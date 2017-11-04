@@ -1,0 +1,505 @@
+<!doctype html>
+<html>
+<head>
+</head>
+<body>
+    <img src="green.jpg" id="green" style="display: none;">
+	<img src="gray.jpg" id="gray" style="display: none;">
+    <canvas id="canvas" width="500" height="500"></canvas>
+	
+	<script>
+	var canvas, context;
+	var player;
+	var terrain;
+	var tile_size = 20; // unused yet
+	var displayOffsetX; // unused yet
+	var displayOffsetY; // unused yet
+	
+	var UpArrow = 38;
+	var DownArrow = 40;
+	var LeftArrow = 37;
+	var RightArrow = 39;
+
+	var keystate = {};	
+	var bombs = {}; // better naming
+	var bombsList = []; // better naming
+	
+	var index; // global declared i for fors
+
+	window.addEventListener("keydown", function(e) {
+		// space and arrow keys
+		if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+			e.preventDefault();
+		}
+	}, false);
+	
+	document.addEventListener("keydown", function (event) {
+	    keystate[event.keyCode] = true;
+	});
+	document.addEventListener("keyup", function (event) {
+	    delete keystate[event.keyCode];
+	});
+	
+	window.onload = function () {
+		canvas = document.getElementById("canvas");
+		context = canvas.getContext("2d");
+		
+		width = canvas.width;
+		height = canvas.height;	
+		
+		console.log('am incarcat canvasul');	
+	
+	    initDisplay();
+	    setInterval(update, 1000/60);
+		//setInterval(update, 2000); // debug only
+	}	
+
+	function generateMatrix(x, y) {
+		var matrix = new Array(x);
+		for (var i = 0; i < x; i++) {
+		  matrix[i] = new Array(y);
+		}
+		return matrix;
+	}
+
+    function transformCoordinateToLogic(value) {
+        return Math.floor(value / 20); // aici inca nu e bine
+	}	
+
+	/* Terrain class */
+	function Terrain() {
+	    var matrix, width, height;
+	}
+	
+	Terrain.prototype.init = function (initx, inity) {
+	    this.width = initx;
+		this.height = inity;
+		this.matrix = generateMatrix(initx, inity);
+		this.populateMatrix();
+	}
+	
+	Terrain.prototype.populateMatrix = function () {
+		/*
+		0 - nothing... black
+		1 - green
+		2 - margin
+		3 - palyer
+		4 - bomb
+		5479 - undefined
+		*/
+	    var i, j;
+	    for (i = 0; i < this.width; i++)
+		    for (j = 0; j < this.height; j++) {
+			    if (i == 0 || j == 0 || i == this.width-1 || j == this.height-1) this.matrix[i][j] = 2;
+			    else this.matrix[i][j] = 1;
+			}
+	}
+	
+	Terrain.prototype.drawTerrain = function () {
+	    var i, j;
+		for (i = 0; i < this.width; i++ )
+		    for (j = 0; j < this.height; j++) {
+			    // desenez un patrat pentru fiecare element din matrice
+				// aici trebuie sa fie o imagine
+				if (this.matrix[i][j] == 1) {
+				    var img = document.getElementById("green");
+					context.drawImage(img, i * 20, j * 20);			
+				}
+				if (this.matrix[i][j] == 2) {
+					var img = document.getElementById("gray");
+					context.drawImage(img, i * 20, j * 20);	
+				}
+			}
+	}
+	
+	Terrain.prototype.canMoveLeft = function (x, y) {
+	    if (this.matrix[x-1][y] == 2 || this.matrix[x-1][y] == 4) return false;
+	    return true;
+	}
+	
+	Terrain.prototype.canMoveRight = function (x, y) {
+	    if (this.matrix[x+1][y] == 2 || this.matrix[x+1][y] == 4) return false;
+		return true;
+	}
+	
+	Terrain.prototype.canMoveUp = function (x, y) {
+	    if (this.matrix[x][y-1] == 2 || this.matrix[x][y-1] == 4) return false;
+		return true;
+	}
+	
+	Terrain.prototype.canMoveDown = function (x, y) {
+	    if (this.matrix[x][y+1] == 2 || this.matrix[x][y+1] == 4) return false;
+		return true;
+	}
+	
+	Terrain.prototype.setTile = function (x, y, value) {
+		this.matrix[x][y] = value;
+	}
+	
+	Terrain.prototype.canBombMoveDown = function (x, y) {
+	    if (this.matrix[x][y+1] == 2 || this.matrix[x][y+1] == 1 || this.matrix[x][y+1] == 3 || this.matrix[x][y+1] == 4) return false;
+		return true;
+	}	
+	
+	Terrain.prototype.canPushObject = function (shape, bomb, offsetX, offsetY) {
+	    // add for pushing an object
+		if (!bomb.isMoving) {
+		    if (terrain.matrix[transformCoordinateToLogic(bomb.x) + offsetX][transformCoordinateToLogic(bomb.y) + offsetY] == 0) {
+			    // todo
+				if (offsetX > 0) {
+					if (shape.hasEnoughForce()) {
+						shape.vx = 2;
+						shape.isMoving = true;
+						shape.isMovingRight = true;
+						shape.movementPhase = 10;	
+
+						bomb.vx = 2;
+						bomb.isMoving = true;
+						bomb.isMovingRight = true;
+						bomb.movementPhase = 10;
+						shape.resetForce();
+					} else {
+					    if (keystate[RightArrow]) shape.increaseForce();
+						else shape.resetForce();
+					}
+				} 
+				if (offsetX < 0) {
+					if (shape.hasEnoughForce()) {
+						shape.vx = -2;
+						shape.isMoving = true;
+						shape.isMovingLeft = true;
+						shape.movementPhase = 10;			
+
+						bomb.vx = -2;
+						bomb.isMoving = true;
+						bomb.isMovingLeft = true;
+						bomb.movementPhase = 10;
+						shape.resetForce();
+					} else {
+					    if (keystate[LeftArrow]) shape.increaseForce();
+						else shape.resetForce();
+					}
+				}
+			}
+		}
+	}
+	/* end Terrain */
+	
+	/* Shape class*/
+	function Shape() {
+	    var x, y, vx, vy, color, logicValue, isMoving, movementPhase, logicX, logicY;
+		var isMovingDown, isMovingUp, isMovingLeft, isMovingRight;
+	}
+	
+	Shape.prototype.init = function (initx, inity, logicValue, default_color) {
+		this.x = initx;
+		this.y = inity;
+		this.vx = 0;
+		this.vy = 0;
+		this.color = default_color;
+		this.logicValue = logicValue;
+		this.isMoving = false;
+		this.movementPhase = 0;
+		//this.logicX = initx; // pozitia logica pe tabla x
+		//this.logicY = inity; // pozitia logica pe tabla y
+		this.isMovingRight = this.isMovingLeft = this.isMovingDown = this.isMovingUp = false;
+		
+	}
+	
+	Shape.prototype.drawElement = function () {
+		context.beginPath();
+		context.rect(this.x, this.y, 20, 20);
+		context.fillStyle = this.color;
+		context.fill();	
+	}
+	
+	Shape.prototype.clearAcceleration = function () {
+	    this.vx = 0;
+		this.vy = 0;
+	}
+	
+	Shape.prototype.trimAcceleration = function () {
+	    // todo
+	}
+	
+	Shape.prototype.updatePosition = function () {
+	    if (this.movementPhase) {
+			this.x += this.vx;
+			this.y += this.vy;
+			this.movementPhase--;
+		} else {
+			this.clearAcceleration();	
+			this.isMoving = false;
+			if(this.isMovingRight) {
+			    this.isMovingRight = false;
+				setLogicPositionMatrix(this, -1, 0, 0); // delete old matrix position
+				if (this.logicValue == 4)
+					delete bombs[(transformCoordinateToLogic(this.x) - 1) + 'x' + transformCoordinateToLogic(this.y)];
+			}
+			if(this.isMovingLeft) {
+			    this.isMovingLeft = false;
+				setLogicPositionMatrix(this, 1, 0, 0); // delete old matrix position
+				if (this.logicValue == 4)
+					delete bombs[(transformCoordinateToLogic(this.x) + 1) + 'x' + transformCoordinateToLogic(this.y)];
+			}
+			if(this.isMovingDown) {
+			    this.isMovingDown = false;
+				setLogicPositionMatrix(this, 0, -1, 0); // delete old matrix position
+				if (this.logicValue == 4)				
+					delete bombs[transformCoordinateToLogic(this.x) + 'x' + (transformCoordinateToLogic(this.y) - 1)];
+			}
+			if(this.isMovingUp) {
+			    this.isMovingUp = false;
+				setLogicPositionMatrix(this, 0, 1, 0); // delete old matrix position
+				if (this.logicValue == 4)				
+					delete bombs[transformCoordinateToLogic(this.x) + 'x' + (transformCoordinateToLogic(this.y) + 1)];
+			}			
+			setLogicPositionMatrix(this, 0, 0, this.logicValue); // update new matrix position
+			if (this.logicValue == 4)
+			    bombs[transformCoordinateToLogic(this.x) + 'x' + transformCoordinateToLogic(this.y)] = this;
+		}
+	}
+	/* end Shape */
+	
+	/* Player class inherits Shape*/
+	function Player() {
+		this.force = 0;
+	}
+	Player.prototype = new Shape();
+	
+	Player.prototype.hasEnoughForce = function () {
+	    return this.force == 5;
+	}
+	
+	Player.prototype.resetForce = function () {
+	    this.force = 0;
+	}
+	
+	Player.prototype.increaseForce = function () {
+	    this.force++;
+	}
+	
+	Player.prototype.moveElement = function () {
+	    // special method for keyboard controller player
+		if (!this.isMoving) {
+			if (keystate[RightArrow] && terrain.canMoveRight(transformCoordinateToLogic(this.x), transformCoordinateToLogic(this.y))) {
+				this.vx = 2;
+				this.isMoving = true;
+				this.isMovingRight = true;
+				this.movementPhase = 10;
+				return;
+			}
+			if (keystate[LeftArrow] && terrain.canMoveLeft(transformCoordinateToLogic(this.x), transformCoordinateToLogic(this.y))) {
+				this.vx = -2;
+				this.isMoving = true;
+				this.isMovingLeft = true;
+				this.movementPhase = 10;
+				return;
+			}
+			if (keystate[DownArrow] && terrain.canMoveDown(transformCoordinateToLogic(this.x), transformCoordinateToLogic(this.y))) {
+				this.vy = 2;
+				this.isMoving = true;
+				this.isMovingDown = true;
+				this.movementPhase = 10;
+				return;
+			}
+			if (keystate[UpArrow] && terrain.canMoveUp(transformCoordinateToLogic(this.x), transformCoordinateToLogic(this.y))) {
+				this.vy = -2;
+				this.isMoving = true;
+				this.isMovingUp = true;
+				this.movementPhase = 10;
+				return;
+			}
+			// added for pushing
+			if (keystate[RightArrow] && terrain.matrix[transformCoordinateToLogic(this.x) + 1][transformCoordinateToLogic(this.y)] == 4) { 
+				terrain.canPushObject(this, bombs[(transformCoordinateToLogic(this.x) + 1) + 'x' + transformCoordinateToLogic(this.y)], 1, 0);
+			    // do stuff
+			}
+			if (keystate[LeftArrow] && terrain.matrix[transformCoordinateToLogic(this.x) - 1][transformCoordinateToLogic(this.y)] == 4) {
+				terrain.canPushObject(this, bombs[transformCoordinateToLogic(this.x) - 1 + 'x' + transformCoordinateToLogic(this.y)], -1, 0);
+			    // do stuff
+			}	
+		}	
+	}
+	/* end Player*/
+	
+	/* Bomb class inherits Shape */
+	function Bomb() {
+		this.wait_time = 0;
+	}
+	Bomb.prototype = new Shape();
+	
+	Bomb.prototype.canFall = function () {
+		return this.wait_time == 0;
+	}
+	
+	Bomb.prototype.resetWaitTime = function () {
+	    this.wait_time = 5;
+	}
+	
+	Bomb.prototype.updateWaitTime = function () {
+	    this.wait_time--;
+	}
+
+	Bomb.prototype.applyGravity = function () {
+			if (!this.isMoving) {
+				if (terrain.canBombMoveDown(transformCoordinateToLogic(this.x), transformCoordinateToLogic(this.y))) {
+					if(!this.canFall()) {
+						this.updateWaitTime();
+						return;
+					}
+					this.vy = 2;
+					this.isMoving = true;
+					this.isMovingDown = true;
+					this.movementPhase = 10;
+					return;
+				} else {
+				    this.resetWaitTime();
+				}
+			}
+		}
+		
+	Bomb.prototype.fallToLeft = function () {
+		this.vx = -2;
+		this.isMoving = true;
+		this.isMovingLeft = true;
+		this.movementPhase = 10;
+	}
+	
+	Bomb.prototype.fallToRight = function () {
+	    this.vx = 2;
+		this.isMoving = true;
+		this.isMovingRight = true;
+		this.movementPhase = 10;
+	}
+	
+	Bomb.prototype.checkIfBombCanGoSideways = function () {
+		var x, y;
+		if ((this.x % 20) == 0 && (this.y % 20) == 0) {
+			x = Math.floor(this.x / 20);
+			y = Math.floor(this.y / 20);
+			if (!this.isMoving) {
+			    if (terrain.matrix[x][y+1] == 4 && terrain.matrix[x-1][y] == 0 && terrain.matrix[x-1][y+1] == 0) {
+				    this.fallToLeft();
+			    }
+			    if (terrain.matrix[x][y+1] == 4 && terrain.matrix[x+1][y] == 0 && terrain.matrix[x+1][y+1] == 0) {
+				    this.fallToRight();
+			    }
+			}
+		}
+	}
+	/* end Bomb*/
+	
+	function setLogicPositionMatrix (shape, offsetX, offsetY, value) {
+		var x, y;
+		if ((shape.x % 20) == 0 && (shape.y % 20) == 0) {
+			x = Math.floor(shape.x / 20);
+			y = Math.floor(shape.y / 20);
+			terrain.setTile(x + offsetX, y + offsetY, value);
+		}		
+	}
+	
+	function initDisplay () {
+		player = new Player();
+		player.init(20, 20, 3, 'red');
+		bomb = new Bomb();
+		bomb.init(10 * 20, 2 * 20, 4, 'gray');
+		bombs['10x2'] = bomb;
+		bombsList.push(bomb);
+		bomb.resetWaitTime();
+		
+		bomb2 = new Bomb();
+		bomb2.init(12 * 20, 2 * 20, 4, 'gray');
+		bombs['12x2'] = bomb2;
+		bombsList.push(bomb2);
+		bomb2.resetWaitTime();
+		bomb3 = new Bomb();
+		bomb3.init(12 * 20, 3 * 20, 4, 'gray');
+		bombs['12x3'] = bomb3;
+		bombsList.push(bomb3);
+		bomb3.resetWaitTime();
+		
+		bomb4 = new Bomb();
+		bomb4.init(5 * 20, 4 * 20, 4, 'gray');
+		bombs['5x4'] = bomb4;
+		bombsList.push(bomb4);
+		bomb4.resetWaitTime();
+		bomb5 = new Bomb();
+		bomb5.init(5 * 20, 7 * 20, 4, 'gray');
+		bombs['5x7'] = bomb5;
+		bombsList.push(bomb5);
+		bomb5.resetWaitTime();		
+
+		bomb6 = new Bomb();
+		bomb6.init(3 * 20, 2 * 20, 4, 'gray');
+		bombs['3x2'] = bomb6;
+		bombsList.push(bomb6);
+		bomb6.resetWaitTime();
+		bomb7 = new Bomb();
+		bomb7.init(8 * 20, 16 * 20, 4, 'gray');
+		bombs['8x16'] = bomb7;
+		bombsList.push(bomb7);
+		bomb7.resetWaitTime();		
+		
+		
+		terrain = new Terrain();
+		terrain.init(22, 22);
+		
+		// initializarea logica
+		terrain.matrix[1][1] = 3;
+		terrain.matrix[10][2] = 4;
+		terrain.matrix[12][2] = 4;
+		terrain.matrix[12][3] = 4;
+		
+		terrain.matrix[5][4] = 4;
+		terrain.matrix[5][7] = 4;
+		terrain.matrix[3][2] = 4;
+		terrain.matrix[8][16] = 4;
+	}
+	
+	function update () {
+	    context.fillStyle = 'black';
+		context.fillRect(0, 0, canvas.width, canvas.height);
+		
+		terrain.drawTerrain();
+		
+		player.drawElement();
+		player.updatePosition();
+		player.moveElement();
+		
+		for (index = 0; index < bombsList.length; index++) {
+			bombsList[index].drawElement();
+			bombsList[index].updatePosition();
+			bombsList[index].applyGravity();
+			bombsList[index].checkIfBombCanGoSideways();
+		}
+		
+		/*bomb.drawElement();
+		bomb.updatePosition();
+		bomb.applyGravity();
+		
+		bomb2.drawElement();
+		bomb2.updatePosition();
+		bomb2.applyGravity();
+		bomb3.drawElement();
+		bomb3.updatePosition();
+		bomb3.applyGravity();
+		
+		bomb4.drawElement();
+		bomb4.updatePosition();
+		bomb4.applyGravity();
+		bomb5.drawElement();
+		bomb5.updatePosition();
+		bomb5.applyGravity();
+		bomb6.drawElement();
+		bomb6.updatePosition();
+		bomb6.applyGravity();
+		bomb7.drawElement();
+		bomb7.updatePosition();
+		bomb7.applyGravity();*/
+	}
+	</script>
+	<div>testeaza miscarea - bomba sa mai astepte pana incepe sa cada; adauga conditii de oprire pentru player cand impinge bombe; implementeaza canPushObject; refactorizeaza codul</div>
+	<img src="clase.jpg">
+</body>
+</html>

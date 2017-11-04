@@ -1,0 +1,14 @@
+0 - nimic, negru
+1 - verde
+2 - bomba
+3 - player
+7 - info
+20 - solid border
+21 - exit
+
+30 - explosion
+30+ - etape de explozie
+
+50 - explosive disquette
+
+70 - scissor

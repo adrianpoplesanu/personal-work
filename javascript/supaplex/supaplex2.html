@@ -1,0 +1,649 @@
+<html>
+<head>
+</head>
+<body>
+    <img src="green.jpg" id="green" style="display: none;">
+	<img src="gray.jpg" id="gray" style="display: none;">
+	<img src="bomb.jpg" id="bomb" style="display: none;">
+	<img src="player.jpg" id="player" style="display: none;">
+    <canvas id="canvas" width="800" height="600"></canvas>
+	
+	<script>
+	var canvas, context;
+	var width, height;
+	
+	var canvasOffsetX, canvasOffsetY, canvasOffsetVX, canvasOffsetVY;
+	
+	var tile_size = 40;
+	var bombsList = [], bombsDict = {};
+	
+	var game, terrain, player, bombs;
+	var gameRows, gameCols;
+	
+	var greenImage, borderImage, bombImage, playerImage;
+	
+	var UpArrow = 38;
+	var DownArrow = 40;
+	var LeftArrow = 37;
+	var RightArrow = 39;
+	var SpaceKey = 32;
+	var movementKey;
+	
+	var keystate = {};	
+	
+    window.onload = function () {
+		canvas = document.getElementById("canvas");
+		context = canvas.getContext("2d");
+		
+		width = canvas.width;
+		height = canvas.height;	
+	
+		init();
+		setInterval(update, 1000/30);
+		//setInterval(update, 2000); // debug only
+	}
+	
+	window.addEventListener("keydown", function(e) {
+		// space and arrow keys
+		if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+			e.preventDefault();
+		}
+	}, false);
+	
+	document.addEventListener("keydown", function (event) {
+		/*if (!keystate[event.keyCode] && event.keyCode == SpaceKey) {
+		    delete keystate[UpArrow];
+			delete keystate[DownArrow];
+			delete keystate[RightArrow];
+			delete keystate[LeftArrow];
+		}*/
+	    keystate[event.keyCode] = true;
+	});
+	
+	document.addEventListener("keyup", function (event) {
+	    delete keystate[event.keyCode];
+	});	
+	
+	function generateMatrix(x, y) {
+		var matrix = new Array(x);
+		for (var i = 0; i < x; i++) {
+		  matrix[i] = new Array(y);
+		}
+		return matrix;
+	}
+	
+	function populateMatrix(terrain, x, y) {
+	    var i, j;
+		for(i = 0; i < x; i++) {
+			for(j = 0; j < y; j++) {
+				terrain.logicMatrix[i][j] = 1;
+				if (i == 1 && j == 1) terrain.logicMatrix[i][j] = 3;
+			    if (i == 0 || i == x - 1) terrain.logicMatrix[i][j] = 20;
+				if (j == 0 || j == y - 1) terrain.logicMatrix[i][j] = 20;
+			}
+		}
+	}
+	
+	function generateBombs(terrain, number) {
+		var potentialBombs = [[3, 3], [3, 4], [3, 5], [4, 4], [5, 4], [4, 6]];
+		while(number--) {
+			//var logicX = 3; // this should be random
+			//var logicY = 3 + number; // this should be random
+			var logicX = potentialBombs[number][0];
+			var logicY = potentialBombs[number][1];
+			terrain.logicMatrix[logicX][logicY] = 2;
+			var bomb = new BombNew();
+			bomb.logicX = logicX;
+			bomb.logicY = logicY;
+			
+			bomb.x = bomb.logicX * tile_size;
+			bomb.y = bomb.logicY * tile_size;
+			
+			bomb.vx = 0;
+			bomb.vy = 0;
+			
+			bomb.isMoving = false;
+			
+			//bomb.waitTime = 0;
+			bomb.waitTime = 1;
+			bomb.isWaiting = false;
+			
+			bomb.logicOffsetX = 0;
+			bomb.logicOffsetY = 0;
+			
+			//bomb.alreadyCalculated = false;
+			bomb.isMovingSideways = false;
+			
+			bombsDict[logicX + 'x' + logicY] = bomb;
+			bombsList.push(bomb);
+		}
+	}
+	
+	function transformCoordinateToLogic(value) {
+		// round the value of the
+		return Math.floor(value / 40);
+	}
+	
+	function sortBombsDictKeys(bomb1, bomb2) {
+		var bomb1Y = bomb1.split('x')[1];
+		var bomb2Y = bomb2.split('x')[1];
+		//return Number(bomb1Y) - Number(bomb2Y);
+		return Number(bomb2Y) - Number(bomb1Y);
+	}
+	
+    function Terrain() {
+		var logicMatrix; // logic matrix
+    }
+	
+	Terrain.prototype.draw = function () {
+		var i, j;
+		for (i = 0; i < gameRows; i++) {
+			for (j = 0; j < gameCols; j++) {
+			    if (this.logicMatrix[i][j] == 1) {
+					context.drawImage(greenImage, i * tile_size, j * tile_size);	
+				}
+			    if (this.logicMatrix[i][j] == 20) {
+					context.drawImage(borderImage, i * tile_size, j * tile_size);	
+				}				
+			}
+		}
+	}
+	
+	function Shape() {
+		var x, y; // pixels on screen
+		var logicX, logicY; // matrix logic position
+		var logicOffsetX, logicOffsetY; // -1, 0 or 1 values
+		var movementPhase;
+		var isMoving;
+		var vx, vy;
+		var image;
+	}
+	
+	Shape.prototype.testInheritance = function () {
+	    return 56;
+	}
+	
+	function Player() {
+		
+	}
+	
+	Player.prototype = new Shape();
+	
+	Player.prototype.moveElement = function () {
+		if (!this.isMoving && !keystate[SpaceKey])	{
+			if (keystate[RightArrow] && terrain.logicMatrix[this.logicX + 1][this.logicY] != 20 &&
+			terrain.logicMatrix[this.logicX + 1][this.logicY] != 2) {
+				this.vx = tile_size / 10;
+				this.movementPhase = 10;
+				this.logicOffsetX = 1;
+				this.logicOffsetY = 0;
+				movementKey = RightArrow;
+				this.isMoving = true;
+				return;
+			}
+			if (keystate[LeftArrow] && terrain.logicMatrix[this.logicX - 1][this.logicY] != 20 &&
+			terrain.logicMatrix[this.logicX - 1][this.logicY] != 2) {
+				this.vx = tile_size / -10;
+				this.movementPhase = 10;
+				this.logicOffsetX = -1;
+				this.logicOffsetY = 0;		
+				movementKey = LeftArrow;				
+				this.isMoving = true;
+				return;
+			}
+			if (keystate[UpArrow] && terrain.logicMatrix[this.logicX][this.logicY - 1] != 20 && 
+			terrain.logicMatrix[this.logicX][this.logicY - 1] != 2) {
+				this.vy = tile_size / -10;
+				this.movementPhase = 10;
+				this.logicOffsetX = 0;
+				this.logicOffsetY = -1;
+				movementKey = UpArrow;				
+				this.isMoving = true;
+				return;
+			}
+			if (keystate[DownArrow] && terrain.logicMatrix[this.logicX][this.logicY + 1] != 20 &&
+			terrain.logicMatrix[this.logicX][this.logicY + 1] != 2) {
+				this.vy = tile_size / 10;
+				this.movementPhase = 10;
+				this.logicOffsetX = 0;
+				this.logicOffsetY = 1;
+				movementKey = DownArrow;
+				this.isMoving = true;
+				return;
+			}
+		} else {
+			this.movementPhase--;
+			if (!this.movementPhase) {
+				this.isMoving = false;
+				this.vx = 0;
+				this.vy = 0;
+				this.logicOffsetX = 0;
+				this.logicOffsetY = 0;
+				movementKey = false;
+				terrain.logicMatrix[this.logicX][this.logicY] = 0;
+				this.logicX = this.x / tile_size;
+				this.logicY = this.y / tile_size;
+				terrain.logicMatrix[this.logicX][this.logicY] = 3;
+			}
+ 		}
+	}
+	
+	Player.prototype.chackSpacePressed = function () {
+		if (keystate[SpaceKey]) {
+			if (keystate[RightArrow] && terrain.logicMatrix[this.logicX + 1][this.logicY + this.logicOffsetY] == 1 &&
+					movementKey != RightArrow) {
+				terrain.logicMatrix[this.logicX + 1][this.logicY + this.logicOffsetY] = 0;
+				return;
+				//delete keystate[RightArrow];
+				//delete keystate[SpaceKey];
+			}
+			/*if (keystate[RightArrow] && terrain.logicMatrix[transformCoordinateToLogic(this.x) + 1][transformCoordinateToLogic(this.y)] == 1) {
+				terrain.logicMatrix[this.logicX + 1][this.logicY] = 0;
+				delete keystate[RightArrow];
+				delete keystate[SpaceKey];
+			}*/			
+			if (keystate[LeftArrow] && terrain.logicMatrix[this.logicX - 1][this.logicY + this.logicOffsetY] == 1 &&
+					movementKey != LeftArrow) {
+				terrain.logicMatrix[this.logicX - 1][this.logicY + this.logicOffsetY] = 0;
+				return;
+				//delete keystate[LeftArrow];
+				//delete keystate[SpaceKey];
+			}
+			if (keystate[UpArrow] && terrain.logicMatrix[this.logicX + this.logicOffsetX][this.logicY - 1] == 1 &&
+					movementKey !=  UpArrow) {
+				terrain.logicMatrix[this.logicX + this.logicOffsetX][this.logicY - 1] = 0;
+				return;
+				//delete keystate[UpArrow];
+				//delete keystate[SpaceKey];
+			}
+			if (keystate[DownArrow] && terrain.logicMatrix[this.logicX + this.logicOffsetX][this.logicY + 1] == 1 &&
+					movementKey != DownArrow) {
+				terrain.logicMatrix[this.logicX + this.logicOffsetX][this.logicY + 1] = 0;
+				return;
+				//delete keystate[DownArrow];
+				//delete keystate[SpaceKey];
+			}
+			/*if (keystate[UpArrow] && terrain.logicMatrix[this.logicX ][this.logicY - 1] == 1) {
+				terrain.logicMatrix[this.logicX][this.logicY - 1] = 0;
+				delete keystate[UpArrow];
+				//delete keystate[SpaceKey];
+			}
+			if (keystate[DownArrow] && terrain.logicMatrix[this.logicX][this.logicY + 1] == 1) {
+				terrain.logicMatrix[this.logicX][this.logicY + 1] = 0;
+				delete keystate[DownArrow];
+				//delete keystate[SpaceKey];
+			}	*/		
+		}	
+	}
+	
+	Player.prototype.updatePosition = function () {
+		this.x += this.vx;
+		this.y += this.vy;
+	}
+	
+	Player.prototype.draw = function () {
+		context.drawImage(playerImage, this.x, this.y);
+	}
+	
+	function BombNew() {
+		var waitTime;
+		var isWaiting;
+	}
+	
+	BombNew.prototype = new Shape();
+	
+	BombNew.prototype.draw = function () {
+		context.drawImage(bombImage, this.x, this.y);	
+	}
+	
+	BombNew.prototype.updatePosition = function () {
+		this.x += this.vx;
+		this.y += this.vy;
+	}
+	
+	BombNew.prototype.applyGravity = function () {
+		if (this.waitTime > 0) {
+			this.waitTime--;
+			return;
+		}
+		if (!this.isMoving && !this.isWaiting)	{
+			if (terrain.logicMatrix[this.logicX][this.logicY + 1] == 0) {
+				this.vy = 4;
+				this.movementPhase = 10;
+				this.isMoving = true;
+			} else {
+				this.moveElement();
+			}
+		} else {
+			this.movementPhase--;
+			if (!this.movementPhase) {
+				// update the logic position
+				terrain.logicMatrix[this.logicX][this.logicY] = 0;
+				delete bombsDict[this.logicX + 'x' + this.logicY];
+				this.logicX = this.x / tile_size;
+				this.logicY = this.y / tile_size;
+				terrain.logicMatrix[this.logicX][this.logicY] = 2;
+				bombsDict[this.logicX + 'x' + this.logicY] = this;
+				
+				if (terrain.logicMatrix[this.logicX][this.logicY + 1] == 0 ||
+						terrain.logicMatrix[this.logicX][this.logicY + 1] == 3) {
+					// continue falling
+					this.vx = 0;
+					this.vy = 4;
+					this.movementPhase = 10;
+				} else {
+					this.isMoving = false;
+					this.vy = 0;
+					this.vx = 0;
+					this.waitTime = 1;
+				}
+				// update this if to check for moving sideways
+			}
+		}		
+	}
+	
+	BombNew.prototype.moveElement = function () {
+		// 1. verific daca poate sa se duca in laterale
+		// 2. verific daca poate sa cada
+		/*if (terrain.logicMatrix[this.logicX][this.logicOffsetY + 1] == 0) {
+		    //poate sa cada
+		} else if (terrain.logicMatrix[this.logicX][this.logicOffsetY + 1] == 2) {
+			// mai trebuie adaugate conditii
+		}*/
+		if (!this.isMoving && !this.isWaiting) {
+			if (player.logicX == this.logicX && (player.logicY == this.logicY + 2) && player.isMoving) return;
+			if (terrain.logicMatrix[this.logicX][this.logicY + 1] == 2 &&
+					terrain.logicMatrix[this.logicX - 1][this.logicY] == 0 &&
+					terrain.logicMatrix[this.logicX - 1][this.logicY + 1] == 0 &&
+					terrain.logicMatrix[this.logicX - 1][this.logicY - 1] != 2 &&
+					//bombsDict[this.logicX + 'x' + (this.logicY + 1)] != undefined &&
+					!bombsDict[this.logicX + 'x' + (this.logicY + 1)].isMoving) {
+				this.isMoving = true;
+				this.movementPhase = 5;
+				this.vx = -8;
+			} else if (terrain.logicMatrix[this.logicX][this.logicY + 1] == 2 &&
+					terrain.logicMatrix[this.logicX + 1][this.logicY] == 0 &&
+					terrain.logicMatrix[this.logicX + 1][this.logicY + 1] == 0 &&
+					terrain.logicMatrix[this.logicX + 1][this.logicY - 1] != 2 &&
+					//bombsDict[this.logicX + 'x' + (this.logicY + 1)] != undefined &&					
+					!bombsDict[this.logicX + 'x' + (this.logicY + 1)].isMoving) {
+				this.isMoving = true;
+				this.movementPhase = 5;
+				this.vx = 8;			
+			}
+		}
+	}
+	
+	BombNew.prototype.setWaitTime = function () {
+	
+	}
+	
+	BombNew.prototype.checkIfBombKillsPlayer = function () {
+		// asta cred ca e buna asa cum era inainte
+		if (this.isMoving) {
+			if (this.x - player.x < tile_size / 2 && this.y - player.y < tile_size && this.x - player.x >= 0 && this.y - player.y >= 0) {
+				window.location.reload();
+			}
+			if (player.x - this.x < tile_size / 2 && player.y - this.y < tile_size && player.x - this.x >= 0 && player.y - this.y >= 0) {
+				window.location.reload();
+			} 		
+		}		
+	}
+	
+	function Bomb() {
+		var waitTime;
+		var isMovingSideways;
+		//var alreadyCalculated;
+	}
+	
+	Bomb.prototype = new Shape();
+	
+	Bomb.prototype.draw = function () {
+		context.drawImage(bombImage, this.x, this.y);
+	}
+	
+	Bomb.prototype.updatePosition = function () {
+		/*if(this.waitTime > 0) {
+			console.log(this.waitTime);
+			this.waitTime--;
+			return;
+		}*/
+		this.x += this.vx;
+		this.y += this.vy;
+	}
+	
+	Bomb.prototype.applyGravity = function () {
+		/*if (this.isMovingSideways) {
+			this.movementPhase--;
+			if (!this.movementPhase) {
+				terrain.logicMatrix[this.logicX][this.logicY] = 0;
+				this.logicX = this.x / tile_size;
+				this.logicY = this.y / tile_size;
+				terrain.logicMatrix[this.logicX][this.logicY] = 2;
+				this.isMovingSideways = false;
+				this.vx = 0;
+			}
+			return;
+		}*/
+		if (!this.isMoving && this.waitTime > 0) {
+			console.log(this.waitTime);
+			this.waitTime--;
+			if (this.waitTime > 0) return;
+		}
+		if (!this.isMoving) {
+			if (terrain.logicMatrix[this.logicX][this.logicY + 1] == 0) {
+				this.isMoving = true;
+				this.vy = tile_size / 10;
+				this.movementPhase = 10;
+			}
+		} else {
+			/*if(this.waitTime > 0) {
+				this.waitTime--;
+				return;
+			}*/
+			this.movementPhase--;
+			if (!this.movementPhase) {
+				terrain.logicMatrix[this.logicX][this.logicY] = 0;
+				this.logicX = this.x / tile_size;
+				this.logicY = this.y / tile_size;
+				terrain.logicMatrix[this.logicX][this.logicY] = 2;
+				
+				if (terrain.logicMatrix[this.logicX][this.logicY + 1] == 0 || terrain.logicMatrix[this.logicX][this.logicY + 1] == 3) { 
+				    // continue moving
+					this.movementPhase = 10;
+				} else {
+					this.isMoving = false;
+					//this.isMovingSideways = false;
+					//this.alreadyCalculated = false;
+				    this.vy = 0;
+				}
+				
+			}
+		}
+	}
+	
+	Bomb.prototype.checkIfBombKillsPlayer = function () {
+		if (this.isMoving) {
+			if (this.x - player.x < tile_size / 2 && this.y - player.y < tile_size && this.x - player.x >= 0 && this.y - player.y >= 0) {
+				window.location.reload();
+			}
+			if (player.x - this.x < tile_size / 2 && player.y - this.y < tile_size && player.x - this.x >= 0 && player.y - this.y >= 0) {
+				window.location.reload();
+			} 		
+		}
+	}
+	
+	Bomb.prototype.calculateWaitTime = function () {
+		var logicX, logicY;
+		logicX = this.logicX;
+		logicY = this.logicY;
+		if (this.waitTime == 0 && !this.alreadyCalculated) { // this.alreadyCalculated ???
+			if ((terrain.logicMatrix[logicX][logicY + 1] == 0 && terrain.logicMatrix[logicX][logicY + 2] == 3) ||
+					(terrain.logicMatrix[logicX][logicY + 1] == 3 && terrain.logicMatrix[logicX][logicY + 2] == 0)) {
+				console.log('calculat');
+				//this.alreadyCalculated = true;
+				this.waitTime = 10;
+			}
+		}
+	}
+	
+	Bomb.prototype.checkIfBombCanGoSideways = function () {
+	    if (terrain.logicMatrix[this.logicX][this.logicY + 1] == 2 && 
+				terrain.logicMatrix[this.logicX - 1][this.logicY] == 0 &&
+				terrain.logicMatrix[this.logicX - 1][this.logicY + 1] == 0) {
+			// move to the left
+		    //console.log(this);
+			//console.log('move to left');
+			return -1;
+		}
+	    if (terrain.logicMatrix[this.logicX][this.logicY + 1] == 2 && 
+				terrain.logicMatrix[this.logicX + 1][this.logicY] == 0 &&
+				terrain.logicMatrix[this.logicX + 1][this.logicY + 1] == 0) {
+			// move to the left
+		    //console.log(this);
+			//console.log('move to right');
+			return 1;
+		}
+		return 0;
+	}
+	
+	Bomb.prototype.moveBombSideways = function () {
+		var move = this.checkIfBombCanGoSideways();
+		//console.log(this.isMovingSideways);
+		if (!this.isMovingSideways) {
+			if (move == -1) {
+				console.log('moving to left. only once');
+				this.isMovingSideways = true;
+				/*this.vx = -4;
+				this.movementPhase = 10;*/
+				//this.isMoving = true;
+			}
+			if (move == 1) {
+				console.log('moving to right. only once');			
+				this.isMovingSideways = true;
+				/*this.vy = 4;
+				this.movementPhase = 10;*/
+				//this.isMoving = true;
+			}
+		}
+		/*if (!this.isMovingSideways && !this.isMoving) {
+			if (move == -1) {
+				this.isMoving = true;		
+				this.vx = -4;
+				this.movementPhase = 10;
+				this.isMovingSideways = true;
+			}
+			if (move == 1) {
+				this.isMoving = true;		
+				this.vx = 4;
+				this.movementPhase = 10;		
+				this.isMovingSideways = true;
+			}
+		}*/
+	}
+	
+	Bomb.prototype.updateSidewaysMove = function () {
+		/*if (this.isMovingSideways) {
+			this.movementPhase--;
+			//console.log(this.movementPhase);
+			if (this.movementPhase == 0) {
+				terrain.logicMatrix[this.logicX][this.logicY] = 0;
+				this.logicX = this.x / tile_size;
+				this.logicY = this.y / tile_size;
+				console.log(this.logicX);
+				console.log(this.logicY);
+				terrain.logicMatrix[this.logicX][this.logicY] = 2;			
+				this.isMovingSideways = false;
+				this.isMoving = false;
+				this.vx = 0;
+			}
+		}*/
+	}
+	
+	function Game() {
+		var maxX, maxY;
+	}
+	
+	Game.prototype.init = function () {
+		terrain = new Terrain();
+		player = new Player();
+		
+		gameRows = 12;
+		gameCols = 12;
+		
+		terrain.logicMatrix = generateMatrix(gameRows, gameCols);
+		populateMatrix(terrain, gameRows, gameCols);
+		generateBombs(terrain, 6);
+		
+		player.x = tile_size;
+		player.y = tile_size;
+		player.vx = 0;
+		player.vy = 0;
+		player.logicX = 1;
+		player.logicY = 1;
+		player.logicOffsetX = 0;
+		player.logicOffsetY = 0;
+	}
+	
+	Game.prototype.update = function () {
+		var i, bomb, key, keys = [];
+		terrain.draw();
+		player.draw();
+		player.moveElement();
+		player.chackSpacePressed();
+		player.updatePosition();
+		/*for (i = 0; i < bombsList.length; i++) {
+			bombsList[i].draw();
+			//bombsDict[key].calculateWaitTime();	
+			bombsList[i].setWaitTime();
+			bombsList[i].updatePosition();
+			//bombsList[i].applyGravity();
+			bombsList[i].checkIfBombKillsPlayer();
+			bombsList[i].moveElement();
+			bombsList[i].applyGravity();
+		}*/
+		for (key in bombsDict) {
+			keys.push(key);
+		}
+		keys.sort(sortBombsDictKeys);
+		//keys.sort();
+		//console.log(keys);
+		
+		//for (key in bombsDict) {
+		for (i = 0; i < keys.length; i++) {
+			key = keys[i];
+			bomb = bombsDict[key];
+			bomb.draw();
+			//bombsDict[key].calculateWaitTime();	
+			bomb.setWaitTime();
+			bomb.updatePosition();
+			bomb.applyGravity();
+			bomb.checkIfBombKillsPlayer();
+			//bomb.moveElement();
+			//bombsDict[key].applyGravity();
+			//bombsDict[key].checkIfBombCanGoSideways();
+			//bombsDict[key].moveBombSideways();
+			//bombsDict[key].updateSidewaysMove();
+		    //bomb.draw();
+		}
+	}
+	
+	function init () {
+		greenImage = document.getElementById("green");
+		borderImage = document.getElementById("gray");
+		playerImage = document.getElementById("player");
+		bombImage = document.getElementById("bomb");
+	    //player = new Player();
+		//console.log(player.testInheritance());
+		
+		game = new Game();
+		game.init();	
+	}
+	
+	function update () {
+		context.fillStyle = 'black';
+		context.fillRect(0, 0, canvas.width, canvas.height);
+		game.update();
+	}
+	</script>
+</html>

@@ -1,0 +1,1624 @@
+<html>
+<head>
+</head>
+<body>
+    <img src="green_new.png" id="green_new" style="display: none;">
+	<img src="gray_new.png" id="gray_new" style="display: none;">
+	<img src="bomb_new.png" id="bomb_new" style="display: none;">
+	
+	<img src="bomb_new_rot1.png" id="bomb_new_rot1" style="display: none;">
+	<img src="bomb_new_rot2.png" id="bomb_new_rot2" style="display: none;">
+	<img src="bomb_new_rot3.png" id="bomb_new_rot3" style="display: none;">
+	
+	<img src="player_new.png" id="player_new" style="display: none;">
+	<img src="player_original_left.png" id="player_original_left" style="display: none;">
+	<img src="player_original_right.png" id="player_original_right" style="display: none;">
+	<img src="exit_new.png" id="exit_new" style="display: none;">
+	<img src="info_new.png" id="info_new" style="display: none;">
+	
+	<img src="info_new_rot1.png" id="info_new_rot1" style="display: none;">
+	<img src="info_new_rot2.png" id="info_new_rot2" style="display: none;">
+	<img src="info_new_rot3.png" id="info_new_rot3" style="display: none;">
+	<img src="info_new_rot4.png" id="info_new_rot4" style="display: none;">
+	<img src="info_new_rot5.png" id="info_new_rot5" style="display: none;">
+	<img src="info_new_rot6.png" id="info_new_rot6" style="display: none;">
+	<img src="info_new_rot7.png" id="info_new_rot7" style="display: none;">
+	
+	<img src="explosive_disquette_new.png" id="explosive_disquette_new" style="display: none;">
+	
+	<img src="explosion_new_1.png" id="explosion_new_1" style="display: none;">
+	<img src="explosion_new_2.png" id="explosion_new_2" style="display: none;">
+	<img src="explosion_new_3.png" id="explosion_new_3" style="display: none;">
+	<img src="explosion_new_4.png" id="explosion_new_4" style="display: none;">
+	<img src="explosion_new_5.png" id="explosion_new_5" style="display: none;">
+	<img src="explosion_new_6.png" id="explosion_new_6" style="display: none;">
+	<img src="explosion_new_7.png" id="explosion_new_7" style="display: none;">
+	
+	<img src="scissor_new_left.png" id="scissor_new_left" style="display: none;">
+	<img src="scissor_new_down.png" id="scissor_new_down" style="display: none;">
+	<img src="scissor_new_right.png" id="scissor_new_right" style="display: none;">
+	<img src="scissor_new_up.png" id="scissor_new_up" style="display: none;">
+	
+    <canvas id="canvas" width="800" height="600"></canvas>
+
+	<font face="Tahoma" size="2">
+	<br>TODO:<br>
+	- moveElement din Bombs updatat ca sa nu se suprapuna cu dischetele explozive...<font color="green"><b>done</b></font><br>
+	- dischetele explozive sa explodeze si daca cade ceva peste ele...<font color="green"><b>done</b></font><br>
+	- sprite-urile pentru informatii... <font color="green"><b>done</b></font><br>
+	- sprite-urile pentru Murphy... <font color="red"><b>not done</b></font><br>
+	- de impins dischetele... <font color="green"><b>done</b></font><br>
+	- de implementat: nu poti sa impingi bomba/discheta daca alta cade de sus pe culoar... <font color="blue"><i>testing fix</i></font><br>
+	- de implementat: explozia lui Murphy cu un decay time... <font color="green"><b>done</b></font><br>
+	- de implementat: jocul se termina daca are loc o explozie in proximitatea lui Murphy... <font color="blue"><i>still needs tweaking</i></font><br>
+	- fix: pentru detonari multiple... <font color="blue"><i>still needs tweaking</i></font><br>
+	- test test test... <font color="blue"><i>pending</i></font><br>
+	<br>
+	*** de terminat scissor (checkIfScissorKillsPlayer + explode + trigger explode by bombs, infos, explosive disquette)<br>
+	*** electron(mostenire scissor + explode cu informatii)<br>
+	*** dischetele 2 si 3<br>
+	*** alte elemente de terrain(ziduri distructibile)<br>
+	*** porti !dificil<br>	
+	*** offset global pentru harti mari !dificil<br>
+	</font>
+	<script>
+	var canvas, context;
+	var width, height;
+	
+	var canvasOffsetX, canvasOffsetY, canvasOffsetVX, canvasOffsetVY;
+	
+	var tile_size = 32;
+	//var defaultWaitTime = 106;
+	//var defaultWaitTime = 4;
+	//var defaultWaitTime = 0; // asta e o prostie
+	var defaultWaitTime = 1;
+	var defaultPushForce = 8;
+	var defaultPushForce = 4;
+	var bombsList = [], bombsDict = {}; // list is not used
+	
+	var infosList = [], infosDict = {}; // list is not used
+	
+	var scissorsList = [], scissorsDict = {}; // list is not used
+	
+	var explosiveDisquettesList = [], explosiveDisquettesDict = {}; // list is not used
+	
+	var game, terrain, player, bombs;
+	var gameRows, gameCols;
+	var gameOn = true;
+	
+	var numberTotalInfos, numberColectedInfos;
+	
+	var greenImage, borderImage, bombImage, playerImage, infoImage, playerImageLeft, playerImageRight, 
+		exitImage, explosiveDisquetteImage,
+		bombImageRot1, bombImageRot2, bombImageRot3,
+		infoImageRot1, infoImageRot2, infoImageRot3, infoImageRot4, infoImageRot5, infoImageRot6, infoImageRot7,
+		explosionImage1, explosionImage2, explosionImage3, explosionImage4, explosionImage5,
+		explosionImage6, explosionImage7,
+		scissorImageLeft, scissorImageDown, scissorImageRight, scissorImageUp;
+	
+	var UpArrow = 38;
+	var DownArrow = 40;
+	var LeftArrow = 37;
+	var RightArrow = 39;
+	var SpaceKey = 32;
+	var movementKey;
+	
+	var keystate = {};	
+	
+    window.onload = function () {
+		canvas = document.getElementById("canvas");
+		context = canvas.getContext("2d");
+		
+		width = canvas.width;
+		height = canvas.height;	
+	
+		init();
+		setInterval(update, 1000/30);
+		//setInterval(update, 2000); // debug only
+	}
+	
+	window.addEventListener("keydown", function(e) {
+		// space and arrow keys
+		if (e.keyCode == 27) {
+			window.location.reload();
+		}
+		if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+			e.preventDefault();
+		}
+	}, false);
+	
+	document.addEventListener("keydown", function (event) {
+	    keystate[event.keyCode] = true;
+	});
+	
+	document.addEventListener("keyup", function (event) {
+		if (event.keyCode === movementKey) {
+			//console.log(movementKey);
+			movementKey = false;
+		}
+	    delete keystate[event.keyCode];
+	});	
+	
+	function generateMatrix(x, y) {
+		var matrix = new Array(x);
+		for (var i = 0; i < x; i++) {
+		  matrix[i] = new Array(y);
+		}
+		return matrix;
+	}
+	
+	function populateMatrix(terrain, x, y) {
+	    var i, j;
+		for(i = 0; i < x; i++) {
+			for(j = 0; j < y; j++) {
+				terrain.logicMatrix[i][j] = 1;
+				if (i == 1 && j == 1) terrain.logicMatrix[i][j] = 3;
+			    if (i == 0 || i == x - 1) terrain.logicMatrix[i][j] = 20;
+				if (j == 0 || j == y - 1) terrain.logicMatrix[i][j] = 20;
+			}
+		}
+	}
+	
+	function generateExit() {
+		exit.x = 18 * tile_size;
+		exit.y = 13 * tile_size;
+		terrain.logicMatrix[18][13] = 21; // cod pentru exit
+	}
+	
+	function generateBombs(terrain, number) {
+		//number = 1;
+		//var potentialBombs = [[3, 3], [3, 4], [3, 5], [3, 6], [3, 7], [3, 8], [5, 3], [5, 4], [5, 5], [5, 6], [5, 7], [5, 8], [6, 8], [6, 5], [6, 9], [7, 10], [8, 3], [8, 4], [8, 5], [10, 3], [10, 4], [10, 5]];
+		//number = 12;
+		while (number--) {
+			var logicX, logicY;
+			do {
+				logicX = Math.floor((Math.random() * (gameRows - 2)) + 1);
+				logicY = Math.floor((Math.random() * (gameCols - 2)) + 1);
+				//logicX = potentialBombs[number][0];
+				//logicY = potentialBombs[number][1];
+			//} while(bombsDict[logicX + 'x' logicY]);
+			//} while(false);
+			} while ((terrain.logicMatrix[logicX][logicY] == 2 || terrain.logicMatrix[logicX][logicY] == 70) || 
+					 (logicX == 1 && logicY == 1) || 
+					 (logicX == 18 && logicY == 13));
+			//var logicX = potentialBombs[number][0];
+			//var logicY = potentialBombs[number][1];
+			terrain.logicMatrix[logicX][logicY] = 2;
+			var bomb = new Bomb();
+			bomb.logicX = logicX;
+			bomb.logicY = logicY;
+			
+			bomb.x = bomb.logicX * tile_size;
+			bomb.y = bomb.logicY * tile_size;
+			
+			bomb.vx = 0;
+			bomb.vy = 0;
+			
+			bomb.isMoving = false;
+			
+			bomb.logicValue = 2;
+			bomb.waitTime = defaultWaitTime;
+			bomb.isWaiting = false;
+			
+			bomb.logicOffsetX = 0;
+			bomb.logicOffsetY = 0;
+			
+			bomb.isMovingSideways = false;
+			
+			bombsDict[logicX + 'x' + logicY] = bomb;
+			bombsList.push(bomb);
+		}
+	}
+	
+	function generateInfos(terrain, number) {
+		while (number--) {
+			var logicX, logicY;
+			do {
+				logicX = Math.floor((Math.random() * (gameRows - 2)) + 1);
+				logicY = Math.floor((Math.random() * (gameCols - 2)) + 1);
+			} while ((terrain.logicMatrix[logicX][logicY] == 2 || terrain.logicMatrix[logicX][logicY] == 7
+					|| terrain.logicMatrix[logicX][logicY] == 70) || 
+					 (logicX == 1 && logicY == 1) || 
+					 (logicX == 18 && logicY == 13));
+			terrain.logicMatrix[logicX][logicY] = 7;
+			var info = new Info();
+			info.logicX = logicX;
+			info.logicY = logicY;
+			
+			info.x = info.logicX * tile_size;
+			info.y = info.logicY * tile_size;
+			
+			info.vx = 0;
+			info.vy = 0;
+			
+			info.isMoving = false;
+			
+			info.logicValue = 7;
+			info.waitTime = defaultWaitTime;
+			info.isWaiting = false;
+			
+			info.logicOffsetX = 0;
+			info.logicOffsetY = 0;
+			
+			info.isMovingSideways = false;
+			
+			infosDict[logicX + 'x' + logicY] = info;
+			infosList.push(info);					 
+		}
+	}
+	
+	function generateExplosiveDisquettes(terrain, number) {
+		while (number--) {
+			var logicX, logicY;
+			do {
+				logicX = Math.floor((Math.random() * (gameRows - 2)) + 1);
+				logicY = Math.floor((Math.random() * (gameCols - 2)) + 1);
+			} while((terrain.logicMatrix[logicX][logicY] == 2 || terrain.logicMatrix[logicX][logicY] == 7 ||
+					 terrain.logicMatrix[logicX][logicY] == 50 || terrain.logicMatrix[logicX][logicY] == 70) ||
+					 (logicX == 1 && logicY == 1) || 
+					 (logicX == 18 && logicY == 13));
+			terrain.logicMatrix[logicX][logicY] = 50;
+			var disquette = new ExplosiveDisquette();
+			disquette.logicX = logicX;
+			disquette.logicY = logicY;
+			
+			disquette.x = disquette.logicX * tile_size;
+			disquette.y = disquette.logicY * tile_size;
+			
+			disquette.vx = 0;
+			disquette.vy = 0;
+			
+			disquette.isMoving = false;
+			
+			disquette.logicValue = 50;
+			disquette.waitTime = defaultWaitTime;
+			disquette.isWaiting = false;
+			
+			disquette.logicOffsetX = 0;
+			disquette.logicOffsetY = 0;
+			
+			disquette.isMovingSideways = false;
+			
+			explosiveDisquettesDict[logicX + 'x' + logicY] = disquette;
+			explosiveDisquettesList.push(disquette);					 
+		}
+	}
+	
+	function generateScissors(terrain, number) {
+		//var logicX = 11, logicY = 5;
+		//terrain.logicMatrix[5][5] = 0;
+		//terrain.logicMatrix[6][5] = 0;
+		//terrain.logicMatrix[7][5] = 0;
+		//terrain.logicMatrix[8][5] = 0;
+		//terrain.logicMatrix[9][5] = 0;
+		//terrain.logicMatrix[10][5] = 0;
+		//terrain.logicMatrix[logicX][logicY] = 70;
+		while (number--) {
+			var logicX, logicY;
+			do {
+				logicX = Math.floor((Math.random() * (gameRows - 2)) + 1);;
+				logicY = Math.floor((Math.random() * (gameCols - 2)) + 1);;
+			} while (terrain.logicMatrix[logicX][logicY] == 70);
+			terrain.logicMatrix[logicX][logicY] = 70;
+			var scissor = new Scissor();
+			scissor.logicX = logicX;
+			scissor.logicY = logicY;
+			
+			scissor.x = scissor.logicX * tile_size;
+			scissor.y = scissor.logicY * tile_size;
+			
+			scissor.vx = 0;
+			scissor.vy = 0;
+			
+			scissor.isMoving = false;
+			
+			scissor.logicValue = 70;
+			scissor.waitTime = defaultWaitTime;
+			scissor.isWaiting = false;
+			
+			scissor.logicOffsetX = 0;
+			scissor.logicOffsetY = 0;
+			
+			scissor.isMovingSideways = false;
+			scissor.direction = 2;
+			
+			scissorsDict[logicX + 'x' + logicY] = scissor;
+			scissorsList.push(scissor);	
+		}
+	}
+	
+	function checkNumberOfBombs() {
+	    var i, j, key, number = 0, size = 0;
+		for (i = 1; i < gameRows; i++) {
+			for (j = 1; j < gameCols; j++) {
+				if (terrain.logicMatrix[i][j] == 2) number++;
+			}
+		}
+		for (key in bombsDict) {
+			if (bombsDict.hasOwnProperty(key)) size++;
+		}
+		console.log('Matrix Logic bombs: ' + number);
+		console.log('bombsList length: ' + bombsList.length);
+		console.log('bombsDict number keys: ' + size);
+	}
+	
+	function checkNumberOfInfos() {
+	    var i, j, key, number = 0, size = 0;
+		for (i = 1; i < gameRows; i++) {
+			for (j = 1; j < gameCols; j++) {
+				if (terrain.logicMatrix[i][j] == 7) number++;
+			}
+		}
+		for (key in infosDict) {
+			if (infosDict.hasOwnProperty(key)) size++;
+		}
+		console.log('Matrix Logic infos: ' + number);
+		console.log('infosList length: ' + infosList.length);
+		console.log('infosDict number keys: ' + size);	
+	}
+	
+	function transformCoordinateToLogic(value) {
+		// round the value of the X, Y coordinates
+		return Math.floor(value / 40);
+	}
+	
+	function sortBombsDictKeys(bomb1, bomb2) {
+		var bomb1Y = bomb1.split('x')[1];
+		var bomb2Y = bomb2.split('x')[1];
+		return Number(bomb2Y) - Number(bomb1Y);
+	}
+
+	function sortInfosDictKeys(info1, info2) {
+		var info1Y = info1.split('x')[1];
+		var info2Y = info2.split('x')[1];
+		return Number(info2Y) - Number(info1Y);
+	}
+	
+	function sortExplosiveDisquettesKeys(disquette1, disquette2) {
+		var disquette1Y = disquette1.split('x')[1];
+		var disquette2Y = disquette2.split('x')[1];
+		return Number(disquette2Y) - Number(disquette1Y);	
+	}
+	
+	function whipeAdiacentSquares(logicX, logicY) {
+		if (terrain.logicMatrix[logicX][logicY] == 3) {
+			gameOn = false;
+			player.explode();
+		}
+		if (terrain.logicMatrix[logicX][logicY] == 20) return;
+		if (terrain.logicMatrix[logicX][logicY] == 50) {
+			//detonateSquare(this.logicX, this.logicY);
+			//delete explosiveDisquettesDict[this.logicX + 'x' + this.logicY];
+			//terrain.logicMatrix[this.logicX][this.logicY] = 0;
+			//return;
+			explosiveDisquettesDict[logicX + 'x' + logicY].explode();
+			return;
+		}
+		var bomb, info, disquette;
+		bomb = bombsDict[logicX + 'x' + logicY];
+		if (bomb) delete bombsDict[logicX + 'x' + logicY];
+		info = infosDict[logicX + 'x' + logicY];
+		if (info) delete infosDict[logicX + 'x' + logicY];
+		terrain.logicMatrix[logicX][logicY] = 32;
+	}
+	
+	function detonateSquare(logicX, logicY) {
+		//console.log('KABOOOOM!!!');
+		terrain.logicMatrix[logicX][logicY] = 30;
+		whipeAdiacentSquares(logicX - 1, logicY - 1);
+		whipeAdiacentSquares(logicX, logicY - 1);
+		whipeAdiacentSquares(logicX + 1, logicY - 1);
+		whipeAdiacentSquares(logicX - 1, logicY);
+		whipeAdiacentSquares(logicX + 1, logicY);
+		whipeAdiacentSquares(logicX - 1, logicY + 1);
+		whipeAdiacentSquares(logicX, logicY + 1);
+		whipeAdiacentSquares(logicX + 1, logicY + 1);		
+	}
+	
+    function Terrain() {
+		var logicMatrix; // logic matrix
+    }
+	
+	Terrain.prototype.draw = function () {
+		var i, j;
+		for (i = 0; i < gameRows; i++) {
+			for (j = 0; j < gameCols; j++) {
+			    if (this.logicMatrix[i][j] == 1) {
+					context.drawImage(greenImage, i * tile_size, j * tile_size);	
+				}
+			    if (this.logicMatrix[i][j] == 20) {
+					context.drawImage(borderImage, i * tile_size, j * tile_size);	
+				}				
+			}
+		}
+	}
+	
+	function Shape() {
+		var x, y; // pixels on screen
+		var logicX, logicY; // matrix logic position
+		var logicOffsetX, logicOffsetY; // -1, 0 or 1 values
+		var movementPhase;
+		var isMoving;
+		var vx, vy;
+		var image;
+	}
+	
+	Shape.prototype.testInheritance = function () {
+	    return 56;
+	}
+	
+	function Player() {
+		var pushForce;
+	}
+	
+	Player.prototype = new Shape();
+	
+	Player.prototype.moveElement = function () {
+	if (!gameOn) return;
+		if (!this.isMoving && !keystate[SpaceKey])	{
+			// Right movement		
+			if (keystate[RightArrow] && terrain.logicMatrix[this.logicX + 1][this.logicY] == 21) {
+				if (finishContidion()) window.location.reload();
+				return;
+			}
+			if (keystate[RightArrow] && terrain.logicMatrix[this.logicX + 1][this.logicY] != 20 &&
+					terrain.logicMatrix[this.logicX + 1][this.logicY] != 2 &&
+					terrain.logicMatrix[this.logicX + 1][this.logicY] != 50) {
+					//terrain.logicMatrix[this.logicX + 1][this.logicY] != 2 &&
+					//terrain.logicMatrix[this.logicX + 1][this.logicY] != 7) {
+				this.vx = tile_size / 8;
+				this.movementPhase = 8;
+				this.logicOffsetX = 1;
+				this.logicOffsetY = 0;
+				movementKey = RightArrow;
+				this.isMoving = true;
+				return;
+			}
+			// right - pushing bomb
+			if (keystate[RightArrow] && terrain.logicMatrix[this.logicX + 1][this.logicY] == 2) {
+				var pushedBomb = bombsDict[(this.logicX + 1) + 'x' + this.logicY];
+				if(terrain.logicMatrix[this.logicX + 2][this.logicY - 1] == 2 ||
+						terrain.logicMatrix[this.logicX + 2][this.logicY - 1] == 7 ||
+						terrain.logicMatrix[this.logicX + 2][this.logicY - 1] == 50) return; // this is still in testing			
+				if (!pushedBomb.isMoving) {
+					if (terrain.logicMatrix[this.logicX + 2][this.logicY] == 0) {
+						if (this.pushForce > 0) {
+							this.pushForce--;
+							return;
+						}
+						this.vx = tile_size / 8;
+						this.movementPhase = 8;
+						this.logicOffsetX = 1;
+						this.logicOffsetY = 0;
+						movementKey = RightArrow;
+						this.isMoving = true;
+						
+						pushedBomb.isMoving = true;
+						pushedBomb.movementPhase = 8;
+						pushedBomb.vx = tile_size / 8;
+						return;						
+					}
+				}
+			}
+			// right - disquette pushing
+			if (keystate[RightArrow] && terrain.logicMatrix[this.logicX + 1][this.logicY] == 50) {
+				var pushedDisquette = explosiveDisquettesDict[(this.logicX + 1) + 'x' + this.logicY];
+				if(terrain.logicMatrix[this.logicX + 2][this.logicY - 1] == 2 ||
+						terrain.logicMatrix[this.logicX + 2][this.logicY - 1] == 7 ||
+						terrain.logicMatrix[this.logicX + 2][this.logicY - 1] == 50) return; // this is still in testing			
+				if (!pushedDisquette.isMoving) {
+					if (terrain.logicMatrix[this.logicX + 2][this.logicY] == 0) {
+						if (this.pushForce > 0) {
+							this.pushForce--;
+							return;
+						}
+						this.vx = tile_size / 8;
+						this.movementPhase = 8;
+						this.logicOffsetX = 1;
+						this.logicOffsetY = 0;
+						movementKey = RightArrow;
+						this.isMoving = true;
+						
+						pushedDisquette.isMoving = true;
+						pushedDisquette.movementPhase = 8;
+						pushedDisquette.vx = tile_size / 8;
+						return;						
+					}
+				}
+			}			
+			// Left movement			
+			if (keystate[LeftArrow] && terrain.logicMatrix[this.logicX - 1][this.logicY] == 21) {
+				if (finishContidion()) window.location.reload();
+				return;
+			}			
+			if (keystate[LeftArrow] && terrain.logicMatrix[this.logicX - 1][this.logicY] != 20 &&
+					terrain.logicMatrix[this.logicX - 1][this.logicY] != 2 &&
+					terrain.logicMatrix[this.logicX - 1][this.logicY] != 50) {
+					//terrain.logicMatrix[this.logicX - 1][this.logicY] != 2 &&
+					//terrain.logicMatrix[this.logicX - 1][this.logicY] != 7) {
+				this.vx = -tile_size / 8;
+				this.movementPhase = 8;
+				this.logicOffsetX = -1;
+				this.logicOffsetY = 0;		
+				movementKey = LeftArrow;				
+				this.isMoving = true;
+				return;
+			}
+			// left - pushing bomb
+			if (keystate[LeftArrow] && terrain.logicMatrix[this.logicX - 1][this.logicY] == 2) {
+				var pushedBomb = bombsDict[(this.logicX - 1) + 'x' + this.logicY];
+				if(terrain.logicMatrix[this.logicX - 2][this.logicY - 1] == 2 ||
+						terrain.logicMatrix[this.logicX - 2][this.logicY - 1] == 7 ||
+						terrain.logicMatrix[this.logicX - 2][this.logicY - 1] == 50) return; // this is still in testing
+				if (!pushedBomb.isMoving) {
+					if (terrain.logicMatrix[this.logicX - 2][this.logicY] == 0) {
+						if (this.pushForce > 0) {
+							this.pushForce--;
+							return;
+						}					
+						this.vx = -tile_size / 8;
+						this.movementPhase = 8;
+						this.logicOffsetX = -1;
+						this.logicOffsetY = 0;
+						movementKey = LeftArrow;
+						this.isMoving = true;
+						
+						pushedBomb.isMoving = true;
+						pushedBomb.movementPhase = 8;
+						pushedBomb.vx = -tile_size / 8;
+						return;						
+					}
+				}
+			}
+			// left - pushing disquete
+			if (keystate[LeftArrow] && terrain.logicMatrix[this.logicX - 1][this.logicY] == 50) {
+				var pushedDisquette = explosiveDisquettesDict[(this.logicX - 1) + 'x' + this.logicY];
+				if(terrain.logicMatrix[this.logicX - 2][this.logicY - 1] == 2 ||
+						terrain.logicMatrix[this.logicX - 2][this.logicY - 1] == 7 ||
+						terrain.logicMatrix[this.logicX - 2][this.logicY - 1] == 50) return; // this is still in testing
+				if (!pushedDisquette.isMoving) {
+					if (terrain.logicMatrix[this.logicX - 2][this.logicY] == 0) {
+						if (this.pushForce > 0) {
+							this.pushForce--;
+							return;
+						}					
+						this.vx = -tile_size / 8;
+						this.movementPhase = 8;
+						this.logicOffsetX = -1;
+						this.logicOffsetY = 0;
+						movementKey = LeftArrow;
+						this.isMoving = true;
+						
+						pushedDisquette.isMoving = true;
+						pushedDisquette.movementPhase = 8;
+						pushedDisquette.vx = -tile_size / 8;
+						return;						
+					}
+				}
+			}			
+			// Up movement			
+			if (keystate[UpArrow] && terrain.logicMatrix[this.logicX][this.logicY - 1] == 21) {
+				if (finishContidion()) window.location.reload();
+				return;
+			}			
+			if (keystate[UpArrow] && terrain.logicMatrix[this.logicX][this.logicY - 1] != 20 && 
+					terrain.logicMatrix[this.logicX][this.logicY - 1] != 2 &&
+					terrain.logicMatrix[this.logicX][this.logicY - 1] != 50) {
+					//terrain.logicMatrix[this.logicX][this.logicY - 1] != 2 &&
+					//terrain.logicMatrix[this.logicX][this.logicY - 1] != 7) {
+				this.vy = -tile_size / 8;
+				this.movementPhase = 8;
+				this.logicOffsetX = 0;
+				this.logicOffsetY = -1;
+				movementKey = UpArrow;				
+				this.isMoving = true;
+				return;
+			}
+			// Down movement				
+			if (keystate[DownArrow] && terrain.logicMatrix[this.logicX][this.logicY + 1] == 21) {
+				if (finishContidion()) window.location.reload();
+				return;
+			}				
+			if (keystate[DownArrow] && terrain.logicMatrix[this.logicX][this.logicY + 1] != 20 &&
+					terrain.logicMatrix[this.logicX][this.logicY + 1] != 2 &&
+					terrain.logicMatrix[this.logicX][this.logicY + 1] != 50) {
+					//terrain.logicMatrix[this.logicX][this.logicY + 1] != 2 &&
+					//terrain.logicMatrix[this.logicX][this.logicY + 1] != 7) {
+				this.vy = tile_size / 8;
+				this.movementPhase = 8;
+				this.logicOffsetX = 0;
+				this.logicOffsetY = 1;
+				movementKey = DownArrow;
+				this.isMoving = true;
+				return;
+			}		
+		} else {
+			this.movementPhase--;
+			if (!this.movementPhase) {
+				this.isMoving = false;
+				this.vx = 0;
+				this.vy = 0;
+				this.logicOffsetX = 0;
+				this.logicOffsetY = 0;
+				//movementKey = false;
+				if (terrain.logicMatrix[this.logicX][this.logicY] != 2) 
+				    terrain.logicMatrix[this.logicX][this.logicY] = 0;
+				this.logicX = this.x / tile_size;
+				this.logicY = this.y / tile_size;
+				if (terrain.logicMatrix[this.logicX][this.logicY] == 7) consumeInformation(this.logicX, this.logicY);
+				terrain.logicMatrix[this.logicX][this.logicY] = 3;
+				this.pushForce = defaultPushForce;
+				if (movementKey) {
+				    // mai executa o data metoda asta si stabileste ce trebuie facut in continuare
+					this.moveElement();
+				}
+			}
+			// aici trebuie un else pentru continue movement daca movementKey e inca apasata... done
+ 		}
+	}
+	
+	Player.prototype.chackSpacePressed = function () {
+		if (keystate[SpaceKey]) {
+			if (keystate[RightArrow] && (terrain.logicMatrix[this.logicX + 1][this.logicY + this.logicOffsetY] == 1 ||
+					terrain.logicMatrix[this.logicX + 1][this.logicY + this.logicOffsetY] == 7) &&
+					movementKey != RightArrow) {
+				if (terrain.logicMatrix[this.logicX + 1][this.logicY + this.logicOffsetY] == 7 && 
+						infosDict[(this.logicX + 1) + 'x' + (this.logicY + this.logicOffsetY)].isMoving)
+					return;
+				if (terrain.logicMatrix[this.logicX + 1][this.logicY + this.logicOffsetY] == 7)
+					consumeInformation(this.logicX + 1, this.logicY + this.logicOffsetY);
+				terrain.logicMatrix[this.logicX + 1][this.logicY + this.logicOffsetY] = 0;
+				return;
+			}
+			if (keystate[LeftArrow] && (terrain.logicMatrix[this.logicX - 1][this.logicY + this.logicOffsetY] == 1 || 
+					terrain.logicMatrix[this.logicX - 1][this.logicY + this.logicOffsetY] == 7) &&
+					movementKey != LeftArrow) {
+				if (terrain.logicMatrix[this.logicX - 1][this.logicY + this.logicOffsetY] == 7 &&
+						infosDict[(this.logicX - 1) + 'x' + (this.logicY + this.logicOffsetY)].isMoving)
+					return;
+				if (terrain.logicMatrix[this.logicX - 1][this.logicY + this.logicOffsetY] == 7)
+				    consumeInformation(this.logicX - 1, this.logicY + this.logicOffsetY);
+				terrain.logicMatrix[this.logicX - 1][this.logicY + this.logicOffsetY] = 0;
+				return;
+			}
+			if (keystate[UpArrow] && (terrain.logicMatrix[this.logicX + this.logicOffsetX][this.logicY - 1] == 1 ||
+					terrain.logicMatrix[this.logicX + this.logicOffsetX][this.logicY - 1] == 7) &&
+					movementKey !=  UpArrow) {
+				if (terrain.logicMatrix[this.logicX + this.logicOffsetX][this.logicY - 1] == 7 &&
+						infosDict[(this.logicX + this.logicOffsetX) + 'x' + (this.logicY - 1)].isMoving)
+					return;
+				if (terrain.logicMatrix[this.logicX + this.logicOffsetX][this.logicY - 1] == 7)
+					consumeInformation(this.logicX + this.logicOffsetX, this.logicY - 1);
+				terrain.logicMatrix[this.logicX + this.logicOffsetX][this.logicY - 1] = 0;
+				return;
+			}
+			if (keystate[DownArrow] && (terrain.logicMatrix[this.logicX + this.logicOffsetX][this.logicY + 1] == 1 ||
+					terrain.logicMatrix[this.logicX + this.logicOffsetX][this.logicY + 1] == 7) &&
+					movementKey != DownArrow) {
+				if (terrain.logicMatrix[this.logicX + this.logicOffsetX][this.logicY + 1] == 7 &&
+						infosDict[(this.logicX + this.logicOffsetX) + 'x' + (this.logicY + 1)].isMoving)
+					return;
+				if (terrain.logicMatrix[this.logicX + this.logicOffsetX][this.logicY + 1] == 7)
+					consumeInformation(this.logicX + this.logicOffsetX, this.logicY + 1);
+				terrain.logicMatrix[this.logicX + this.logicOffsetX][this.logicY + 1] = 0;
+				return;
+			}	
+		}	
+	}
+	
+	Player.prototype.explode = function () {	
+		detonateSquare(this.logicX, this.logicY);
+	}
+	
+	Player.prototype.updatePosition = function () {
+		this.x += this.vx;
+		this.y += this.vy;
+	}
+	
+	Player.prototype.draw = function () {
+		/*var drawImage;
+		if (this.isMoving) {
+			if(this.vx > 0) {
+				drawImage = playerImageRight;
+			} else {
+				drawImage = playerImageLeft;
+			}		
+		} else {
+		    drawImage = playerImage;
+		}
+		context.drawImage(drawImage, this.x, this.y);*/
+		if (gameOn)
+			context.drawImage(playerImage, this.x, this.y);
+	}
+	
+	function Exit() {
+	
+	}
+	
+	Exit.prototype = new Shape();
+	
+	Exit.prototype.draw = function () {
+		context.drawImage(exitImage, this.x, this.y);
+	}
+	
+	function Bomb() {
+		var waitTime;
+		var isWaiting;
+		var logicValue;
+	}
+	
+	Bomb.prototype = new Shape();
+	
+	/*Bomb.prototype.draw = function () {
+		context.drawImage(bombImage, this.x, this.y);	
+	}*/
+	
+	Bomb.prototype.draw = function () {
+		var drawnImage = bombImage;
+		if(this.vx > 0) {
+			if (this.movementPhase == 7) drawnImage = bombImage;
+			if (this.movementPhase == 6) drawnImage = bombImageRot3;
+			if (this.movementPhase == 5) drawnImage = bombImageRot3;
+			if (this.movementPhase == 4) drawnImage = bombImageRot2;
+			if (this.movementPhase == 3) drawnImage = bombImageRot2;
+			if (this.movementPhase == 2) drawnImage = bombImageRot1;
+			if (this.movementPhase == 1) drawnImage = bombImageRot1;
+		} else if (this.vx < 0) {
+			if (this.movementPhase == 7) drawnImage = bombImage;
+			if (this.movementPhase == 6) drawnImage = bombImageRot1;
+			if (this.movementPhase == 5) drawnImage = bombImageRot1;
+			if (this.movementPhase == 4) drawnImage = bombImageRot2;		
+			if (this.movementPhase == 3) drawnImage = bombImageRot2;
+			if (this.movementPhase == 2) drawnImage = bombImageRot3;
+			if (this.movementPhase == 1) drawnImage = bombImageRot3;
+		}
+		context.drawImage(drawnImage, this.x, this.y);	
+	}
+	
+	Bomb.prototype.updatePosition = function () {
+		this.x += this.vx;
+		this.y += this.vy;
+	}
+	
+	Bomb.prototype.applyGravity = function () {
+		/*if (this.waitTime > 0) {
+			this.waitTime--;
+			return;
+		}*/
+		if (!this.isMoving && !this.isWaiting)	{
+			//if (player.logicX == this.logicX - 1 && player.logicY == this.logicY + 1 && player.vx > 0) return;
+			//if (player.logicX == this.logicX + 1 && player.logicY == this.logicY + 1 && player.vx < 0) return;
+			if (terrain.logicMatrix[this.logicX][this.logicY + 1] == 0) {
+				bombDownRight = bombsDict[(this.logicX + 1) + 'x' + (this.logicY + 1)];
+				bombDownLeft = bombsDict[(this.logicX - 1) + 'x' + (this.logicY + 1)];
+				infoDownRight = infosDict[(this.logicX + 1) + 'x' + (this.logicY + 1)];
+				infoDownLeft = infosDict[(this.logicX - 1) + 'x' + (this.logicY + 1)];
+				scissorDownRight = scissorsDict[(this.logicX + 1) + 'x' + (this.logicY + 1)];
+				scissorDownLeft = scissorsDict[(this.logicX - 1) + 'x' + (this.logicY + 1)];
+				if (bombDownRight && bombDownRight.vx < 0) return;
+				if (bombDownLeft && bombDownLeft.vx > 0) return;
+				if (infoDownRight && infoDownRight.vx < 0) return;
+				if (infoDownLeft && infoDownLeft.vx > 0) return;
+				if (scissorDownRight && scissorDownRight.vx < 0) { // conditia asta e prea puternica, not finished, yet
+					scissorDownRight.explode();
+					return;
+				}
+				if (scissorDownLeft && scissorDownLeft.vx > 0) { // conditia asta e prea puternica, not finished, yet
+					scissorDownLeft.explode();				
+					return;
+				}
+				if (this.waitTime > 0) {
+				    this.waitTime--;
+					return;
+				}
+				this.vy = 4;
+				this.movementPhase = 8;
+				this.isMoving = true;
+			} else {
+				/*if (this.waitTime > 0) {
+					this.waitTime--;
+					return; 
+				}*/
+				if (this.logicValue == 50) return; // don't move sideways for Explosive Disquette
+				this.moveElement();
+			}
+		} else {
+			//if (this.waitTime > 0) return;
+			this.movementPhase--;
+			if (!this.movementPhase) {
+				// update the logic position
+				terrain.logicMatrix[this.logicX][this.logicY] = 0;
+				if (this.logicValue == 2)
+					delete bombsDict[this.logicX + 'x' + this.logicY];
+				if (this.logicValue == 7)					
+					delete infosDict[this.logicX + 'x' + this.logicY];
+				if (this.logicValue == 50)					
+					delete explosiveDisquettesDict[this.logicX + 'x' + this.logicY];					
+				this.logicX = this.x / tile_size;
+				this.logicY = this.y / tile_size;
+				terrain.logicMatrix[this.logicX][this.logicY] = this.logicValue;
+				if (this.logicValue == 2)
+					bombsDict[this.logicX + 'x' + this.logicY] = this;
+				if (this.logicValue == 7)
+					infosDict[this.logicX + 'x' + this.logicY] = this;
+				if (this.logicValue == 50)
+					explosiveDisquettesDict[this.logicX + 'x' + this.logicY] = this;
+					
+				if (terrain.logicMatrix[this.logicX][this.logicY + 1] == 0 ||
+						terrain.logicMatrix[this.logicX][this.logicY + 1] == 3) {
+					// check if scissor will cross path
+					// not finished, yet
+					if (this.logicValue == 2 || this.logicValue == 7 || this.logicValue == 50) { 
+						console.log('aaa');
+						if (terrain.logicMatrix[this.logicX - 1][this.logicY + 1] == 70) {
+							console.log('bbb');
+							var scissor = scissorsDict[(this.logicX - 1) + 'x' + (this.logicY + 1)];
+							if (scissor.vx > 0) scissor.explode();
+						}
+						if (terrain.logicMatrix[this.logicX + 1][this.logicY + 1] == 70) {
+							console.log('ccc');
+							var scissor = scissorsDict[(this.logicX + 1) + 'x' + (this.logicY + 1)];
+							if (scissor.vx < 0) scissor.explode();
+						}						
+						if (terrain.logicMatrix[this.logicX][this.logicY + 1] == 70) {
+							console.log('ddd');
+							var scissor = scissorsDict[(this.logicX) + 'x' + (this.logicY + 1)];
+							scissor.explode();
+						}
+						if (terrain.logicMatrix[this.logicX][this.logicY] == 70) {
+							console.log('eee');
+							var scissor = scissorsDict[this.logicX + 'x' + this.logicY];
+							scissor.explode();							
+						}
+						if (terrain.logicMatrix[this.logicX][this.logicY + 2] == 70) {
+							console.log('fff');
+							var scissor = scissorsDict[this.logicX + 'x' + (this.logicY + 2)];
+							// ultima oara nu a explodat
+							if (scissor.vy < 0 && (scissor.y - this.y <= tile_size)) scissor.explode();
+							console.log(terrain.logicMatrix[this.logicX]);
+							//if (scissor.vy < 0) scissor.explode(); // aici cateodata mai ramane bomba pt ca e distanta si doi si nu ajunge sa explodeze
+						}						
+					}						
+					// continue falling
+					this.vx = 0;
+					this.vy = 4;
+					this.movementPhase = 8;
+				} else {
+					// if explosive disquette then explode!!! and remove it from dict!!!
+					if (this.logicValue == 50 && !this.vx) {
+						this.explode();
+					}
+					// check if scissor will cross path
+					// not finished, yet
+					if (this.logicValue == 2 || this.logicValue == 7 || this.logicValue == 50) {
+						console.log('aaa2');
+						if (terrain.logicMatrix[this.logicX - 1][this.logicY + 1] == 70) {
+							console.log('bbb2');
+							var scissor = scissorsDict[(this.logicX - 1) + 'x' + (this.logicY + 1)];
+							if (scissor.vx > 0) scissor.explode();
+						}
+						if (terrain.logicMatrix[this.logicX + 1][this.logicY + 1] == 70) {
+							console.log('ccc2');
+							var scissor = scissorsDict[(this.logicX + 1) + 'x' + (this.logicY + 1)];
+							if (scissor.vx < 0) scissor.explode();
+						}						
+						if (terrain.logicMatrix[this.logicX][this.logicY + 1] == 70) {
+							console.log('ddd2');
+							var scissor = scissorsDict[(this.logicX) + 'x' + (this.logicY + 1)];
+							scissor.explode();
+						}
+						if (terrain.logicMatrix[this.logicX][this.logicY] == 70) {
+							console.log('eee2');
+							var scissor = scissorsDict[this.logicX + 'x' + this.logicY];
+							scissor.explode();							
+						}
+						if (terrain.logicMatrix[this.logicX][this.logicY + 2] == 70) {
+							console.log('fff2');
+							var scissor = scissorsDict[this.logicX + 'x' + (this.logicY + 2)];
+							if (scissor.vy < 0) scissor.explode();							
+						}												
+					}
+					// also if beneath is an explosing disquete then explode it!!!
+					if (!this.vx) this.triggerExplosionUnderneath();
+					this.isMoving = false;
+					this.vy = 0;
+					this.vx = 0;
+					this.waitTime = defaultWaitTime;
+				}
+				// update this if to check for moving sideways
+			}
+		}		
+	}
+	
+	Bomb.prototype.moveElement = function () {
+		// 1. verific daca poate sa se duca in laterale
+		// 2. verific daca poate sa cada
+		/*if (terrain.logicMatrix[this.logicX][this.logicOffsetY + 1] == 0) {
+		    //poate sa cada
+		} else if (terrain.logicMatrix[this.logicX][this.logicOffsetY + 1] == 2) {
+			// mai trebuie adaugate conditii
+		}*/
+		if (!this.isMoving && !this.isWaiting) {
+			//if (player.logicX == this.logicX && (player.logicY == this.logicY + 2) && player.isMoving) return;
+			if ((terrain.logicMatrix[this.logicX][this.logicY + 1] == 2 || terrain.logicMatrix[this.logicX][this.logicY + 1] == 7) &&
+					terrain.logicMatrix[this.logicX - 1][this.logicY] == 0 &&
+					/*(terrain.logicMatrix[this.logicX - 1][this.logicY + 1] == 0 ||
+					terrain.logicMatrix[this.logicX - 1][this.logicY + 1] == 3 && (player.vx > 0 || player.vx < 0 || player.vy > 0)) &&*/
+					terrain.logicMatrix[this.logicX - 1][this.logicY + 1] == 0 &&
+					terrain.logicMatrix[this.logicX - 1][this.logicY + 1] != 3 &&
+					terrain.logicMatrix[this.logicX - 1][this.logicY - 1] != 2 &&
+					terrain.logicMatrix[this.logicX - 1][this.logicY - 1] != 7 &&
+					terrain.logicMatrix[this.logicX - 1][this.logicY - 1] != 50) {
+					//bombsDict[this.logicX + 'x' + (this.logicY + 1)] != undefined &&
+					//!bombsDict[this.logicX + 'x' + (this.logicY - 1)].isMoving) {
+				if (bombsDict[(this.logicX - 1) + 'x' + (this.logicY - 2)] != undefined &&
+					bombsDict[(this.logicX - 1) + 'x' + (this.logicY - 2)].isMoving) {
+				} else if (infosDict[(this.logicX - 1) + 'x' + (this.logicY - 2)] != undefined &&
+						   infosDict[(this.logicX - 1) + 'x' + (this.logicY - 2)].isMoving) {	
+				} else if (explosiveDisquettesDict[(this.logicX - 1) + 'x' + (this.logicY - 2)] != undefined &&
+						   explosiveDisquettesDict[(this.logicX - 1) + 'x' + (this.logicY - 2)].isMoving) {
+				} else {
+					var bomb = bombsDict[(this.logicX - 2) + 'x' + (this.logicY)];
+					if (bomb && bomb.vx > 0) return;
+					var info = infosDict[(this.logicX - 2) + 'x' + (this.logicY)];
+					if (info && info.vx > 0) return;
+					var disquette = explosiveDisquettesDict[(this.logicX - 2) + 'x' + (this.logicY)];
+					if (disquette && disquette.vx > 0) return;
+					// bomba sau informatia de deasupra nu si-a inceput caderea pe lange bomba/informatia curenta					
+					var upBomb = bombsDict[this.logicX + 'x' + (this.logicY - 1)];
+					if (upBomb && upBomb.vx < 0) return;
+					var upInfo = infosDict[this.logicX + 'x' + (this.logicY - 1)];
+					if (upInfo && upInfo.vx < 0) return;
+					// la acelasi nivel dar din partea stanga
+					var leftBomb = bombsDict[(this.logicX - 2) + 'x' + this.logicY];
+					if (leftBomb && leftBomb.vx > 0) return;
+					var leftInfo = infosDict[(this.logicX - 2) + 'x' + this.logicY];
+					if (leftInfo && leftInfo.vx > 0) return;
+					// la acelasi nivel dar din partea stanga si de sus
+					var leftUpBomb = bombsDict[(this.logicX - 2) + 'x' + (this.logicY - 1)];
+					if (leftUpBomb && leftUpBomb.vx > 0) return;
+					var leftUpInfo = infosDict[(this.logicX - 2) + 'x' + (this.logicY - 1)];
+					if (leftUpInfo && leftUpInfo.vx > 0) return;
+					
+					// nu poti sa te duci stanga/dreapta daca bomba/informatia de sub tine e in cadere
+					if (terrain.logicMatrix[this.logicX][this.logicY + 1] == 2) {
+						if (bombsDict[this.logicX + 'x' + (this.logicY + 1)].isMoving) return;
+					}
+					if (terrain.logicMatrix[this.logicX][this.logicY + 1] == 7) {
+						if (infosDict[this.logicX + 'x' + (this.logicY + 1)].isMoving) return;
+					}
+					
+					this.isMoving = true;
+					//this.movementPhase = 4;
+					//this.vx = -8;
+					this.movementPhase = 8;
+					this.vx = -4;
+				}
+			} else if ((terrain.logicMatrix[this.logicX][this.logicY + 1] == 2  || terrain.logicMatrix[this.logicX][this.logicY + 1] == 7) &&
+					terrain.logicMatrix[this.logicX + 1][this.logicY] == 0 &&
+					/*(terrain.logicMatrix[this.logicX + 1][this.logicY + 1] == 0 ||
+					terrain.logicMatrix[this.logicX + 1][this.logicY + 1] == 3 && (player.vx > 0 || player.vx < 0 || player.vy > 0)) &&*/
+					terrain.logicMatrix[this.logicX + 1][this.logicY + 1] == 0 &&
+					terrain.logicMatrix[this.logicX + 1][this.logicY + 1] != 3 &&
+					terrain.logicMatrix[this.logicX + 1][this.logicY - 1] != 2 &&
+					terrain.logicMatrix[this.logicX + 1][this.logicY - 1] != 7 &&
+					terrain.logicMatrix[this.logicX + 1][this.logicY - 1] != 50) { 
+					//bombsDict[this.logicX + 'x' + (this.logicY + 1)] != undefined &&					
+					//!bombsDict[this.logicX + 'x' + (this.logicY - 1)].isMoving) {
+				if (bombsDict[(this.logicX + 1) + 'x' + (this.logicY - 2)] != undefined &&
+					bombsDict[(this.logicX + 1) + 'x' + (this.logicY - 2)].isMoving) {			
+				} else if (infosDict[(this.logicX + 1) + 'x' + (this.logicY - 2)] != undefined &&
+						   infosDict[(this.logicX + 1) + 'x' + (this.logicY - 2)].isMoving) {				
+				} else if (explosiveDisquettesDict[(this.logicX + 1) + 'x' + (this.logicY - 2)] != undefined &&
+						   explosiveDisquettesDict[(this.logicX + 1) + 'x' + (this.logicY - 2)].isMoving) {
+				} else {
+					var bomb = bombsDict[(this.logicX + 2) + 'x' + (this.logicY)];
+					if (bomb && bomb.vx < 0) return;
+					var info = infosDict[(this.logicX + 2) + 'x' + (this.logicY)];
+					if (info && info.vx < 0) return;
+					var disquette = explosiveDisquettesDict[(this.logicX + 2) + 'x' + (this.logicY)];
+					if (disquette && disquette.vx < 0) return;
+					// bomba sau informatia de deasupra nu si-a inceput caderea pe lange bomba/informatia curenta
+					var upBomb = bombsDict[this.logicX + 'x' + (this.logicY - 1)];
+					if (upBomb && upBomb.vx > 0) return;
+					var upInfo = infosDict[this.logicX + 'x' + (this.logicY - 1)];
+					if (upInfo && upInfo.vx > 0) return;					
+					// la acelasi nivel dar din partea dreapta
+					var rightBomb = bombsDict[(this.logicX + 2) + 'x' + this.logicY];
+					if (rightBomb && rightBomb.vx < 0) return;
+					var rightInfo = infosDict[(this.logicX + 2) + 'x' + this.logicY];
+					if (rightInfo && rightInfo.vx < 0) return;
+					// la acelasi nivel dar din partea dreapta si de sus
+					var rightUpBomb = bombsDict[(this.logicX + 2) + 'x' + (this.logicY - 1)];
+					if (rightUpBomb && rightUpBomb.vx < 0) return;
+					var rightUpInfo = infosDict[(this.logicX + 2) + 'x' + (this.logicY - 1)];
+					if (rightUpInfo && rightUpInfo.vx < 0) return;
+					
+					
+					// nu poti sa te duci stanga/dreapta daca bomba/informatia de sub tine e in cadere
+					if (terrain.logicMatrix[this.logicX][this.logicY + 1] == 2) {
+						if (bombsDict[this.logicX + 'x' + (this.logicY + 1)].isMoving) return;
+					}
+					if (terrain.logicMatrix[this.logicX][this.logicY + 1] == 7) {
+						if (infosDict[this.logicX + 'x' + (this.logicY + 1)].isMoving) return;
+					}					
+					
+					this.isMoving = true;
+					//this.movementPhase = 4;
+					//this.vx = 8;			
+					this.movementPhase = 8;
+					this.vx = 4;								
+				}
+			}
+		}
+	}
+	
+	Bomb.prototype.setWaitTime = function () {
+	
+	}
+	
+	Bomb.prototype.checkIfBombKillsPlayer = function () {
+		// asta cred ca e buna asa cum era inainte
+/*		if (terrain.logicMatrix[this.logixX][this.logixY + 1] == 3) {
+		    this.isMoving = false;
+			this.waitTime = 0;
+		}*/
+		if (this.isMoving) {
+			if (this.x - player.x < tile_size / 2 && player.y - this.y < tile_size && this.x - player.x >= 0 && player.y - this.y >= 0) {
+				gameOn = false;
+				player.explode();
+				//window.location.reload();
+				//console.log(this.x - player.x < tile_size / 2);
+				//console.log('aaa');
+				//console.log(this.x - player.x);
+				//console.log(this.y - player.y);
+			}
+			if (player.x - this.x < tile_size / 2 && player.y - this.y < tile_size && player.x - this.x >= 0 && player.y - this.y >= 0) {
+				gameOn = false;
+				player.explode();
+				//window.location.reload();
+				//console.log(player.x - this.x);
+				//console.log(player.y - this.y);
+				//console.log('bbb');
+			} 		
+			/*if (terrain.logicMatrix[this.logicX][this.logicY + 1] == 3) {
+				this.isMoving = false;
+				this.waitTime = 0;
+			} */	
+		}
+	}
+	
+	Bomb.prototype.triggerExplosionUnderneath = function () {
+		if (this.isMoving && this.vx == 0 && terrain.logicMatrix[this.logicX][this.logicY + 1] == 50) {
+			var disquette = explosiveDisquettesDict[this.logicX + 'x' + (this.logicY + 1)];
+			disquette.explode();
+		}
+	}
+	
+	function Info() {
+		// valoare logica in logicMatrix = 7
+	}
+	
+	Info.prototype = new Bomb();
+	//Info.prototype = new Shape();
+	
+	Info.prototype.draw = function () {
+		var drawnImage = infoImage;
+		if(this.vx < 0) {
+			if (this.movementPhase == 7) drawnImage = infoImageRot7;
+			if (this.movementPhase == 6) drawnImage = infoImageRot6;
+			if (this.movementPhase == 5) drawnImage = infoImageRot5;
+			if (this.movementPhase == 4) drawnImage = infoImageRot4;
+			if (this.movementPhase == 3) drawnImage = infoImageRot3;
+			if (this.movementPhase == 2) drawnImage = infoImageRot2;
+			if (this.movementPhase == 1) drawnImage = infoImageRot1;
+		} else if (this.vx > 0) {
+			if (this.movementPhase == 7) drawnImage = infoImageRot1;
+			if (this.movementPhase == 6) drawnImage = infoImageRot2;
+			if (this.movementPhase == 5) drawnImage = infoImageRot3;
+			if (this.movementPhase == 4) drawnImage = infoImageRot4;		
+			if (this.movementPhase == 3) drawnImage = infoImageRot5;
+			if (this.movementPhase == 2) drawnImage = infoImageRot6;
+			if (this.movementPhase == 1) drawnImage = infoImageRot7;
+		}
+		context.drawImage(drawnImage, this.x, this.y);		
+		/*var drawnImage = infoImage;
+		if(this.vx > 0) {
+			if (this.movementPhase == 3) drawnImage = infoImageRot3;
+			if (this.movementPhase == 2) drawnImage = infoImageRot2;
+			if (this.movementPhase == 1) drawnImage = infoImageRot1;
+		} else if (this.vx < 0) {
+			if (this.movementPhase == 3) drawnImage = infoImageRot1;
+			if (this.movementPhase == 2) drawnImage = infoImageRot2;
+			if (this.movementPhase == 1) drawnImage = infoImageRot3;
+		}
+		context.drawImage(drawnImage, this.x, this.y);	*/	
+		//context.drawImage(infoImage, this.x, this.y);
+	}
+	
+	Info.prototype.checkIfInfoKillsPlayer = function () {
+	    // todo... aici daca isMoving trebuie sa omor playerul in orice conditie de suprapunere
+	}
+	
+	function ExplosiveDisquette() {
+		// valoare logica in logicMatrix = 50
+	}
+	
+	ExplosiveDisquette.prototype = new Bomb();
+	
+	ExplosiveDisquette.prototype.draw = function () {
+		context.drawImage(explosiveDisquetteImage, this.x, this.y);
+	}
+	
+	ExplosiveDisquette.prototype.explode = function () {
+		detonateSquare(this.logicX, this.logicY);
+		delete explosiveDisquettesDict[this.logicX + 'x' + this.logicY];
+		//terrain.logicMatrix[this.logicX][this.logicY] = 0;
+		return;
+	}
+	
+	function Scissor() {
+		var direction; // 1 - left, 2 - up, 3 - right, 4 - down
+		var isChangingDirection;
+		var logicValue; // logicValue = 70
+	}
+	
+	Scissor.prototype = new Shape();
+	
+	Scissor.prototype.moveElement = function () {
+		// change direction and then move !!!
+		
+		if (!this.isMoving) {
+			this.changeDirection();
+			this.startMove();
+		} else {
+			// check for move ended... 
+			// update the logicMatrix and the scissorsDict
+			this.movementPhase--;
+			if (!this.movementPhase) {
+				// ... yata yata yata
+				terrain.logicMatrix[this.logicX][this.logicY] = 0;
+				delete scissorsDict[this.logicX + 'x' + this.logicY];
+				this.logicX = this.x / tile_size;
+				this.logicY = this.y / tile_size;
+				terrain.logicMatrix[this.logicX][this.logicY] = this.logicValue;
+				scissorsDict[this.logicX + 'x' + this.logicY] = this;		
+				
+				var logicOffsetX = 0, logicOffsetY = 0;
+				var logicOffsetX1 = 0, logicOffsetY1 = 0;
+				var logicOffsetX2 = 0, logicOffsetY2 = 0;
+				var vx1, vy1, vx2, vy2;
+				if (this.vx > 0) {
+					logicOffsetX = 1;
+					logicOffsetX1 = 0;
+					logicOffsetY1 = -1;
+					vx1 = 0; 
+					vy1 = -4;
+					logicOffsetX2 = 0;
+					logicOffsetY2 = 1;
+					vx2 = 0;
+					vy2 = 4;
+				}					
+				if (this.vx < 0) {
+					logicOffsetX = -1;
+					logicOffsetX1 = 0;
+					logicOffsetY1 = 1;
+					vx1 = 0;
+					vy1 = 4;
+					logicOffsetX2 = 0;
+					logicOffsetY2 = -1;			
+					vx2 = 0;
+					vy2 = -4;
+				}
+				if (this.vy > 0) {
+					logicOffsetY = 1;
+					logicOffsetX1 = 1;
+					logicOffsetY1 = 0;
+					vx1 = 4;
+					vy1 = 0;
+					logicOffsetX2 = -1;
+					logicOffsetY2 = 0;			
+					vx2 = -4;
+					vy2 = 0;
+				}
+				if (this.vy < 0) {
+					logicOffsetY = -1;
+					logicOffsetX1 = -1;
+					logicOffsetY1 = 0;
+					vx1 = -4;
+					vy1 = 0;
+					logicOffsetX2 = 1;
+					logicOffsetY2 = 0;			
+					vx2 = 4;
+					vy2 = 0;					
+				}
+				//if (false) {
+				/*if (this.canMove(logicOffsetX, logicOffsetY)) {
+					// continue moving to direction
+					// do nothing
+					this.movementPhase = 8;
+				} else if (this.canMove(logicOffsetX1, logicOffsetY1)) {
+					this.vx = vx1;
+					this.vy = vy1;
+					this.movementPhase = 8;
+				} else if (this.canMove(logicOffsetX2, logicOffsetY2)) {
+					this.vx = vx2;
+					this.vy = vy2;
+					this.movementPhase = 8;				
+				} else {
+					this.isMoving = false;
+					this.vy = 0;
+					this.vx = 0;
+				}*/	
+				if (this.canMove(logicOffsetX1, logicOffsetY1)) {
+					this.vx = vx1;
+					this.vy = vy1;
+					this.movementPhase = 8;
+				} else if (this.canMove(logicOffsetX, logicOffsetY)) {
+					// continue moving to direction
+					// do nothing
+					this.movementPhase = 8;				
+				} else if (this.canMove(logicOffsetX2, logicOffsetY2)) {
+					this.vx = vx2;
+					this.vy = vy2;
+					this.movementPhase = 8;				
+				} else {
+					this.isMoving = false;
+					this.vy = 0;
+					this.vx = 0;
+				}				
+			}
+		}
+		/*switch (this.direction) {
+			case 1:
+				if (this.canMoveDirection(-1, 0)) {
+					this.moveDirection(-1, 0);
+				} else {
+					this.direction++;
+				}
+			break;
+			case 2:
+			break;
+			case 3:
+			break;
+			case 4:
+			break
+		}*/
+	}
+	
+	Scissor.prototype.startMove = function () {
+		// if (can't modve on direction) return;
+		// else start the move
+		switch(this.direction) {
+		case 1:
+			if (this.canMove(-1, 0)) {
+				this.moveIt(-1, 0);
+			}
+			break;
+		case 2:
+			if (this.canMove(0, -1)) {
+				this.moveIt(0, -1);
+			}		
+			break;
+		case 3:
+			if (this.canMove(1, 0)) {
+				this.moveIt(1, 0);
+			}		
+			break;
+		case 4:
+			if (this.canMove(0, 1)) {
+				this.moveIt(0, 1);
+			}		
+		    break;
+		}
+		//this.isMoving = true; // moved to moveIt
+	}
+	
+	Scissor.prototype.canMove = function (logicOffsetX, logicOffsetY) {
+		//console.log(this.logicX +logicOffsetX);
+		//console.log(this.logicY +logicOffsetY);
+		//console.log(terrain.logicMatrix[this.logicX + logicOffsetX][this.logicY + logicOffsetY]);
+		if (terrain.logicMatrix[this.logicX + logicOffsetX][this.logicY + logicOffsetY] == 0 ||
+				terrain.logicMatrix[this.logicX + logicOffsetX][this.logicY + logicOffsetY] == 3) 
+			return true;
+		return false;
+	}
+	
+	Scissor.prototype.moveIt = function (logicOffsetX, logicOffsetY) {
+		if (logicOffsetX > 0) {
+			this.vx = 4;
+			this.movementPhase = 8;
+			this.isMoving = true;
+		}
+		if (logicOffsetX < 0) {
+			this.vx = -4;
+			this.movementPhase = 8;
+			this.isMoving = true;
+		}
+		if (logicOffsetY > 0) {
+			this.vy = 4;
+			this.movementPhase = 8;
+			this.isMoving = true;
+		}
+		if (logicOffsetY < 0) {
+			this.vy = -4;
+			this.movementPhase = 8;
+			this.isMoving = true;
+		}		
+		//this.isMoving = true;
+	}
+	
+	Scissor.prototype.changeDirection = function () {
+		if (this.direction == 1) {
+			this.direction = 4;
+			return;
+		}
+		if (this.direction == 4) {
+			this.direction = 3;
+			return;			
+		}
+		if (this.direction == 3) {
+			this.direction = 2;
+			return;			
+		}
+		if (this.direction == 2) {
+			this.direction = 1;
+			return;			
+		}
+	}
+	
+	Scissor.prototype.checkIfScissorKillsPlayer = function () {
+		// preluata de la clasa Bomb
+		if (this.isMoving) {
+			if (this.x - player.x < tile_size / 2 && player.y - this.y < tile_size && this.x - player.x >= 0 && player.y - this.y >= 0) {
+				gameOn = false;
+				player.explode();
+				delete scissorsDict[this.logicX + 'x' + this.logicY];
+			}
+			if (player.x - this.x < tile_size / 2 && player.y - this.y < tile_size && player.x - this.x >= 0 && player.y - this.y >= 0) {
+				gameOn = false;
+				player.explode();
+				delete scissorsDict[this.logicX + 'x' + this.logicY];
+			} 		
+		}	
+	}
+	
+	/*Scissor.prototype.moveDirection = function (offsetLogicX, offsetLogicY) {
+	
+	}*/
+	
+	Scissor.prototype.explode = function () {
+		// asta trebuie luata de la explosive Bomb... exact aceeasi
+		console.log('scissor kabooom!');
+		detonateSquare(this.logicX, this.logicY);
+		delete scissorsDict[this.logicX + 'x' + this.logicY];
+		//terrain.logicMatrix[this.logicX][this.logicY] = 0;
+		return;		
+	}
+	
+	Scissor.prototype.draw = function () {
+		var drawnImage;
+		/*if (this.direction == 1) drawnImage = scissorImageLeft;
+		if (this.direction == 2) drawnImage = scissorImageUp;
+		if (this.direction == 3) drawnImage = scissorImageRight;
+		if (this.direction == 4) drawnImage = scissorImageDown;*/
+		if (this.vx > 0) {
+			drawnImage = scissorImageRight;
+		} else if (this.vx < 0) {
+			drawnImage = scissorImageLeft;
+		} else if (this.vy > 0) {
+			drawnImage = scissorImageDown;
+		} else {
+			drawnImage = scissorImageUp;
+		}
+		context.drawImage(drawnImage, this.x, this.y); // this is shit
+	}
+	
+	Scissor.prototype.updatePosition = function () {
+		this.x += this.vx;
+		this.y += this.vy;
+	}
+	
+	function consumeInformation(logicX, logicY) {
+		var key = logicX + 'x' + logicY;
+		delete infosDict[key];
+		numberColectedInfos++;
+	}
+	
+	function finishContidion() {
+		/*var key, size = 0;
+		for (key in infosDict) {
+			size += 1;
+		}
+		return size == 0;*/
+		return numberColectedInfos >= numberTotalInfos;
+	}
+	
+	function Game() {
+		var maxX, maxY;
+	}
+	
+	Game.prototype.init = function () {
+		terrain = new Terrain();
+		player = new Player();
+		exit = new Exit();
+		
+		gameRows = 25;
+		gameCols = 18;
+		
+		numberColectedInfos = 0;
+		
+		terrain.logicMatrix = generateMatrix(gameRows, gameCols);
+		populateMatrix(terrain, gameRows, gameCols);
+		//generateBombs(terrain, 70);
+		
+		//generateInfos(terrain, 40);
+		//numberTotalInfos = 40;
+		
+		//generateExplosiveDisquettes(terrain, 10);
+		
+		/*generateBombs(terrain, 5);
+		generateInfos(terrain, 0);
+		numberTotalInfos = 0;
+		//generateExplosiveDisquettes(terrain, 0);
+		generateScissors(terrain, 1);*/
+
+		generateScissors(terrain, 10);
+		generateBombs(terrain, 30);
+		generateInfos(terrain, 20);
+		numberTotalInfos = 20;
+		generateExplosiveDisquettes(terrain, 10);
+
+		
+		player.x = tile_size;
+		player.y = tile_size;
+		player.vx = 0;
+		player.vy = 0;
+		player.logicX = 1;
+		player.logicY = 1;
+		player.logicOffsetX = 0;
+		player.logicOffsetY = 0;
+		player.pushForce = defaultPushForce;
+		
+		generateExit();
+		//exit.x = 10 * tile_size;
+		//exit.y = 10 * tile_size;
+		//errain.logicMatrix[10][10] = 21; // cod pentru exit
+	}
+	
+	Game.prototype.analyzeTiles = function () {
+		var i, j;
+		for (i = 0; i < gameRows; i++) {
+			for (j = 0; j < gameCols; j++) {
+				//console.log('aaa');
+				if (terrain.logicMatrix[i][j] == 37) terrain.logicMatrix[i][j] = 0;
+				if (terrain.logicMatrix[i][j] >= 30 && terrain.logicMatrix[i][j] <= 36) {
+					if (terrain.logicMatrix[i][j] == 30) context.drawImage(explosionImage1, i * tile_size, j * tile_size);
+					if (terrain.logicMatrix[i][j] == 31) context.drawImage(explosionImage2, i * tile_size, j * tile_size);
+					if (terrain.logicMatrix[i][j] == 32) context.drawImage(explosionImage3, i * tile_size, j * tile_size);
+					if (terrain.logicMatrix[i][j] == 33) context.drawImage(explosionImage4, i * tile_size, j * tile_size);
+					if (terrain.logicMatrix[i][j] == 34) context.drawImage(explosionImage5, i * tile_size, j * tile_size);
+					if (terrain.logicMatrix[i][j] == 35) context.drawImage(explosionImage6, i * tile_size, j * tile_size);
+					if (terrain.logicMatrix[i][j] == 36) context.drawImage(explosionImage7, i * tile_size, j * tile_size);
+					terrain.logicMatrix[i][j]++;
+				}
+			}
+		}
+	}
+	
+	Game.prototype.loop = function () {
+		var i, bomb, key, bombsKeys = [], infosKeys = [], explosiveDisquettesKeys = [];
+		terrain.draw();
+
+		exit.draw();
+		
+		for (key in infosDict) {
+			infosKeys.push(key);
+		}
+		infosKeys.sort(sortInfosDictKeys);
+		for (i = 0; i < infosKeys.length; i++) {
+			key = infosKeys[i];
+			info = infosDict[key];
+			//infosDict[key].checkIfInfoKillsPlayer();
+		    info.draw();
+			info.updatePosition();
+			info.applyGravity();
+			//infosDict[key].checkIfInfoKillsPlayer(); //... asta nu merge :(
+			info.checkIfBombKillsPlayer(); //... works
+			//info.testInheritance();
+		}
+		
+		for (key in explosiveDisquettesDict) {
+			explosiveDisquettesKeys.push(key);
+		}
+		explosiveDisquettesKeys.sort(sortExplosiveDisquettesKeys);
+		for (i = 0; i < explosiveDisquettesKeys.length; i++) {
+			key = explosiveDisquettesKeys[i];
+			disquette = explosiveDisquettesDict[key];
+			disquette.draw();
+			disquette.updatePosition();
+			disquette.applyGravity();
+		}
+	
+		for (key in bombsDict) {
+			bombsKeys.push(key);
+		}
+		bombsKeys.sort(sortBombsDictKeys);
+		
+		for (key in scissorsDict) {
+			var scissor = scissorsDict[key];
+			scissor.draw();
+			scissor.updatePosition();
+			scissor.moveElement();
+			scissor.checkIfScissorKillsPlayer();
+		}
+		
+		for (i = 0; i < bombsKeys.length; i++) {
+			key = bombsKeys[i];
+			bomb = bombsDict[key];
+			if (!bomb) continue;
+			bomb.draw();
+			//bomb.setWaitTime();
+			//bomb.triggerExplosionUnderneath();
+			bomb.updatePosition();
+			bomb.applyGravity();
+			bomb.checkIfBombKillsPlayer();
+		}
+		
+		player.draw();
+		player.moveElement();
+		player.chackSpacePressed();
+		player.updatePosition();
+		
+		this.analyzeTiles();
+	}
+	
+	function init () {
+		greenImage = document.getElementById("green_new");
+		borderImage = document.getElementById("gray_new");
+		playerImage = document.getElementById("player_new");
+		bombImage = document.getElementById("bomb_new");
+		exitImage = document.getElementById("exit_new");
+		infoImage = document.getElementById("info_new");
+		
+		infoImageRot1 = document.getElementById("info_new_rot1");
+		infoImageRot2 = document.getElementById("info_new_rot2");
+		infoImageRot3 = document.getElementById("info_new_rot3");
+		infoImageRot4 = document.getElementById("info_new_rot4");
+		infoImageRot5 = document.getElementById("info_new_rot5");
+		infoImageRot6 = document.getElementById("info_new_rot6");		
+		infoImageRot7 = document.getElementById("info_new_rot7");
+
+		playerImageLeft = document.getElementById("player_original_left");
+		playerImageRight = document.getElementById("player_original_right");
+
+		bombImageRot1 = document.getElementById("bomb_new_rot1");
+		bombImageRot2 = document.getElementById("bomb_new_rot2");
+		bombImageRot3 = document.getElementById("bomb_new_rot3");
+		
+		explosiveDisquetteImage = document.getElementById("explosive_disquette_new");
+		
+		explosionImage1 = document.getElementById("explosion_new_1");
+		explosionImage2 = document.getElementById("explosion_new_2");
+		explosionImage3 = document.getElementById("explosion_new_3");
+		explosionImage4 = document.getElementById("explosion_new_4");
+		explosionImage5 = document.getElementById("explosion_new_5");
+		explosionImage6 = document.getElementById("explosion_new_6");
+		explosionImage7 = document.getElementById("explosion_new_7");
+		
+		scissorImageLeft = document.getElementById("scissor_new_left");
+		scissorImageDown = document.getElementById("scissor_new_down");
+		scissorImageRight = document.getElementById("scissor_new_right");
+		scissorImageUp = document.getElementById("scissor_new_up");
+		
+		game = new Game();
+		game.init();	
+	}
+	
+	function update () {
+		context.fillStyle = 'black';
+		context.fillRect(0, 0, canvas.width, canvas.height);
+		game.loop();
+	}
+	</script>
+</html>

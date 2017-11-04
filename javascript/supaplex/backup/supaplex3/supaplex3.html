@@ -1,0 +1,594 @@
+<html>
+<head>
+</head>
+<body>
+    <img src="green_original.png" id="green_original" style="display: none;">
+	<img src="gray.jpg" id="gray" style="display: none;">
+	<img src="bomb_original.png" id="bomb_original" style="display: none;">
+	<img src="player_original.png" id="player_original" style="display: none;">
+	<img src="player_original_left.png" id="player_original_left" style="display: none;">
+	<img src="player_original_right.png" id="player_original_right" style="display: none;">
+	<img src="exit_original.png" id="exit_original" style="display: none;">
+    <canvas id="canvas" width="800" height="600"></canvas>
+	
+	<script>
+	var canvas, context;
+	var width, height;
+	
+	var canvasOffsetX, canvasOffsetY, canvasOffsetVX, canvasOffsetVY;
+	
+	var tile_size = 40;
+	//var defaultWaitTime = 106;
+	var defaultWaitTime = 3;
+	var bombsList = [], bombsDict = {};
+	
+	var game, terrain, player, bombs;
+	var gameRows, gameCols;
+	
+	var greenImage, borderImage, bombImage, playerImage;
+	
+	var UpArrow = 38;
+	var DownArrow = 40;
+	var LeftArrow = 37;
+	var RightArrow = 39;
+	var SpaceKey = 32;
+	var movementKey;
+	
+	var keystate = {};	
+	
+    window.onload = function () {
+		canvas = document.getElementById("canvas");
+		context = canvas.getContext("2d");
+		
+		width = canvas.width;
+		height = canvas.height;	
+	
+		init();
+		setInterval(update, 1000/30);
+		//setInterval(update, 2000); // debug only
+	}
+	
+	window.addEventListener("keydown", function(e) {
+		// space and arrow keys
+		if (e.keyCode == 27) {
+			window.location.reload();
+		}
+		if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+			e.preventDefault();
+		}
+	}, false);
+	
+	document.addEventListener("keydown", function (event) {
+	    keystate[event.keyCode] = true;
+	});
+	
+	document.addEventListener("keyup", function (event) {
+		if (event.keyCode === movementKey) {
+			//console.log(movementKey);
+			movementKey = false;
+		}
+	    delete keystate[event.keyCode];
+	});	
+	
+	function generateMatrix(x, y) {
+		var matrix = new Array(x);
+		for (var i = 0; i < x; i++) {
+		  matrix[i] = new Array(y);
+		}
+		return matrix;
+	}
+	
+	function populateMatrix(terrain, x, y) {
+	    var i, j;
+		for(i = 0; i < x; i++) {
+			for(j = 0; j < y; j++) {
+				terrain.logicMatrix[i][j] = 1;
+				if (i == 1 && j == 1) terrain.logicMatrix[i][j] = 3;
+			    if (i == 0 || i == x - 1) terrain.logicMatrix[i][j] = 20;
+				if (j == 0 || j == y - 1) terrain.logicMatrix[i][j] = 20;
+			}
+		}
+	}
+	
+	function generateExit() {
+		exit.x = 18 * tile_size;
+		exit.y = 13 * tile_size;
+		terrain.logicMatrix[18][13] = 21; // cod pentru exit
+	}
+	
+	function generateBombs(terrain, number) {
+		//number = 1;
+		//var potentialBombs = [[3, 3], [3, 4], [3, 5], [4, 4], [5, 4], [4, 6], [9, 9], [9, 8], [6, 1], [2, 3], [1, 7], [2, 7], [6, 8], [6, 5], [6, 9], [7, 10], [8, 3], [8, 4], [8, 5], [10, 3], [10, 4], [10, 5]];
+		while(number--) {
+			var logicX, logicY;
+			do {
+				logicX = Math.floor((Math.random() * 18) + 1);
+				logicY = Math.floor((Math.random() * 13) + 1);
+			//} while(bombsDict[logicX + 'x' logicY]);
+			//} while(false);
+			} while ((terrain.logicMatrix[logicX][logicY] == 2) || 
+					 (logicX == 1 && logicY == 1) || 
+					 (logicX == 18 && logicY == 13));
+			//var logicX = potentialBombs[number][0];
+			//var logicY = potentialBombs[number][1];
+			terrain.logicMatrix[logicX][logicY] = 2;
+			var bomb = new BombNew();
+			bomb.logicX = logicX;
+			bomb.logicY = logicY;
+			
+			bomb.x = bomb.logicX * tile_size;
+			bomb.y = bomb.logicY * tile_size;
+			
+			bomb.vx = 0;
+			bomb.vy = 0;
+			
+			bomb.isMoving = false;
+			
+			bomb.waitTime = defaultWaitTime;
+			bomb.isWaiting = false;
+			
+			bomb.logicOffsetX = 0;
+			bomb.logicOffsetY = 0;
+			
+			bomb.isMovingSideways = false;
+			
+			bombsDict[logicX + 'x' + logicY] = bomb;
+			bombsList.push(bomb);
+		}
+	}
+	
+	function checkNumberOfBombs() {
+	    var i, j, key, number = 0, size = 0;
+		for (i = 1; i < gameRows; i++) {
+			for (j = 1; j < gameCols; j++) {
+				if (terrain.logicMatrix[i][j] == 2) number++;
+			}
+		}
+		for (key in bombsDict) {
+			if (bombsDict.hasOwnProperty(key)) size++;
+		}
+		console.log('Matrix Logic bombs: ' + number);
+		console.log('bomsList length: ' + bombsList.length);
+		console.log('bombsDict number keys: ' + size);
+	}
+	
+	function transformCoordinateToLogic(value) {
+		// round the value of the X, Y coordinates
+		return Math.floor(value / 40);
+	}
+	
+	function sortBombsDictKeys(bomb1, bomb2) {
+		var bomb1Y = bomb1.split('x')[1];
+		var bomb2Y = bomb2.split('x')[1];
+		return Number(bomb2Y) - Number(bomb1Y);
+	}
+	
+    function Terrain() {
+		var logicMatrix; // logic matrix
+    }
+	
+	Terrain.prototype.draw = function () {
+		var i, j;
+		for (i = 0; i < gameRows; i++) {
+			for (j = 0; j < gameCols; j++) {
+			    if (this.logicMatrix[i][j] == 1) {
+					context.drawImage(greenImage, i * tile_size, j * tile_size);	
+				}
+			    if (this.logicMatrix[i][j] == 20) {
+					context.drawImage(borderImage, i * tile_size, j * tile_size);	
+				}				
+			}
+		}
+	}
+	
+	function Shape() {
+		var x, y; // pixels on screen
+		var logicX, logicY; // matrix logic position
+		var logicOffsetX, logicOffsetY; // -1, 0 or 1 values
+		var movementPhase;
+		var isMoving;
+		var vx, vy;
+		var image;
+	}
+	
+	Shape.prototype.testInheritance = function () {
+	    return 56;
+	}
+	
+	function Player() {
+
+	}
+	
+	Player.prototype = new Shape();
+	
+	Player.prototype.moveElement = function () {
+		if (!this.isMoving && !keystate[SpaceKey])	{
+			if (keystate[RightArrow] && terrain.logicMatrix[this.logicX + 1][this.logicY] == 21) {
+				window.location.reload();
+			}		
+			if (keystate[RightArrow] && terrain.logicMatrix[this.logicX + 1][this.logicY] != 20 &&
+			terrain.logicMatrix[this.logicX + 1][this.logicY] != 2) {
+				this.vx = tile_size / 10;
+				this.movementPhase = 10;
+				this.logicOffsetX = 1;
+				this.logicOffsetY = 0;
+				movementKey = RightArrow;
+				this.isMoving = true;
+				return;
+			}
+			if (keystate[RightArrow] && terrain.logicMatrix[this.logicX + 1][this.logicY] == 2) {
+				var pushedBomb = bombsDict[(this.logicX + 1) + 'x' + this.logicY];
+				if (!pushedBomb.isMoving) {
+					if (terrain.logicMatrix[this.logicX + 2][this.logicY] == 0) {
+						this.vx = tile_size / 20;
+						this.movementPhase = 20;
+						this.logicOffsetX = 1;
+						this.logicOffsetY = 0;
+						movementKey = RightArrow;
+						this.isMoving = true;
+						
+						pushedBomb.isMoving = true;
+						pushedBomb.movementPhase = 20;
+						pushedBomb.vx = tile_size / 20;
+						return;						
+					}
+				}
+			}
+			if (keystate[LeftArrow] && terrain.logicMatrix[this.logicX - 1][this.logicY] == 21) {
+				window.location.reload();
+			}			
+			if (keystate[LeftArrow] && terrain.logicMatrix[this.logicX - 1][this.logicY] != 20 &&
+			terrain.logicMatrix[this.logicX - 1][this.logicY] != 2) {
+				this.vx = -tile_size / 10;
+				this.movementPhase = 10;
+				this.logicOffsetX = -1;
+				this.logicOffsetY = 0;		
+				movementKey = LeftArrow;				
+				this.isMoving = true;
+				return;
+			}
+			if (keystate[LeftArrow] && terrain.logicMatrix[this.logicX - 1][this.logicY] == 2) {
+				var pushedBomb = bombsDict[(this.logicX - 1) + 'x' + this.logicY];
+				if (!pushedBomb.isMoving) {
+					if (terrain.logicMatrix[this.logicX - 2][this.logicY] == 0) {
+						this.vx = -tile_size / 20;
+						this.movementPhase = 20;
+						this.logicOffsetX = -1;
+						this.logicOffsetY = 0;
+						movementKey = LeftArrow;
+						this.isMoving = true;
+						
+						pushedBomb.isMoving = true;
+						pushedBomb.movementPhase = 20;
+						pushedBomb.vx = -tile_size / 20;
+						return;						
+					}
+				}
+			}
+			if (keystate[UpArrow] && terrain.logicMatrix[this.logicX][this.logicY - 1] == 21) {
+				window.location.reload();
+			}			
+			if (keystate[UpArrow] && terrain.logicMatrix[this.logicX][this.logicY - 1] != 20 && 
+			terrain.logicMatrix[this.logicX][this.logicY - 1] != 2) {
+				this.vy = tile_size / -10;
+				this.movementPhase = 10;
+				this.logicOffsetX = 0;
+				this.logicOffsetY = -1;
+				movementKey = UpArrow;				
+				this.isMoving = true;
+				return;
+			}
+			if (keystate[DownArrow] && terrain.logicMatrix[this.logicX][this.logicY + 1] == 21) {
+				window.location.reload();
+			}				
+			if (keystate[DownArrow] && terrain.logicMatrix[this.logicX][this.logicY + 1] != 20 &&
+			terrain.logicMatrix[this.logicX][this.logicY + 1] != 2) {
+				this.vy = tile_size / 10;
+				this.movementPhase = 10;
+				this.logicOffsetX = 0;
+				this.logicOffsetY = 1;
+				movementKey = DownArrow;
+				this.isMoving = true;
+				return;
+			}		
+		} else {
+			this.movementPhase--;
+			if (!this.movementPhase) {
+				this.isMoving = false;
+				this.vx = 0;
+				this.vy = 0;
+				this.logicOffsetX = 0;
+				this.logicOffsetY = 0;
+				//movementKey = false;
+				if (terrain.logicMatrix[this.logicX][this.logicY] != 2) 
+				    terrain.logicMatrix[this.logicX][this.logicY] = 0;
+				this.logicX = this.x / tile_size;
+				this.logicY = this.y / tile_size;
+				terrain.logicMatrix[this.logicX][this.logicY] = 3;
+				if (movementKey) {
+				    // mai executa o data metoda asta si stabileste ce trebuie facut in continuare
+					this.moveElement();
+				}
+			}
+			// aici trebuie un else pentru continue movement daca movementKey e inca apasata
+ 		}
+	}
+	
+	Player.prototype.chackSpacePressed = function () {
+		if (keystate[SpaceKey]) {
+			if (keystate[RightArrow] && terrain.logicMatrix[this.logicX + 1][this.logicY + this.logicOffsetY] == 1 &&
+					movementKey != RightArrow) {
+				terrain.logicMatrix[this.logicX + 1][this.logicY + this.logicOffsetY] = 0;
+				return;
+			}
+			if (keystate[LeftArrow] && terrain.logicMatrix[this.logicX - 1][this.logicY + this.logicOffsetY] == 1 &&
+					movementKey != LeftArrow) {
+				terrain.logicMatrix[this.logicX - 1][this.logicY + this.logicOffsetY] = 0;
+				return;
+			}
+			if (keystate[UpArrow] && terrain.logicMatrix[this.logicX + this.logicOffsetX][this.logicY - 1] == 1 &&
+					movementKey !=  UpArrow) {
+				terrain.logicMatrix[this.logicX + this.logicOffsetX][this.logicY - 1] = 0;
+				return;
+			}
+			if (keystate[DownArrow] && terrain.logicMatrix[this.logicX + this.logicOffsetX][this.logicY + 1] == 1 &&
+					movementKey != DownArrow) {
+				terrain.logicMatrix[this.logicX + this.logicOffsetX][this.logicY + 1] = 0;
+				return;
+			}	
+		}	
+	}
+	
+	Player.prototype.updatePosition = function () {
+		this.x += this.vx;
+		this.y += this.vy;
+	}
+	
+	Player.prototype.draw = function () {
+		var drawImage;
+		if (this.isMoving) {
+			if(this.vx > 0) {
+				drawImage = playerImageRight;
+			} else {
+				drawImage = playerImageLeft;
+			}		
+		} else {
+		    drawImage = playerImage;
+		}
+		context.drawImage(drawImage, this.x, this.y);
+		//context.drawImage(playerImageRight, this.x, this.y);
+	}
+	
+	function Exit() {
+	
+	}
+	
+	Exit.prototype = new Shape();
+	
+	Exit.prototype.draw = function () {
+		context.drawImage(exitImage, this.x, this.y);
+	}
+	
+	function BombNew() {
+		var waitTime;
+		var isWaiting;
+	}
+	
+	BombNew.prototype = new Shape();
+	
+	BombNew.prototype.draw = function () {
+		context.drawImage(bombImage, this.x, this.y);	
+	}
+	
+	BombNew.prototype.updatePosition = function () {
+		this.x += this.vx;
+		this.y += this.vy;
+	}
+	
+	BombNew.prototype.applyGravity = function () {
+		/*if (this.waitTime > 0) {
+			this.waitTime--;
+			return;
+		}*/
+		if (!this.isMoving && !this.isWaiting)	{
+			if (player.logicX == this.logicX - 1 && player.logicY == this.logicY + 1 && player.vx > 0) return;
+			if (player.logicX == this.logicX + 1 && player.logicY == this.logicY + 1 && player.vx < 0) return;
+			if (terrain.logicMatrix[this.logicX][this.logicY + 1] == 0) {
+				bombDownRight = bombsDict[(this.logicX + 1) + 'x' + (this.logicY + 1)];
+				bombDownLeft = bombsDict[(this.logicX - 1) + 'x' + (this.logicY + 1)];
+				if (bombDownRight && bombDownRight.vx < 0) return;
+				if (bombDownLeft && bombDownLeft.vx > 0) return;
+				if (this.waitTime > 0) {
+				    this.waitTime--;
+					return;
+				}
+				this.vy = 4;
+				this.movementPhase = 10;
+				this.isMoving = true;
+			} else {
+				/*if (this.waitTime > 0) {
+					this.waitTime--;
+					return; 
+				}*/
+				this.moveElement();
+			}
+		} else {
+			//if (this.waitTime > 0) return;
+			this.movementPhase--;
+			if (!this.movementPhase) {
+				// update the logic position
+				terrain.logicMatrix[this.logicX][this.logicY] = 0;
+				delete bombsDict[this.logicX + 'x' + this.logicY];
+				this.logicX = this.x / tile_size;
+				this.logicY = this.y / tile_size;
+				terrain.logicMatrix[this.logicX][this.logicY] = 2;
+				bombsDict[this.logicX + 'x' + this.logicY] = this;
+				
+				if (terrain.logicMatrix[this.logicX][this.logicY + 1] == 0 ||
+						terrain.logicMatrix[this.logicX][this.logicY + 1] == 3) {
+					// continue falling
+					this.vx = 0;
+					this.vy = 4;
+					this.movementPhase = 10;
+				} else {
+					this.isMoving = false;
+					this.vy = 0;
+					this.vx = 0;
+					this.waitTime = defaultWaitTime;
+				}
+				// update this if to check for moving sideways
+			}
+		}		
+	}
+	
+	BombNew.prototype.moveElement = function () {
+		// 1. verific daca poate sa se duca in laterale
+		// 2. verific daca poate sa cada
+		/*if (terrain.logicMatrix[this.logicX][this.logicOffsetY + 1] == 0) {
+		    //poate sa cada
+		} else if (terrain.logicMatrix[this.logicX][this.logicOffsetY + 1] == 2) {
+			// mai trebuie adaugate conditii
+		}*/
+		if (!this.isMoving && !this.isWaiting) {
+			if (player.logicX == this.logicX && (player.logicY == this.logicY + 2) && player.isMoving) return;
+			if (terrain.logicMatrix[this.logicX][this.logicY + 1] == 2 &&
+					terrain.logicMatrix[this.logicX - 1][this.logicY] == 0 &&
+					terrain.logicMatrix[this.logicX - 1][this.logicY + 1] == 0 &&
+					terrain.logicMatrix[this.logicX - 1][this.logicY - 1] != 2) {
+					//bombsDict[this.logicX + 'x' + (this.logicY + 1)] != undefined &&
+					//!bombsDict[this.logicX + 'x' + (this.logicY - 1)].isMoving) {
+				if (bombsDict[(this.logicX - 1) + 'x' + (this.logicY - 2)] != undefined &&
+					bombsDict[(this.logicX - 1) + 'x' + (this.logicY - 2)].isMoving) {
+				} else {
+					var bomb = bombsDict[(this.logicX - 2) + 'x' + (this.logicY)];
+					if (bomb && bomb.vx > 0) return;
+					this.isMoving = true;
+					this.movementPhase = 5;
+					this.vx = -8;
+				}
+			} else if (terrain.logicMatrix[this.logicX][this.logicY + 1] == 2 &&
+					terrain.logicMatrix[this.logicX + 1][this.logicY] == 0 &&
+					terrain.logicMatrix[this.logicX + 1][this.logicY + 1] == 0 &&
+					terrain.logicMatrix[this.logicX + 1][this.logicY - 1] != 2) { 
+					//bombsDict[this.logicX + 'x' + (this.logicY + 1)] != undefined &&					
+					//!bombsDict[this.logicX + 'x' + (this.logicY - 1)].isMoving) {
+				if (bombsDict[(this.logicX + 1) + 'x' + (this.logicY - 2)] != undefined &&
+					bombsDict[(this.logicX + 1) + 'x' + (this.logicY - 2)].isMoving) {			
+				} else {
+					var bomb = bombsDict[(this.logicX + 2) + 'x' + (this.logicY)];
+					if (bomb && bomb.vx < 0) return;					
+					this.isMoving = true;
+					this.movementPhase = 5;
+					this.vx = 8;			
+				}
+			}
+		}
+	}
+	
+	BombNew.prototype.setWaitTime = function () {
+	
+	}
+	
+	BombNew.prototype.checkIfBombKillsPlayer = function () {
+		// asta cred ca e buna asa cum era inainte
+/*		if (terrain.logicMatrix[this.logixX][this.logixY + 1] == 3) {
+		    this.isMoving = false;
+			this.waitTime = 0;
+		}*/
+		if (this.isMoving) {
+			if (this.x - player.x < tile_size / 2 && player.y - this.y < tile_size && this.x - player.x >= 0 && player.y - this.y >= 0) {
+				window.location.reload();
+				//console.log(this.x - player.x < tile_size / 2);
+				//console.log('aaa');
+				//console.log(this.x - player.x);
+				//console.log(this.y - player.y);
+			}
+			if (player.x - this.x < tile_size / 2 && player.y - this.y < tile_size && player.x - this.x >= 0 && player.y - this.y >= 0) {
+				window.location.reload();
+				//console.log(player.x - this.x);
+				//console.log(player.y - this.y);
+				//console.log('bbb');
+			} 		
+			/*if (terrain.logicMatrix[this.logicX][this.logicY + 1] == 3) {
+				this.isMoving = false;
+				this.waitTime = 0;
+			} */	
+		}
+	}
+	
+	function Game() {
+		var maxX, maxY;
+	}
+	
+	Game.prototype.init = function () {
+		terrain = new Terrain();
+		player = new Player();
+		exit = new Exit();
+		
+		gameRows = 20;
+		gameCols = 15;
+		
+		terrain.logicMatrix = generateMatrix(gameRows, gameCols);
+		populateMatrix(terrain, gameRows, gameCols);
+		generateBombs(terrain, 80);
+		
+		player.x = tile_size;
+		player.y = tile_size;
+		player.vx = 0;
+		player.vy = 0;
+		player.logicX = 1;
+		player.logicY = 1;
+		player.logicOffsetX = 0;
+		player.logicOffsetY = 0;
+		
+		generateExit();
+		//exit.x = 10 * tile_size;
+		//exit.y = 10 * tile_size;
+		//errain.logicMatrix[10][10] = 21; // cod pentru exit
+	}
+	
+	Game.prototype.update = function () {
+		var i, bomb, key, keys = [];
+		terrain.draw();
+		player.draw();
+		player.moveElement();
+		player.chackSpacePressed();
+		player.updatePosition();
+		
+		exit.draw();
+
+		for (key in bombsDict) {
+			keys.push(key);
+		}
+		keys.sort(sortBombsDictKeys);
+		for (i = 0; i < keys.length; i++) {
+			key = keys[i];
+			bomb = bombsDict[key];
+			bomb.draw();
+			bomb.setWaitTime();
+			bomb.updatePosition();
+			bomb.applyGravity();
+			bomb.checkIfBombKillsPlayer();
+		}
+	}
+	
+	function init () {
+		greenImage = document.getElementById("green_original");
+		borderImage = document.getElementById("gray");
+		playerImage = document.getElementById("player_original");
+		playerImageLeft = document.getElementById("player_original_left");
+		playerImageRight = document.getElementById("player_original_right");
+		bombImage = document.getElementById("bomb_original");
+		exitImage = document.getElementById("exit_original");
+		
+		game = new Game();
+		game.init();	
+	}
+	
+	function update () {
+		context.fillStyle = 'black';
+		context.fillRect(0, 0, canvas.width, canvas.height);
+		game.update();
+	}
+	</script>
+</html>

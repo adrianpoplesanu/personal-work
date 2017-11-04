@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+<head>
+</head>
+<body>
+    <img src="green.jpg" id="green" style="display: none;">
+	<img src="gray.jpg" id="gray" style="display: none;">
+    <canvas id="canvas" width="500" height="500"></canvas>
+	
+	<script>
+	var canvas, context;
+	var image;
+	var bloc; // the purple thing
+	var bomb;
+	var terrain;
+	var tile_size = 20; // unused yet
+	var display_offset_x; // unused yet
+	var display_offset_y; // unused yet
+	
+	var UpArrow = 38;
+	var DownArrow = 40;
+	var LeftArrow = 37;
+	var RightArrow = 39;
+
+	var keystate = {};	
+
+	window.addEventListener("keydown", function(e) {
+		// space and arrow keys
+		if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+			e.preventDefault();
+		}
+	}, false);
+	
+	document.addEventListener("keydown", function (event) {
+	    keystate[event.keyCode] = true;
+	});
+	document.addEventListener("keyup", function (event) {
+	    delete keystate[event.keyCode];
+	});
+	
+	window.onload = function () {
+		canvas = document.getElementById("canvas");
+		context = canvas.getContext("2d");
+		
+		width = canvas.width;
+		height = canvas.height;	
+		
+		console.log('am incarcat canvasul');	
+	
+	    initDisplay();
+	    setInterval(update, 1000/60);
+	}	
+
+	function generateMatrix(x, y) {
+		var matrix = new Array(10);
+		for (var i = 0; i < x; i++) {
+		  matrix[i] = new Array(y);
+		}
+		return matrix;
+	}
+
+    function transformCoordinateToLogic(value) {
+        return Math.floor(value / 20); // aici inca nu e bine
+	}	
+
+	function Terrain() {
+	    var matrix, width, height;
+	}
+	
+	Terrain.prototype.init = function (initx, inity) {
+	    this.width = initx;
+		this.height = inity;
+		this.matrix = generateMatrix(initx, inity);
+		this.populateMatrix();
+	}
+	
+	Terrain.prototype.populateMatrix = function () {
+	    var i, j;
+	    for (i = 0; i < this.width; i++)
+		    for (j = 0; j < this.height; j++) {
+			    if (i == 0 || j == 0 || i == this.width-1 || j == this.height-1) this.matrix[i][j] = 2;
+			    else this.matrix[i][j] = 1;
+			}
+	}
+	
+	Terrain.prototype.drawTerrain = function () {
+	    var i, j;
+		for (i = 0; i < this.width; i++ )
+		    for (j = 0; j < this.height; j++) {
+			    // desenez un patrat pentru fiecare element din matrice
+				// aici trebuie sa fie o imagine
+				if (this.matrix[i][j] == 1) {
+				    var img = document.getElementById("green");
+					context.drawImage(img, i * 20, j * 20);			
+				}
+				if (this.matrix[i][j] == 2) {
+					var img = document.getElementById("gray");
+					context.drawImage(img, i * 20, j * 20);	
+				}
+			}
+	}
+	
+	Terrain.prototype.canMoveLeft = function (x, y) {
+	    if (this.matrix[x-1][y] == 2) return false;
+	    return true;
+	}
+	
+	Terrain.prototype.canMoveRight = function (x, y) {
+	    if (this.matrix[x+1][y] == 2) return false;
+		return true;
+	}
+	
+	Terrain.prototype.canMoveUp = function (x, y) {
+	    if (this.matrix[x][y-1] == 2) return false;
+		return true;
+	}
+	
+	Terrain.prototype.canMoveDown = function (x, y) {
+	    if (this.matrix[x][y+1] == 2) return false;
+		return true;
+	}
+	
+	Terrain.prototype.cleanTile = function (x, y) {
+	    this.matrix[x][y] = 0;
+	}
+	
+	function Shape() {
+	    var x, y, vx, vy, color;		
+	}
+	
+	Shape.prototype.init = function (initx, inity, default_color) {
+		this.x = initx;
+		this.y = inity;
+		this.vx = 0;
+		this.vy = 0;
+		this.color = default_color;
+		this.isMoving = false;
+		this.movementPhase = 0;
+		this.logic_x; // unused yet, pozitia logica pe tabla x
+		this.logic_y; // unused yet. pozitia logica pe tabla y
+	}
+	
+	Shape.prototype.drawElement = function () {
+		context.beginPath();
+		context.rect(this.x, this.y, 20, 20);
+		context.fillStyle = this.color;
+		context.fill();	
+	}
+	
+	Shape.prototype.clearAcceleration = function () {
+	    this.vx = 0;
+		this.vy = 0;
+	}
+	
+	Shape.prototype.trimAcceleration = function () {
+	    // todo
+	}
+	
+	Shape.prototype.updatePosition = function () {
+	    if (this.movementPhase) {
+			this.x += this.vx;
+			this.y += this.vy;
+			this.movementPhase--;
+		} else {
+			this.clearAcceleration();	
+			this.isMoving = false;
+		}	
+	}
+	
+	Shape.prototype.moveElement = function ()  {
+		if (!this.isMoving) {
+			if (keystate[RightArrow] && terrain.canMoveRight(transformCoordinateToLogic(this.x), transformCoordinateToLogic(this.y))) {
+				this.vx = 2;
+				this.isMoving = true;
+				this.movementPhase = 10;
+				return;
+			}
+			if (keystate[LeftArrow] && terrain.canMoveLeft(transformCoordinateToLogic(this.x), transformCoordinateToLogic(this.y))) {
+				this.vx = -2;
+				this.isMoving = true;
+				this.movementPhase = 10;
+				return;
+			}
+			if (keystate[DownArrow] && terrain.canMoveDown(transformCoordinateToLogic(this.x), transformCoordinateToLogic(this.y))) {
+				this.vy = 2;
+				this.isMoving = true;
+				this.movementPhase = 10;
+				return;
+			}
+			if (keystate[UpArrow] && terrain.canMoveUp(transformCoordinateToLogic(this.x), transformCoordinateToLogic(this.y))) {
+				this.vy = -2;
+				this.isMoving = true;
+				this.movementPhase = 10;
+				return;
+			}
+		}
+	}
+	
+	function cleanPath () {
+	    var x, y;
+		if ((image.x % 20) == 0 && (image.y % 20) == 0) {
+			x = Math.floor(image.x / 20);
+			y = Math.floor(image.y / 20);
+			terrain.cleanTile(x, y);
+		}
+	}
+	
+	function initDisplay () {
+	    image = new Shape();
+		image.init(20, 20, 'red');
+		bloc = new Shape();
+		bloc.init(5 * 20, 5 * 20, 'purple');
+		bomb = new Shape();
+		bomb.init(10 * 20, 2 * 20, 'gray');
+		terrain = new Terrain();
+		terrain.init(22, 22);
+	}
+	
+	function update () {
+	    context.fillStyle = 'black';
+		context.fillRect(0, 0, canvas.width, canvas.height);
+		
+		terrain.drawTerrain();
+		
+		image.drawElement();
+		image.updatePosition();
+		image.moveElement();
+		
+		bloc.drawElement();
+		bomb.drawElement();
+		cleanPath();
+	}
+	</script>
+</body>
+</html>
