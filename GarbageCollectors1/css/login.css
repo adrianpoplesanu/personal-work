@@ -1,0 +1,25 @@
+html,
+body {
+	height: 100%
+}
+
+.search-box {
+	margin:80px auto;
+	position:absolute;
+	width: 80%;
+}
+
+.caption {
+	margin-bottom:50px;
+}
+
+.login-form input[type=text],
+.login-form input[type=password] {
+	margin-bottom:10px;
+}
+
+.login-form input[type=submit] {
+	background:#fb044a;
+	color:#fff;
+	font-weight:700;
+}

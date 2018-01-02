@@ -1,0 +1,71 @@
+@CHARSET "UTF-8";
+
+.mini-submenu{
+    display:none;
+    background-color: rgba(0, 0, 0, 0);
+    border: 1px solid rgba(0, 0, 0, 0.9);
+    border-radius: 4px;
+    padding: 9px;
+    /*position: relative;*/
+    width: 42px;
+}
+
+.mini-submenu:hover{
+    cursor: pointer;
+}
+
+.mini-submenu .icon-bar {
+    border-radius: 1px;
+    display: block;
+    height: 2px;
+    width: 22px;
+    margin-top: 3px;
+}
+
+.mini-submenu .icon-bar {
+    background-color: #000;
+}
+
+#slide-submenu{
+    background: rgba(0, 0, 0, 0.45);
+    display: inline-block;
+    padding: 0 8px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#test {
+	color: red;
+}
+
+.top-nav-buttons {
+	display: inline-block;
+	padding: 2px;
+}
+
+input[type=submit].link-button {
+     background: none !important;
+     background-color: transparent;
+     color: #337ab7;
+     text-decoration: none;
+     border: none; 
+     padding: 0 !important;
+     font: inherit;
+     /*border is optional*/
+     /*border-bottom:1px solid #444;*/
+     cursor: pointer;
+}
+
+input[type=submit].link-button:hover {
+     background:none!important;
+     background-color: transparent;
+     color: #23527c;
+     text-decoration: underline;
+     /*transition: color .9s;*/
+     border:none; 
+     padding:0!important;
+     font: inherit;
+     /*border is optional*/
+     /*border-bottom:1px solid #444;*/ 
+     cursor: pointer;
+}

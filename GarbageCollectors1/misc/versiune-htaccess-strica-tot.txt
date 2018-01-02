@@ -1,0 +1,7 @@
+#Options -Multiviews
+
+#asta pare sa mearga
+#atentie ca sa scot regulile trebuie sa sterg cache-ul din browser
+
+#RewriteEngine On
+#RewriteRule ^$ /GarbageCollectors1/pages [L]

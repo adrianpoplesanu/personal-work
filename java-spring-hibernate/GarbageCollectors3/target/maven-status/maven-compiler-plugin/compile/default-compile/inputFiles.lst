@@ -1,0 +1,14 @@
+/Users/adrianpoplesanu/Documents/workspace/GarbageCollectors3/src/main/java/com/adrianpoplesanu/garbagecollectors/controllers/ErrorsController.java
+/Users/adrianpoplesanu/Documents/workspace/GarbageCollectors3/src/main/java/com/adrianpoplesanu/garbagecollectors/controllers/LoginController.java
+/Users/adrianpoplesanu/Documents/workspace/GarbageCollectors3/src/main/java/com/adrianpoplesanu/garbagecollectors/models/UserData.java
+/Users/adrianpoplesanu/Documents/workspace/GarbageCollectors3/src/main/java/com/adrianpoplesanu/garbagecollectors/daos/UserDao.java
+/Users/adrianpoplesanu/Documents/workspace/GarbageCollectors3/src/main/java/com/adrianpoplesanu/garbagecollectors/controllers/MyAccountController.java
+/Users/adrianpoplesanu/Documents/workspace/GarbageCollectors3/src/main/java/com/adrianpoplesanu/garbagecollectors/daos/UserDaoImpl.java
+/Users/adrianpoplesanu/Documents/workspace/GarbageCollectors3/src/main/java/com/adrianpoplesanu/garbagecollectors/controllers/HomepageController.java
+/Users/adrianpoplesanu/Documents/workspace/GarbageCollectors3/src/main/java/com/adrianpoplesanu/garbagecollectors/services/UserServiceImpl.java
+/Users/adrianpoplesanu/Documents/workspace/GarbageCollectors3/src/main/java/com/adrianpoplesanu/garbagecollectors/models/UserRowMapper.java
+/Users/adrianpoplesanu/Documents/workspace/GarbageCollectors3/src/main/java/com/adrianpoplesanu/garbagecollectors/services/UserService.java
+/Users/adrianpoplesanu/Documents/workspace/GarbageCollectors3/src/main/java/com/adrianpoplesanu/garbagecollectors/models/User.java
+/Users/adrianpoplesanu/Documents/workspace/GarbageCollectors3/src/main/java/com/adrianpoplesanu/garbagecollectors/daos/UserDataDao.java
+/Users/adrianpoplesanu/Documents/workspace/GarbageCollectors3/src/main/java/com/adrianpoplesanu/garbagecollectors/daos/UserDataDaoImpl.java
+/Users/adrianpoplesanu/Documents/workspace/GarbageCollectors3/src/main/java/com/adrianpoplesanu/garbagecollectors/models/UserDataRowMapper.java

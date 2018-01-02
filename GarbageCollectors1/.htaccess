@@ -1,0 +1,6 @@
+#asta pare sa mearga
+#atentie ca sa scot regulile trebuie sa sterg cache-ul din browser
+#l-am activat pe 18 noiembrie 2017
+
+RewriteEngine On
+RewriteRule ^$ /GarbageCollectors1/pages [L]

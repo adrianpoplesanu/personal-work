@@ -1,0 +1,4 @@
+//include_once('utils/dbapi.php'); // asta pusa la modele
+
+//$results = $dbapi->execute('select * from testdb');
+//echo $results[0]['MESSAGE'];

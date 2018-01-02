@@ -1,0 +1,45 @@
+@CHARSET "UTF-8";
+
+#users_container {
+	margin-top: 10px;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.label-offset {
+	padding-top: 7px;
+}
+
+.top-nav-buttons {
+	display: inline-block;
+	padding: 2px;
+}
+
+input[type=submit].link-button {
+     background: none !important;
+     background-color: transparent;
+     color: #337ab7;
+     text-decoration: none;
+     border: none; 
+     padding: 0 !important;
+     font: inherit;
+     /*border is optional*/
+     /*border-bottom:1px solid #444;*/
+     cursor: pointer;
+}
+
+input[type=submit].link-button:hover {
+     background:none!important;
+     background-color: transparent;
+     color: #23527c;
+     text-decoration: underline;
+     /*transition: color .9s;*/
+     border:none; 
+     padding:0!important;
+     font: inherit;
+     /*border is optional*/
+     /*border-bottom:1px solid #444;*/ 
+     cursor: pointer;
+}
