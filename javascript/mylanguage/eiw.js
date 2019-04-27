@@ -1,3 +1,7 @@
+/*
+    EIW - Everything is wrong
+    Programming language
+*/
 console.log('running mylanguage.js...');
 
 const keywords = {
