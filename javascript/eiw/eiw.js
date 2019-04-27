@@ -2,7 +2,7 @@
     EIW - Everything is wrong
     Programming language
 */
-console.log('running mylanguage.js...');
+console.log('running eiw.js...');
 
 const keywords = {
    PRINT: 'print',
@@ -12,32 +12,32 @@ const keywords = {
 }
 
 const identifiers = {
-    STRING: '???,
+    STRING: '???',
     NUMBER: '???'
 }
 
 function Parser() {
-}
+};
 
 function Lexer() {
 
-}
+};
 
 function AbstractSyntaxTree() {
 
-}
+};
 
 function StatementEvaluator() {
 
-}
+};
 
 function Program() {
 
-}
+};
 
 Program.prototype.traverse = function () {
     console.log('traversing...');
-}
+};
 
 $(document).ready(function () {
     $('#run-button').on('click', function () {
