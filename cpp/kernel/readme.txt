@@ -1,3 +1,5 @@
-to create the iso run:
+Developed and compiled on Ubuntu.
+Dependencies: xorriso, grub
 
+To create the iso run:
 make mykernel.iso
