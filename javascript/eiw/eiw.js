@@ -77,11 +77,16 @@ Lexer.prototype.getLineTokens = function (line) {
                 token = '';
             } else {
                 is_string = true;
-                //token += line[pos];
             }
         } else if (line[pos] == '{') {
             if (is_string) {
                 token += '{';
+            } else {
+                if (token) {
+                    tokens.push(new Token(keywords.UNKNOWN_KEYWORD, token));
+                    token = '';
+                }
+                tokens.push(new Token(keywords.OPEN_BRAKETS, '{'));
             }
         } else if (line[pos] == '}') {
             if (is_string) {
@@ -96,7 +101,6 @@ Lexer.prototype.getLineTokens = function (line) {
         }
         pos++;
     }
-    //tokens = line.split(' '); // TODO
     return tokens;
 };
 
@@ -104,20 +108,20 @@ function AbstractSyntaxTree() {
     var astNode = {};
 };
 
-function Action() {
+function Statement() {
 
 };
 
-Action.prototype.eval = function () {
+Statement.prototype.eval = function () {
     console.log("evaluating action");
 };
 
 function PrintAction() {
-    Action.call(this);
+    Statement.call(this);
 };
 
 function IfAction() {
-    Action.call(this);
+    Statement.call(this);
 };
 
 function Program() {
