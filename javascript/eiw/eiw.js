@@ -17,6 +17,14 @@ const keywords = {
     STRING_VALUE: 9,
     NUMBER_VALUE: 10,
     UNKNOWN_KEYWORD: 11,
+    DEFINE_VARIABLE: 12,
+    ATTRIBUTION_OPERATOR: 13,
+    GREATER_THAN: 14,
+    LOWER_THAN: 15,
+    BOOL_TRUE: 16,
+    BOOL_FALSE: 17,
+    OPEN_PAREN: 18,
+    CLOSED_PAREN: 19,
 }
 
 const tokens_to_keywords = {
@@ -28,6 +36,14 @@ const tokens_to_keywords = {
     ';': keywords.INSTRUCTION_END,
     'string': keywords.STRING_DEFINITION,
     'number': keywords.NUMBER_DEFINITION,
+    'define': keywords.DEFINE_VARIABLE,
+    '=': keywords.ATTRIBUTION_OPERATOR,
+    '>': keywords.GREATER_THAN,
+    '<': keywords.LOWER_THAN,
+    'true': keywords.BOOL_TRUE,
+    'false': keywords.BOOL_FALSE,
+    '(': keywords.OPEN_PAREN,
+    ')':keywords.CLOSED_PAREN,
 }
 
 const identifiers = {
@@ -35,13 +51,20 @@ const identifiers = {
     NUMBER: '???'
 }
 
+var symbolTable = [];
+var codeBlockHeap = 0;
+
 function Parser() {
 
 };
 
 Parser.prototype.buildAbstractSyntaxTree = function(tokens) {
     var abstractSyntaxTree = new AbstractSyntaxTree();
-    abstractSyntaxTree.tokens = tokens;
+    var i;
+    for (i = 0; i < tokens.length; i++) {
+        console.log(tokens[i]);
+    }
+    //abstractSyntaxTree.tokens = tokens;
     return abstractSyntaxTree;
 };
 
@@ -65,8 +88,12 @@ Lexer.prototype.getLineTokens = function (line) {
             if (is_string) {
                 token += ' ';
             } else {
-                if (token != '') {
-                    tokens.push(new Token(keywords.UNKNOWN_KEYWORD, token));
+                if (token) {
+                    if (token in tokens_to_keywords) {
+                        tokens.push(new Token(tokens_to_keywords[token], token));
+                    } else {
+                        tokens.push(new Token(keywords.UNKNOWN_KEYWORD, token));
+                    }
                 }
                 token = '';
             }
@@ -83,6 +110,7 @@ Lexer.prototype.getLineTokens = function (line) {
                 token += '{';
             } else {
                 if (token) {
+                    console.log('possible compiler error');
                     tokens.push(new Token(keywords.UNKNOWN_KEYWORD, token));
                     token = '';
                 }
@@ -91,38 +119,86 @@ Lexer.prototype.getLineTokens = function (line) {
         } else if (line[pos] == '}') {
             if (is_string) {
                 token += '}';
+            } else {
+                if (token) {
+                    console.log('possible compiler error');
+                    tokens.push(new Token(keywords.UNKNOWN_KEYWORD, token));
+                    token = '';
+                }
+                tokens.push(new Token(keywords.CLOSE_BRAKETS, '}'));
+            }
+        } else if (line[pos] == '(') {
+            if (is_string) {
+                token += '(';
+            } else {
+                if (token) {
+                    console.log('possible compiler error');
+                    tokens.push(new Token(keywords.UNKNOWN_KEYWORD, token));
+                    token = '';
+                }
+                tokens.push(new Token(keywords.OPEN_PAREN, '('));
+            }
+        } else if (line[pos] == ')') {
+            if (is_string) {
+                token += ')';
+            } else {
+                if (token) {
+                    console.log('possible compiler error');
+                    tokens.push(new Token(keywords.UNKNOWN_KEYWORD, token));
+                    token = '';
+                }
+                tokens.push(new Token(keywords.CLOSED_PAREN, ')'));
             }
         } else if (line[pos] == ';') {
             if (is_string) {
                 token += ';';
+            } else {
+                if (token) {
+                    tokens.push(new Token(keywords.UNKNOWN_KEYWORD, token));
+                    token = '';
+                }
+                tokens.push(new Token(keywords.INSTRUCTION_END, ';'));
             }
         } else {
             token += line[pos];
         }
         pos++;
     }
+    if (token) { // TODO: fix this
+        console.log('possible compiler error');
+        tokens.push(new Token(keywords.UNKNOWN_KEYWORD, token));
+        token = '';
+    }
     return tokens;
 };
 
 function AbstractSyntaxTree() {
-    var astNode = {};
+    var root = null;
 };
+
+function AstNode() {
+
+}
 
 function Statement() {
 
 };
 
 Statement.prototype.eval = function () {
-    console.log("evaluating action");
+    console.log("evaluating statement");
 };
 
-function PrintAction() {
+function PrintStatement() {
     Statement.call(this);
 };
 
-function IfAction() {
+function IfStatement() {
     Statement.call(this);
 };
+
+function DefineStatement() {
+    Statement.call(this);
+}
 
 function Program() {
 
@@ -144,7 +220,7 @@ Program.prototype.traverse = function (source) {
         tokens.push(...new_tokens);
     }
     abstractSyntaxTree = parser.buildAbstractSyntaxTree(tokens);
-    console.log(abstractSyntaxTree.tokens);
+    //console.log(abstractSyntaxTree.tokens);
 };
 
 $(document).ready(function () {
