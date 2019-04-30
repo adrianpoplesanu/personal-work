@@ -102,6 +102,7 @@ Parser.prototype.buildAbstractSyntaxTree = function(tokens) {
             new_node.type2 = 'call_print';
             current.children.push(new_node);
             current = new_node;
+            continue;
         }
         if (tokens[i].keyword == keywords.STRING_VALUE) {
             var new_node = new AstNode();
@@ -109,6 +110,7 @@ Parser.prototype.buildAbstractSyntaxTree = function(tokens) {
             new_node.level = new_node.parent2.level + 1;
             new_node.type2 = 'call_string_identifier';
             current.children.push(new_node);
+            continue;
         }
         if (tokens[i].keyword == keywords.INSTRUCTION_END) {
             if (current.type2 == 'call_print' || current.type2 == 'call_define_variable') { // nu sunt sigur aici ca e ce trebuie
@@ -119,6 +121,7 @@ Parser.prototype.buildAbstractSyntaxTree = function(tokens) {
                 current.children.push(new_node);
                 current = current.parent2; // asta pare incorecta
             }
+            continue;
         }
         if (tokens[i].keyword == keywords.OPEN_BRAKETS) {
             var new_node = new AstNode();
@@ -127,6 +130,7 @@ Parser.prototype.buildAbstractSyntaxTree = function(tokens) {
             new_node.type2 = 'call_start_code_block';
             current.children.push(new_node);
             current = new_node;
+            continue;
         }
         if (tokens[i].keyword == keywords.CLOSE_BRAKETS) {
             if (current.type2 == 'call_start_code_block') {
@@ -139,6 +143,7 @@ Parser.prototype.buildAbstractSyntaxTree = function(tokens) {
                 if (current.type2 == 'call_if') current = current.parent2; // iarasi nu sunt 100% sigur
                 //current = new_node;
             }
+            continue;
         }
         if (tokens[i].keyword == keywords.DEFINE_VARIABLE) {
             var new_node = new AstNode();
@@ -148,6 +153,7 @@ Parser.prototype.buildAbstractSyntaxTree = function(tokens) {
             current.children.push(new_node);
             //current = current.parent2;
             current = new_node;
+            continue;
         }
         if (tokens[i].keyword == keywords.IDENTIFIER_) {
             var new_node = new AstNode();
@@ -158,6 +164,7 @@ Parser.prototype.buildAbstractSyntaxTree = function(tokens) {
             current.children.push(new_node);
             //current = current.parent2;
             //current = new_node;
+            continue;
         }
         if (tokens[i].keyword == keywords.IF) {
             var new_node = new AstNode();
@@ -168,6 +175,7 @@ Parser.prototype.buildAbstractSyntaxTree = function(tokens) {
             current.children.push(new_node);
             //current = current.parent2;
             current = new_node;
+            continue;
         }
         if (tokens[i].keyword == keywords.OPEN_PAREN) {
             if (current.type2 == 'call_if') {
@@ -180,6 +188,7 @@ Parser.prototype.buildAbstractSyntaxTree = function(tokens) {
                 //current = current.parent2;
                 current = new_node;
             }
+            continue;
         }
         if (tokens[i].keyword == keywords.CLOSED_PAREN) {
             if (current.type2 == 'call_conditional_begin') {
@@ -190,6 +199,7 @@ Parser.prototype.buildAbstractSyntaxTree = function(tokens) {
                 current.children.push(new_node);
                 current = current.parent2;
             }
+            continue;
         }
         if (tokens[i].keyword == keywords.GREATER_THAN) {
             if (current.type2 == 'call_conditional_begin') {
@@ -200,7 +210,9 @@ Parser.prototype.buildAbstractSyntaxTree = function(tokens) {
                 current.children.push(new_node);
                 //current = current.parent2;
             }
+            continue;
         }
+        console.log(tokens[i]);
     }
     //abstractSyntaxTree.tokens = tokens;
     console.log(abstractSyntaxTree);
