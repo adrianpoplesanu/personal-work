@@ -5,23 +5,62 @@
     <style>
     body {
         background-color: black;
+        font-family: Calibri;
     }
-    textarea {
+    .source-console, .output-console {
         background-color: black;
         color: white;
+        font-weight: bold;
+    }
+    .source-console {
+        color: white;
+    }
+    .output-console {
+        color: yellow;
     }
     button {
         background-color: black;
         color:yellow;
     }
+    .readme {
+        color: white;
+    }
+    .example-code {
+        color: lightgreen;
+    }
     </style>
 </head>
 <body>
-    <div>
-        <textarea id="source" rows="20" cols="50"></textarea>
+    <div style="float: left;">
+        <textarea id="source" class="source-console" rows="20" cols="70"></textarea>
     </div>
-    <div>
+    <div style="float: left;">
+        <textarea id="output" class="output-console" rows="20" cols="70" disabled>
+EIW interpreter v1.0
+Console output:
+        </textarea>
+    </div>
+    <div style="clear: both;">
         <button id="run-button">Run</button>
+    </div>
+    <div style="clear: both;">
+        <button id="clear-button">Clear console</button>
+    </div>
+    <div class="readme"><h2>EIW source code example:</h2>
+        <pre class="example-code">
+{print     "aaa" ; }
+print "bbb";
+if (5 > 0) {
+    print "e mai mare";
+}
+define number five = 6;
+print five;
+five=five+1;
+print five;
+        </pre>
+    </div>
+    <div class="readme"><h2>EIW - Everything is wrong</h2>
+        Created in 2o19.
     </div>
 </body>
 </html>

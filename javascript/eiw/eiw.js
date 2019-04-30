@@ -25,6 +25,33 @@ const keywords = {
     BOOL_FALSE: 17,
     OPEN_PAREN: 18,
     CLOSED_PAREN: 19,
+    ADDITION_OPERATOR: 20,
+    IDENTIFIER_ : 21,
+}
+
+const keywords_to_strings = {
+    0: 'PRINT',
+    1: 'IF',
+    2: 'ELSE',
+    3: 'OPEN_BRAKETS',
+    4: 'CLOSE_BRAKETS',
+    5: 'INSTRUCTION_END',
+    6: 'VOID_INSTRUCTION',
+    7: 'STRING_DEFINITION',
+    8: 'NUMBER_DEFINITION',
+    9: 'STRING_VALUE',
+    10: 'NUMBER_VALUE',
+    11: 'UNKNOWN_KEYWORD',
+    12: 'DEFINE_VARIABLE',
+    13: 'ATTRIBUTION_OPERATOR',
+    14: 'GREATER_THAN',
+    15: 'LOWER_THAN',
+    16: 'BOOL_TRUE',
+    17: 'BOOL_FALSE',
+    18: 'OPEN_PAREN',
+    19: 'CLOSED_PAREN',
+    20: 'ADDITION_OPERATOR',
+    21: 'IDENTIFIER_',
 }
 
 const tokens_to_keywords = {
@@ -43,7 +70,8 @@ const tokens_to_keywords = {
     'true': keywords.BOOL_TRUE,
     'false': keywords.BOOL_FALSE,
     '(': keywords.OPEN_PAREN,
-    ')':keywords.CLOSED_PAREN,
+    ')': keywords.CLOSED_PAREN,
+    '+': keywords.ADDITION_OPERATOR,
 }
 
 const identifiers = {
@@ -51,8 +79,8 @@ const identifiers = {
     NUMBER: '???'
 }
 
-var symbolTable = [];
-var codeBlockHeap = 0;
+//.var symbolTable = [];
+//var codeBlockHeap = 0;
 
 function Parser() {
 
@@ -61,16 +89,131 @@ function Parser() {
 Parser.prototype.buildAbstractSyntaxTree = function(tokens) {
     var abstractSyntaxTree = new AbstractSyntaxTree();
     var i;
+    //abstractSyntaxTree.root = new AstNode();
+    var current = abstractSyntaxTree.root;
     for (i = 0; i < tokens.length; i++) {
-        console.log(tokens[i]);
+        //console.log(tokens[i]);
+        //virtual_machine_output(tokens[i].toString());
+        if (tokens[i].keyword == keywords.PRINT) {
+            var new_node = new AstNode();
+            new_node.parent2 = current;
+            new_node.symbolTable = {...current.symbolTable}; // TODO check if this works!!!
+            new_node.level = new_node.parent2.level + 1;
+            new_node.type2 = 'call_print';
+            current.children.push(new_node);
+            current = new_node;
+        }
+        if (tokens[i].keyword == keywords.STRING_VALUE) {
+            var new_node = new AstNode();
+            new_node.parent2 = current;
+            new_node.level = new_node.parent2.level + 1;
+            new_node.type2 = 'call_string_identifier';
+            current.children.push(new_node);
+        }
+        if (tokens[i].keyword == keywords.INSTRUCTION_END) {
+            if (current.type2 == 'call_print' || current.type2 == 'call_define_variable') { // nu sunt sigur aici ca e ce trebuie
+                var new_node = new AstNode();
+                new_node.parent2 = current;
+                new_node.level = new_node.parent2.level + 1;
+                new_node.type2 = 'call_end_instruction';
+                current.children.push(new_node);
+                current = current.parent2; // asta pare incorecta
+            }
+        }
+        if (tokens[i].keyword == keywords.OPEN_BRAKETS) {
+            var new_node = new AstNode();
+            new_node.parent2 = current;
+            new_node.level = new_node.parent2.level + 1;
+            new_node.type2 = 'call_start_code_block';
+            current.children.push(new_node);
+            current = new_node;
+        }
+        if (tokens[i].keyword == keywords.CLOSE_BRAKETS) {
+            if (current.type2 == 'call_start_code_block') {
+                var new_node = new AstNode();
+                new_node.parent2 = current;
+                new_node.level = new_node.parent2.level + 1;
+                new_node.type2 = 'call_end_code_block';
+                current.children.push(new_node);
+                current = current.parent2;
+                if (current.type2 == 'call_if') current = current.parent2; // iarasi nu sunt 100% sigur
+                //current = new_node;
+            }
+        }
+        if (tokens[i].keyword == keywords.DEFINE_VARIABLE) {
+            var new_node = new AstNode();
+            new_node.parent2 = current;
+            new_node.level = new_node.parent2.level + 1;
+            new_node.type2 = 'call_define_variable';
+            current.children.push(new_node);
+            //current = current.parent2;
+            current = new_node;
+        }
+        if (tokens[i].keyword == keywords.IDENTIFIER_) {
+            var new_node = new AstNode();
+            //console.log(tokens[i].value2);
+            new_node.parent2 = current;
+            new_node.level = new_node.parent2.level + 1;
+            new_node.type2 = 'call_identifier_';
+            current.children.push(new_node);
+            //current = current.parent2;
+            //current = new_node;
+        }
+        if (tokens[i].keyword == keywords.IF) {
+            var new_node = new AstNode();
+            //console.log(tokens[i].value2);
+            new_node.parent2 = current;
+            new_node.level = new_node.parent2.level + 1;
+            new_node.type2 = 'call_if';
+            current.children.push(new_node);
+            //current = current.parent2;
+            current = new_node;
+        }
+        if (tokens[i].keyword == keywords.OPEN_PAREN) {
+            if (current.type2 == 'call_if') {
+                var new_node = new AstNode();
+                //console.log(tokens[i].value2);
+                new_node.parent2 = current;
+                new_node.level = new_node.parent2.level + 1;
+                new_node.type2 = 'call_conditional_begin';
+                current.children.push(new_node);
+                //current = current.parent2;
+                current = new_node;
+            }
+        }
+        if (tokens[i].keyword == keywords.CLOSED_PAREN) {
+            if (current.type2 == 'call_conditional_begin') {
+                var new_node = new AstNode();
+                new_node.parent2 = current;
+                new_node.level = new_node.parent2.level + 1;
+                new_node.type2 = 'call_end_conditional';
+                current.children.push(new_node);
+                current = current.parent2;
+            }
+        }
+        if (tokens[i].keyword == keywords.GREATER_THAN) {
+            if (current.type2 == 'call_conditional_begin') {
+                var new_node = new AstNode();
+                new_node.parent2 = current;
+                new_node.level = new_node.parent2.level + 1;
+                new_node.type2 = 'call_greater_than';
+                current.children.push(new_node);
+                //current = current.parent2;
+            }
+        }
     }
     //abstractSyntaxTree.tokens = tokens;
+    console.log(abstractSyntaxTree);
     return abstractSyntaxTree;
 };
 
 function Token(keyword, value2) {
     this.keyword = keyword;
     this.value2 = value2;
+}
+
+Token.prototype.toString = function () {
+    return "Token [<" + this.keyword + "> : <" + keywords_to_strings[this.keyword] + "> : <" + this.value2 + ">]";
 }
 
 function Lexer() {
@@ -92,7 +235,8 @@ Lexer.prototype.getLineTokens = function (line) {
                     if (token in tokens_to_keywords) {
                         tokens.push(new Token(tokens_to_keywords[token], token));
                     } else {
-                        tokens.push(new Token(keywords.UNKNOWN_KEYWORD, token));
+                        //tokens.push(new Token(keywords.UNKNOWN_KEYWORD, token));
+                        tokens.push(new Token(keywords.IDENTIFIER_, token)); // nu sunt asa convins de asta
                     }
                 }
                 token = '';
@@ -144,7 +288,8 @@ Lexer.prototype.getLineTokens = function (line) {
             } else {
                 if (token) {
                     console.log('possible compiler error');
-                    tokens.push(new Token(keywords.UNKNOWN_KEYWORD, token));
+                    //tokens.push(new Token(keywords.UNKNOWN_KEYWORD, token));
+                    tokens.push(new Token(keywords.IDENTIFIER_, token)); // nu sunt asa convins de asta
                     token = '';
                 }
                 tokens.push(new Token(keywords.CLOSED_PAREN, ')'));
@@ -159,6 +304,37 @@ Lexer.prototype.getLineTokens = function (line) {
                 }
                 tokens.push(new Token(keywords.INSTRUCTION_END, ';'));
             }
+        } else if (line[pos] == '=') {
+            if (is_string) {
+                token += '=';
+            } else {
+                if (token) {
+                    tokens.push(new Token(keywords.IDENTIFIER_, token));
+                    token = '';
+                }
+                tokens.push(new Token(keywords.ATTRIBUTION_OPERATOR, '='));
+            }
+        } else if (line[pos] == '+') {
+            if (is_string) {
+                token += '=';
+            } else {
+                if (token) {
+                    tokens.push(new Token(keywords.UNKNOWN_KEYWORD, token));
+                    token = '';
+                }
+                tokens.push(new Token(keywords.ATTRIBUTION_OPERATOR, '+'));
+            }
+        } else if (line[pos] == '>') {
+            if (is_string) {
+                token += '>';
+            } else {
+                console.log('possible compiler error');
+                if (token) {
+                    tokens.push(new Token(keywords.IDENTIFIER_, token));
+                    token = '';
+                }
+                tokens.push(new Token(keywords.GREATER_THAN, '>'));
+            }            
         } else {
             token += line[pos];
         }
@@ -173,11 +349,15 @@ Lexer.prototype.getLineTokens = function (line) {
 };
 
 function AbstractSyntaxTree() {
-    var root = null;
+    this.root = new AstNode();
 };
 
 function AstNode() {
-
+    this.parent2 = null;
+    this.children = [];
+    this.symbolTable = {};
+    this.level = 0;
+    this.type2 = "program";
 }
 
 function Statement() {
@@ -208,6 +388,25 @@ function evaluateExpression() {
 
 };
 
+function virtual_machine_output(message) {
+    if ($('#output').val()) {
+        $('#output').val($('#output').val() + '\n' + message);
+    } else {
+        $('#output').val(message);
+    }
+    virtual_macine_scroll_bottom();
+};
+
+function virtual_macine_scroll_bottom() {
+    var $textarea = $('#output');
+    $textarea.scrollTop($textarea[0].scrollHeight);
+}
+
+function virtual_machine_clear_screen() {
+    var $textarea = $('#output');
+    $textarea.val('');
+}
+
 Program.prototype.traverse = function (source) {
     console.log('traversing...');
     var lexer = new Lexer();
@@ -228,5 +427,8 @@ $(document).ready(function () {
         var source = $('#source').val();
         var program = new Program();
         program.traverse(source);
+    });
+    $('#clear-button').on('click', function () {
+        virtual_machine_clear_screen();
     });
 });
