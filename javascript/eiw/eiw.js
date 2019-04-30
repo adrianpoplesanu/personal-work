@@ -113,13 +113,14 @@ Parser.prototype.buildAbstractSyntaxTree = function(tokens) {
             continue;
         }
         if (tokens[i].keyword == keywords.INSTRUCTION_END) {
-            if (current.type2 == 'call_print' || current.type2 == 'call_define_variable') { // nu sunt sigur aici ca e ce trebuie
+            if (current.type2 == 'call_print' || current.type2 == 'call_define_variable' || current.type2 == 'call_attribution_operator') { // nu sunt sigur aici ca e ce trebuie
                 var new_node = new AstNode();
                 new_node.parent2 = current;
                 new_node.level = new_node.parent2.level + 1;
                 new_node.type2 = 'call_end_instruction';
-                current.children.push(new_node);
+                current.children.push(new_node); // poate nu e nevoie de asta... vom vedea
                 current = current.parent2; // asta pare incorecta
+                if (current.type2 == 'call_define_variable') current = current.parent2; // asta arata naspa rau
             }
             continue;
         }
@@ -211,6 +212,35 @@ Parser.prototype.buildAbstractSyntaxTree = function(tokens) {
                 //current = current.parent2;
             }
             continue;
+        }
+        if (tokens[i].keyword == keywords.NUMBER_DEFINITION) {
+            var new_node = new AstNode();
+            new_node.parent2 = current;
+            new_node.level = new_node.parent2.level + 1;
+            new_node.type2 = 'call_number_definition';
+            current.children.push(new_node);
+            //current = current.parent2;
+            continue;
+        }
+        if (tokens[i].keyword == keywords.ATTRIBUTION_OPERATOR) {
+            var new_node = new AstNode();
+            new_node.parent2 = current;
+            new_node.level = new_node.parent2.level + 1;
+            new_node.type2 = 'call_attribution_operator';
+            current.children.push(new_node);
+            //current = current.parent2;
+            current = new_node;
+            continue;
+        }
+        if (tokens[i].keyword == keywords.ADDITION_OPERATOR) {
+            var new_node = new AstNode();
+            new_node.parent2 = current;
+            new_node.level = new_node.parent2.level + 1;
+            new_node.type2 = 'call_addition';
+            current.children.push(new_node);
+            //current = current.parent2;
+            //current = new_node;
+            continue;           
         }
         console.log(tokens[i]);
     }
@@ -311,7 +341,8 @@ Lexer.prototype.getLineTokens = function (line) {
                 token += ';';
             } else {
                 if (token) {
-                    tokens.push(new Token(keywords.UNKNOWN_KEYWORD, token));
+                    //tokens.push(new Token(keywords.UNKNOWN_KEYWORD, token));
+                    tokens.push(new Token(keywords.IDENTIFIER_, token)); // nu sunt asa convins de asta
                     token = '';
                 }
                 tokens.push(new Token(keywords.INSTRUCTION_END, ';'));
@@ -328,13 +359,14 @@ Lexer.prototype.getLineTokens = function (line) {
             }
         } else if (line[pos] == '+') {
             if (is_string) {
-                token += '=';
+                token += '+';
             } else {
                 if (token) {
-                    tokens.push(new Token(keywords.UNKNOWN_KEYWORD, token));
+                    //tokens.push(new Token(keywords.UNKNOWN_KEYWORD, token));
+                    tokens.push(new Token(keywords.IDENTIFIER_, token)); // nu sunt asa convins de asta
                     token = '';
                 }
-                tokens.push(new Token(keywords.ATTRIBUTION_OPERATOR, '+'));
+                tokens.push(new Token(keywords.ADDITION_OPERATOR, '+'));
             }
         } else if (line[pos] == '>') {
             if (is_string) {
