@@ -1,10 +1,11 @@
-console.log('running SlowHands bash application...');
-process.stdout.write("sh: ");
+//console.log('running SlowHands bash application...');
+//process.stdout.write("sh: ");
 
 const readline = require('readline');
 const clear = require('clear');
 const chalk = require('chalk');
 const figlet = require('figlet');
+var fs = require('fs');
 var path = require('path');
 var rl = readline.createInterface({
   input: process.stdin,
@@ -13,6 +14,7 @@ var rl = readline.createInterface({
 });
 
 var workingDirectory = path.resolve(".");
+var isLSCommand = false;
 
 clear();
 console.log(
@@ -21,29 +23,36 @@ console.log(
   )
 );
 process.stdout.write("sh> ");
-//process.stdout.write(chalk.green('sh>');
 
 rl.on('line', function(line){
     if (line) {
         switch(line) {
             case 'pwd':
                 console.log(chalk.green(workingDirectory));
-                //process.stdout.write(workingDirectory);
-                //process.stdout.write(path.resolve(".") + '\n');
-                //workingDirectory = path.basename(process.cwd());
-                //process.stdout.write(workingDirectory);
+            break;
+            case 'ls':
+                isLSCommand = true;
+                fs.readdir(workingDirectory, function(err, items) {
+                    console.log(chalk.green('Contents of ' + workingDirectory));
+                 
+                    for (var i=0; i<items.length; i++) {
+                        console.log(chalk.white(items[i]));
+                    }
+                    process.stdout.write("sh> ");
+                });
             break;
             case 'exit':
                 console.log(chalk.yellow('Good bye! SlowHands (c) 2o19.'));
-                //process.stdout.write('Good bye! SlowHands (c) 2o19.');
                 process.exit();
             break;
             default:
                 console.log(chalk.red('Command not found'));
-                //process.stdout.write('Unknown command\n');
             break;
         }
-        //console.log("received command: " + line);
     }
-    process.stdout.write("sh> ");
+    if (!isLSCommand) {
+        process.stdout.write("sh> ");
+    } else {
+        isLSCommand = false;
+    }
 });
