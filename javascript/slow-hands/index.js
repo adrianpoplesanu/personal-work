@@ -5,7 +5,7 @@ const readline = require('readline');
 const clear = require('clear');
 const chalk = require('chalk');
 const figlet = require('figlet');
-var fs = require('fs');
+const fs = require('fs');
 var path = require('path');
 var rl = readline.createInterface({
   input: process.stdin,
@@ -36,8 +36,16 @@ rl.on('line', function(line){
                     console.log(chalk.green('Contents of ' + workingDirectory));
                  
                     for (var i=0; i<items.length; i++) {
-                        console.log(chalk.white(items[i]));
-                    }
+                        if (fs.lstatSync(workingDirectory + '\\' + items[i]).isDirectory()) {
+                            console.log(chalk.white(items[i]));
+                        }
+                    } 
+                    for (var i=0; i<items.length; i++) {
+                        if (!fs.lstatSync(workingDirectory + '\\' + items[i]).isDirectory()) {
+                            //console.log(items[i].padEnd(30, '.'));
+                            console.log(chalk.white(items[i]).padEnd(40, '.') + ' ... ' + (fs.statSync(workingDirectory + '\\' + items[i]).size / 1000000.0 + 'Mb').padStart(15, '.'));
+                        }
+                    } 
                     process.stdout.write("sh> ");
                 });
             break;
