@@ -17,7 +17,7 @@ extern "C" void callConstructors() {
 }
 
 extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot_magic*/) {
-    printf("running Adrian's fourth kernel...");
+    printf("running Obstacle1 v0.1...");
 
     GlobalDescriptorTable gdt;
 
