@@ -1,0 +1,4 @@
+#Sat May 04 14:58:43 EEST 2019
+base.0=/Users/adrianpoplesanu/Documents/sencha/mobile_apps/randul_tau/cordova/platforms/android/app/build/intermediates/transforms/dexMerger/debug/0
+path.0=classes.dex
+renamed.0=classes.dex
