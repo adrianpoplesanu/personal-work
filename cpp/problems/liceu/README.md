@@ -24,3 +24,7 @@ Scrie codul pentru asta. Citesti n si m sunt parametri in linia de comanda, afis
 
 make compile1
 ./problema1 6 1
+
+2. Permutari simple
+make compile2
+./problema2 5
