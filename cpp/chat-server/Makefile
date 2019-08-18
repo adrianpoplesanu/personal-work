@@ -6,4 +6,4 @@ build:
 	rm client.o server.o
 
 clean:
-	rm client.o server.o sever client
+	rm client.o server.o server client
