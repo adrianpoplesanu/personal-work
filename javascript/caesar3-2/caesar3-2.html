@@ -1,0 +1,105 @@
+<html>
+<head>
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+<style>
+body {
+    background-color: ivory;
+}
+canvas {
+    border:1px solid red;
+}
+
+.center {
+  margin: auto;
+  width: 50%;
+  //border: 3px solid green;
+  padding: 10px;
+}
+</style>
+</head>
+<body>
+<p>Move, press and release the mouse</p>
+<p id="downlog">Down</p>
+<p id="movelog">Move</p>
+<p id="uplog">Up</p>
+<p id="outlog">Out</p>
+<div class="center">
+    <canvas id="canvas" width=800 height=600></canvas>
+</div>
+<script>
+var canvas = document.getElementById("canvas");
+var context = canvas.getContext("2d");
+var width = canvas.width;
+var height = canvas.height;
+
+var canvasOffset = $("#canvas").offset();
+var offsetX = canvasOffset.left;
+var offsetY = canvasOffset.top;
+
+var mouseX; // ???
+var mouseY; // ???
+var mousePressed = false; //
+
+function handleMouseDown(e) {
+    mouseX = parseInt(e.clientX - offsetX);
+    mouseY = parseInt(e.clientY - offsetY);
+    $("#downlog").html("Down: " + mouseX + " / " + mouseY);
+
+    mousePressed = true;
+}
+
+function handleMouseUp(e) {
+    mouseX = parseInt(e.clientX - offsetX);
+    mouseY = parseInt(e.clientY - offsetY);
+    $("#uplog").html("Up: " + mouseX + " / " + mouseY);
+
+    mousePressed = false;
+}
+
+function handleMouseOut(e) {
+    mouseX = parseInt(e.clientX - offsetX);
+    mouseY = parseInt(e.clientY - offsetY);
+    $("#outlog").html("Out: " + mouseX + " / " + mouseY);
+
+}
+
+function handleMouseMove(e) {
+    mouseX = parseInt(e.clientX - offsetX);
+    mouseY = parseInt(e.clientY - offsetY);
+    $("#movelog").html("Move: " + mouseX + " / " + mouseY);
+
+}
+
+$("#canvas").mousedown(function (e) {
+    handleMouseDown(e);
+});
+$("#canvas").mousemove(function (e) {
+    handleMouseMove(e);
+});
+$("#canvas").mouseup(function (e) {
+    handleMouseUp(e);
+});
+$("#canvas").mouseout(function (e) {
+    handleMouseOut(e);
+});
+
+window.onload = function () {
+    init();
+    setInterval(update, 1000/30);
+    //setInterval(update, 2000); // debug only
+}
+
+function init() {
+    console.log("running init()");
+}
+
+function update() {
+    //console.log("updating");
+    //console.log(mouseX + " x " + mouseY);
+}
+</script>
+</body>
+</html>
