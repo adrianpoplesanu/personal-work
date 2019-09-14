@@ -1,4 +1,5 @@
 #include <iostream>
+#include <time.h>
 using namespace std;
 
 void fib_dp(int n) {
@@ -24,7 +25,11 @@ void fib_opt(int n) {
 }
 
 int main(int argc, char* atgv[]) {
+    clock_t tstart = clock();
     fib_dp(10);
+    cout << "execution time: " << (double)(clock() - tstart) / CLOCKS_PER_SEC << endl;
+    tstart = clock();
     fib_opt(10);
+    cout << "execution time: " << (double)(clock() - tstart) / CLOCKS_PER_SEC << endl;
     return 0;
 }
