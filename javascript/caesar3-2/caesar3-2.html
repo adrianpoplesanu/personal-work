@@ -100,19 +100,48 @@ function update() {
     //console.log("updating");
     //console.log(mouseX + " x " + mouseY);
     game.clear();
+    game.drawGrid();
 }
 
 function Game () {
-
+    this.cameraOffset = {x: 0, y: 0};
 }
 
 Game.prototype.init = function () {
     console.log('Game init...');
+    var i, j;
+    this.grid = new Array(10);
+    for(i = 0; i < this.grid.length; i++) {
+        this.grid[i] = new Array(10);
+    }
+    for (i = 0; i < this.grid.length; i++) {
+        for (j = 0; j < this.grid[i].length; j++) {
+            this.grid[i][j] = 0;
+        }
+    }
+}
+
+Game.prototype.drawGrid = function () {
+    var i, j;
+    for (i = 0; i < this.grid.length; i++) {
+        for (j = 0; j < this.grid[i].length; j++) {
+            drawRombBorder(i, j);
+        }
+    }
+}
+
+function drawRombBorder(i, j) {
+    context.beginPath();
+    context.strokeStyle = "black"; //"#558899";
+    context.lineWidth = "0.5"; // don't like this, trebuie sa desenez fiecare linie independent
+    context.rect(i * 20, j * 20,  20, 20);
+    //context.rect(0, 0, 10, 10);
+    context.stroke();
 }
 
 Game.prototype.clear = function () {
     context.beginPath();
-    context.fillStyle = "#556655";
+    context.fillStyle = "gray"; //"#556655";
     context.rect(0, 0, width, height);
     context.fill();
 }
