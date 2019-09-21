@@ -125,8 +125,9 @@ Game.prototype.drawGrid = function () {
     var i, j;
     for (i = 0; i < this.grid.length; i++) {
         for (j = 0; j < this.grid[i].length; j++) {
-            drawRombBorder(i, j);
+            drawRombBorder(j, i); // draw row x col y: (0,0) ; (1,0) ; (2, 0)
         }
+        //break;
     }
 }
 
@@ -143,19 +144,21 @@ function getSquareFromPhisicalPosition(pointX, pointY) {
 }
 
 function drawRombBorder(i, j) {
-    var offsetX = 50;
-    var offsetY = 50;
+    // trebuie puse variabile si parametrizat
+    var offsetX = 340 - i * 10 - j * 60 + j * 30;
+    var offsetY = 140 + i * 15 - j * 40 + j * 15;
     if ((i + j) % 2 == 0)
         context.fillStyle = 'red';
     else
         context.fillStyle = 'blue';
     context.beginPath();
-    context.moveTo(offsetX + i * 40, offsetY + j * 40); // stanga jos
-    context.lineTo(offsetX + i * 40, offsetY + j * 40 + 40); // dreapta jos
-    context.lineTo(offsetX + i * 40 + 40, offsetY + j * 40 + 40); // dreapta sus
-    context.lineTo(offsetX + i * 40 + 40, offsetY + j * 40); //  stanga sus
+    context.moveTo(offsetX + i * 40, offsetY + j * 40);
+    context.lineTo(offsetX + i * 40 + 30, offsetY + j * 40 + 15);
+    context.lineTo(offsetX + i * 40 + 60, offsetY + j * 40);
+    context.lineTo(offsetX + i * 40 + 30, offsetY + j * 40 - 15);
     context.closePath();
     context.fill();
+    //context.stroke();
     //context.strokeStyle = "black"; //"#558899";
     //context.lineWidth = "0.5"; // don't like this, trebuie sa desenez fiecare linie independent
     //context.rect(i * 20, j * 20,  20, 20);
