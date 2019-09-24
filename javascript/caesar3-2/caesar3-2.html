@@ -145,17 +145,19 @@ function getSquareFromPhisicalPosition(pointX, pointY) {
 
 function drawRombBorder(i, j) {
     // trebuie puse variabile si parametrizat
-    var offsetX = 340 - i * 10 - j * 60 + j * 30;
-    var offsetY = 140 + i * 15 - j * 40 + j * 15;
+    var halfWidth = 30;
+    var halfHeight = 15;
+    var offsetX = 340 + i * halfWidth - j * halfWidth;
+    var offsetY = 140 + i * halfHeight + j * halfHeight;
     if ((i + j) % 2 == 0)
         context.fillStyle = 'red';
     else
         context.fillStyle = 'blue';
     context.beginPath();
-    context.moveTo(offsetX + i * 40, offsetY + j * 40);
-    context.lineTo(offsetX + i * 40 + 30, offsetY + j * 40 + 15);
-    context.lineTo(offsetX + i * 40 + 60, offsetY + j * 40);
-    context.lineTo(offsetX + i * 40 + 30, offsetY + j * 40 - 15);
+    context.moveTo(offsetX, offsetY);
+    context.lineTo(offsetX + halfWidth, offsetY + halfHeight);
+    context.lineTo(offsetX + halfWidth * 2, offsetY);
+    context.lineTo(offsetX + halfWidth, offsetY - halfHeight);
     context.closePath();
     context.fill();
     //context.stroke();
