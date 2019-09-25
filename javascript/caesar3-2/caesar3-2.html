@@ -36,6 +36,9 @@ var canvasOffset = $("#canvas").offset();
 var offsetX = canvasOffset.left;
 var offsetY = canvasOffset.top;
 
+var GlobalOffsetX = 340;
+var GlobalOffsetY = 140;
+
 var mouseX; // ???
 var mouseY; // ???
 var mousePressed = false; //
@@ -133,7 +136,7 @@ Game.prototype.drawGrid = function () {
 
 Game.prototype.clear = function () {
     context.beginPath();
-    context.fillStyle = "gray"; //"#556655";
+    context.fillStyle = "black"; //"#556655";
     context.rect(0, 0, width, height);
     context.fill();
 }
@@ -147,25 +150,45 @@ function drawRombBorder(i, j) {
     // trebuie puse variabile si parametrizat
     var halfWidth = 30;
     var halfHeight = 15;
-    var offsetX = 340 + i * halfWidth - j * halfWidth;
-    var offsetY = 140 + i * halfHeight + j * halfHeight;
-    if ((i + j) % 2 == 0)
-        context.fillStyle = 'red';
-    else
-        context.fillStyle = 'blue';
+    var rombOffsetX = GlobalOffsetX + i * halfWidth - j * halfWidth;
+    var rombOffsetY = GlobalOffsetY + i * halfHeight + j * halfHeight;
+    if (mouseHoverRomb(rombOffsetX, rombOffsetY)) {
+        context.fillStyle = 'green';
+    } else {
+        if ((i + j) % 2 == 0)
+            context.fillStyle = 'gray';
+        else
+            context.fillStyle = 'lightgrey';
+    }
     context.beginPath();
-    context.moveTo(offsetX, offsetY);
-    context.lineTo(offsetX + halfWidth, offsetY + halfHeight);
-    context.lineTo(offsetX + halfWidth * 2, offsetY);
-    context.lineTo(offsetX + halfWidth, offsetY - halfHeight);
+    context.moveTo(rombOffsetX, rombOffsetY);
+    context.lineTo(rombOffsetX + halfWidth, rombOffsetY + halfHeight);
+    context.lineTo(rombOffsetX + halfWidth * 2, rombOffsetY);
+    context.lineTo(rombOffsetX + halfWidth, rombOffsetY - halfHeight);
     context.closePath();
     context.fill();
-    //context.stroke();
-    //context.strokeStyle = "black"; //"#558899";
-    //context.lineWidth = "0.5"; // don't like this, trebuie sa desenez fiecare linie independent
-    //context.rect(i * 20, j * 20,  20, 20);
-    //context.rect(0, 0, 10, 10);
-    //context.stroke();
+}
+
+function mouseHoverRomb(rombOffsetX, rombOffsetY) {
+    var halfWidth = 30;
+    var halfHeight = 15;
+
+    var point = {x: mouseX, y: mouseY};
+    var a = {x: rombOffsetX, y: rombOffsetY};
+    var b = {x: rombOffsetX + halfWidth, y: rombOffsetY + halfHeight};
+    var c = {x: rombOffsetX + halfWidth * 2, y: rombOffsetY};
+    var d = {x: rombOffsetX + halfWidth, y: rombOffsetY - halfHeight};
+    return checkIfPointInsideTriangle(point, a, b, c) || checkIfPointInsideTriangle(point, a, c, d);
+}
+
+function checkIfPointInsideTriangle(s, a, b, c) {
+    var as_x = s.x-a.x;
+    var as_y = s.y-a.y;
+
+    var s_ab = (b.x-a.x)*as_y-(b.y-a.y)*as_x > 0;
+    if((c.x-a.x)*as_y-(c.y-a.y)*as_x > 0 == s_ab) return false;
+    if((c.x-b.x)*(s.y-b.y)-(c.y-b.y)*(s.x-b.x) > 0 != s_ab) return false;
+    return true;
 }
 
 </script>
