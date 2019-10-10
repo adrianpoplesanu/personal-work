@@ -18,6 +18,7 @@ canvas {
 </style>
 </head>
 <body>
+    <img id="img-water1" src="assets/caesar2-water1.png" style="display: none;">
 <p>Move, press and release the mouse</p>
 <p id="downlog">Down</p>
 <p id="movelog">Move</p>
@@ -26,6 +27,11 @@ canvas {
 <div class="center">
     <canvas id="canvas" width=800 height=600></canvas>
 </div>
+TODOs<br>
+move scripts outside the html, have a js file<br>
+do the Overall offset stuff for map moving<br>
+do the water tile show at the correct location<br>
+</fieldset>
 <script>
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext("2d");
@@ -147,6 +153,12 @@ function getSquareFromPhisicalPosition(pointX, pointY) {
 }
 
 function drawRombBorder(i, j) {
+    if (i == 0 && j == 0) {
+        var img = document.getElementById("img-water1");
+        context.drawImage(img, 10, 10);
+        // draw the water romb image
+        return;
+    }
     // trebuie puse variabile si parametrizat
     var halfWidth = 30;
     var halfHeight = 15;
@@ -175,9 +187,9 @@ function mouseHoverRomb(rombOffsetX, rombOffsetY) {
 
     var point = {x: mouseX, y: mouseY};
     var a = {x: rombOffsetX, y: rombOffsetY};
-    var b = {x: rombOffsetX + halfWidth, y: rombOffsetY + halfHeight};
-    var c = {x: rombOffsetX + halfWidth * 2, y: rombOffsetY};
-    var d = {x: rombOffsetX + halfWidth, y: rombOffsetY - halfHeight};
+    var b = {x: rombOffsetX + halfWidth - 1, y: rombOffsetY + halfHeight}; // am pus -1 ca sa nu fac overlap
+    var c = {x: rombOffsetX + halfWidth * 2 - 1, y: rombOffsetY}; // am pus -1 ca sa nu fac overlap
+    var d = {x: rombOffsetX + halfWidth - 1, y: rombOffsetY - halfHeight}; // am pus -1 ca sa nu fac overlap
     return checkIfPointInsideTriangle(point, a, b, c) || checkIfPointInsideTriangle(point, a, c, d);
 }
 
