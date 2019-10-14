@@ -29,8 +29,9 @@ canvas {
 </div>
 TODOs<br>
 move scripts outside the html, have a js file<br>
-do the Overall offset stuff for map moving<br>
+do the Global Offset stuff for map moving<br>
 do the water tile show at the correct location<br>
+do all point variables be dicts with x and y attributes<br>
 </fieldset>
 <script>
 var canvas = document.getElementById("canvas");
@@ -42,8 +43,10 @@ var canvasOffset = $("#canvas").offset();
 var offsetX = canvasOffset.left;
 var offsetY = canvasOffset.top;
 
-var GlobalOffsetX = 340;
-var GlobalOffsetY = 140;
+var globalOffsetX = 340;
+var globalOffsetY = 140;
+var globalOffsetMoveDirection = 0; // 1 - right; 2 - left; 3 - up; 4 - down
+var stepGlobalMoving = {x: 0, y: 0};
 
 var mouseX; // ???
 var mouseY; // ???
@@ -71,14 +74,39 @@ function handleMouseOut(e) {
     mouseX = parseInt(e.clientX - offsetX);
     mouseY = parseInt(e.clientY - offsetY);
     $("#outlog").html("Out: " + mouseX + " / " + mouseY);
-
+    if (mouseX <= 0) {
+        console.log('moving to the left of the board');
+        globalOffsetMoveDirection = 2;
+        stepGlobalMoving.x = -1;
+        stepGlobalMoving.y = 0;
+    }
+    if (mouseX >= 800) {
+        console.log('moving to the right of the board');
+        globalOffsetMoveDirection = 1;
+        stepGlobalMoving.x = 1;
+        stepGlobalMoving.y = 0;
+    }
+    if (mouseY <= 0) {
+        console.log('moving up the board');
+        globalOffsetMoveDirection = 3;
+        stepGlobalMoving.x = 0;
+        stepGlobalMoving.y = 1;
+    }
+    if (mouseY >= 600) {
+        console.log('moving down the board');
+        globalOffsetMoveDirection = 4;
+        stepGlobalMoving.x = 0;
+        stepGlobalMoving.y = -1;
+    }
 }
 
 function handleMouseMove(e) {
     mouseX = parseInt(e.clientX - offsetX);
     mouseY = parseInt(e.clientY - offsetY);
     $("#movelog").html("Move: " + mouseX + " / " + mouseY);
-
+    globalOffsetMoveDirection = 0;
+    stepGlobalMoving.x = 0;
+    stepGlobalMoving.y = 0;
 }
 
 $("#canvas").mousedown(function (e) {
@@ -109,6 +137,7 @@ function update() {
     //console.log("updating");
     //console.log(mouseX + " x " + mouseY);
     game.clear();
+    game.changeGlobalOffsetParams();
     game.drawGrid();
 }
 
@@ -120,14 +149,26 @@ Game.prototype.init = function () {
     console.log('Game init...');
     var i, j;
     this.grid = new Array(10);
-    for(i = 0; i < this.grid.length; i++) {
+    /*for(i = 0; i < this.grid.length; i++) {
         this.grid[i] = new Array(10);
     }
     for (i = 0; i < this.grid.length; i++) {
         for (j = 0; j < this.grid[i].length; j++) {
             this.grid[i][j] = 0;
         }
-    }
+    }*/
+    this.grid = [
+        [1, 0, 0, 0, 1, 0, 0, 1, 1, 1],
+        [0, 0, 0, 0, 1, 1, 0, 1, 1, 0],
+        [0, 0, 0, 0, 0, 1, 0, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
+        [0, 0, 0, 0, 0, 0, 0, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 0, 0, 0, 0, 0, 0, 0]
+    ];
 }
 
 Game.prototype.drawGrid = function () {
@@ -140,11 +181,47 @@ Game.prototype.drawGrid = function () {
     }
 }
 
+Game.prototype.changeGlobalOffsetParams = function () {
+    switch(globalOffsetMoveDirection) {
+        case 1:
+            if (stepGlobalMoving.x < 8) stepGlobalMoving.x -= 1; // initial *= 2 ; apoi += 2
+            if (globalOffsetX > 240) {
+                updateGlobalOffsetPoint();
+            }
+        break;
+        case 2:
+            if (stepGlobalMoving.x > -8) stepGlobalMoving.x += 1; // initial *= 2 ; apoi += 2
+            if (globalOffsetX < 440) {
+                updateGlobalOffsetPoint();
+            }
+        break;
+        case 3:
+            if (stepGlobalMoving.y < 8) stepGlobalMoving.y += 1; // initial *= 2 ; apoi += 2
+            if (globalOffsetY < 180) {
+                updateGlobalOffsetPoint();
+            }
+        break;
+        case 4:
+            if (stepGlobalMoving.y > -8) stepGlobalMoving.y -= 1; // initial *= 2 ; apoi += 2
+            if (globalOffsetY > 100) {
+                updateGlobalOffsetPoint();
+            }
+        break;
+    }
+}
+
 Game.prototype.clear = function () {
     context.beginPath();
     context.fillStyle = "black"; //"#556655";
     context.rect(0, 0, width, height);
     context.fill();
+}
+
+function updateGlobalOffsetPoint() {
+    if (globalOffsetMoveDirection) {
+        globalOffsetX += stepGlobalMoving.x;
+        globalOffsetY += stepGlobalMoving.y;
+    }
 }
 
 function getSquareFromPhisicalPosition(pointX, pointY) {
@@ -153,17 +230,20 @@ function getSquareFromPhisicalPosition(pointX, pointY) {
 }
 
 function drawRombBorder(i, j) {
-    if (i == 0 && j == 0) {
-        var img = document.getElementById("img-water1");
-        context.drawImage(img, 10, 10);
-        // draw the water romb image
-        return;
-    }
     // trebuie puse variabile si parametrizat
     var halfWidth = 30;
     var halfHeight = 15;
-    var rombOffsetX = GlobalOffsetX + i * halfWidth - j * halfWidth;
-    var rombOffsetY = GlobalOffsetY + i * halfHeight + j * halfHeight;
+    //if (i == 0 && j == 0) {
+    if (game.grid[i][j] == 1) {
+        var img = document.getElementById("img-water1");
+        var tileOffsetX = globalOffsetX + i * halfWidth - j * halfWidth;
+        var tileOffsetY = globalOffsetY + i * halfHeight + (j - 1) * halfHeight;
+        context.drawImage(img, tileOffsetX, tileOffsetY);
+        // draw the water romb image
+        return;
+    }
+    var rombOffsetX = globalOffsetX + i * halfWidth - j * halfWidth;
+    var rombOffsetY = globalOffsetY + i * halfHeight + j * halfHeight;
     if (mouseHoverRomb(rombOffsetX, rombOffsetY)) {
         context.fillStyle = 'green';
     } else {
