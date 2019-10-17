@@ -1,0 +1,10 @@
+<Request>
+    <NewOrder>
+        <AccountNum>4444444444444448</AccountNum>
+        <AVSZip>44145</AVSZip>
+        <PCAddress1></PCAddress1>
+        <OrbitalGatewayUser>test</OrbitalGatewayUser>
+        <OrbitalGatewayPassword></OrbitalGatewayPassword>
+        <MerchantID>123456</MerchantID>
+    </NewOrder>
+</Request>
