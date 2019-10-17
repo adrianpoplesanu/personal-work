@@ -1,0 +1,360 @@
+#form_submit {
+2	
+    display: none;
+3	
+}
+4	
+5	
+.tile-align {
+6	
+    text-align: center;
+7	
+}
+8	
+9	
+#check3dsecure-iframe-authentication {
+10	
+    display: none;
+11	
+}
+12	
+13	
+.resp-container {
+14	
+    position: relative;
+15	
+    overflow: hidden;
+16	
+    padding-top: 56.25%;
+17	
+    display: none;
+18	
+}
+19	
+20	
+.resp-iframe {
+21	
+    position: absolute;
+22	
+    top: 0;
+23	
+    left: 0;
+24	
+    width: 100%;
+25	
+    height: 100%;
+26	
+    border: 0;
+27	
+}
+28	
+29	
+#btnPayJoin {
+30	
+    display: none;
+31	
+}
+32	
+33	
+#agi-update.newstyle.agi-formbutton {
+34	
+    display: none;
+35	
+}
+36	
+37	
+#check3dsecure-simple-redirect {
+38	
+    display: none;
+39	
+}
+40	
+41	
+.renew_payment{
+42	
+    width: 250px;
+43	
+}
+44	
+45	
+.join_renew_form{
+46	
+    margin-bottom: 0;
+47	
+}
+48	
+.payment-overlay {
+49	
+    background: rgba(0, 0, 0, 0.6);
+50	
+    bottom: 0;
+51	
+    left: 0;
+52	
+    opacity: 0;
+53	
+    pointer-events: none;
+54	
+    position: fixed;
+55	
+    right: 0;
+56	
+    top: 0;
+57	
+    -webkit-transition: opacity 400ms ease-in;
+58	
+    -moz-transition: opacity 400ms ease-in;
+59	
+    transition: opacity 400ms ease-in;
+60	
+    z-index: -1;
+61	
+    display: none;
+62	
+}
+63	
+.payment-overlay .secure-modal  {
+64	
+    background-color: #fff;
+65	
+    position: relative;
+66	
+    padding: 3em;
+67	
+    height: 75%;
+68	
+    max-height: 57em;
+69	
+    max-width: 66em;
+70	
+    width: 85%;
+71	
+    -moz-border-radius: 10px;
+72	
+    -webkit-border-radius: 10px;
+73	
+    border-radius: 10px;
+74	
+    position: absolute;
+75	
+    top: 50%;
+76	
+    left: 50%;
+77	
+    transform: translate(-50%, -50%);
+78	
+}
+79	
+  #error-modal {
+80	
+    background-color: #fefefe;
+81	
+    margin: 15% auto;
+82	
+    padding: 10px;
+83	
+    border: 1px solid #888;
+84	
+    width: 60%;
+85	
+    height: fit-content;
+86	
+    border-radius: 10px;
+87	
+  }
+88	
+ #error-modal p {margin: 0 0 1em 0;} 
+89	
+90	
+.error-header {    color: #cc4000;
+91	
+    font-size: 1.583rem;
+92	
+    font-weight: bold;
+93	
+}
+94	
+95	
+.modal-show {
+96	
+    display: block;
+97	
+    opacity: 1;
+98	
+    pointer-events: auto;
+99	
+    z-index: 99999;
+100	
+}
+101	
+#spinner-modal {
+102	
+    display:none;
+103	
+    position: absolute;
+104	
+    top: 50%;
+105	
+    left: 50%;
+106	
+    transform: translate(-50%, -50%);
+107	
+    margin: 0;
+108	
+    background-color: #fff;
+109	
+    background-image: url(/jl/loader.gif);
+110	
+    background-repeat: no-repeat;
+111	
+    background-position: center 50px;
+112	
+    height: auto;
+113	
+    padding: 20px 20px 64px;
+114	
+    width: 100px;
+115	
+    -moz-border-radius: 10px;
+116	
+    -webkit-border-radius: 10px;
+117	
+    border-radius: 10px;
+118	
+    z-index: 501;
+119	
+}
+120	
+#spinner-payment {
+121	
+    position: absolute;
+122	
+    top: 50%;
+123	
+    left: 50%;
+124	
+    transform: translate(-50%, -50%);
+125	
+    background-color: #fff;
+126	
+    background-image: url(/jl/loader.gif);
+127	
+    background-repeat: no-repeat;
+128	
+    background-position: center 50px;
+129	
+    height: auto;
+130	
+    padding: 20px 20px 64px;
+131	
+    width: 100px;
+132	
+    -moz-border-radius: 10px;
+133	
+    -webkit-border-radius: 10px;
+134	
+    border-radius: 10px;
+135	
+    z-index: 501;
+136	
+}
+137	
+.close-error {
+138	
+    background: url(/jl/icons/close-x.png) no-repeat right 0 rgba(0, 0, 0, 0);
+139	
+    color: #000066;
+140	
+    cursor: pointer;
+141	
+    display: inline;
+142	
+    font-size: 0.9167rem;
+143	
+    height: 17px;
+144	
+    padding-right: 20px;
+145	
+    padding-top: 1px;
+146	
+    position: absolute;
+147	
+    right: 10px;
+148	
+    top: 10px;
+149	
+}
+150	
+/* Gifth payment flow*/
+151	
+#jl-paymentinfo {
+152	
+    margin-bottom: 0!important; 
+153	
+}
+154	
+.gift-payment {
+155	
+    min-height: 49px;
+156	
+    padding-bottom: 10px;
+157	
+}
+158	
+.jl-buttons {
+159	
+    display: none;
+160	
+}
+161	
+.payment-text {
+162	
+    margin-bottom: 60px;
+163	
+}
+164	
+165	
+/* Collections flow*/
+166	
+.caption{
+167	
+    margin-right: 20px;
+168	
+    text-align: right;
+169	
+    width: 241px;
+170	
+}
+171	
+172	
+.collections_payment{
+173	
+    width: 250px;
+174	
+    height: 25px;
+175	
+    margin: 0 0 36px 0;
+176	
+}
+177	
+@media only screen and (max-device-width: 767px) {
+178	
+    .payment-overlay .secure-modal {
+179	
+        margin: 0 auto;
+180	
+        overflow-y: scroll;
+181	
+        -webkit-overflow-scrolling: touch;
+182	
+183	
+    }
+184	
+    #spinner-modal {
+185	
+        position:fixed;
+186	
+    }
+187	
+}
+188	
