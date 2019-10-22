@@ -41,6 +41,6 @@ func setupRoutes() {
 }
 
 func main() {
-    fmt.Println("running...")
+    fmt.Println("running sever with /upload POST endpoint...")
     setupRoutes()
 }
