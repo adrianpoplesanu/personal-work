@@ -8,7 +8,7 @@ import(
 func uploadFile(w http.ResponseWriter, r *http.Request) {
     fmt.Println("File upload endpoint hit")
     r.ParseMultipartForm(10 << 20)
-    file, handler, err := r.FormFile("myFile")
+    file, handler, err := r.FormFile("file")
     if err != nil {
         fmt.Println("Error retrieving file");
         fmt.Println(err)
@@ -32,7 +32,7 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
     }
 
     tempFile.Write(fileBytes)
-    fmt.Fprintf(w, "Successfully uploaded file\n")
+    fmt.Fprintf(w, "Successfully uploaded file %+v\n", handler.Filename)
 }
 
 func setupRoutes() {
@@ -41,6 +41,6 @@ func setupRoutes() {
 }
 
 func main() {
-    fmt.Println("running sever with /upload POST endpoint...")
+    fmt.Println("running Ramona1 sever with /upload POST endpoint...")
     setupRoutes()
 }
