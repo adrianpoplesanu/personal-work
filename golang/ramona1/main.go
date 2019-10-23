@@ -1,6 +1,7 @@
 package main
 import(
     "fmt"
+    "html/template"
     "io/ioutil"
     "net/http"
     "os/exec"
@@ -61,10 +62,16 @@ func commandExecTest(w http.ResponseWriter, r *http.Request) {
     w.Write(out)
 }
 
+func swaggerTemplate(w http.ResponseWriter, r *http.Request) {
+    tmpl := template.Must(template.ParseFiles("swagger.html"))
+    tmpl.Execute(w, nil)
+}
+
 func setupRoutes() {
     http.HandleFunc("/", statusChecker)
     http.HandleFunc("/upload", uploadFile)
     http.HandleFunc("/command-exec-test", commandExecTest)
+    http.HandleFunc("/swagger", swaggerTemplate)
     http.ListenAndServe(":9191", nil)
 }
 
