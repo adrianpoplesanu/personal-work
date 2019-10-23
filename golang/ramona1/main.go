@@ -36,7 +36,7 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
     tempFile.Write(fileBytes)
     fmt.Printf("Destination: %+v\n", tempFile.Name())
 
-    out, err := exec.Command("python", "analyzer.py", tempFile.Name()).Output()
+    out, err := exec.Command("python3", "analyzer.py", tempFile.Name()).Output()
     if err != nil {
         w.Write([]byte(`"status": "error", "message": "Check server console output"`))
         fmt.Println(err)
@@ -53,7 +53,7 @@ func statusChecker(w http.ResponseWriter, r *http.Request) {
 }
 
 func commandExecTest(w http.ResponseWriter, r *http.Request) {
-    out, err := exec.Command("python", "analyzer.py", "adri.jpg").Output()
+    out, err := exec.Command("python3", "analyzer.py", "adri.jpg").Output()
     if err != nil {
         w.Write([]byte(`"status": "error", "message": "Check server console output"`))
         fmt.Println(err)
@@ -77,5 +77,6 @@ func setupRoutes() {
 
 func main() {
     fmt.Println("running Ramona1 sever with /upload POST endpoint...")
+    fmt.Ptintln("CTRL + C to exit process")
     setupRoutes()
 }
