@@ -3,6 +3,7 @@ import(
     "fmt"
     "io/ioutil"
     "net/http"
+    "os/exec"
 )
 
 func uploadFile(w http.ResponseWriter, r *http.Request) {
@@ -32,11 +33,38 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
     }
 
     tempFile.Write(fileBytes)
-    fmt.Fprintf(w, "Successfully uploaded file %+v\n", handler.Filename)
+    fmt.Printf("Destination: %+v\n", tempFile.Name())
+
+    out, err := exec.Command("python", "analyzer.py", tempFile.Name()).Output()
+    if err != nil {
+        w.Write([]byte(`"status": "error", "message": "Check server console output"`))
+        fmt.Println(err)
+        return
+    }
+    //fmt.Fprintf(w, "Successfully uploaded file %+v\n", handler.Filename)
+    w.Write(out)
+}
+
+func statusChecker(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+    response := `{"responseCode": "200", "status": "OK"}`
+    w.Write([]byte (response))
+}
+
+func commandExecTest(w http.ResponseWriter, r *http.Request) {
+    out, err := exec.Command("python", "analyzer.py", "adri.jpg").Output()
+    if err != nil {
+        w.Write([]byte(`"status": "error", "message": "Check server console output"`))
+        fmt.Println(err)
+        return
+    }
+    w.Write(out)
 }
 
 func setupRoutes() {
+    http.HandleFunc("/", statusChecker)
     http.HandleFunc("/upload", uploadFile)
+    http.HandleFunc("/command-exec-test", commandExecTest)
     http.ListenAndServe(":9191", nil)
 }
 
