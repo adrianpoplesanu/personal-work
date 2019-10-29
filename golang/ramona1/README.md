@@ -24,3 +24,9 @@ Run on ubuntu:
 
 Or simply:
 start_server.sh
+
+To test analyze.py:
+python3 analize.py adri.jpg
+also:
+python3 test_face_recognition2.py adri.jpg
+python3 test_face_recognition3.py adri.jpg

@@ -77,6 +77,6 @@ func setupRoutes() {
 
 func main() {
     fmt.Println("running Ramona1 sever with /upload POST endpoint...")
-    fmt.Println("CTRL + C to exit process")
+    fmt.Println("CTRL+C to exit process")
     setupRoutes()
 }

@@ -1,15 +1,9 @@
 import sys
 import face_recognition
 
-def format_points(points):
-    formatted_points = []
-    for point in points:
-        formatted_points.append([point[0], point[1]])
-    return formatted_points
-
 if __name__ == '__main__':
-    filename = sys.argv[1]
-    image = face_recognition.load_image_file(filename)
+    #filename = sys.argv[1]
+    image = face_recognition.load_image_file("adri.jpg")
     face_landmarks_list = face_recognition.face_landmarks(image)
     results = {
         'filename': filename,
@@ -23,4 +17,4 @@ if __name__ == '__main__':
         'chin': face_landmarks_list[0]['chin'],
         'nose_bridge': face_landmarks_list[0]['nose_bridge']
     }
-    print ('{{"filename": "{filename}", "right_eye": {right_eye}}}'.format(filename=results['filename'], right_eye=format_points(results['right_eye'])))
+    print ('{{"filename": "{filename}", "right_eye": {right_eye}}}'.format(filename=results['filename'], right_eye=results['right_eye']))

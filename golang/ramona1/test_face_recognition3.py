@@ -2,6 +2,7 @@ import sys
 import face_recognition
 
 def format_points(points):
+    print (points)
     formatted_points = []
     for point in points:
         formatted_points.append([point[0], point[1]])
