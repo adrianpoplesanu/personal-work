@@ -1,5 +1,6 @@
 import sys
 import face_recognition
+import json
 
 def format_points(points):
     formatted_points = []
@@ -23,4 +24,4 @@ if __name__ == '__main__':
         'chin': face_landmarks_list[0]['chin'],
         'nose_bridge': face_landmarks_list[0]['nose_bridge']
     }
-    print ('{{"filename": "{filename}", "right_eye": {right_eye}}}'.format(filename=results['filename'], right_eye=format_points(results['right_eye'])))
+    print (json.dumps(results))
