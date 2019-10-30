@@ -35,4 +35,4 @@ python3 test_face_recognition3.py adri.jpg
 echo "Welcome Adri to the Amazon server!"
 export GO_SOURCE='/home/ubuntu/tmp/go/bin'
 export GO_EXECUTABLE='/home/ubuntu/tmp/go/bin/go'
-export APP_HOME='/home/ubuntu/Documents/git-projects/personal-work/golang/ramona1/'
+export APP_HOME='/home/ubuntu/Documents/git-projects/personal-work/golang/ramona1'
