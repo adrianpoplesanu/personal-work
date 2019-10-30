@@ -30,3 +30,9 @@ python3 analize.py adri.jpg
 also:
 python3 test_face_recognition2.py adri.jpg
 python3 test_face_recognition3.py adri.jpg
+
+.bashrc:
+echo "Welcome Adri to the Amazon server!"
+export GO_SOURCE='/home/ubuntu/tmp/go/bin'
+export GO_EXECUTABLE='/home/ubuntu/tmp/go/bin/go'
+export APP_HOME='/home/ubuntu/Documents/git-projects/personal-work/golang/ramona1/'
