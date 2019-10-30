@@ -3,57 +3,61 @@ import(
     "fmt"
     "html/template"
     "io/ioutil"
+    "log"
     "net/http"
     "os/exec"
+    "os"
 )
 
 func uploadFile(w http.ResponseWriter, r *http.Request) {
-    fmt.Println("File upload endpoint hit")
+    log.Println("POST /upload - File upload endpoint hit")
     r.ParseMultipartForm(10 << 20)
     file, handler, err := r.FormFile("file")
     if err != nil {
-        fmt.Println("Error retrieving file");
-        fmt.Println(err)
+	log.Println("Error retrieving file")
+	log.Println(err)
         return
     }
     defer file.Close()
 
-    fmt.Printf("Uploaded file: %+v\n", handler.Filename)
-    fmt.Printf("File Size: %+v\n", handler.Size)
-    fmt.Printf("MIME Header: %+v\n", handler.Header)
+    log.Println("Uploaded file:", handler.Filename)
+    log.Println("File Size:", handler.Size)
+    log.Println("MIME Header:", handler.Header)
 
-    tempFile, err := ioutil.TempFile("temp-images", "upload-*.jpg")
+    tempFile, err := ioutil.TempFile(os.Getenv("APP_HOME") + "/temp-images", "upload-*.jpg")
     if err != nil {
-        fmt.Println(err)
+	log.Println(err)
     }
     defer tempFile.Close()
 
     fileBytes, err := ioutil.ReadAll(file)
     if err != nil {
-        fmt.Println(err)
+	log.Println(err)
     }
 
     tempFile.Write(fileBytes)
-    fmt.Printf("Destination: %+v\n", tempFile.Name())
+    log.Println("Destination:", tempFile.Name())
 
-    out, err := exec.Command("python3", "analyzer.py", tempFile.Name()).Output()
+    out, err := exec.Command("python3", os.Getenv("APP_HOME") + "/analyzer.py", tempFile.Name()).Output()
     if err != nil {
         w.Write([]byte(`"status": "error", "message": "Check server console output"`))
-        fmt.Println(err)
+	log.Println(err)
         return
     }
-    //fmt.Fprintf(w, "Successfully uploaded file %+v\n", handler.Filename)
+    log.Println("Successfully uploaded file ", handler.Filename)
     w.Write(out)
 }
 
 func statusChecker(w http.ResponseWriter, r *http.Request) {
+    log.Println("GET /")
     w.Header().Set("Content-Type", "application/json")
     response := `{"responseCode": "200", "status": "OK"}`
     w.Write([]byte (response))
 }
 
 func commandExecTest(w http.ResponseWriter, r *http.Request) {
-    out, err := exec.Command("python3", "analyzer.py", "adri.jpg").Output()
+    log.Println("GET /command-exec-test")
+    out, err := exec.Command("python3", os.Getenv("APP_HOME") + "/analyzer.py", os.Getenv("APP_HOME") + "/adri.jpg").Output()
     if err != nil {
         w.Write([]byte(`"status": "error", "message": "Check server console output"`))
         fmt.Println(err)
@@ -63,20 +67,31 @@ func commandExecTest(w http.ResponseWriter, r *http.Request) {
 }
 
 func swaggerTemplate(w http.ResponseWriter, r *http.Request) {
-    tmpl := template.Must(template.ParseFiles("swagger.html"))
+    log.Println("GET /swagger")
+    tmpl := template.Must(template.ParseFiles(os.Getenv("APP_HOME") + "/swagger.html"))
     tmpl.Execute(w, nil)
 }
 
 func setupRoutes() {
+    log.Println("setting up routes...")
     http.HandleFunc("/", statusChecker)
     http.HandleFunc("/upload", uploadFile)
     http.HandleFunc("/command-exec-test", commandExecTest)
     http.HandleFunc("/swagger", swaggerTemplate)
+    log.Println("listening on 9191...")
     http.ListenAndServe(":9191", nil)
 }
 
 func main() {
-    fmt.Println("running Ramona1 sever with /upload POST endpoint...")
-    fmt.Println("CTRL+C to exit process")
+    f, err := os.OpenFile("ramona1_server.log", os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
+    if err != nil {
+        log.Fatalf("error opening file: %v", err)
+    }
+    defer f.Close()
+
+    log.SetOutput(f)
+    log.Println("=============================================")
+    log.Println("= Ramona1 server started...                 =")
+    log.Println("=============================================")
     setupRoutes()
 }
