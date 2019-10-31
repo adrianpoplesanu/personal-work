@@ -1,0 +1,5 @@
+- serve static image logo.png... done
+- add api_client_key check: load it from file and check the request to contain it
+- better environment variables and project paths
+- update ami image
+- crontabs for checking the server is still running
