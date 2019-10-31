@@ -72,9 +72,26 @@ func swaggerTemplate(w http.ResponseWriter, r *http.Request) {
     tmpl.Execute(w, nil)
 }
 
+type LogoHandler struct {
+}
+
+func (this *LogoHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+    log.Println("GET /logo.jpg")
+    data, err := ioutil.ReadFile(os.Getenv("APP_HOME") + "/logo.jpg")
+
+    if err == nil {
+        w.Header().Add("Content Type", "image/jpeg")
+        w.Write(data)
+    } else {
+        w.WriteHeader(404)
+        w.Write([]byte("404 My dear - " + http.StatusText(404)))
+    }
+}
+
 func setupRoutes() {
     log.Println("setting up routes...")
     http.HandleFunc("/", statusChecker)
+    http.Handle("/logo.jpg", new(LogoHandler))
     http.HandleFunc("/upload", uploadFile)
     http.HandleFunc("/command-exec-test", commandExecTest)
     http.HandleFunc("/swagger", swaggerTemplate)
