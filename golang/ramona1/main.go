@@ -11,7 +11,7 @@ import(
 
 func uploadFile(w http.ResponseWriter, r *http.Request) {
     log.Println("POST /upload - File upload endpoint hit")
-    r.ParseMultipartForm(10 << 20)
+    r.ParseMultipartForm(50 << 20)
     file, handler, err := r.FormFile("file")
     if err != nil {
 	log.Println("Error retrieving file")
@@ -76,8 +76,9 @@ type LogoHandler struct {
 }
 
 func (this *LogoHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-    log.Println("GET /logo.jpg")
-    data, err := ioutil.ReadFile(os.Getenv("APP_HOME") + "/logo.jpg")
+    path := r.URL.Path[1:]
+    log.Println("GET /" + string(path))
+    data, err := ioutil.ReadFile(os.Getenv("APP_HOME") + "/" + string(path))
 
     if err == nil {
         w.Header().Add("Content Type", "image/jpeg")
@@ -92,6 +93,7 @@ func setupRoutes() {
     log.Println("setting up routes...")
     http.HandleFunc("/", statusChecker)
     http.Handle("/logo.jpg", new(LogoHandler))
+    http.Handle("/logo2.jpg", new(LogoHandler))
     http.HandleFunc("/upload", uploadFile)
     http.HandleFunc("/command-exec-test", commandExecTest)
     http.HandleFunc("/swagger", swaggerTemplate)
