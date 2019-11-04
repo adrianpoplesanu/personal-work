@@ -185,8 +185,11 @@ Game.prototype.drawGrid = function () {
     var i, j;
     for (i = 0; i < this.grid.length; i++) {
         for (j = 0; j < this.grid[i].length; j++) {
-            drawRombBorder(j, i); // draw row x col y: (0,0) ; (1,0) ; (2, 0)
-            //drawRombBorder(i, j); // de ce nu conteaza ordinea??? // PROBLEMA MARE - e totul dat peste cap in indecsii matricei!!!
+            //drawRombBorder(j, i); // draw row x col y: (0,0) ; (1,0) ; (2, 0)
+            // draw row x col y: (0, 0) ; (0, 1) ; (0, 2) etc...
+            drawRombBorder(i, j); // de ce nu conteaza ordinea??? // nu conteaza ordinea pentru ca nu sunt overlapping
+            // fiecare casuta se deseneaza la locatia ei; ordinea va conta cand va fi nevoie de desenare din spate spre in fata
+            // pentru a nu supra desena elementele din plan apropiat
         }
         //break;
     }
@@ -287,7 +290,7 @@ function drawRombBorder(i, j) {
     if (game.grid[i][j] == 1) {
         //var img = document.getElementById("img-water1");
         var img = document.getElementById("img-water2"); // img-water1
-        var tileOffsetX = globalOffsetX + i * halfWidth - j * halfWidth;
+        var tileOffsetX = globalOffsetX - i * halfWidth + j * halfWidth;
         var tileOffsetY = globalOffsetY + i * halfHeight + (j - 1) * halfHeight;
         context.drawImage(img, tileOffsetX, tileOffsetY);
         // draw the water romb image
@@ -296,7 +299,7 @@ function drawRombBorder(i, j) {
     if (game.grid[i][j] == 4) {
         return;
     }
-    var rombOffsetX = globalOffsetX + i * halfWidth - j * halfWidth;
+    var rombOffsetX = globalOffsetX - i * halfWidth + j * halfWidth;
     var rombOffsetY = globalOffsetY + i * halfHeight + j * halfHeight;
     if (mouseHoverRomb(rombOffsetX, rombOffsetY)) {
         context.fillStyle = 'green';
