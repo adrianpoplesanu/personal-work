@@ -19,11 +19,14 @@ canvas {
 </head>
 <body>
     <img id="img-water1" src="assets/caesar2-water1.png" style="display: none;">
-<p>Move, press and release the mouse</p>
-<p id="downlog">Down</p>
-<p id="movelog">Move</p>
-<p id="uplog">Up</p>
-<p id="outlog">Out</p>
+    <img id="img-water2" src="assets/caesar2-water2.png" style="display: none;">
+<div id="hud" style="display:none;">
+    <p>Move, press and release the mouse</p>
+    <p id="downlog">Down</p>
+    <p id="movelog">Move</p>
+    <p id="uplog">Up</p>
+    <p id="outlog">Out</p>
+</div>
 <div class="center">
     <canvas id="canvas" width=800 height=600></canvas>
 </div>
@@ -48,11 +51,15 @@ var globalOffsetY = 140;
 var globalOffsetMoveDirection = 0; // 1 - right; 2 - left; 3 - up; 4 - down
 var stepGlobalMoving = {x: 0, y: 0};
 
+var halfWidth = 30;
+var halfHeight = 15;
+
 var mouseX; // ???
 var mouseY; // ???
 var mousePressed = false; //
 
 var game = new Game();
+var walkers = [];
 
 function handleMouseDown(e) {
     mouseX = parseInt(e.clientX - offsetX);
@@ -131,6 +138,8 @@ window.onload = function () {
 function init() {
     console.log("running init()");
     game.init();
+    var walker = new Walker();
+    walkers.push(walker);
 }
 
 function update() {
@@ -139,6 +148,7 @@ function update() {
     game.clear();
     game.changeGlobalOffsetParams();
     game.drawGrid();
+    drawWalkers();
 }
 
 function Game () {
@@ -163,7 +173,7 @@ Game.prototype.init = function () {
         [0, 0, 0, 0, 0, 1, 0, 1, 1, 0],
         [0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
         [0, 0, 0, 0, 0, 0, 0, 1, 1, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 4, 0, 0, 0, 0],
         [0, 1, 1, 0, 0, 0, 0, 0, 0, 0],
         [0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
         [0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
@@ -176,6 +186,7 @@ Game.prototype.drawGrid = function () {
     for (i = 0; i < this.grid.length; i++) {
         for (j = 0; j < this.grid[i].length; j++) {
             drawRombBorder(j, i); // draw row x col y: (0,0) ; (1,0) ; (2, 0)
+            //drawRombBorder(i, j); // de ce nu conteaza ordinea??? // PROBLEMA MARE - e totul dat peste cap in indecsii matricei!!!
         }
         //break;
     }
@@ -217,6 +228,47 @@ Game.prototype.clear = function () {
     context.fill();
 }
 
+function Walker() {
+    this.speed = 0;
+    this.direction = {x: -1, y: 0};
+    this.directionStatus = 1;
+    this.position  = {x: 5, y: 5};
+    this.type = 0;
+}
+
+Walker.prototype.canMove = function () {
+    return game.grid[this.position.x + this.direction.x][this.position.y + this.direction.y] == 4;
+}
+
+Walker.prototype.determineDirection = function () {
+
+}
+
+Walker.prototype.move = function () {
+    if (this.canMove()) {
+        this.position.x += this.direction.x;
+        this.position.y += this.direction.y;
+    } else {
+        this.determineDirection();
+    }
+}
+
+Walker.prototype.draw = function () {
+    // sprited move ; just like supaplex this needs to "flow", be a cursive movement
+    context.beginPath();
+    context.rect(globalOffsetX + this.position.x * halfWidth - this.position.y * halfWidth + 20,
+                globalOffsetY + this.position.x * halfHeight + (this.position.y - 1) * halfHeight,
+                20, 20);
+    context.fillStyle = "red";
+    context.fill();
+}
+
+function drawWalkers() {
+    for (var i = 0; i < walkers.length; i++) {
+        walkers[i].draw();
+    }
+}
+
 function updateGlobalOffsetPoint() {
     if (globalOffsetMoveDirection) {
         globalOffsetX += stepGlobalMoving.x;
@@ -231,15 +283,17 @@ function getSquareFromPhisicalPosition(pointX, pointY) {
 
 function drawRombBorder(i, j) {
     // trebuie puse variabile si parametrizat
-    var halfWidth = 30;
-    var halfHeight = 15;
     //if (i == 0 && j == 0) {
     if (game.grid[i][j] == 1) {
-        var img = document.getElementById("img-water1");
+        //var img = document.getElementById("img-water1");
+        var img = document.getElementById("img-water2"); // img-water1
         var tileOffsetX = globalOffsetX + i * halfWidth - j * halfWidth;
         var tileOffsetY = globalOffsetY + i * halfHeight + (j - 1) * halfHeight;
         context.drawImage(img, tileOffsetX, tileOffsetY);
         // draw the water romb image
+        return;
+    }
+    if (game.grid[i][j] == 4) {
         return;
     }
     var rombOffsetX = globalOffsetX + i * halfWidth - j * halfWidth;
