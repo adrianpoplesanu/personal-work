@@ -2,6 +2,7 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
+    cout << 0x2 << endl;
     cout << 0xF << endl;
     cout << 0xFF << endl;
     cout << 0xFFF << endl;
