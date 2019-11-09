@@ -30,6 +30,9 @@ canvas {
 <div class="center">
     <canvas id="canvas" width=800 height=600></canvas>
 </div>
+<div>
+    <button id="center-world">Centreaza lumea</button>
+</div>
 TODOs<br>
 move scripts outside the html, have a js file<br>
 do the Global Offset stuff for map moving<br>
@@ -50,6 +53,7 @@ var globalOffsetX = 340;
 var globalOffsetY = 140;
 var globalOffsetMoveDirection = 0; // 1 - right; 2 - left; 3 - up; 4 - down
 var stepGlobalMoving = {x: 0, y: 0};
+var walkerClockSequence = 0;
 
 var halfWidth = 30;
 var halfHeight = 15;
@@ -148,6 +152,12 @@ function update() {
     game.clear();
     game.changeGlobalOffsetParams();
     game.drawGrid();
+    walkerClockSequence++;
+    if (walkerClockSequence == 4) {
+        walkerClockSequence = 0;
+        moveWalkers();
+    }
+    //moveWalkers();
     drawWalkers();
 }
 
@@ -168,16 +178,17 @@ Game.prototype.init = function () {
         }
     }*/
     this.grid = [
-        [1, 0, 0, 0, 1, 0, 0, 1, 1, 1],
-        [0, 0, 0, 0, 1, 1, 0, 1, 1, 0],
-        [0, 0, 0, 0, 0, 1, 0, 1, 1, 0],
-        [0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
-        [0, 0, 0, 0, 0, 0, 0, 1, 1, 0],
-        [0, 0, 0, 0, 0, 4, 0, 0, 0, 0],
-        [0, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
-        [0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-        [0, 1, 1, 0, 0, 0, 0, 0, 0, 0]
+        [1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0],
+        [0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0],
+        [0, 0, 0, 0, 4, 4, 4, 0, 0, 0, 0],
+        [0, 1, 1, 0, 0, 0, 4, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0, 4, 4, 4, 1, 0],
+        [0, 1, 1, 1, 0, 4, 0, 0, 4, 0, 0],
+        [0, 1, 1, 0, 0, 4, 4, 4, 4, 0, 0],
+        [0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]
     ];
 }
 
@@ -236,19 +247,41 @@ function Walker() {
     this.step = 0; // a few steps until reaching destination
     this.direction = {x: -1, y: 0};
     this.directionStatus = 1;
-    this.position  = {x: 5, y: 5};
+    this.position = {x: 5, y: 5};
     this.type = 0;
     this.deletion = 0;
 }
 
 Walker.prototype.canMove = function () {
-    return game.grid[this.position.x + this.direction.x][this.position.y + this.direction.y] == 4;
+    // e un motiv serios pentru care am interschimbat astea, se oberva din ce inseamna grid-ul in raport cu position si direction
+    // cred ca trebuie regandita si rescrisa miscarea luand in calcul grid[x][y] si faptul ca o linie din grid e o coloana din game world
+    if (this.step == 0) return false;
+    return game.grid[this.position.y + this.direction.y][this.position.x + this.direction.x] == 4;
 }
 
 Walker.prototype.determineDirection = function () {
     var retries = 0;
-    while (!this.canMove()) {
-        if (retries == 4) {
+    if (this.canMove()) return;
+    switch(this.directionStatus) {
+        case 1:
+            // x: -1 ; y = 0 ; directionStatus = 1
+            permutateWalkerDirection(this, [{x:0, y:1, directionStatus:4}, {x:0, y:-1, directionStatus:2}, {x:1, y:0, directionStatus:3}]);
+        break;
+        case 2:
+            // x: 0 ; y = -1 ; directionStatus = 2
+            permutateWalkerDirection(this, [{x:1, y:0, directionStatus:3}, {x:-1, y:-0, directionStatus:1}, {x:0, y:1, directionStatus:4}]);
+        break;
+        case 3:
+            // x: 1 ; y = 0 ; directionStatus = 3
+            permutateWalkerDirection(this, [{x:0, y:-1, directionStatus:2}, {x:0, y:1, directionStatus:4}, {x:-1, y:0, directionStatus:1}]);
+        break;
+        case 4:
+            // x: 0 ; y = 1 ; directionStatus = 4
+            permutateWalkerDirection(this, [{x:-1, y:0, directionStatus:1}, {x:1, y:0, directionStatus:3}, {x:0, y:-1, directionStatus:2}]);
+        break;
+    }
+    /*while (!this.canMove()) {
+        if (retries > 4) {
             this.direction.x = 0;
             this.direction.y = 0;
             this.deletion = 1;
@@ -261,30 +294,58 @@ Walker.prototype.determineDirection = function () {
                 retries++;
                 this.direction.x = -1;
                 this.direction.y = 0;
+                this.step = 1;
             break;
             case 2:
                 retries++;
                 this.direction.x = 0;
                 this.direction.y = -1;
+                this.step = 1;
             break;
             case 3:
                 retries++;
                 this.direction.x = 1;
                 this.direction.y = 0;
+                this.step = 1;
             break;
             case 4:
                 retries++;
                 this.direction.x = 0;
                 this.direction.y = 1;
+                this.step = 1;
             break;
         }
-    }
+    } */
 }
 
 Walker.prototype.move = function () {
-    if (this.canMove()) {
+    //console.log(this.step);
+    var moving = false;
+    if (this.step > 0) {
+        this.step++;
+        if (this.step == 9)  {
+            //console.log("done");
+            moving = true;
+            this.step = 1;
+        } else {
+            //console.log(this.step);
+            return;
+        }
+    } else {
+        this.determineDirection();
+        return;
+    }
+    if (this.canMove() && moving) {
         this.position.x += this.direction.x;
         this.position.y += this.direction.y;
+        if (this.canMove()) {
+            this.step = 1;
+            return
+        } else {
+            this.step = 0;
+            this.determineDirection();
+            //console.log("aaa");
+        }
     } else {
         this.determineDirection();
     }
@@ -293,16 +354,40 @@ Walker.prototype.move = function () {
 Walker.prototype.draw = function () {
     // sprited move ; just like supaplex this needs to "flow", be a cursive movement
     context.beginPath();
-    context.rect(globalOffsetX + this.position.x * halfWidth - this.position.y * halfWidth + 20,
+    /*context.rect(globalOffsetX + this.position.x * halfWidth - this.position.y * halfWidth + 20,
                 globalOffsetY + this.position.x * halfHeight + (this.position.y - 1) * halfHeight,
+                20, 20);*/
+    context.rect(globalOffsetX + (this.position.x + this.step/8 * this.direction.x) * halfWidth - (this.position.y + this.step/8 * this.direction.y) * halfWidth + 20,
+                globalOffsetY + (this.position.x + this.step/8 * this.direction.x) * halfHeight + (this.position.y + this.step/8 * this.direction.y - 1) * halfHeight,
                 20, 20);
     context.fillStyle = "red";
     context.fill();
 }
 
+function permutateWalkerDirection(walker, directions) {
+    walker.step = 1;
+    for (var i = 0; i < directions.length; i++) {
+        walker.direction.x = directions[i].x;
+        walker.direction.y = directions[i].y;
+        walker.directionStatus = directions[i].directionStatus;
+        if (walker.canMove()) {
+            return true;
+        }
+    }
+    walker.deletion = 1;
+    walker.step = 0;
+    return false;
+}
+
 function drawWalkers() {
     for (var i = 0; i < walkers.length; i++) {
         walkers[i].draw();
+    }
+}
+
+function moveWalkers() {
+    for (var i = 0; i < walkers.length; i++) {
+        walkers[i].move();
     }
 }
 
@@ -374,6 +459,19 @@ function checkIfPointInsideTriangle(s, a, b, c) {
     return true;
 }
 
+</script>
+<!-- jquery events -->
+<script>
+    $(document).ready(function () {
+        $("#center-world").on('click', function () {
+            globalOffsetMoveDirection = 0;
+            stepGlobalMoving.x = 0;
+            stepGlobalMoving.y = 0;
+            mousePressed = false;
+            globalOffsetX = 340;
+            globalOffsetY = 140;
+        });
+    });
 </script>
 </body>
 </html>
