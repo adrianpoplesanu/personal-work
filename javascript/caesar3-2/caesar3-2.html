@@ -233,10 +233,12 @@ Game.prototype.clear = function () {
 
 function Walker() {
     this.speed = 0;
+    this.step = 0; // a few steps until reaching destination
     this.direction = {x: -1, y: 0};
     this.directionStatus = 1;
     this.position  = {x: 5, y: 5};
     this.type = 0;
+    this.deletion = 0;
 }
 
 Walker.prototype.canMove = function () {
@@ -244,7 +246,39 @@ Walker.prototype.canMove = function () {
 }
 
 Walker.prototype.determineDirection = function () {
-
+    var retries = 0;
+    while (!this.canMove()) {
+        if (retries == 4) {
+            this.direction.x = 0;
+            this.direction.y = 0;
+            this.deletion = 1;
+            return;
+        }
+        this.directionStatus++;
+        if (this.directionStatus > 4) this.directionStatus = 1;
+        switch(this.directionStatus) {
+            case 1:
+                retries++;
+                this.direction.x = -1;
+                this.direction.y = 0;
+            break;
+            case 2:
+                retries++;
+                this.direction.x = 0;
+                this.direction.y = -1;
+            break;
+            case 3:
+                retries++;
+                this.direction.x = 1;
+                this.direction.y = 0;
+            break;
+            case 4:
+                retries++;
+                this.direction.x = 0;
+                this.direction.y = 1;
+            break;
+        }
+    }
 }
 
 Walker.prototype.move = function () {
