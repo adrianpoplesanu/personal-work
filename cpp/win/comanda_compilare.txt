@@ -1,0 +1,4 @@
+g++ keylogger.cpp -o keylogger.exe
+g++ test1.cpp -o test1.exe
+g++ console1.cpp -o console1.exe
+g++ windows1.cpp -o windows1.exe
