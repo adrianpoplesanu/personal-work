@@ -1,0 +1,32 @@
+<html>
+<script>
+   var varsta32 = "54";
+   var varsta101 = "45";
+   var varsta154 = "34";
+
+   var listaVarste = [varsta32, varsta101, varsta154];
+</script>
+<script>
+    function calculeazaVarsta(nume) {
+        //console.log('calculeaza varsta');
+        //var nume1 = "n1";
+        //var nume2 = "n2";
+        console.log(nume);
+    }
+</script>
+<button onclick='calculeazaVarsta("Vlad");'>buton1</button>
+<button onclick='calculeazaVarsta("Andrei");'>buton2</button>
+
+<div id='target'>
+</div>
+
+<script>
+    function afiseazaToti() {
+        for (var i = 0; i < listaVarste.length; i++) {
+            document.getElementById('target').innerHTML += listaVarste[i] + "<br>";
+        }
+    }
+    afiseazaToti();
+</script>
+
+</html
