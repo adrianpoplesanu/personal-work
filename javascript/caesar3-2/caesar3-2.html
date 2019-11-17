@@ -38,6 +38,8 @@ move scripts outside the html, have a js file<br>
 do the Global Offset stuff for map moving<br>
 do the water tile show at the correct location<br>
 do all point variables be dicts with x and y attributes<br>
+out of bounds for walkers check<br>
+add game speed dropdown<br>
 </fieldset>
 <script>
 var canvas = document.getElementById("canvas");
@@ -53,6 +55,8 @@ var globalOffsetX = 340;
 var globalOffsetY = 140;
 var globalOffsetMoveDirection = 0; // 1 - right; 2 - left; 3 - up; 4 - down
 var stepGlobalMoving = {x: 0, y: 0};
+
+var hoveredRomb = {x: -1, y: -1};
 var walkerClockSequence = 0;
 
 var halfWidth = 30;
@@ -78,6 +82,10 @@ function handleMouseUp(e) {
     mouseY = parseInt(e.clientY - offsetY);
     $("#uplog").html("Up: " + mouseX + " / " + mouseY);
 
+    if (hoveredRomb.x > -1 && hoveredRomb.y > -1) {
+        if (game.grid[hoveredRomb.x][hoveredRomb.y] == 4) game.grid[hoveredRomb.x][hoveredRomb.y] = 0;
+        else if (game.grid[hoveredRomb.x][hoveredRomb.y] == 0) game.grid[hoveredRomb.x][hoveredRomb.y] = 4;
+    }
     mousePressed = false;
 }
 
@@ -280,45 +288,9 @@ Walker.prototype.determineDirection = function () {
             permutateWalkerDirection(this, [{x:-1, y:0, directionStatus:1}, {x:1, y:0, directionStatus:3}, {x:0, y:-1, directionStatus:2}]);
         break;
     }
-    /*while (!this.canMove()) {
-        if (retries > 4) {
-            this.direction.x = 0;
-            this.direction.y = 0;
-            this.deletion = 1;
-            return;
-        }
-        this.directionStatus++;
-        if (this.directionStatus > 4) this.directionStatus = 1;
-        switch(this.directionStatus) {
-            case 1:
-                retries++;
-                this.direction.x = -1;
-                this.direction.y = 0;
-                this.step = 1;
-            break;
-            case 2:
-                retries++;
-                this.direction.x = 0;
-                this.direction.y = -1;
-                this.step = 1;
-            break;
-            case 3:
-                retries++;
-                this.direction.x = 1;
-                this.direction.y = 0;
-                this.step = 1;
-            break;
-            case 4:
-                retries++;
-                this.direction.x = 0;
-                this.direction.y = 1;
-                this.step = 1;
-            break;
-        }
-    } */
 }
 
-Walker.prototype.move = function () {
+Walker.prototype.move = function () { // TODO clean this a bit
     //console.log(this.step);
     var moving = false;
     if (this.step > 0) {
@@ -406,6 +378,8 @@ function getSquareFromPhisicalPosition(pointX, pointY) {
 function drawRombBorder(i, j) {
     // trebuie puse variabile si parametrizat
     //if (i == 0 && j == 0) {
+    var rombOffsetX = globalOffsetX - i * halfWidth + j * halfWidth;
+    var rombOffsetY = globalOffsetY + i * halfHeight + j * halfHeight;
     if (game.grid[i][j] == 1) {
         //var img = document.getElementById("img-water1");
         var img = document.getElementById("img-water2"); // img-water1
@@ -416,12 +390,16 @@ function drawRombBorder(i, j) {
         return;
     }
     if (game.grid[i][j] == 4) {
+        if (mouseHoverRomb(rombOffsetX, rombOffsetY)) {
+            hoveredRomb.x = i;
+            hoveredRomb.y = j;
+        }
         return;
     }
-    var rombOffsetX = globalOffsetX - i * halfWidth + j * halfWidth;
-    var rombOffsetY = globalOffsetY + i * halfHeight + j * halfHeight;
     if (mouseHoverRomb(rombOffsetX, rombOffsetY)) {
         context.fillStyle = 'green';
+        hoveredRomb.x = i;
+        hoveredRomb.y = j;
     } else {
         if ((i + j) % 2 == 0)
             context.fillStyle = 'gray';
