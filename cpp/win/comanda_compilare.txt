@@ -2,3 +2,8 @@ g++ keylogger.cpp -o keylogger.exe
 g++ test1.cpp -o test1.exe
 g++ console1.cpp -o console1.exe
 g++ windows1.cpp -o windows1.exe
+
+
+Compilatorul pe care l-am folosit ca sa generez programele de Windows:
+D:\Documents\git-projects\personal-work\javascript>where g++
+D:\Program Files\mingw-w64\x86_64-8.1.0-posix-seh-rt_v6-rev0\mingw64\bin\g++.exe
