@@ -33,6 +33,15 @@ canvas {
 <div>
     <button id="center-world">Centreaza lumea</button>
 </div>
+<div>
+    <select id="global_game_speed">
+        <option value="veryslow">Very Slow</option>
+        <option value="slow">Slow</option>
+        <option value="medium" selected>Medium</option>
+        <option value="fast">Fast</option>
+        <option value="veryfast">Very Fast</option>
+    </select>
+</div>
 TODOs<br>
 move scripts outside the html, have a js file<br>
 do the Global Offset stuff for map moving<br>
@@ -55,6 +64,7 @@ var globalOffsetX = 340;
 var globalOffsetY = 140;
 var globalOffsetMoveDirection = 0; // 1 - right; 2 - left; 3 - up; 4 - down
 var stepGlobalMoving = {x: 0, y: 0};
+var globalGameSpeed = 3; // merge si asa: 0x2; adica 0x3;
 
 var hoveredRomb = {x: -1, y: -1};
 var walkerClockSequence = 0;
@@ -143,7 +153,7 @@ $("#canvas").mouseout(function (e) {
 
 window.onload = function () {
     init();
-    setInterval(update, 1000/30);
+    setInterval(update, 1000/60);
     //setInterval(update, 2000); // debug only
 }
 
@@ -161,10 +171,11 @@ function update() {
     game.changeGlobalOffsetParams();
     game.drawGrid();
     walkerClockSequence++;
-    if (walkerClockSequence == 4) {
+    globalSpeedMoveWalkers();
+    /*if (walkerClockSequence == 4) {
         walkerClockSequence = 0;
         moveWalkers();
-    }
+    }*/
     //moveWalkers();
     drawWalkers();
 }
@@ -363,6 +374,41 @@ function moveWalkers() {
     }
 }
 
+function globalSpeedMoveWalkers() {
+    switch(globalGameSpeed) {
+        case 1:
+            if (walkerClockSequence >= 12) {
+                walkerClockSequence = 0;
+                moveWalkers();                
+            }
+        break;
+        case 2:
+            if (walkerClockSequence >=8) {
+                walkerClockSequence = 0;
+                moveWalkers();                
+            }
+        break;
+        case 3:
+            if (walkerClockSequence >= 4) {
+                walkerClockSequence = 0;
+                moveWalkers();
+            }
+        break;
+        case 4:
+            if (walkerClockSequence >= 2) {
+                walkerClockSequence = 0;
+                moveWalkers();                
+            }
+        break;
+        case 5:
+            if (walkerClockSequence >= 1) {
+                walkerClockSequence = 0;
+                moveWalkers();                
+            }
+        break;
+    }
+}
+
 function updateGlobalOffsetPoint() {
     if (globalOffsetMoveDirection) {
         globalOffsetX += stepGlobalMoving.x;
@@ -448,6 +494,25 @@ function checkIfPointInsideTriangle(s, a, b, c) {
             mousePressed = false;
             globalOffsetX = 340;
             globalOffsetY = 140;
+        });
+        $("#global_game_speed").on('change', function () {
+            switch($(this).val()) {
+                case "veryslow":
+                    globalGameSpeed = 1;
+                break;
+                case "slow":
+                    globalGameSpeed = 2;
+                break;
+                case "medium":
+                    globalGameSpeed = 3;
+                break;
+                case "fast":
+                    globalGameSpeed = 4;
+                break;
+                case "veryfast":
+                    globalGameSpeed = 5;
+                break;                
+            }
         });
     });
 </script>
