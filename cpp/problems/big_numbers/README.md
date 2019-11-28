@@ -1,14 +1,15 @@
 Librarie de calcul cu numere mari.
+
 Cifrele sunt intregi dintr-un vector de cifre.
 Adunare, scadere, inmultire, impartire, operatori de eglitate si ordine.
 
-usage:
-downloadat big_numbers.h si big_numbers.cpp
-incluse fisierele in sursa
+usage: 
+downloadat big_numbers.h si big_numbers.cpp 
+incluse fisierele in sursa C++
 
 exemplu:
 
-#include "big_numbers.h"
+#include "big_numbers.h" 
 #include "big_numbers.cpp"
 
 BigNumber numar1, numar2, numar3;
