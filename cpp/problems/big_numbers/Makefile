@@ -5,4 +5,4 @@ all:
 	g++ main.cpp -c -o main.o
 	g++ main.o -o main
 clean:
-	find . -type f  ! -name "*.h" ! -name "*.cpp" ! -name "Makefile" -delete
+	find . -type f  ! -name "*.h" ! -name "*.cpp" ! -name "README.md" ! -name "Makefile" -delete
