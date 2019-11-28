@@ -2,8 +2,8 @@
 #define __BIG_NUMBERS
 
 #include <string>
-#define BAZA_DEFAULT = 10
-#define MAX_CIFRE = 1000;
+#define BAZA_DEFAULT 1000
+#define MAX_CIFRE 1000
 
 using namespace std;
 
@@ -27,6 +27,7 @@ public:
     void Mod(BigNumber);
     int GetDigit(int);
     void PrintNumber(void);
+    void PrintLineNumber(void);
     BigNumber operator + (const BigNumber&);
     bool operator > (const BigNumber&);
     bool operator < (const BigNumber&);

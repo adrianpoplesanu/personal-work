@@ -7,17 +7,17 @@ void running(void) {
     cout << "running Big Number ver 1.0..." << endl;
 }
 
-BigNumber::BigNumber() : baza(10), _len(1000) {
+BigNumber::BigNumber() : baza(BAZA_DEFAULT), _len(MAX_CIFRE) {
     for (int i = 0; i < _len; i++) {
         cifre[i] = 0;
     }
 }
 
-BigNumber::BigNumber(int n) : baza(10), _len(1000) {
+BigNumber::BigNumber(int n) : baza(BAZA_DEFAULT), _len(MAX_CIFRE) {
     LoadFromInt(n);
 }
 
-BigNumber::BigNumber(string s) : baza(10), _len(1000) {
+BigNumber::BigNumber(string s) : baza(BAZA_DEFAULT), _len(MAX_CIFRE) {
     LoadFromString(s);
 }
 
@@ -90,5 +90,10 @@ void BigNumber::PrintNumber() {
             }
         }
     }
+    //cout << endl;
+}
+
+void BigNumber::PrintLineNumber() {
+    PrintNumber();
     cout << endl;
-} 
+}
