@@ -2,6 +2,10 @@
 #include <fstream>
 #include "big_number.h"
 #include "big_number.cpp"
+#include "interpreter.h"
+#include "interpreter.cpp"
+#include "program.h"
+#include "program.cpp"
 using namespace std;
 
 int main(int argc, char *argv[]) {
@@ -14,7 +18,8 @@ int main(int argc, char *argv[]) {
     numar3.PrintNumber();
     cout << " ... \033[32;1mok!\033[0m" << endl;
     //cout << " ... ok!" << endl;
-    
+
+    Program program;    
     string command;
     while(1) {
         cout << "> "; 
