@@ -2,26 +2,34 @@
 #define __INTERPRETER_H
 
 #include <iostream>
+#include <ctime>
+#include <map>
+#include "big_number.h"
 using namespace std;
 
 enum Command {
     UNKNOWN,
     EMPTY,
-    VARIABLE_DECLARATION,
-    PRINT_COMMAND,
+    VARIABLE_ASSIGN,
+    VARIABLE_REFERENCE,
+    NUMBER_REFERENCE,
+    PRINT_COMMAND, // this might be the same as VARIABLE_REFERENCE, only with the twist of couting the variable
     FOR_INSTRUCTION,
-    SHOWALL
+    ADD_INSTRUCTION,
+    SHOWALL // show all variable currently existing
 };
 
 class CommandInterpreter {
 private:
     string text;
-    Command command_type; 
+    Command command_type;
+    clock_t start;
+    clock_t end;
 public:
     CommandInterpreter();
     CommandInterpreter(string);
     void Analyze();
-    void Execute();
+    void Execute(map<string, BigNumber>&);
 };
 
 #endif

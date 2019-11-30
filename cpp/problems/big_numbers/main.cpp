@@ -19,26 +19,7 @@ int main(int argc, char *argv[]) {
     cout << " ... \033[32;1mok!\033[0m" << endl;
     //cout << " ... ok!" << endl;
 
-    Program program;    
-    string command;
-    while(1) {
-        cout << "> "; 
-        getline(cin, command);
-        if (command == "help") {
-            cout << "=== Help Big Number v1.0 ====================" << endl;
-            cout << "help - shows help information" << endl;
-            cout << "version - shows compiler version" << endl;
-            cout << "exit - exit interpreter ; same as quit" << endl;
-            cout << "quit - exit interpreter ; same as exit" << endl;
-            cout << "=============================================" << endl;
-        }
-        if (command == "version") {
-            cout << "1.1" << endl;
-        }
-        if (command == "exit" || command =="quit") {
-            cout << "\033[29;1mBye!\033[0m" << endl;
-            break;
-        }
-    }
+    Program program;
+    program.Loop();
     return 0;
 }

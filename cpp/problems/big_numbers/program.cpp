@@ -22,8 +22,27 @@ void Program::Init() {
 void Program::Loop() {
     Init();
     while(1) {
-        string text = ReadCommand();
-        CommandInterpreter commandInterpreter(text);
-        // ...
+        cout << "> ";
+        string command = ReadCommand();
+        if (command == "help") {
+            cout << "=== Help Big Number v1.2 ====================" << endl;
+            cout << "help - shows help information" << endl;
+            cout << "version - shows compiler version" << endl;
+            cout << "purge - clears all variables in the stack" << endl;
+            cout << "exit - exit interpreter ; same as quit" << endl;
+            cout << "quit - exit interpreter ; same as exit" << endl;
+            cout << "=============================================" << endl;
+        } else if (command == "version") {
+            cout << "1.2" << endl;
+        } else if (command == "purge") {
+            Init();
+        } else if (command == "exit" || command =="quit") {
+            cout << "\033[29;1mBye!\033[0m" << endl;
+            break;
+        } else {
+            CommandInterpreter commandInterpreter(command);
+            commandInterpreter.Analyze();
+            commandInterpreter.Execute(variables);
+        }
     }
 }
