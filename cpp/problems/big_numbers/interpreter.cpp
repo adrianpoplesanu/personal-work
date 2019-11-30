@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <regex>
 #include "interpreter.h"
 #include "big_number.h"
 using namespace std;
@@ -32,11 +33,19 @@ void CommandInterpreter::Execute(map<string, BigNumber> &variables) {
         return;
     }
     if (command_type == SHOWALL) {
-        for(auto variable : variables) {
-            //cout << variable[0] << ":" << variable[1] << endl;
-            cout << "showing a variable" << endl;
+        if (variables.begin() == variables.end()) {
+            cout << "no current variables" << endl;
+        } else {
+            for (map<string, BigNumber>::iterator it = variables.begin(); it != variables.end(); ++it) {
+                cout << it->first << ":";
+                it->second.PrintNumber();
+                cout << endl;
+            }
         }
         return;
+    }
+    if (command_type == VARIABLE_ASSIGN) {
+
     }
     cout << "running...  \r";
     end = clock();
