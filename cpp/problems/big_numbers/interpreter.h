@@ -12,6 +12,7 @@ enum Command {
     EMPTY,
     VARIABLE_ASSIGN,
     VARIABLE_REFERENCE,
+    ASSIGN_SCALAR,
     NUMBER_REFERENCE,
     PRINT_COMMAND, // this might be the same as VARIABLE_REFERENCE, only with the twist of couting the variable
     FOR_INSTRUCTION,
