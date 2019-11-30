@@ -32,13 +32,25 @@ void CommandInterpreter::Analyze() {
         }
         regex assign_variable("^([a-zA-Z]+[a-zA-Z0-9]*):([a-zA-Z]+[a-zA-Z0-9]*)$");
         if (regex_search(text, m, assign_variable)) {
-            command_type = VARIABLE_ASSIGN; 
+            command_type = VARIABLE_ASSIGN;
+            return;
+        }
+        regex add_in_variable("^([a-zA-Z]+[a-zA-Z0-9]*):([0-9a-zA-Z]+)\\+([0-9a-zA-Z]+)$");
+        if (regex_search(text, m, add_in_variable)) {
+            command_type = ADD_INVARIABLE_INSTRUCTION;
+            return;
+        }
+        regex normal_add("^([0-9a-zA-Z]+)\\+([0-9a-zA-Z]+)$");
+        if (regex_search(text, m, normal_add)) {
+            command_type = ADD_NORMAL_INSTRUCTION;
             return;
         }
     }
 }
 
 void CommandInterpreter::Execute(map<string, BigNumber> &variables) {
+    BigNumber result;
+    bool show_result = false;
     if (command_type == EMPTY) {
         // do nothing
         return;
@@ -89,7 +101,64 @@ void CommandInterpreter::Execute(map<string, BigNumber> &variables) {
             return;
         }
     }
+    if (command_type == ADD_INVARIABLE_INSTRUCTION) {
+        string dest_var, membr1, membr2;
+        regex add_in_variable("^([a-zA-Z]+[a-zA-Z0-9]*):([0-9a-zA-Z]+)\\+([0-9a-zA-Z]+)$");
+        smatch m;
+        regex_search(text, m, add_in_variable);
+        dest_var = m[1];
+        membr1 = m[2];
+        membr2 = m[3];
+        cout << dest_var << " <<< " << membr1 << " ... " << membr2 << endl;
+    }
+    if (command_type == ADD_NORMAL_INSTRUCTION) {
+        string membr1, membr2;
+        regex normal_add("^([0-9a-zA-Z]+)\\+([0-9a-zA-Z]+)$");
+        smatch m;
+        regex_search(text, m, normal_add);
+        membr1 = m[1];
+        membr2 = m[2];
+        if (isNumber(membr1)) {
+            BigNumber numar;
+            numar.LoadFromString(membr1);
+            result = result + numar;
+        } else {
+
+        }
+        if (isNumber(membr2)) {
+            BigNumber numar;
+            numar.LoadFromString(membr2);
+            result = result + numar;
+        } else {
+
+        }
+        show_result = true;
+    }
     cout << "running...  \r";
     end = clock();
     cout << "ran for " << double(end - start) / CLOCKS_PER_SEC << "secs" << endl;
+    if (show_result) result.PrintLineNumber();
+}
+
+bool isNumber(string text) {
+    // check if only digits in string
+    return true;
+}
+
+bool isVariable(string text) {
+    // check if this can be a valid variable name
+    return true;
+}
+
+void AddNumber(BigNumber &desc, BigNumber origin) {
+
+}
+
+bool CheckVariableExists(map<string, BigNumber> variables, string text) {
+    // here or in CommandInterpreter?
+    return false;
+}
+
+void AddVariable(map<string, BigNumber> &variables, string name, BigNumber value) {
+
 }

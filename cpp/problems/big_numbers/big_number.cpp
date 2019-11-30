@@ -4,7 +4,7 @@
 using namespace std;
 
 void running(void) {
-    cout << "\033[29;1mrunning\033[0m \033[35;1mBig Number ver 1.3\033[0m..." << endl;
+    cout << "\033[29;1mrunning\033[0m \033[35;1mBig Number ver 1.5\033[0m..." << endl;
 }
 
 BigNumber::BigNumber() : baza(BAZA_DEFAULT), _len(MAX_CIFRE) {
@@ -36,7 +36,11 @@ void BigNumber::LoadFromString(string s) {
         start -= size;
         if (start < 0 && start > -size) {
             cifre[i] = stoi(s.substr(0, size + start));
+            return;
         }
+    }
+    if (start < 0 && start > -size) { // if the string converter to BigNumber is one "digit"
+        cifre[0] = stoi(s.substr(0, size + start));
     }
 }
 

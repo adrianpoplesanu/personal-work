@@ -7,6 +7,12 @@
 #include "big_number.h"
 using namespace std;
 
+bool isNumber(string);
+bool isVariable(string);
+void AddNumber(BigNumber&, BigNumber);
+bool CheckVariableExists(map<string, BigNumber>, string);
+void AddVariable(map<string, BigNumber>&, string, BigNumber);
+
 enum Command {
     UNKNOWN,
     EMPTY,
@@ -16,7 +22,10 @@ enum Command {
     NUMBER_REFERENCE,
     PRINT_COMMAND, // this might be the same as VARIABLE_REFERENCE, only with the twist of couting the variable
     FOR_INSTRUCTION,
-    ADD_INSTRUCTION,
+    ADD_NORMAL_INSTRUCTION,
+    ADD_INVARIABLE_INSTRUCTION,
+    LOAD_FROM_FILE,
+    DROP_TO_FILE,
     SHOWALL // show all variable currently existing
 };
 
