@@ -25,7 +25,7 @@ void Program::Loop() {
         cout << "> ";
         string command = ReadCommand();
         if (command == "help") {
-            cout << "=== Help Big Number v1.6 ====================" << endl;
+            cout << "=== Help Big Number v1.7 ====================" << endl;
             cout << "help - shows help information" << endl;
             cout << "version - shows compiler version" << endl;
             cout << "purge - clears all variables in the stack" << endl;
@@ -33,7 +33,7 @@ void Program::Loop() {
             cout << "quit - exit interpreter ; same as exit" << endl;
             cout << "=============================================" << endl;
         } else if (command == "version") {
-            cout << "1.6" << endl;
+            cout << "1.7" << endl;
         } else if (command == "purge") {
             Init();
         } else if (command == "exit" || command =="quit") {

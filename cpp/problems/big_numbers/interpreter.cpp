@@ -24,23 +24,23 @@ void CommandInterpreter::Analyze() {
         cout << "analyzing...\r";
         command_type = UNKNOWN;
         // do regex checks and determine if this is assign, add, reference or for
-        regex assign_scalar("^([a-zA-Z]+[a-zA-Z0-9]*):([0-9]+)$");
+        regex assign_scalar("^[ ]*([a-zA-Z]+[a-zA-Z0-9]*)[ ]*:[ ]*([0-9]+)[ ]*$");
         smatch m;
         if (regex_search(text, m, assign_scalar)) {
             command_type = ASSIGN_SCALAR;
             return;
         }
-        regex assign_variable("^([a-zA-Z]+[a-zA-Z0-9]*):([a-zA-Z]+[a-zA-Z0-9]*)$");
+        regex assign_variable("^[ ]*([a-zA-Z]+[a-zA-Z0-9]*)[ ]*:[ ]*([a-zA-Z]+[a-zA-Z0-9]*)[ ]*$");
         if (regex_search(text, m, assign_variable)) {
             command_type = VARIABLE_ASSIGN;
             return;
         }
-        regex add_in_variable("^([a-zA-Z]+[a-zA-Z0-9]*):([0-9a-zA-Z]+\\+[0-9a-zA-Z]+)$");
+        regex add_in_variable("^[ ]*([a-zA-Z]+[a-zA-Z0-9]*)[ ]*:[ ]*([0-9a-zA-Z]+[ ]*\\+[ ]*[0-9a-zA-Z]+)[ ]*$");
         if (regex_search(text, m, add_in_variable)) {
             command_type = ADD_INVARIABLE_INSTRUCTION;
             return;
         }
-        regex normal_add("^([0-9a-zA-Z]+)\\+([0-9a-zA-Z]+)$");
+        regex normal_add("^[ ]*([0-9a-zA-Z]+)[ ]*\\+[ ]*([0-9a-zA-Z]+)[ ]*$");
         if (regex_search(text, m, normal_add)) {
             command_type = ADD_NORMAL_INSTRUCTION;
             return;
@@ -60,7 +60,7 @@ void CommandInterpreter::Execute(map<string, BigNumber> &variables) {
             cout << "no current variables" << endl;
         } else {
             for (map<string, BigNumber>::iterator it = variables.begin(); it != variables.end(); ++it) {
-                cout << it->first << ":";
+                cout << it->first << " : ";
                 it->second.PrintNumber();
                 cout << endl;
             }
@@ -68,7 +68,7 @@ void CommandInterpreter::Execute(map<string, BigNumber> &variables) {
         return;
     }
     if (command_type == ASSIGN_SCALAR) {
-       regex assign_scalar("^([a-zA-Z]+[a-zA-Z0-9]*):([0-9]+)$");
+       regex assign_scalar("^[ ]*([a-zA-Z]+[a-zA-Z0-9]*)[ ]*:[ ]*([0-9]+)[ ]*$");
        smatch m;
        regex_search(text, m, assign_scalar);
        string var_name = m[1];
@@ -85,7 +85,7 @@ void CommandInterpreter::Execute(map<string, BigNumber> &variables) {
        }
     }
     if (command_type == VARIABLE_ASSIGN) {
-        regex assign_variable("^([a-zA-Z]+[a-zA-Z0-9]*):([a-zA-Z]+[a-zA-Z0-9]*)$");
+        regex assign_variable("^[ ]*([a-zA-Z]+[a-zA-Z0-9]*)[ ]*:[ ]*([a-zA-Z]+[a-zA-Z0-9]*)[ ]*$");
         smatch m;
         regex_search(text, m, assign_variable);
         string desc_var = m[1];
@@ -105,7 +105,7 @@ void CommandInterpreter::Execute(map<string, BigNumber> &variables) {
     }
     if (command_type == ADD_INVARIABLE_INSTRUCTION) {
         string dest_var, add_sequence;
-        regex add_in_variable("^([a-zA-Z]+[a-zA-Z0-9]*):([0-9a-zA-Z]+\\+[0-9a-zA-Z]+)$");
+        regex add_in_variable("^[ ]*([a-zA-Z]+[a-zA-Z0-9]*)[ ]*:[ ]*([0-9a-zA-Z]+[ ]*\\+[ ]*[0-9a-zA-Z]+)[ ]*$");
         smatch m;
         regex_search(text, m, add_in_variable);
         dest_var = m[1];
@@ -167,7 +167,7 @@ void AddVariable(map<string, BigNumber> &variables, string name, BigNumber value
 
 void AddNormalInstruction(map<string, BigNumber> variables, string text, bool &show_result, BigNumber &result) {
     string membr1, membr2;
-    regex normal_add("^([0-9a-zA-Z]+)\\+([0-9a-zA-Z]+)$");
+    regex normal_add("^[ ]*([0-9a-zA-Z]+)[ ]*\\+[ ]*([0-9a-zA-Z]+)[ ]*$");
     smatch m;
     regex_search(text, m, normal_add);
     membr1 = m[1];
