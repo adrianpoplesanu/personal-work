@@ -12,6 +12,9 @@ bool isVariable(string);
 void AddNumber(BigNumber&, BigNumber);
 bool CheckVariableExists(map<string, BigNumber>, string);
 void AddVariable(map<string, BigNumber>&, string, BigNumber);
+BigNumber GetVariable(map<string, BigNumber>, string);
+void SetVariable(map<string, BigNumber>&, string, BigNumber);
+void AddNormalInstruction(map<string, BigNumber>, string, bool&, BigNumber&);
 
 enum Command {
     UNKNOWN,

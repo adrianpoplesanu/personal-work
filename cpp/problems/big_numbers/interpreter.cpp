@@ -35,7 +35,7 @@ void CommandInterpreter::Analyze() {
             command_type = VARIABLE_ASSIGN;
             return;
         }
-        regex add_in_variable("^([a-zA-Z]+[a-zA-Z0-9]*):([0-9a-zA-Z]+)\\+([0-9a-zA-Z]+)$");
+        regex add_in_variable("^([a-zA-Z]+[a-zA-Z0-9]*):([0-9a-zA-Z]+\\+[0-9a-zA-Z]+)$");
         if (regex_search(text, m, add_in_variable)) {
             command_type = ADD_INVARIABLE_INSTRUCTION;
             return;
@@ -102,37 +102,24 @@ void CommandInterpreter::Execute(map<string, BigNumber> &variables) {
         }
     }
     if (command_type == ADD_INVARIABLE_INSTRUCTION) {
-        string dest_var, membr1, membr2;
-        regex add_in_variable("^([a-zA-Z]+[a-zA-Z0-9]*):([0-9a-zA-Z]+)\\+([0-9a-zA-Z]+)$");
+        string dest_var, add_sequence;
+        regex add_in_variable("^([a-zA-Z]+[a-zA-Z0-9]*):([0-9a-zA-Z]+\\+[0-9a-zA-Z]+)$");
         smatch m;
         regex_search(text, m, add_in_variable);
         dest_var = m[1];
-        membr1 = m[2];
-        membr2 = m[3];
-        cout << dest_var << " <<< " << membr1 << " ... " << membr2 << endl;
+        add_sequence = m[2];
+        AddNormalInstruction(variables, add_sequence, show_result, result);
+        if (show_result) {
+            if (CheckVariableExists(variables, dest_var)) {
+                SetVariable(variables, dest_var, result);
+            } else {
+                AddVariable(variables, dest_var, result);
+            }
+        }
+        show_result = false;
     }
     if (command_type == ADD_NORMAL_INSTRUCTION) {
-        string membr1, membr2;
-        regex normal_add("^([0-9a-zA-Z]+)\\+([0-9a-zA-Z]+)$");
-        smatch m;
-        regex_search(text, m, normal_add);
-        membr1 = m[1];
-        membr2 = m[2];
-        if (isNumber(membr1)) {
-            BigNumber numar;
-            numar.LoadFromString(membr1);
-            result = result + numar;
-        } else {
-
-        }
-        if (isNumber(membr2)) {
-            BigNumber numar;
-            numar.LoadFromString(membr2);
-            result = result + numar;
-        } else {
-
-        }
-        show_result = true;
+        AddNormalInstruction(variables, text, show_result, result);
     }
     cout << "running...  \r";
     end = clock();
@@ -141,13 +128,15 @@ void CommandInterpreter::Execute(map<string, BigNumber> &variables) {
 }
 
 bool isNumber(string text) {
-    // check if only digits in string
-    return true;
+    regex is_number("^([0-9]+)$");
+    smatch m;
+    return regex_search(text, m, is_number);
 }
 
 bool isVariable(string text) {
-    // check if this can be a valid variable name
-    return true;
+    regex is_variable("^([a-zA-Z]+[0-9a-zA-Z]*)$");
+    smatch m;
+    return regex_search(text, m, is_variable);
 }
 
 void AddNumber(BigNumber &desc, BigNumber origin) {
@@ -155,10 +144,61 @@ void AddNumber(BigNumber &desc, BigNumber origin) {
 }
 
 bool CheckVariableExists(map<string, BigNumber> variables, string text) {
-    // here or in CommandInterpreter?
-    return false;
+    // check if variable already exists
+    map<string, BigNumber>::iterator it = variables.find(text);
+    return it != variables.end();
+}
+
+BigNumber GetVariable(map<string, BigNumber> variables, string name) {
+    map<string, BigNumber>::iterator it = variables.find(name);
+    return it->second;
+}
+
+void SetVariable(map<string, BigNumber> &variables, string name, BigNumber value) {
+    map<string, BigNumber>::iterator it = variables.find(name);
+    it->second = value;
 }
 
 void AddVariable(map<string, BigNumber> &variables, string name, BigNumber value) {
+    variables.insert(pair<string, BigNumber>(name, value));
+}
 
+void AddNormalInstruction(map<string, BigNumber> variables, string text, bool &show_result, BigNumber &result) {
+    string membr1, membr2;
+    regex normal_add("^([0-9a-zA-Z]+)\\+([0-9a-zA-Z]+)$");
+    smatch m;
+    regex_search(text, m, normal_add);
+    membr1 = m[1];
+    membr2 = m[2];
+    if (isNumber(membr1)) {
+        BigNumber numar;
+        numar.LoadFromString(membr1);
+        result = result + numar;
+    } else {
+        if (isVariable(membr1)) {
+            if (CheckVariableExists(variables, membr1)) {
+                BigNumber numar = GetVariable(variables, membr1);
+                result = result + numar;
+            } else {
+                cout << "error - variable " << membr1 << " not defined" << endl;
+                return;
+            }
+        }
+    }
+    if (isNumber(membr2)) {
+        BigNumber numar;
+        numar.LoadFromString(membr2);
+        result = result + numar;
+    } else {
+        if (isVariable(membr2)) {
+            if (CheckVariableExists(variables, membr2)) {
+                BigNumber numar = GetVariable(variables, membr2);
+                result = result + numar;
+            } else {
+                cout << "error - variable " << membr2 << " not defined" << endl;
+                return;
+            }
+        }
+    }
+    show_result = true;
 }
