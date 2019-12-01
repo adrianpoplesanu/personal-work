@@ -75,7 +75,9 @@ void CommandInterpreter::Execute(map<string, BigNumber> &variables) {
        string scalar = m[2];
        map<string, BigNumber>::iterator it = variables.find(var_name);
        if (it != variables.end()) {
-           it->second.LoadFromString(scalar);
+           BigNumber new_value;
+           new_value.LoadFromString(scalar);
+           it->second = new_value;
        } else {
            BigNumber number;
            number.LoadFromString(scalar);
