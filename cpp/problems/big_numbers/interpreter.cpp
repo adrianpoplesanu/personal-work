@@ -132,6 +132,10 @@ void CommandInterpreter::Execute(map<string, BigNumber> &variables) {
     if (command_type == ADD_NORMAL_INSTRUCTION) {
         AddNormalInstruction(variables, text, show_result, result);
     }
+    if (command_type == FOR_INSTRUCTION) {
+        cout << "dealing with a for" << endl;
+        return;
+    }
     cout << "running...  \r";
     end = clock();
     cout << "ran for " << double(end - start) / CLOCKS_PER_SEC << "secs" << endl;
