@@ -14,6 +14,10 @@ CommandInterpreter::CommandInterpreter(string s) {
     text = s;
 }
 
+CommandInterpreter::~CommandInterpreter() {
+
+}
+
 void CommandInterpreter::Analyze() {
     start = clock();
     if (text == "") {
@@ -43,6 +47,11 @@ void CommandInterpreter::Analyze() {
         regex normal_add("^[ ]*([0-9a-zA-Z]+)[ ]*\\+[ ]*([0-9a-zA-Z]+)[ ]*$");
         if (regex_search(text, m, normal_add)) {
             command_type = ADD_NORMAL_INSTRUCTION;
+            return;
+        }
+        regex for_instruction("^[ ]*for[ ]*([0-9a-zA-Z]+)[ ]*:[ ]*([0-9a-zA-Z]+)[ ]*:[ ]*([0-9a-zA-Z]+)[ ]*:[ ]*([0-9a-zA-Z]+)[ ]*(.*)$");
+        if (regex_search(text, m, for_instruction)) {
+            command_type = FOR_INSTRUCTION;
             return;
         }
     }

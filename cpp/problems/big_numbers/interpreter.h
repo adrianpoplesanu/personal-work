@@ -41,6 +41,7 @@ private:
 public:
     CommandInterpreter();
     CommandInterpreter(string);
+    ~CommandInterpreter();
     void Analyze();
     void Execute(map<string, BigNumber>&);
 };

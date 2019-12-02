@@ -9,6 +9,10 @@ Program::Program() {
     //...
 }
 
+Program::~Program() {
+
+}
+
 string Program::ReadCommand() {
     string s;
     getline(cin, s);

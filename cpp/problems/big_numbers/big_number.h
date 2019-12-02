@@ -18,6 +18,7 @@ public:
     BigNumber();
     BigNumber(int);
     BigNumber(string);
+    ~BigNumber();
     void LoadFromInt(int);
     void LoadFromString(string);
     void Add(BigNumber);

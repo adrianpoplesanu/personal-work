@@ -10,6 +10,7 @@ private:
     map<string, BigNumber> variables;
 public:
     Program();
+    ~Program();
     void Init();
     string ReadCommand();
     void Loop();

@@ -21,6 +21,10 @@ BigNumber::BigNumber(string s) : baza(BAZA_DEFAULT), _len(MAX_CIFRE) {
     LoadFromString(s);
 }
 
+BigNumber::~BigNumber() {
+
+}
+
 void BigNumber::LoadFromString(string s) {
     int b = baza, size = 0;
     while(b > 1) {
