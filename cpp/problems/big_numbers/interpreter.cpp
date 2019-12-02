@@ -135,7 +135,7 @@ void CommandInterpreter::Execute(map<string, BigNumber> &variables) {
     if (command_type == FOR_INSTRUCTION) {
         cout << "dealing with a for" << endl;
         //regex for_instruction("");
-        ForInstruction();
+        ForInstruction(variables, text);
         return;
     }
     cout << "running...  \r";
@@ -220,9 +220,14 @@ void AddNormalInstruction(map<string, BigNumber> variables, string text, bool &s
     show_result = true;
 }
 
-void ForInstruction() {
-    string loop_var, start_val, end_val, step_val;
+void ForInstruction(map<string, BigNumber> &variables, string text) {
+    string loop_var, start_val, end_val, step_val, nested_commands;
     regex for_instruction("^[ ]*for[ ]*([0-9a-zA-Z]+)[ ]*:[ ]*([0-9a-zA-Z]+)[ ]*:[ ]*([0-9a-zA-Z]+)[ ]*:[ ]*([0-9a-zA-Z]+)[ ]*(.*)$");
     smatch m;
-    //regex_search(text, m, for_instruction);
+    regex_search(text, m, for_instruction);
+    loop_var = m[1];
+    start_val = m[2];
+    end_val = m[3];
+    step_val = m[4];
+    nested_commands = m[5];
 }

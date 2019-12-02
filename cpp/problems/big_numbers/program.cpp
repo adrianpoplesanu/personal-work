@@ -29,15 +29,15 @@ void Program::Loop() {
         cout << "> ";
         string command = ReadCommand();
         if (command == "help") {
-            cout << "=== Help Big Number v1.8 ====================" << endl;
-            cout << "help - shows help information" << endl;
-            cout << "version - shows compiler version" << endl;
-            cout << "purge - clears all variables in the stack" << endl;
-            cout << "exit - exit interpreter ; same as quit" << endl;
-            cout << "quit - exit interpreter ; same as exit" << endl;
+            cout << "=== Help Big Number =========================" << endl;
+            cout << "  > help - shows help information" << endl;
+            cout << "  > version - shows compiler version" << endl;
+            cout << "  > purge - clears all variables in the stack" << endl;
+            cout << "  > exit - exit interpreter ; same as quit" << endl;
+            cout << "  > quit - exit interpreter ; same as exit" << endl;
             cout << "=============================================" << endl;
         } else if (command == "version") {
-            cout << "1.8" << endl;
+            cout << "1.9" << endl;
         } else if (command == "purge") {
             Init();
         } else if (command == "exit" || command =="quit") {
