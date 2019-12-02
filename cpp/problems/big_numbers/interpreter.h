@@ -15,6 +15,7 @@ void AddVariable(map<string, BigNumber>&, string, BigNumber);
 BigNumber GetVariable(map<string, BigNumber>, string);
 void SetVariable(map<string, BigNumber>&, string, BigNumber);
 void AddNormalInstruction(map<string, BigNumber>, string, bool&, BigNumber&);
+void ForInstruction();
 
 enum Command {
     UNKNOWN,
