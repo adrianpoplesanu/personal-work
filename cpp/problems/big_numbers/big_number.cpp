@@ -4,7 +4,7 @@
 using namespace std;
 
 void running(void) {
-    cout << "\033[29;1mrunning\033[0m \033[35;1mBig Number ver 1.8\033[0m..." << endl;
+    cout << "\033[29;1mrunning\033[0m \033[35;1mBig Number ver 1.9\033[0m..." << endl;
 }
 
 BigNumber::BigNumber() : baza(BAZA_DEFAULT), _len(MAX_CIFRE) {
@@ -79,6 +79,15 @@ BigNumber BigNumber::operator + (BigNumber const &obj) {
         }
     }
     return suma;
+}
+
+bool BigNumber::operator < (BigNumber const &obj) {
+    for (int i = _len - 1; i >= 0; i--) {
+        if (obj.cifre[i] > cifre[i]) {
+            return true;
+        }
+    }
+    return false;
 }
 
 void BigNumber::PrintNumber() {

@@ -18,6 +18,8 @@ int main(int argc, char *argv[]) {
     numar3.PrintNumber();
     cout << " ... \033[32;1mok!\033[0m" << endl;
     //cout << " ... ok!" << endl;
+    cout << (numar1 < numar2) << endl;
+    cout << (numar2 < numar1) << endl;
 
     Program program;
     program.Loop();
