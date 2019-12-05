@@ -25,7 +25,7 @@ void CommandInterpreter::Analyze() {
     } else if (text == "showall") {
         command_type = SHOWALL;
     } else {
-        cout << "analyzing...\r";
+        //cout << "analyzing...\r";
         command_type = UNKNOWN;
         // do regex checks and determine if this is assign, add, reference or for
         regex assign_scalar("^[ ]*([a-zA-Z]+[a-zA-Z0-9]*)[ ]*:[ ]*([0-9]+)[ ]*$");
@@ -52,6 +52,11 @@ void CommandInterpreter::Analyze() {
         regex for_instruction("^[ ]*for[ ]*([0-9a-zA-Z]+)[ ]*:[ ]*([0-9a-zA-Z]+)[ ]*:[ ]*([0-9a-zA-Z]+)[ ]*:[ ]*([0-9a-zA-Z]+)[ ]*(.*)$");
         if (regex_search(text, m, for_instruction)) {
             command_type = FOR_INSTRUCTION;
+            return;
+        }
+        regex print_instruction("^[ ]*([0-9a-zA-Z]+)[ ]*$");
+        if (regex_search(text, m, print_instruction)) {
+            command_type = PRINT_COMMAND;
             return;
         }
     }
@@ -138,7 +143,11 @@ void CommandInterpreter::Execute(map<string, BigNumber> &variables) {
         ForInstruction(variables, text);
         return;
     }
-    cout << "running...  \r";
+    if (command_type == PRINT_COMMAND) {
+        PrintCommand(variables, text);
+        return;
+    }
+    //cout << "running...  \r";
     end = clock();
     cout << "ran for " << double(end - start) / CLOCKS_PER_SEC << "secs" << endl;
     if (show_result) result.PrintLineNumber();
@@ -230,4 +239,24 @@ void ForInstruction(map<string, BigNumber> &variables, string text) {
     end_val = m[3];
     step_val = m[4];
     nested_commands = m[5];
+}
+
+void PrintCommand(map<string, BigNumber> variables, string command) {
+    string var_name;
+    regex print_instruction("^[ ]*([0-9a-zA-Z]+)[ ]*$");
+    smatch m;
+    regex_search(command, m, print_instruction);
+    var_name = m[1];
+    if (isNumber(var_name)) {
+        cout << var_name << endl;
+    }
+    if (isVariable(var_name)) {
+        if (CheckVariableExists(variables, var_name)) {
+            BigNumber numar = GetVariable(variables, var_name);
+            numar.PrintLineNumber();
+        } else {
+            cout << "error - variable " << var_name << " not defined" << endl;
+            return;
+        }
+    }
 }
