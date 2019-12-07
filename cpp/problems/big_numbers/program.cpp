@@ -37,7 +37,7 @@ void Program::Loop() {
             cout << "  > quit - exit interpreter ; same as exit" << endl;
             cout << "=============================================" << endl;
         } else if (command == "version") {
-            cout << "1.10" << endl;
+            cout << "1.11" << endl;
         } else if (command == "purge") {
             Init();
         } else if (command == "exit" || command =="quit") {

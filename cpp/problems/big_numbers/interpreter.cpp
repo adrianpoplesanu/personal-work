@@ -169,9 +169,9 @@ void AddNumber(BigNumber &desc, BigNumber origin) {
 
 }
 
-bool CheckVariableExists(map<string, BigNumber> variables, string text) {
+bool CheckVariableExists(map<string, BigNumber> variables, string name) {
     // check if variable already exists
-    map<string, BigNumber>::iterator it = variables.find(text);
+    map<string, BigNumber>::iterator it = variables.find(name);
     return it != variables.end();
 }
 
@@ -239,6 +239,17 @@ void ForInstruction(map<string, BigNumber> &variables, string text) {
     end_val = m[3];
     step_val = m[4];
     nested_commands = m[5];
+
+    BigNumber _loop_var, _start_val, _end_val, _step_val;
+    if (CheckVariableExists(variables, loop_var)) {
+        _loop_var = GetVariable(variables, loop_var);
+    } else {
+        BigNumber numar;
+        AddVariable(variables, loop_var, numar);
+    }
+    CommandInterpreter commandInterpreter(nested_commands);
+    commandInterpreter.Analyze();
+    commandInterpreter.Execute(variables);
 }
 
 void PrintCommand(map<string, BigNumber> variables, string command) {
