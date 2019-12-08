@@ -247,9 +247,24 @@ void ForInstruction(map<string, BigNumber> &variables, string text) {
         BigNumber numar;
         AddVariable(variables, loop_var, numar);
     }
+    if (isNumber(start_val)) {
+        // TODO add variable case
+        _start_val.LoadFromString(start_val);
+    }
+    if (isNumber(end_val)) {
+        // TODO add variable case
+        _end_val.LoadFromString(end_val);
+    }
+    if (isNumber(step_val)) {
+        // TODO add variable case
+        _step_val.LoadFromString(step_val);
+    }
     CommandInterpreter commandInterpreter(nested_commands);
-    commandInterpreter.Analyze();
-    commandInterpreter.Execute(variables);
+    while (_loop_var < _end_val) {
+        commandInterpreter.Analyze();
+        commandInterpreter.Execute(variables);
+        _loop_var = _loop_var + _step_val;
+    }
 }
 
 void PrintCommand(map<string, BigNumber> variables, string command) {
