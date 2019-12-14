@@ -3,6 +3,7 @@
 #include <map>
 #include <regex>
 #include "interpreter.h"
+#include "expressions.h"
 #include "big_number.h"
 using namespace std;
 
@@ -157,7 +158,7 @@ void CommandInterpreter::Execute(map<string, BigNumber> &variables) {
     }
     //cout << "running...  \r";
     end = clock();
-    cout << "ran for " << double(end - start) / CLOCKS_PER_SEC << "secs" << endl;
+    //cout << "ran for " << double(end - start) / CLOCKS_PER_SEC << "secs" << endl;
     if (show_result) result.PrintLineNumber();
 }
 
@@ -277,7 +278,15 @@ void ForInstruction(map<string, BigNumber> &variables, string text) {
 }
 
 void IfInstruction(map<string, BigNumber> &variables, string text) {
-    cout << "dealing with an if" << endl;
+    //cout << "dealing with an if" << endl;
+    string cond, expr;
+    regex if_instruction("^[ ]*if[ ]*\\((.*)\\)[ ]*(.+)$");
+    smatch m;
+    regex_search(text, m, if_instruction);
+    cond = m[1];
+    expr = m[2];
+    cout << "cond: [" << cond << "] expr: [" << expr << "]" << endl;
+    EvaluateCondition(variables, cond);
 }
 
 void PrintCommand(map<string, BigNumber> variables, string command) {

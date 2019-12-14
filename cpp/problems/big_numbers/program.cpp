@@ -32,12 +32,13 @@ void Program::Loop() {
             cout << "=== Help Big Number =========================" << endl;
             cout << "  > help - shows help information" << endl;
             cout << "  > version - shows compiler version" << endl;
+            cout << "  > verbose - change verbose flag - current[off]" << endl;
             cout << "  > purge - clears all variables in the stack" << endl;
             cout << "  > exit - exit interpreter ; same as quit" << endl;
             cout << "  > quit - exit interpreter ; same as exit" << endl;
             cout << "=============================================" << endl;
         } else if (command == "version") {
-            cout << "1.13" << endl;
+            cout << "1.14" << endl;
         } else if (command == "purge") {
             Init();
         } else if (command == "exit" || command =="quit") {

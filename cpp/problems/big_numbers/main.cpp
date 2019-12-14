@@ -6,6 +6,8 @@
 #include "interpreter.cpp"
 #include "program.h"
 #include "program.cpp"
+#include "expressions.h"
+#include "expressions.cpp"
 using namespace std;
 
 int main(int argc, char *argv[]) {
