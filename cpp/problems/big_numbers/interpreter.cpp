@@ -54,6 +54,11 @@ void CommandInterpreter::Analyze() {
             command_type = FOR_INSTRUCTION;
             return;
         }
+        regex if_instruction("^[ ]*if[ ]*\\((.*)\\)[ ]*(.+)$");
+        if (regex_search(text, m, if_instruction)) {
+            command_type = IF_INSTRUCTION;
+            return;
+        }
         regex print_instruction("^[ ]*([0-9a-zA-Z]+)[ ]*$");
         if (regex_search(text, m, print_instruction)) {
             command_type = PRINT_COMMAND;
@@ -138,10 +143,13 @@ void CommandInterpreter::Execute(map<string, BigNumber> &variables) {
         AddNormalInstruction(variables, text, show_result, result);
     }
     if (command_type == FOR_INSTRUCTION) {
-        cout << "dealing with a for" << endl;
+        //cout << "dealing with a for" << endl;
         //regex for_instruction("");
         ForInstruction(variables, text);
         return;
+    }
+    if (command_type == IF_INSTRUCTION) {
+        IfInstruction(variables, text);
     }
     if (command_type == PRINT_COMMAND) {
         PrintCommand(variables, text);
@@ -266,6 +274,10 @@ void ForInstruction(map<string, BigNumber> &variables, string text) {
         _loop_var = _loop_var + _step_val;
         SetVariable(variables, loop_var, _loop_var);
     }
+}
+
+void IfInstruction(map<string, BigNumber> &variables, string text) {
+    cout << "dealing with an if" << endl;
 }
 
 void PrintCommand(map<string, BigNumber> variables, string command) {

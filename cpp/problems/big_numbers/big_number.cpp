@@ -4,7 +4,7 @@
 using namespace std;
 
 void running(void) {
-    cout << "\033[29;1mrunning\033[0m \033[35;1mBig Number ver 1.12\033[0m..." << endl;
+    cout << "\033[29;1mrunning\033[0m \033[35;1mBig Number ver 1.13\033[0m..." << endl;
 }
 
 BigNumber::BigNumber() : baza(BAZA_DEFAULT), _len(MAX_CIFRE) {
