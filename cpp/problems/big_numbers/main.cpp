@@ -10,7 +10,7 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
     if (argc == 2) {
-        cout << "interpret every command from the file" << endl;
+        cout << "interpret every command from the file: " << argv[1] << endl;
         return 0;
     } else if (argc > 2) {
         cout << "Usage: " << endl << "$ ./main                   lauches the interpreter" << endl << "$ ./main file.bn           executes file.bn in BigNumbers interpreter" << endl;

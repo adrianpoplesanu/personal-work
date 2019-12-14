@@ -264,6 +264,7 @@ void ForInstruction(map<string, BigNumber> &variables, string text) {
         commandInterpreter.Analyze();
         commandInterpreter.Execute(variables);
         _loop_var = _loop_var + _step_val;
+        SetVariable(variables, loop_var, _loop_var);
     }
 }
 

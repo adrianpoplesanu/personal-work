@@ -27,6 +27,7 @@ enum Command {
     NUMBER_REFERENCE,
     PRINT_COMMAND, // this might be the same as VARIABLE_REFERENCE, only with the twist of couting the variable
     FOR_INSTRUCTION,
+    IF_INSTRUCTION,
     ADD_NORMAL_INSTRUCTION,
     ADD_INVARIABLE_INSTRUCTION,
     LOAD_FROM_FILE,
