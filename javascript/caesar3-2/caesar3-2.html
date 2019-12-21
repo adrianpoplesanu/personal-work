@@ -42,6 +42,9 @@ canvas {
         <option value="veryfast">Very Fast</option>
     </select>
 </div>
+<div>
+    <button id="pause-button"><span id="pause-button-text">Pause</span></button>
+</div>
 TODOs<br>
 move scripts outside the html, have a js file<br>
 do the Global Offset stuff for map moving<br>
@@ -65,6 +68,7 @@ var globalOffsetY = 140;
 var globalOffsetMoveDirection = 0; // 1 - right; 2 - left; 3 - up; 4 - down
 var stepGlobalMoving = {x: 0, y: 0};
 var globalGameSpeed = 3; // merge si asa: 0x2; adica 0x3;
+var paused = false;
 
 var hoveredRomb = {x: -1, y: -1};
 var walkerClockSequence = 0;
@@ -513,6 +517,11 @@ function checkIfPointInsideTriangle(s, a, b, c) {
                     globalGameSpeed = 5;
                 break;
             }
+        });
+        $("#pause-button").on('click', function () {
+            paused = !paused;
+            if (paused) $("#pause-button-text").html('Unpause');
+            else $("#pause-button-text").html('Pause');
         });
     });
 </script>
