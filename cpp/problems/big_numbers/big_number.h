@@ -14,6 +14,7 @@ private:
     int cifre[1000];
     int baza;
     int _len;
+    bool sign; // false - positive; true - negative
 public:
     BigNumber();
     BigNumber(int);
@@ -30,6 +31,7 @@ public:
     void PrintNumber(void);
     void PrintLineNumber(void);
     BigNumber operator + (const BigNumber&);
+    BigNumber operator - (const BigNumber&);
     bool operator > (const BigNumber&);
     bool operator < (const BigNumber&);
     bool operator >= (const BigNumber&);

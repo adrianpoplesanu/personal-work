@@ -29,6 +29,8 @@ int main(int argc, char *argv[]) {
     //cout << " ... ok!" << endl;
     cout << (numar1 < numar2) << endl;
     cout << (numar2 < numar1) << endl;
+    cout << (numar1 > numar2) << endl;
+    cout << (numar2 > numar1) << endl;
 
     Program program;
     program.Loop();
