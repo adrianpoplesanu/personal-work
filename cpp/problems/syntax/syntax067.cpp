@@ -95,14 +95,14 @@ int evaluate (string tokens) {
 }
 
 int main() {
-    //cout << evaluate("10 + 2 * 6 + 1 - 23") << "\n";
-    //cout << evaluate("100 * 2 + 12") << "\n";
-    //cout << evaluate("100 * ( 2 - 12 )") << "\n"; // asta nu merge daca in paranteza pun inca o operatie
-    //cout << evaluate("100 * ( 2 + 12 + 14 ) / 14") << endl;
-    //cout << evaluate("2 * ( 1 + 1 + 2 ) / 2") << endl;
-    //cout << evaluate("1 + 1 + 1 + 1 - 3") << endl;
-    //cout << evaluate("2 * ( 1     +1+111 )") << endl;
-    //cout << evaluate("2 * ( 1     +1+111)") << endl;
+    cout << evaluate("10 + 2 * 6 + 1 - 23") << "\n";
+    cout << evaluate("100 * 2 + 12") << "\n";
+    cout << evaluate("100 * ( 2 - 12 )") << "\n"; // asta nu merge daca in paranteza pun inca o operatie
+    cout << evaluate("100 * ( 2 + 12 + 14 ) / 14") << endl;
+    cout << evaluate("2 * ( 1 + 1 + 2 ) / 2") << endl;
+    cout << evaluate("1 + 1 + 1 + 1 - 3") << endl;
+    cout << evaluate("2 * ( 1     +1+111 )") << endl;
+    cout << evaluate("2 * ( 1     +1+111)") << endl;
     cout << evaluate("1 + 2 + 3") << endl;
     cout << evaluate("1 + 2 * 3") << endl;
     cout << evaluate("2 * (1 + 2 + 3 )") << endl;
