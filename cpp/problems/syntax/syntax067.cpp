@@ -39,6 +39,7 @@ int evaluate (string tokens) {
                 val = (val*10) + (tokens[i]-'0');
                 i++; // asta e problema cu segmentation fault cand paranteza de inchidere nu are spatiu in fata ei
             }
+            i--; // this seems to fix the seg fault issue with parenthesis closing imediately after )
             values.push(val);
         }
 
@@ -100,6 +101,13 @@ int main() {
     //cout << evaluate("100 * ( 2 + 12 + 14 ) / 14") << endl;
     //cout << evaluate("2 * ( 1 + 1 + 2 ) / 2") << endl;
     //cout << evaluate("1 + 1 + 1 + 1 - 3") << endl;
-    cout << evaluate("2 * ( 1     +1+111 )") << endl;
+    //cout << evaluate("2 * ( 1     +1+111 )") << endl;
+    //cout << evaluate("2 * ( 1     +1+111)") << endl;
+    cout << evaluate("1 + 2 + 3") << endl;
+    cout << evaluate("1 + 2 * 3") << endl;
+    cout << evaluate("2 * (1 + 2 + 3 )") << endl;
+    cout << evaluate("2 * (1 + 1 + 111)") << endl;
+    cout << evaluate("2 * (1 + 1 + 111 )") << endl;
+    cout << evaluate("100 * ( 2 - 12 +8)/2+1") << endl;
     return 0;
 }
