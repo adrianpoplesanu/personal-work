@@ -169,6 +169,8 @@ function init() {
 }
 
 function update() {
+    if (paused)
+        return;
     //console.log("updating");
     //console.log(mouseX + " x " + mouseY);
     game.clear();
