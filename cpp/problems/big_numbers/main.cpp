@@ -31,6 +31,10 @@ int main(int argc, char *argv[]) {
     cout << (numar2 < numar1) << endl;
     cout << (numar1 > numar2) << endl;
     cout << (numar2 > numar1) << endl;
+    ++numar2;
+    numar2++;
+    numar2.PrintNumber();
+    cout << endl;
 
     Program program;
     program.Loop();

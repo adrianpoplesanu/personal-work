@@ -19,9 +19,11 @@ public:
     BigNumber();
     BigNumber(int);
     BigNumber(string);
+    BigNumber(const BigNumber&);
     ~BigNumber();
     void LoadFromInt(int);
     void LoadFromString(string);
+    void LoadFromNumber(BigNumber);
     void Add(BigNumber);
     void Substract(BigNumber);
     void Multiply(BigNumber);
@@ -36,7 +38,8 @@ public:
     bool operator < (const BigNumber&);
     bool operator >= (const BigNumber&);
     BigNumber operator * (const BigNumber&);
-    BigNumber operator ++(); // need to check if this is correct
+    BigNumber& operator ++(); // need to check if this is correct
+    BigNumber operator ++(int);
 };
 
 #endif

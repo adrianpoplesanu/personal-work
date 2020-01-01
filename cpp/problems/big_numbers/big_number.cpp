@@ -21,6 +21,12 @@ BigNumber::BigNumber(string s) : baza(BAZA_DEFAULT), _len(MAX_CIFRE) {
     LoadFromString(s);
 }
 
+BigNumber::BigNumber(BigNumber const &obj) : baza(BAZA_DEFAULT), _len(MAX_CIFRE) { // THIS IS NOT WORKING!!! WHY?
+    for (int i = 0; i < _len; i++) {
+        cifre[i] = obj.cifre[i];
+    }
+}
+
 BigNumber::~BigNumber() {
 
 }
@@ -45,6 +51,12 @@ void BigNumber::LoadFromString(string s) {
     }
     if (start < 0 && start > -size) { // if the string converter to BigNumber is one "digit"
         cifre[0] = stoi(s.substr(0, size + start));
+    }
+}
+
+void BigNumber::LoadFromNumber(BigNumber obj) {
+    for (int i = 0; i < _len; i++) {
+        cifre[i] = obj.cifre[i];
     }
 }
 
@@ -97,6 +109,20 @@ bool BigNumber::operator > (BigNumber const &obj) {
         }
     }
     return false;
+}
+
+BigNumber& BigNumber::operator ++() { // prefix
+    BigNumber increment;
+    increment.LoadFromString("1");
+    this->Add(increment);
+    return *this;
+}
+
+BigNumber BigNumber::operator ++(int) { // postfix
+    BigNumber temp(*this);
+    //temp.LoadFromNumber(*this);
+    ++(*this);
+    return temp;
 }
 
 void BigNumber::PrintNumber() {
