@@ -35,6 +35,8 @@ public:
     bool operator > (const BigNumber&);
     bool operator < (const BigNumber&);
     bool operator >= (const BigNumber&);
+    BigNumber operator * (const BigNumber&);
+    BigNumber operator ++(); // need to check if this is correct
 };
 
 #endif
