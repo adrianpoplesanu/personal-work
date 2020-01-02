@@ -27,7 +27,9 @@
 
 - (IBAction)SortButtonClicked:(id)sender {
     NSLog(@"Hello World!");
-    NSLog(@"%@", _InputField.text);
+    //NSLog(@"%@", _InputField.text);
+    NSString *data = _InputField.text;
+    NSLog(@"%lu", (unsigned long)data.length);
     //printf("%s", _InputField.text.cString);
 }
 
