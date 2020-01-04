@@ -7,3 +7,6 @@ all:
 	g++ main.o -o main
 clean:
 	find . -type f  ! -name "*.h" ! -name "*.cpp" ! -name "*.bn" ! -name "README.md" ! -name "Makefile" -delete
+test:
+	g++ big_number.cpp -c -o big_number.o
+	g++ aritmetic_evaluator_test.cpp -o aritmetic_evaluator_test
