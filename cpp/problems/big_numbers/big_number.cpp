@@ -93,6 +93,11 @@ BigNumber BigNumber::operator + (BigNumber const &obj) {
     return suma;
 }
 
+BigNumber BigNumber::operator - (BigNumber const &obj) {
+    BigNumber result;
+    return result;
+}
+
 BigNumber BigNumber::operator * (BigNumber const &obj) {
     BigNumber produs;
     BigNumber start;
