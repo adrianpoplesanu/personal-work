@@ -10,3 +10,6 @@ clean:
 test:
 	g++ big_number.cpp -c -o big_number.o
 	g++ aritmetic_evaluator_test.cpp -o aritmetic_evaluator_test
+test2:
+	g++ big_number.cpp -c -o big_number.o
+	g++ aritmetic_minus_test.cpp -o aritmetic_minus_test
