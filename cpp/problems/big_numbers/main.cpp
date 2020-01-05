@@ -36,6 +36,12 @@ int main(int argc, char *argv[]) {
     numar2.PrintNumber();
     cout << endl;
 
+    BigNumber numar4, numar5, numar6;
+    numar4.LoadFromString("3");
+    numar5.LoadFromString("5");
+    numar6 = numar4 * numar5;
+    numar6.PrintLineNumber();
+
     Program program;
     program.Loop();
     return 0;
