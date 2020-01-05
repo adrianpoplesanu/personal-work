@@ -4,7 +4,7 @@ regex
 ^[ ]*if[ ]*\((.*)\)[ ]*(.+)$
 
 test string
-   if    (    a == b    )       instructio3; instr2; instr3;     
+   if    (    a == b    )       instructio3; instr2; instr3;
 
 regex
 \S*
@@ -28,7 +28,7 @@ regex
 \(*(.*)(and|or)(.*)\)*
 
 test string
-a and b > 10) or (c :: 0)) 
+a and b > 10) or (c :: 0))
 
 regex
 \(*(.*)(and|or)(.*)\)*
@@ -40,4 +40,4 @@ regex
 \(*(.*)(and|or)(.*)\)*
 
 test string
- b > 10)  
+ b > 10)
