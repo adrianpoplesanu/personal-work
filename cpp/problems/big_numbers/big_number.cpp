@@ -7,21 +7,21 @@ void running(void) {
     cout << "\033[29;1mrunning\033[0m \033[35;1mBig Number ver 1.15\033[0m..." << endl;
 }
 
-BigNumber::BigNumber() : baza(BAZA_DEFAULT), _len(MAX_CIFRE) {
+BigNumber::BigNumber() : baza(BAZA_DEFAULT), _len(MAX_CIFRE), sign(false) {
     for (int i = 0; i < _len; i++) {
         cifre[i] = 0;
     }
 }
 
-BigNumber::BigNumber(int n) : baza(BAZA_DEFAULT), _len(MAX_CIFRE) {
+BigNumber::BigNumber(int n) : baza(BAZA_DEFAULT), _len(MAX_CIFRE), sign(false) {
     LoadFromInt(n);
 }
 
-BigNumber::BigNumber(string s) : baza(BAZA_DEFAULT), _len(MAX_CIFRE) {
+BigNumber::BigNumber(string s) : baza(BAZA_DEFAULT), _len(MAX_CIFRE), sign(false) {
     LoadFromString(s);
 }
 
-BigNumber::BigNumber(BigNumber const &obj) : baza(BAZA_DEFAULT), _len(MAX_CIFRE) { // THIS IS NOT WORKING!!! WHY?
+BigNumber::BigNumber(BigNumber const &obj) : baza(BAZA_DEFAULT), _len(MAX_CIFRE), sign(false) {
     for (int i = 0; i < _len; i++) {
         cifre[i] = obj.cifre[i];
     }
