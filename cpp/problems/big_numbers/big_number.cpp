@@ -93,6 +93,16 @@ BigNumber BigNumber::operator + (BigNumber const &obj) {
     return suma;
 }
 
+BigNumber BigNumber::operator * (BigNumber const &obj) {
+    BigNumber produs;
+    BigNumber start;
+    while (start < obj) {
+        produs = produs + *this;
+        start++;
+    }
+    return produs;
+}
+
 bool BigNumber::operator < (BigNumber const &obj) {
     for (int i = _len - 1; i >= 0; i--) {
         if (obj.cifre[i] > cifre[i]) {
