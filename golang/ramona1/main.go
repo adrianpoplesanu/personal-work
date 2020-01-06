@@ -14,8 +14,8 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
     r.ParseMultipartForm(50 << 20)
     file, handler, err := r.FormFile("file")
     if err != nil {
-	log.Println("Error retrieving file")
-	log.Println(err)
+	    log.Println("Error retrieving file")
+	    log.Println(err)
         return
     }
     defer file.Close()
@@ -26,13 +26,13 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 
     tempFile, err := ioutil.TempFile(os.Getenv("APP_HOME") + "/temp-images", "upload-*.jpg")
     if err != nil {
-	log.Println(err)
+	    log.Println(err)
     }
     defer tempFile.Close()
 
     fileBytes, err := ioutil.ReadAll(file)
     if err != nil {
-	log.Println(err)
+	    log.Println(err)
     }
 
     tempFile.Write(fileBytes)
@@ -41,7 +41,7 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
     out, err := exec.Command("python3", os.Getenv("APP_HOME") + "/analyzer.py", tempFile.Name()).Output()
     if err != nil {
         w.Write([]byte(`"status": "error", "message": "Check server console output"`))
-	log.Println(err)
+	    log.Println(err)
         return
     }
     log.Println("Successfully uploaded file ", handler.Filename)
