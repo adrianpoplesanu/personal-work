@@ -21,6 +21,7 @@ body {
     var context = canvas.getContext("2d");
 
     var tabla = [];
+    var tries = 0;
     var maxTries = 36;
     // red ; green ; blue ; yellow ; orange ; purple
 
@@ -83,6 +84,12 @@ body {
         }
     }
 
+    function check_solved() {
+        for (i = 0; i < 20; i++)
+            for (j = 0; j < 20; j++) if (tabla[i][j] != tabla[0][0]) return false;
+        return true;
+    }
+
     function update() {
         clear();
         drawTabla();
@@ -100,8 +107,17 @@ body {
 
     function change_color(color) {
         var current = tabla[0][0];
+        if (check_solved()) return;
+        if (color == current) return;
         walk_cell(0, 0, current, color);
         drawTabla();
+        tries++;
+        if (check_solved()) {
+            context.font = "30px Comic Sans MS";
+            context.fillStyle = "white";
+            context.textAlign = "center";
+            context.fillText("Finished in " + tries + " clicks", canvas.width/2, canvas.height/2);
+        }
     }
 
     function walk_cell(x, y, current, target) {
