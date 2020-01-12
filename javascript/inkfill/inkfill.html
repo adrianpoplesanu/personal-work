@@ -21,7 +21,14 @@ body {
     var context = canvas.getContext("2d");
 
     var tabla = [];
+    var maxTries = 36;
     // red ; green ; blue ; yellow ; orange ; purple
+
+    canvas.addEventListener('click', function(event) {
+        var x, y;
+        x = event.clientX;
+        y = event.clientY;
+    }, false);
 
     function drawRectangle(x, y, sizex, sizey, colour) {
         // ...
@@ -35,8 +42,33 @@ body {
         drawRectangle(0, 0, 800, 600, "#001122");
     }
 
+    function drawTabla() {
+        var i, j;
+        for (i = 0; i < 20; i++) {
+            for (j = 0; j < 20; j++) {
+                var color;
+                switch(tabla[i][j]) {
+                    case 0: color = "red";
+                    break;
+                    case 1: color = "green";
+                    break;
+                    case 2: color = "blue";
+                    break;
+                    case 3: color = "yellow";
+                    break;
+                    case 4: color = "orange";
+                    break;
+                    case 5: color = "purple";
+                    break;
+                }
+                drawRectangle(i * 10, j * 10, 10, 10, color);
+            }
+        }
+    }
+
     function update() {
         clear();
+        drawTabla();
     }
 
     function create_tabla() {
