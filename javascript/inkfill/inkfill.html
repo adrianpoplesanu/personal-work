@@ -1,0 +1,46 @@
+<html>
+<head>
+    <title>Inkfill</title>
+<style>
+body {
+    background-color:#000000;
+    color:white;
+}
+</style>
+</head>
+<body>
+    <div>
+        <canvas id="canvas" height="600" width="800"></canvas>
+    </div>
+    <div>
+        Copyright(c) Adrianus per Scorillo.
+    </div>
+<script>
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext("2d");
+
+    function drawRectangle(x, y, sizex, sizey, colour) {
+        // ...
+        context.beginPath();
+        context.fillStyle = colour;
+        context.rect(x, y, sizex, sizey);
+        context.fill();
+    }
+
+    function clear() {
+        //style="background-color: #001122"
+        drawRectangle(0, 0, 800, 600, "#001122");
+    }
+
+    function update() {
+        clear();
+    }
+
+    function init() {
+        update();
+    }
+
+    init();
+</script>
+</body>
+</html>
