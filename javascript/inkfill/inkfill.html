@@ -29,12 +29,12 @@ body {
         x = event.clientX;
         y = event.clientY;
         if (x > 650 && x < 750) {
-            if (y > 100 && y < 150) console.log("do red");
-            if (y > 160 && y < 210) console.log("do green");
-            if (y > 220 && y < 270) console.log("do blue");
-            if (y > 280 && y < 330) console.log("do yellow");
-            if (y > 340 && y < 390) console.log("do orange");
-            if (y > 400 && y < 450) console.log("do purple");
+            if (y > 100 && y < 150) change_color(0); //console.log("do red");
+            if (y > 160 && y < 210) change_color(1); //console.log("do green");
+            if (y > 220 && y < 270) change_color(2); //console.log("do blue");
+            if (y > 280 && y < 330) change_color(3); //console.log("do yellow");
+            if (y > 340 && y < 390) change_color(4); //console.log("do orange");
+            if (y > 400 && y < 450) change_color(5); //console.log("do purple");
         }
     }, false);
 
@@ -95,6 +95,23 @@ body {
         for (i = 0; i < tabla.length; i++) {
             tabla[i] = new Array(20);
             for (j = 0; j < tabla[i].length; j++) tabla[i][j] = Math.floor(Math.random() * 6);
+        }
+    }
+
+    function change_color(color) {
+        var current = tabla[0][0];
+        walk_cell(0, 0, current, color);
+        drawTabla();
+    }
+
+    function walk_cell(x, y, current, target) {
+        if (x < 0 || x > 19 || y < 0 || y > 19) return;
+        if (tabla[x][y] == current) {
+            tabla[x][y] = target;
+            walk_cell(x + 1, y, current, target);
+            walk_cell(x - 1, y, current, target);
+            walk_cell(x, y + 1, current, target);
+            walk_cell(x, y - 1, current, target);
         }
     }
 
