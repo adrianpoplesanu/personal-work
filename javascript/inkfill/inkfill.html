@@ -28,6 +28,14 @@ body {
         var x, y;
         x = event.clientX;
         y = event.clientY;
+        if (x > 650 && x < 750) {
+            if (y > 100 && y < 150) console.log("do red");
+            if (y > 160 && y < 210) console.log("do green");
+            if (y > 220 && y < 270) console.log("do blue");
+            if (y > 280 && y < 330) console.log("do yellow");
+            if (y > 340 && y < 390) console.log("do orange");
+            if (y > 400 && y < 450) console.log("do purple");
+        }
     }, false);
 
     function drawRectangle(x, y, sizex, sizey, colour) {
@@ -40,6 +48,15 @@ body {
 
     function clear() {
         drawRectangle(0, 0, 800, 600, "#001122");
+    }
+
+    function drawMenu() {
+        drawRectangle(650, 100, 100, 50, "red");
+        drawRectangle(650, 160, 100, 50, "green");
+        drawRectangle(650, 220, 100, 50, "blue");
+        drawRectangle(650, 280, 100, 50, "yellow");
+        drawRectangle(650, 340, 100, 50, "orange");
+        drawRectangle(650, 400, 100, 50, "purple");
     }
 
     function drawTabla() {
@@ -61,7 +78,7 @@ body {
                     case 5: color = "purple";
                     break;
                 }
-                drawRectangle(i * 10, j * 10, 10, 10, color);
+                drawRectangle(i * 15, j * 15, 15, 15, color);
             }
         }
     }
@@ -69,6 +86,7 @@ body {
     function update() {
         clear();
         drawTabla();
+        drawMenu();
     }
 
     function create_tabla() {
