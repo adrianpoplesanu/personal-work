@@ -5,6 +5,7 @@
 body {
     background-color:#000000;
     color:white;
+    font-family:Courier;
 }
 </style>
 </head>
@@ -19,6 +20,9 @@ body {
     var canvas = document.getElementById("canvas");
     var context = canvas.getContext("2d");
 
+    var tabla = [];
+    // red ; green ; blue ; yellow ; orange ; purple
+
     function drawRectangle(x, y, sizex, sizey, colour) {
         // ...
         context.beginPath();
@@ -28,7 +32,6 @@ body {
     }
 
     function clear() {
-        //style="background-color: #001122"
         drawRectangle(0, 0, 800, 600, "#001122");
     }
 
@@ -36,11 +39,22 @@ body {
         clear();
     }
 
-    function init() {
+    function create_tabla() {
+        tabla = new Array(20);
+        var i, j;
+        for (i = 0; i < tabla.length; i++) {
+            tabla[i] = new Array(20);
+            for (j = 0; j < tabla[i].length; j++) tabla[i][j] = Math.floor(Math.random() * 6);
+        }
+    }
+
+    function start_loop() {
+        create_tabla();
+        console.log(tabla);
         update();
     }
 
-    init();
+    start_loop();
 </script>
 </body>
 </html>
