@@ -1,6 +1,7 @@
 <html>
 <head>
     <title>Visual sorting</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <style>
     body {
         background-color: #000000;
@@ -9,7 +10,7 @@
 </head>
 <body>
     <div>
-        <input type="input" id="numbers" />
+        <input type="input" id="numbers" width="80"/>
         <input type="button" id="sort-button" value="sort numbers" />
     </div>
     <div>
@@ -19,12 +20,19 @@
     console.log("running...");
     var canvas = document.getElementById("canvas");
     var context = canvas.getContext("2d");
-    function aaa() {
+    function read_array() {
 
     }
     function clear() {
 
     }
+$(document).ready(function () {
+    console.log("loaded");
+    $("#sort-button").on('click', function () {
+        console.log("sort button clicked");
+    });
+});
 </script>
+
 </body>
 </html>
