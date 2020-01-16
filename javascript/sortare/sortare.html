@@ -10,7 +10,8 @@
 </head>
 <body>
     <div>
-        <input type="input" id="numbers" width="80"/>
+        <input type="input" id="numbers" width="80" value="9 3 8 6" />
+        <input type="button" id="load-numbers" value="load numbers" />
         <input type="button" id="sort-button" value="sort numbers" />
     </div>
     <div>
@@ -28,8 +29,11 @@
     }
 $(document).ready(function () {
     console.log("loaded");
+    $("#load-numbers").on('click', function () {
+        console.log($("#numbers").val());
+    });
     $("#sort-button").on('click', function () {
-        console.log("sort button clicked");
+        console.log($("#numbers").val());
     });
 });
 </script>
