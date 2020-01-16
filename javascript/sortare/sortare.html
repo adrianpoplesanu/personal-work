@@ -10,7 +10,7 @@
 </head>
 <body>
     <div>
-        <input type="input" id="numbers" width="80" value="9 3 8 6" />
+        <textarea id="numbers" cols="50" rows="6">9 3 8 70 6 3 2 101</textarea>
         <input type="button" id="load-numbers" value="load numbers" />
         <input type="button" id="sort-button" value="sort numbers" />
     </div>
@@ -22,30 +22,147 @@
     var canvas = document.getElementById("canvas");
     var context = canvas.getContext("2d");
 
-    var numbers;
+    var numbers = [];
+    var nr1, nr2, pos1, pos2, target1, target2, dy = 0, dx = 0, inposition1 = false, inposition2 = false, inposition3 = false;
+    var store_i = 0, store_j, sorted = true;
 
-    function show_array(text) {
+    function drawRectangle(x, y, sizex, sizey, colour) {
+        // ...
+        context.beginPath();
+        context.fillStyle = colour;
+        context.rect(x, y, sizex, sizey);
+        context.fill();
+    }
+
+    function draw_number(i, y, n, color) {
+        if (i == nr1) {
+            drawRectangle(pos1, y, 40, 40, color);
+            context.font = "18px Comic Sans MS";
+            context.fillStyle = "white";
+            context.fillText(n, 11 + pos1, 25 + y);
+        } else if (i == nr2) {
+            drawRectangle(pos2, y, 40, 40, color);
+            context.font = "18px Comic Sans MS";
+            context.fillStyle = "white";
+            context.fillText(n, 11 + pos2, 25 + y);
+        } else {
+            drawRectangle(10 + i * 60, y, 40, 40, color);
+            context.font = "18px Comic Sans MS";
+            context.fillStyle = "white";
+            context.fillText(n, 21 + i * 60, 25 + y);
+        }
+    }
+
+    function show_array() {
+        var i ;
+        for (i = 0; i < numbers.length; i++) {
+            if (i == nr1) {
+                draw_number(i, 60 - dy, numbers[i], "red");
+            } else
+            if (i == nr2) {
+                draw_number(i, 60 + dy, numbers[i], "red");
+            } else
+                if (i < store_i)
+                    draw_number(i, 60, numbers[i], "green");
+                else
+                    draw_number(i, 60, numbers[i], "blue");
+        }
+    }
+
+    function read_array(text) {
         numbers = text.split(" ");
         var i;
         for (i = 0; i < numbers.length; i++) numbers[i] = parseInt(numbers[i], 10);
-        console.log(numbers);
     }
-    function read_array() {
 
+    function update() {
+        clear();
+        if (nr1 !== undefined && nr2 !== undefined) {
+            if (!inposition1) {
+                dy += 10;
+                if (dy == 50) inposition1 = true;
+            } else {
+                if (!inposition2) {
+                    if (pos1 < target1) pos1 += 10;
+                    if (pos2 > target2) pos2 -= 10;
+                    if (pos1 == target1 && pos2 == target2) inposition2 = true;
+                } else {
+                    if (!inposition3) {
+                        dy -= 10;
+                        if (dy == 0) inposition3 = true;
+                    } else {
+                        dy = 0;
+                        dx = 0;
+                        inposition1 = false;
+                        inposition2 = false;
+                        inposition3 = false;
+                        var tmp = numbers[nr1];
+                        numbers[nr1] = numbers[nr2];
+                        numbers[nr2] = tmp;
+                        nr1 = undefined;
+                        nr2 = undefined;
+                        if (!sorted)
+                            sort_array();
+                    }
+                }
+            }
+        }
+        show_array();
     }
+
+    function sort_array() {
+        if (nr1 != undefined && nr2 != undefined) return;
+        var i, j;
+        for (i = store_i; i < numbers.length; i++) {
+            for (j = i + 1; j < numbers.length; j++) {
+                if (numbers[i] > numbers[j]) {
+                    store_i = i;
+                    switch_numbers(i, j);
+                    return;
+                }
+            }
+        }
+        sorted = true;
+        store_i = numbers.length;
+    }
+
+    function switch_numbers(i, j) {
+        dy = 0;
+        dx = 0;
+        inposition1 = false;
+        inposition2 = false;
+        inposition3 = false;
+        nr1 = i;
+        nr2 = j;
+        pos1 = 10 + i * 60;
+        pos2 = 10 + j * 60;
+        target1 = 10 + j * 60;
+        target2 = 10 + i * 60;
+    }
+
     function clear() {
-
+        drawRectangle(0, 0, 800, 600, "#011111");
     }
-$(document).ready(function () {
-    console.log("loaded");
-    $("#load-numbers").on('click', function () {
-        //console.log($("#numbers").val());
-        show_array($("#numbers").val());
+
+    function init() {
+        setInterval(update, 1000/30);
+    }
+
+    init();
+
+    $(document).ready(function () {
+        console.log("loaded");
+        $("#load-numbers").on('click', function () {
+            store_i = 0;
+            read_array($("#numbers").val());
+            show_array();
+        });
+        $("#sort-button").on('click', function () {
+            store_i = 0;
+            sorted = false;
+            sort_array();
+        });
     });
-    $("#sort-button").on('click', function () {
-        console.log($("#numbers").val());
-    });
-});
 </script>
 
 </body>
