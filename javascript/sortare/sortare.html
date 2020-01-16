@@ -21,6 +21,15 @@
     console.log("running...");
     var canvas = document.getElementById("canvas");
     var context = canvas.getContext("2d");
+
+    var numbers;
+
+    function show_array(text) {
+        numbers = text.split(" ");
+        var i;
+        for (i = 0; i < numbers.length; i++) numbers[i] = parseInt(numbers[i], 10);
+        console.log(numbers);
+    }
     function read_array() {
 
     }
@@ -30,7 +39,8 @@
 $(document).ready(function () {
     console.log("loaded");
     $("#load-numbers").on('click', function () {
-        console.log($("#numbers").val());
+        //console.log($("#numbers").val());
+        show_array($("#numbers").val());
     });
     $("#sort-button").on('click', function () {
         console.log($("#numbers").val());
