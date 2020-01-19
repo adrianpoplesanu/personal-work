@@ -27,12 +27,17 @@
 @interface NuclearPowerPlant : PowerPlant {
 
 }
+@property (assign) int total_cores;
+- (void) DisplayNumberOfCores;
 @end
 
 @implementation NuclearPowerPlant
 - (id) init {
     self = [super init];
     return self;
+}
+- (void) DisplayNumberOfCores {
+    NSLog(@"%d", _total_cores);
 }
 @end
 
@@ -69,5 +74,8 @@ int main(int argc, char *argv[]) {
     [powerplant IncreaseMegaWatts : 700];
     message = [powerplant ShowMegaWatts];
     NSLog(@"%@", message);
+    NuclearPowerPlant *nuclearpowerplant = [[NuclearPowerPlant alloc] init];
+    nuclearpowerplant.total_cores = 2;
+    [nuclearpowerplant DisplayNumberOfCores];
     return 0;
 }
