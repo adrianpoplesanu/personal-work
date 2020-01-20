@@ -6,5 +6,7 @@ int main(int argc, char *argv[]) {
     PowerPlant *powerplant = [[PowerPlant alloc] init];
     powerplant.name = @"Centrala Nucleara de la Cernavoda";
     [powerplant LogName];
+    int reactor_num = [powerplant GetNumberOfReactors];
+    NSLog(@"%d", reactor_num);
     return 0;
 }

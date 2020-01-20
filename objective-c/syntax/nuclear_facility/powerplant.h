@@ -2,12 +2,13 @@
 #include "reactor.h"
 
 @interface PowerPlant : NSObject {
-    //@private;
-    //Reactor[] reactors;
-    //int reactor_numbers;
+    @private;
+    Reactor *reactor; // this needs to be an array
+    int total_reactors;
 }
 @property (assign) int reactorNumbers;
 @property (assign) NSString *name;
 @property (assign) NSString *address;
 - (void) LogName;
+- (int) GetNumberOfReactors;
 @end
