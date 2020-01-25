@@ -7,7 +7,9 @@
 - (id) init {
     self = [super init];
     total_reactors = 1;
-    reactor = [[Reactor alloc] init];
+    for (int i = 0; i < total_reactors; i++) {
+        reactor[i] = [[Reactor alloc] init];
+    }
     return self;
 }
 - (void) LogName {
