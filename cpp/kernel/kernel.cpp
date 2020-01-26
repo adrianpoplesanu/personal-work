@@ -1,5 +1,6 @@
 #include "types.h"
 #include "gdt.h"
+#include "interrupts.h"
 
 void printf(char* str) {
     static uint16_t* VideoMemory = (uint16_t*)0xb8000;
@@ -41,10 +42,18 @@ extern "C" void callConstructors() {
 }
 
 extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot_magic*/) {
-    printf("running Obstacle1 v0.2.4...\n");
-    printf("line 2");
+    printf("running Obstacle1 v0.3.1...\n");
+    //printf("line 2");
 
+    printf("declaring gdt...\n");
     GlobalDescriptorTable gdt;
+    printf("declaring interupt manager...\n");
+    InterruptManager interrupts(&gdt);
+
+    printf("activating interrupts\n");
+    interrupts.Activate();
+    printf("entering OS loop\n");
+    printf("interrupts not working yet!!!\n");
 
     while(1);
 }
