@@ -1,5 +1,5 @@
-//: Playground - noun: a place where people can play
+// Adrian test1 with Swift
 
 import UIKit
 
-var str = "Hello, playground"
+print("buna dimineata!")
