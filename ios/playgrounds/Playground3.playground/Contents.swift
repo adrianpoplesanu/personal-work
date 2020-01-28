@@ -11,3 +11,17 @@ func changeName(for name: inout String) {
 print(name)
 changeName(for: &name)
 print(name)
+
+
+var a = 5
+var b = 7
+
+func swap(number a: inout Int, with b: inout Int) {
+    let c = a
+    a = b
+    b = c
+}
+
+print(a, b)
+swap(number: &a, with: &b)
+print(a, b)
