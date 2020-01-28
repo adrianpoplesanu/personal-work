@@ -1,0 +1,40 @@
+<html>
+<head>
+    <title>Mario clone v1</title>
+</head>
+<body>
+    <canvas id="canvas" width="800" height="600"></canvas>
+<script>
+console.log("running a mario clone...");
+
+var canvas = document.getElementById("canvas");
+var context = canvas.getContext("2d");
+var width = canvas.width;
+var height = canvas.height;
+
+function init() {
+    console.log("initiating...");
+}
+
+function drawRectangle(x, y, sizex, sizey, colour) {
+    context.beginPath();
+    context.fillStyle = colour;
+    context.rect(x, y, sizex, sizey);
+    context.fill();
+}
+
+function clear() {
+    drawRectangle(0, 0, 800, 600, "#001122");
+}
+
+function update() {
+    clear();
+}
+
+window.onload = function () {
+    init();
+    setInterval(update, 1000/60);
+}
+</script>
+</body>
+</html
