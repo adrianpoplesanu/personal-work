@@ -12,11 +12,14 @@
 
 @end
 
-@implementation ViewController
+@implementation ViewController {
+    NSArray *sweet_dogs;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    sweet_dogs = [NSArray arrayWithObjects: @"Dexiciul", @"Lunitza", @"Sashic", nil];
 }
 
 
@@ -25,5 +28,21 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (NSInteger) tableView:(UITableView *) tableView numberOfRowsInSection:(NSInteger)section {
+    return [sweet_dogs count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *simpleTableIdentifier = @"SimpleTableCell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier: simpleTableIdentifier];
+    }
+    
+    cell.textLabel.text = [sweet_dogs objectAtIndex:indexPath.row];
+    return cell;
+}
 
 @end
