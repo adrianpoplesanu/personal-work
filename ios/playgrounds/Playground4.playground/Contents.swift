@@ -2,6 +2,7 @@
 
 import UIKit
 
+print("forced unwrapping")
 let str = "5"
 let num = Int(str)
 let num2 = 7
