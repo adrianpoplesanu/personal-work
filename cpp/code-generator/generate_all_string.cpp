@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-void BK(char code[10], int level) {
+void BK(char code[10], int level, int max) {
     if (level > 2) return;
     if (level == 2) {
         for (int i = 0; i < 2; i++) cout << code[i];
@@ -21,6 +21,6 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < 3; i++) code[i] = 31;
 
     cout << "n = 3"; n = 3;
-    BK(code, 0);
+    BK(code, 0, n);
     return 0;
 }
