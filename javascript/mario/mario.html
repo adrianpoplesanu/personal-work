@@ -12,8 +12,27 @@ var context = canvas.getContext("2d");
 var width = canvas.width;
 var height = canvas.height;
 
+var personaje = [];
+
+function Game() {
+    this.maxx = 30;
+    this.maxy = 20;
+    //this.tabla = [];
+    //for ()
+}
+
+function Personaj(color) {
+    this.color = color;
+}
+
+Personaj.prototype.draw = function() {
+    drawRectangle(100, 100, 20, 20, this.color);
+}
+
 function init() {
     console.log("initiating...");
+    var p = new Personaj("blue");
+    personaje.push(p);
 }
 
 function drawRectangle(x, y, sizex, sizey, colour) {
@@ -23,12 +42,18 @@ function drawRectangle(x, y, sizex, sizey, colour) {
     context.fill();
 }
 
+function drawPersonaje() {
+    var i;
+    for (i = 0; i < personaje.length; i++) personaje[i].draw();
+}
+
 function clear() {
     drawRectangle(0, 0, 800, 600, "#001122");
 }
 
 function update() {
     clear();
+    drawPersonaje();
 }
 
 window.onload = function () {
