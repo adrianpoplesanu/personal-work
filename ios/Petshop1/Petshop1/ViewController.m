@@ -14,12 +14,14 @@
 
 @implementation ViewController {
     NSArray *sweet_dogs;
+    NSArray *sweet_dogs_image;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    sweet_dogs = [NSArray arrayWithObjects: @"Dexiciul", @"Lunitza", @"Sashic", nil];
+    sweet_dogs = [NSArray arrayWithObjects: @"Dexiciul", @"Lunitza", @"Sashic", @"Servetel", nil];
+    sweet_dogs_image = [NSArray arrayWithObjects: @"dexiciul.jpg", @"lunitza.jpg", @"sashic.jpg", @"servetel.jpg", nil];
 }
 
 
@@ -32,6 +34,10 @@
     return [sweet_dogs count];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 100;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *simpleTableIdentifier = @"SimpleTableCell";
     
@@ -42,6 +48,8 @@
     }
     
     cell.textLabel.text = [sweet_dogs objectAtIndex:indexPath.row];
+    //cell.imageView.frame = CGRectMake(0, 0, 84, 84);
+    cell.imageView.image = [UIImage imageNamed:[sweet_dogs_image objectAtIndex:indexPath.row]];
     return cell;
 }
 

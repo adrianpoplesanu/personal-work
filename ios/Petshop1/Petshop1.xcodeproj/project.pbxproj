@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E14F8DC223F166FB009556D0 /* dexiciul.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E14F8DC123F166FB009556D0 /* dexiciul.jpg */; };
+		E14F8DC423F172BB009556D0 /* lunitza.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E14F8DC323F172BB009556D0 /* lunitza.jpg */; };
+		E14F8DC623F172CD009556D0 /* sashic.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E14F8DC523F172CD009556D0 /* sashic.jpg */; };
+		E14F8DCA23F19379009556D0 /* servetel.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E14F8DC923F19379009556D0 /* servetel.jpg */; };
 		E14FAEE823E068EC002C25B4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E14FAEE723E068EC002C25B4 /* main.m */; };
 		E14FAEEB23E068EC002C25B4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E14FAEEA23E068EC002C25B4 /* AppDelegate.m */; };
 		E14FAEEE23E068EC002C25B4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E14FAEED23E068EC002C25B4 /* ViewController.m */; };
@@ -35,6 +39,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E14F8DC123F166FB009556D0 /* dexiciul.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = dexiciul.jpg; sourceTree = "<group>"; };
+		E14F8DC323F172BB009556D0 /* lunitza.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = lunitza.jpg; sourceTree = "<group>"; };
+		E14F8DC523F172CD009556D0 /* sashic.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sashic.jpg; sourceTree = "<group>"; };
+		E14F8DC923F19379009556D0 /* servetel.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = servetel.jpg; path = ../servetel.jpg; sourceTree = "<group>"; };
 		E14FAEE323E068EC002C25B4 /* Petshop1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Petshop1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E14FAEE723E068EC002C25B4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E14FAEE923E068EC002C25B4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -101,11 +109,15 @@
 		E14FAEE523E068EC002C25B4 /* Petshop1 */ = {
 			isa = PBXGroup;
 			children = (
+				E14F8DC123F166FB009556D0 /* dexiciul.jpg */,
+				E14F8DC923F19379009556D0 /* servetel.jpg */,
 				E14FAEE923E068EC002C25B4 /* AppDelegate.h */,
 				E14FAEEA23E068EC002C25B4 /* AppDelegate.m */,
 				E14FAEEC23E068EC002C25B4 /* ViewController.h */,
 				E14FAEED23E068EC002C25B4 /* ViewController.m */,
 				E14FAEEF23E068EC002C25B4 /* Main.storyboard */,
+				E14F8DC523F172CD009556D0 /* sashic.jpg */,
+				E14F8DC323F172BB009556D0 /* lunitza.jpg */,
 				E14FAEF223E068EC002C25B4 /* Assets.xcassets */,
 				E14FAEF423E068EC002C25B4 /* LaunchScreen.storyboard */,
 				E14FAEF723E068EC002C25B4 /* Info.plist */,
@@ -246,8 +258,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E14F8DCA23F19379009556D0 /* servetel.jpg in Resources */,
+				E14F8DC623F172CD009556D0 /* sashic.jpg in Resources */,
 				E14FAEF623E068EC002C25B4 /* LaunchScreen.storyboard in Resources */,
 				E14FAEF323E068EC002C25B4 /* Assets.xcassets in Resources */,
+				E14F8DC223F166FB009556D0 /* dexiciul.jpg in Resources */,
+				E14F8DC423F172BB009556D0 /* lunitza.jpg in Resources */,
 				E14FAEF123E068EC002C25B4 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -507,6 +523,7 @@
 				E14FAF1223E068EC002C25B4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E14FAF1323E068EC002C25B4 /* Build configuration list for PBXNativeTarget "Petshop1Tests" */ = {
 			isa = XCConfigurationList;
@@ -515,6 +532,7 @@
 				E14FAF1523E068EC002C25B4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E14FAF1623E068EC002C25B4 /* Build configuration list for PBXNativeTarget "Petshop1UITests" */ = {
 			isa = XCConfigurationList;
@@ -523,6 +541,7 @@
 				E14FAF1823E068EC002C25B4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
