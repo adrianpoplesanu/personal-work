@@ -12,13 +12,44 @@ var context = canvas.getContext("2d");
 var width = canvas.width;
 var height = canvas.height;
 
+var game;
 var personaje = [];
 
 function Game() {
     this.maxx = 30;
-    this.maxy = 20;
-    //this.tabla = [];
-    //for ()
+    this.maxy = 10;
+    this.tabla = [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    ];
+}
+
+Game.prototype.drawPersonaje = function () {
+    var i;
+    for (i = 0; i < personaje.length; i++) personaje[i].draw();
+}
+
+Game.prototype.drawTabla = function () {
+    var i, j;
+    for (i = 0; i < this.maxx; i++) {
+        for (j = 0; j < this.maxy; j++) {
+            var color;
+            if (this.tabla[j][i] == 0) {
+                color = (i + j) % 2 == 0 ? "gray" : "lightgray" ;
+            } else {
+                color = "#11cb33";
+            }
+            drawRectangle(i * 20, j * 20, 20, 20, color);
+        }
+    }
 }
 
 function Personaj(color) {
@@ -26,11 +57,12 @@ function Personaj(color) {
 }
 
 Personaj.prototype.draw = function() {
-    drawRectangle(100, 100, 20, 20, this.color);
+    drawRectangle(100, 60, 20, 20, this.color);
 }
 
 function init() {
     console.log("initiating...");
+    game = new Game();
     var p = new Personaj("blue");
     personaje.push(p);
 }
@@ -42,10 +74,10 @@ function drawRectangle(x, y, sizex, sizey, colour) {
     context.fill();
 }
 
-function drawPersonaje() {
+/*function drawPersonaje() {
     var i;
     for (i = 0; i < personaje.length; i++) personaje[i].draw();
-}
+}*/
 
 function clear() {
     drawRectangle(0, 0, 800, 600, "#001122");
@@ -53,7 +85,8 @@ function clear() {
 
 function update() {
     clear();
-    drawPersonaje();
+    game.drawTabla();
+    game.drawPersonaje();
 }
 
 window.onload = function () {
