@@ -1,0 +1,121 @@
+<html>
+<head>
+    <title>Mario clone v1</title>
+</head>
+<body>
+    <canvas id="canvas" width="800" height="600"></canvas>
+<script>
+console.log("running a mario clone...");
+
+var canvas = document.getElementById("canvas");
+var context = canvas.getContext("2d");
+var width = canvas.width;
+var height = canvas.height;
+
+var game;
+var personaje = [];
+
+function Game() {
+    this.maxx = 30;
+    this.maxy = 10;
+    this.tabla = [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    ];
+}
+
+Game.prototype.drawPersonaje = function () {
+    var i;
+    for (i = 0; i < personaje.length; i++) personaje[i].draw();
+}
+
+Game.prototype.applyGravity = function () {
+    var i;
+    for (i = 0; i < personaje.length; i++) personaje[i].applyGravity();
+}
+
+Game.prototype.drawTabla = function () {
+    var i, j;
+    for (i = 0; i < this.maxx; i++) {
+        for (j = 0; j < this.maxy; j++) {
+            var color;
+            if (this.tabla[j][i] == 0) {
+                color = (i + j) % 2 == 0 ? "gray" : "lightgray" ;
+            } else {
+                color = "#11cb33";
+            }
+            drawRectangle(i * 20, j * 20, 20, 20, color);
+        }
+    }
+}
+
+function Personaj(color) {
+    this.color = color;
+    this.x = 5;
+    this.y = 3;
+    this.offsetx = 0;
+    this.offsety = 0;
+}
+
+Personaj.prototype.draw = function() {
+    //drawRectangle(100, 60, 20, 20, this.color);
+    drawRectangle(this.x * 20 + this.offsetx * 3, this.y * 20 + this.offsety * 3, 20, 20, this.color);
+}
+
+Personaj.prototype.applyGravity = function() {
+     if (game.tabla[this.y+1][this.x] == 0) this.offsety++;
+     if (game.tabla[this.y+1][this.x] == 1) {
+         this.offsety = -16;
+         this.y -= 2;
+     }
+     if (this.offsety == 7) {
+         this.offsety = 0;
+         this.y++;
+     }
+}
+
+function init() {
+    console.log("initiating...");
+    game = new Game();
+    var p = new Personaj("blue");
+    personaje.push(p);
+}
+
+function drawRectangle(x, y, sizex, sizey, colour) {
+    context.beginPath();
+    context.fillStyle = colour;
+    context.rect(x, y, sizex, sizey);
+    context.fill();
+}
+
+/*function drawPersonaje() {
+    var i;
+    for (i = 0; i < personaje.length; i++) personaje[i].draw();
+}*/
+
+function clear() {
+    drawRectangle(0, 0, 800, 600, "#001122");
+}
+
+function update() {
+    clear();
+    game.drawTabla();
+    game.applyGravity();
+    game.drawPersonaje();
+}
+
+window.onload = function () {
+    init();
+    setInterval(update, 1000/60);
+}
+</script>
+</body>
+</html
