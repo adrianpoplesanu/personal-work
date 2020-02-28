@@ -61,22 +61,31 @@ function Personaj(color) {
     this.color = color;
     this.x = 5;
     this.y = 3;
+    this.vx = 0;
+    this.vy = 0;
+    this.ax = 0;
+    this.ay = 0;
+    this.mass = 1;
     this.offsetx = 0;
     this.offsety = 0;
 }
 
 Personaj.prototype.draw = function() {
     //drawRectangle(100, 60, 20, 20, this.color);
-    drawRectangle(this.x * 20 + this.offsetx * 3, this.y * 20 + this.offsety * 3, 20, 20, this.color);
+    drawRectangle(this.x * 20 + this.offsetx * 2, this.y * 20 + this.offsety * 2, 20, 20, this.color);
 }
 
 Personaj.prototype.applyGravity = function() {
      if (game.tabla[this.y+1][this.x] == 0) this.offsety++;
      if (game.tabla[this.y+1][this.x] == 1) {
-         this.offsety = -16;
-         this.y -= 2;
+         this.offsety = -40;
+         //this.y -= 4;
      }
-     if (this.offsety == 7) {
+     if (this.offsety < -10) {
+         this.y -= 1;
+         this.offsety += 10;
+     }
+     if (this.offsety == 10) {
          this.offsety = 0;
          this.y++;
      }
