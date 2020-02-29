@@ -15,6 +15,37 @@ var height = canvas.height;
 var game;
 var personaje = [];
 
+var UpArrow = 38;
+var DownArrow = 40;
+var LeftArrow = 37;
+var RightArrow = 39;
+var SpaceKey = 32;
+var movementKey;
+
+var keystate = {};
+
+window.addEventListener("keydown", function(e) {
+    // space and arrow keys
+    if (e.keyCode == 27) {
+        window.location.reload();
+    }
+    if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+        e.preventDefault();
+    }
+}, false);
+
+document.addEventListener("keydown", function (event) {
+    keystate[event.keyCode] = true;
+});
+
+document.addEventListener("keyup", function (event) {
+    if (event.keyCode === movementKey) {
+        //console.log(movementKey);
+        movementKey = false;
+    }
+    delete keystate[event.keyCode];
+});
+
 function Game() {
     this.maxx = 30;
     this.maxy = 10;
@@ -57,6 +88,17 @@ Game.prototype.drawTabla = function () {
     }
 }
 
+Game.prototype.inputAnalyzer = function () {
+    if (keystate[UpArrow]) {
+        var x = personaje[0].x;
+        var y = personaje[0].y;
+        if (game.tabla[y+1][x] == 1) {
+            personaje[0].offsety = -40;
+            //personaje[0].ay = -10;
+        }
+    }
+}
+
 function Personaj(color) {
     this.color = color;
     this.x = 5;
@@ -76,9 +118,13 @@ Personaj.prototype.draw = function() {
 }
 
 Personaj.prototype.applyGravity = function() {
-     if (game.tabla[this.y+1][this.x] == 0) this.offsety++;
+     if (game.tabla[this.y+1][this.x] == 0) {
+         this.offsety++;
+         //this.ay++;
+     }
      if (game.tabla[this.y+1][this.x] == 1) {
-         this.offsety = -40;
+         this.ay = 0;
+         //this.offsety = -40;
          //this.y -= 4;
      }
      if (this.offsety < -10) {
@@ -116,6 +162,7 @@ function clear() {
 
 function update() {
     clear();
+    game.inputAnalyzer();
     game.drawTabla();
     game.applyGravity();
     game.drawPersonaje();
