@@ -14,6 +14,11 @@
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>
+		<key>FirstShader.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
 		<key>SampleProgram.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -22,6 +27,31 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>E123370D240B1C070021A299</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E1233720240B1ECA0021A299</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E1233730240B215B0021A299</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E1233739240B218D0021A299</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E1233748240B24730021A299</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>E14DE38423DDD45500627103</key>
 		<dict>
 			<key>primary</key>
