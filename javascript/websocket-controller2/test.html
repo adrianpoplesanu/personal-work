@@ -1,0 +1,35 @@
+<html>
+<head></head>
+<body>
+<script>
+    console.log('aaa');
+    let socket = new WebSocket("ws://52.91.25.4:8090");
+
+socket.onopen = function(e) {
+    alert("[open] Connection established");
+    alert("Sending to server");
+    //socket.send("My name is John");
+    //socket.send("[create-room] Aditz");
+    socket.send("[show-rooms]");
+};
+
+socket.onmessage = function(event) {
+    alert(`[message] Data received from server: ${event.data}`);
+};
+
+socket.onclose = function(event) {
+    if (event.wasClean) {
+        alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+    } else {
+        // e.g. server process killed or network down
+        // event.code is usually 1006 in this case
+        alert('[close] Connection died');
+    }
+};
+
+socket.onerror = function(error) {
+    alert(`[error] ${error.message}`);
+};
+</script>
+</body>
+</html>
