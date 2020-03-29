@@ -1,0 +1,1 @@
+sudo mount -t vboxsf virtual-box-shared /media/sf_virtual-box-shared/
