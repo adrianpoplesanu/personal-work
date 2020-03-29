@@ -137,7 +137,7 @@ uint32_t InterruptManager::HandleInterrupt(uint8_t interrupt, uint32_t esp)
 
     foo[12] = hex[(interrupt >> 4) & 0xF];
     foo[13] = hex[interrupt & 0xF];
-    printf("ramonica\n");
+    printf("ramunitz\n");
     printf(foo);
 
     return esp;
