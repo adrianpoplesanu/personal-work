@@ -42,7 +42,7 @@ extern "C" void callConstructors() {
 }
 
 extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot_magic*/) {
-    printf("running Obstacle1 v0.4.7...\n");
+    printf("running Obstacle1 v0.4.8...\n");
 
     printf("declaring gdt...\n");
     GlobalDescriptorTable gdt;
