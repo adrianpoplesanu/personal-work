@@ -7,6 +7,8 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import okhttp3.*
+import org.json.JSONObject
+
 //import java.net.Socket
 //import java.util.concurrent.TimeUnit
 
@@ -46,7 +48,13 @@ class MainActivity : AppCompatActivity() {
         val message_input = findViewById<TextView>(R.id.messageInput)
         val button_send_neata = findViewById<Button>(R.id.send_neatza)
         button_send_neata.setOnClickListener {
-            val text = message_input.text.toString()
+            //{"operation": "new message", "message": "buna dimineata!"}
+            val data : JSONObject = JSONObject()
+            data.put("operation", "new message")
+            //data.put("message", "buna dimineata!")
+            data.put("message",  message_input.text.toString())
+            //val text = message_input.text.toString()
+            val text = data.toString()
             webSocket?.send(text)
         }
     }
