@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
 using namespace std;
 
 class Shader {
@@ -21,11 +22,15 @@ public:
 		//ifstream in;
 	}
 
-	void LoadShader() {
+	void ReadShaderFile() {
 		ifstream in(filename);
-		char a[100];
-		in >> a;
-		cout << a << endl;
+		//char a[100];
+		//in >> a;
+		//cout << a << endl;
+		string line;
+		while (getline(in, line)) {
+			cout << line << endl;
+		}
 	}
 
 	~Shader() {
