@@ -268,6 +268,7 @@ void ForInstruction(map<string, BigNumber> &variables, string text) {
         // TODO add variable case
         _step_val.LoadFromString(step_val);
     }
+    //cout << "for nested commands: " << nested_commands << endl;
     CommandInterpreter commandInterpreter(nested_commands);
     while (_loop_var < _end_val) {
         commandInterpreter.Analyze();
