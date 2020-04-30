@@ -6,19 +6,24 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // asta ascunde title bar-ul
+        //getSupportActionBar()?.hide()
+
         setContentView(R.layout.activity_main)
         Log.d("LayoutTesting Debug", "main activity loaded")
 
         val scrollContent = findViewById<LinearLayout>(R.id.scrollContent)
+        val scrollLayout = findViewById<ScrollView>(R.id.scrollLayout)
 
         val text_view_dinamic = TextView(this)
         text_view_dinamic.textSize = 30f
@@ -41,6 +46,9 @@ class MainActivity : AppCompatActivity() {
         button_dinamic.layoutParams = params
         button_dinamic.text = "Press me!!!"
         button_dinamic.setBackgroundResource(R.drawable.button_face)
+        button_dinamic.setOnClickListener {
+            Log.d("LayoutTesting Debug", "button clicked!!!")
+        }
         scrollContent?.addView(button_dinamic)
 
         val text_view_dinamic2 = TextView(this)
@@ -84,5 +92,29 @@ class MainActivity : AppCompatActivity() {
         text_view_dinamic7.setBackgroundResource(R.drawable.received_message)
         text_view_dinamic7.layoutParams = params
         scrollContent?.addView(text_view_dinamic7)
+
+        val text_view_dinamic8 = TextView(this)
+        text_view_dinamic8.textSize = 30f
+        text_view_dinamic8.text = "neata!!!"
+        text_view_dinamic8.setBackgroundResource(R.drawable.received_message)
+        text_view_dinamic8.layoutParams = params
+        scrollContent?.addView(text_view_dinamic8)
+
+        val text_view_dinamic9 = TextView(this)
+        text_view_dinamic9.textSize = 30f
+        text_view_dinamic9.text = "dexiciul"
+        text_view_dinamic9.setBackgroundResource(R.drawable.received_message)
+        text_view_dinamic9.layoutParams = params
+        scrollContent?.addView(text_view_dinamic9)
+
+        val text_view_dinamic10 = TextView(this)
+        text_view_dinamic10.textSize = 30f
+        text_view_dinamic10.text = "e dexiciut"
+        text_view_dinamic10.setBackgroundResource(R.drawable.received_message)
+        text_view_dinamic10.layoutParams = params
+        scrollContent?.addView(text_view_dinamic10)
+
+        // asta face scroll la bottom
+        scrollLayout.post(Runnable { scrollLayout.fullScroll(ScrollView.FOCUS_DOWN) })
     }
 }
