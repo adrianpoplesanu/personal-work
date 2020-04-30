@@ -1,5 +1,6 @@
 package com.adrianpoplesanu.layouttesting
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
@@ -55,7 +56,8 @@ class MainActivity : AppCompatActivity() {
         text_view_dinamic2.textSize = 30f
         text_view_dinamic2.text = "Message received2"
         text_view_dinamic2.setBackgroundResource(R.drawable.received_message)
-        text_view_dinamic2.layoutParams = params
+        text_view_dinamic2.setTextColor(Color.parseColor("#0aad3f"))
+        //text_view_dinamic2.layoutParams = params // s-ar putea sa nu am nevoie de asta
         scrollContent?.addView(text_view_dinamic2)
 
         val text_view_dinamic3 = TextView(this)
@@ -113,6 +115,14 @@ class MainActivity : AppCompatActivity() {
         text_view_dinamic10.setBackgroundResource(R.drawable.received_message)
         text_view_dinamic10.layoutParams = params
         scrollContent?.addView(text_view_dinamic10)
+
+        val text_view_dinamic11 = TextView(this)
+        text_view_dinamic11.textSize = 30f
+        text_view_dinamic11.text = "scumpet overload"
+        text_view_dinamic11.setBackgroundResource(R.drawable.received_message)
+        text_view_dinamic11.setTextColor(Color.parseColor("#11ff33"))
+        //text_view_dinamic10.layoutParams = params
+        scrollContent?.addView(text_view_dinamic11)
 
         // asta face scroll la bottom
         scrollLayout.post(Runnable { scrollLayout.fullScroll(ScrollView.FOCUS_DOWN) })
