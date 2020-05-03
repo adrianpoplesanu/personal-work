@@ -1,5 +1,6 @@
 package com.adrianpoplesanu.layouttesting
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -126,5 +127,12 @@ class MainActivity : AppCompatActivity() {
 
         // asta face scroll la bottom
         scrollLayout.post(Runnable { scrollLayout.fullScroll(ScrollView.FOCUS_DOWN) })
+
+        val chat_log_button = findViewById<Button>(R.id.chat_log)
+        chat_log_button.setOnClickListener() {
+            val intent = Intent(this, ChatLogActivity::class.java)
+            startActivity(intent)
+            //finish()
+        }
     }
 }

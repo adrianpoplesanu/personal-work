@@ -35,4 +35,14 @@
             android:scrollbars="vertical" />
     </ScrollView>
 
+    <Button
+        android:id="@+id/chat_log"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="chat log"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollLayout" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
