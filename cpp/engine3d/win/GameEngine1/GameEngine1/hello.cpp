@@ -185,7 +185,7 @@ int run() {
 }
 
 int main() {
-	cout << "running Hello Engine7" << endl;
+	cout << "running Hello Engine8" << endl;
 	Shader shader("basicShader.shader");
 	shader.ReadShaderFile();
 	run();
