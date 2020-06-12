@@ -4,6 +4,9 @@ var context = canvas.getContext("2d");
 var width = 800;
 var height = 600;
 
+var mousex = 50;
+var mousey = 50;
+
 var game;
 // ATENTIE! - formatul unei unitati: 12345100 : 1 - playernum, 2 - unit tyoe, 345 - unit action, 100 - hit points
 // example: 1205095: player 1, grunt, doing action 5, having 95 hit points
@@ -29,7 +32,25 @@ function pathFinder (current_point, destination_point) {
 }
 
 function Game () {
-    var tabla = [[0, 0], [0, 0]];
+    //var tabla = [[0, 0], [0, 0]];
+    this.tabla = [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, 2, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 7, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 6, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 4, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ];
     var units = [[], []]; // it's just o juxtapunere for tabla
 };
 
@@ -51,9 +72,48 @@ Game.prototype.draw = function () {
     var j = 0;
     for (i = 0; i < 20; i++) {
         for (j = 0; j < 16; j++) {
-            context.drawImage(terrain, 33 * i + 1, 33 * j + 1, 32, 32, i * 32, j * 32, 32, 32);
+            //context.drawImage(terrain, 33 * i + 1, 33 * j + 1, 32, 32, i * 32, j * 32, 32, 32);
+            switch (game.tabla[j][i]) {
+                case 0:
+                    context.drawImage(terrain, 33 * 1 + 1, 33 * 6 + 1, 32, 32, i * 32, j * 32, 32, 32); // done
+                break;
+                case 1:
+                    context.drawImage(terrain, 33 * 24 + 1, 33 * 9 + 1, 32, 32, i * 32, j * 32, 32, 32); // done
+                break;
+                case 2:
+                    context.drawImage(terrain, 33 * 28 + 1, 33 * 7 + 1, 32, 32, i * 32, j * 32, 32, 32);
+                break;
+                case 3:
+                    context.drawImage(terrain, 33 * 29 + 1, 33 * 10 + 1, 32, 32, i * 32, j * 32, 32, 32); // done
+                break;
+                case 4:
+                    context.drawImage(terrain, 33 * 1 + 1, 33 * 6 + 1, 32, 32, i * 32, j * 32, 32, 32);
+                break;
+                case 5:
+                    context.drawImage(terrain, 33 * 24 + 1, 33 * 15 + 1, 32, 32, i * 32, j * 32, 32, 32); // done
+                break;
+                case 6:
+                    context.drawImage(terrain, 33 * 1 + 1, 33 * 6 + 1, 32, 32, i * 32, j * 32, 32, 32);
+                break;
+                case 7:
+                    context.drawImage(terrain, 33 * 1 + 1, 33 * 6 + 1, 32, 32, i * 32, j * 32, 32, 32);
+                break;
+                case 8:
+                    context.drawImage(terrain, 33 * 24 + 1, 33 * 7 + 1, 32, 32, i * 32, j * 32, 32, 32); // done
+                break;
+                case 9:
+                    context.drawImage(terrain, 33 * 28 + 1, 33 * 8 + 1, 32, 32, i * 32, j * 32, 32, 32); // done
+                break;
+            }
         }
     }
+}
+
+Game.prototype.drawMouse = function () {
+    context.fillStyle = "#f00";
+    context.beginPath();
+    context.arc(mousex, mousey, RADIUS, 0, degToRad(360), true);
+    context.fill();
 }
 
 function Player () {
@@ -70,6 +130,60 @@ Player.prototype.drawBuildings = function () {
 
 }
 
+// MOUSE HANDLING START
+const RADIUS = 20;
+
+function degToRad(degrees) {
+  var result = Math.PI / 180 * degrees;
+  return result;
+}
+
+canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
+
+document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
+
+canvas.onclick = function() {
+    canvas.requestPointerLock();
+};
+
+// pointer lock event listeners
+
+// Hook pointer lock state change events for different browsers
+document.addEventListener('pointerlockchange', lockChangeAlert, false);
+document.addEventListener('mozpointerlockchange', lockChangeAlert, false);
+
+function lockChangeAlert() {
+    if (document.pointerLockElement === canvas || document.mozPointerLockElement === canvas) {
+        console.log('The pointer lock status is now locked');
+        document.addEventListener("mousemove", updatePosition, false);
+    } else {
+        console.log('The pointer lock status is now unlocked');
+        document.removeEventListener("mousemove", updatePosition, false);
+    }
+}
+
+function updatePosition(e) {
+    mousex += e.movementX; // do the add only if it needs to
+    mousey += e.movementY; // do the add only if it needs to
+    if (mousex > canvas.width + RADIUS) {
+        //mousex = -RADIUS;
+        mousex = canvas.width + RADIUS / 2;
+    }
+    if (mousey > canvas.height + RADIUS) {
+        //mousey = -RADIUS;
+        mousey = canvas.height + RADIUS / 2;
+    }
+    if (mousex < -RADIUS) {
+        //mousex = canvas.width + RADIUS;
+        mousex = -RADIUS / 2;
+    }
+    if (mousey < -RADIUS) {
+        //mousey = canvas.height + RADIUS;
+        mousey = -RADIUS / 2;
+    }
+}
+// MOUSE HANDLING STOP
+
 function init() {
     game = new Game();
 }
@@ -77,6 +191,7 @@ function init() {
 function loop() {
     game.update();
     game.draw();
+    game.drawMouse(); // this probably needs to be moved to draw() function
 }
 
 init();
