@@ -6,6 +6,10 @@ var height = 600;
 
 var mousex = 50;
 var mousey = 50;
+var offsetX = 0;
+var offsetY = 0;
+var accOffsetX = 0;
+var accOffsetY = 0;
 
 var game;
 // ATENTIE! - formatul unei unitati: 12345100 : 1 - playernum, 2 - unit tyoe, 345 - unit action, 100 - hit points
@@ -75,7 +79,7 @@ Game.prototype.draw = function () {
             //context.drawImage(terrain, 33 * i + 1, 33 * j + 1, 32, 32, i * 32, j * 32, 32, 32);
             switch (game.tabla[j][i]) {
                 case 0:
-                    context.drawImage(terrain, 33 * 1 + 1, 33 * 6 + 1, 32, 32, i * 32, j * 32, 32, 32); // done
+                    context.drawImage(terrain, 33 * 1 + 1, 33 * 6 + 1, 32, 32, i * 32 + offsetX, j * 32 + offsetY, 32, 32); // done
                 break;
                 case 1:
                     context.drawImage(terrain, 33 * 24 + 1, 33 * 9 + 1, 32, 32, i * 32, j * 32, 32, 32); // done
@@ -114,6 +118,27 @@ Game.prototype.drawMouse = function () {
     context.beginPath();
     context.arc(mousex, mousey, RADIUS, 0, degToRad(360), true);
     context.fill();
+}
+
+Game.prototype.calculateOffset = function () {
+    if (mousex == 0) {
+        if (accOffsetX < 20) accOffsetX++;
+        offsetX += accOffsetX;
+    } else if (mousex >= canvas.width) {
+        if (accOffsetX < 20) accOffsetX++;
+        offsetX -= accOffsetX;
+    } else {
+        accOffsetX = 5;
+    }
+    if (mousey == 0) {
+        if (accOffsetY < 20) accOffsetY++;
+        offsetY += accOffsetY;
+    } else if (mousey >= canvas.height) {
+        if (accOffsetY < 20) accOffsetY++;
+        offsetY -= accOffsetY;
+    } else {
+        accOffsetY = 5;
+    }
 }
 
 function Player () {
@@ -163,24 +188,36 @@ function lockChangeAlert() {
 }
 
 function updatePosition(e) {
-    mousex += e.movementX; // do the add only if it needs to
-    mousey += e.movementY; // do the add only if it needs to
-    if (mousex > canvas.width + RADIUS) {
-        //mousex = -RADIUS;
-        mousex = canvas.width + RADIUS / 2;
+    //mousex += e.movementX; // do the add only if it needs to
+    //mousey += e.movementY; // do the add only if it needs to
+    var limitedx = false;
+    var limitedy = false;
+    if (mousex + e.movementX >= canvas.width) {
+        mousex = canvas.width;
+        limitedx = true;
+        // i need to adjust the offset
+        //offsetX -= 5; // this needs to be done in a different place
     }
-    if (mousey > canvas.height + RADIUS) {
-        //mousey = -RADIUS;
-        mousey = canvas.height + RADIUS / 2;
+    if (mousey + e.movementY >= canvas.height) {
+        mousey = canvas.height;
+        limitedy = true;
+        // i need to adjust the offset
+        //offsetY -= 5; // this needs to be done in a different place
     }
-    if (mousex < -RADIUS) {
-        //mousex = canvas.width + RADIUS;
-        mousex = -RADIUS / 2;
+    if (mousex + e.movementX <= 0) {
+        mousex = 0;
+        limitedx = true;
+        // i need to adjust the offset
+        //offsetX += 5; // this needs to be done in a different place
     }
-    if (mousey < -RADIUS) {
-        //mousey = canvas.height + RADIUS;
-        mousey = -RADIUS / 2;
+    if (mousey + e.movementY <= 0) {
+        mousey = 0;
+        limitedy = true;
+        // i need to adjust the offset
+        //offsetY += 5; // this needs to be done in a different place
     }
+    if (!limitedx) mousex += e.movementX;
+    if (!limitedy) mousey += e.movementY;
 }
 // MOUSE HANDLING STOP
 
@@ -191,6 +228,7 @@ function init() {
 function loop() {
     game.update();
     game.draw();
+    game.calculateOffset();
     game.drawMouse(); // this probably needs to be moved to draw() function
 }
 
