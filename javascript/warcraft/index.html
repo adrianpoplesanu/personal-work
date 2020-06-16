@@ -9,10 +9,17 @@
 </head>
 <body>
     <img id="terrain" src="assets/terrain.png" style="display: none;">
-    <canvas id="canvas" width="800" height="600" style="border:1px solid #12aaee;">
-    </canvas>
+    <img id="archer" src="assets/units/human/archer.png" style="display: none;">
+    <img id="cursors" src="assets/cursors/mouse-cursors.png" style="display: none;">
+    <div style="position: relative;">
+        <canvas id="canvas" width="800" height="600" style="position: absolute; left: 0; top: 0; border:1px solid #12aaee; z-index: 0;"></canvas>
+        <!-- <canvas id="fog" width="800" height="600" style="position: absolute; left: 0; top: 0; border:1px solid #12aaee; z-index: 1;"></canvas>
+        <canvas id="chars" width="800" height="600" style="position: absolute; left: 0; top: 0; border:1px solid #12aaee; z-index: 2;"></canvas> -->
+    </div>
     <script>
         var terrain = document.getElementById("terrain");
+        var archer = document.getElementById("archer");
+        var cursors = document.getElementById("cursors");
     </script>
     <script src="warcraft.js"></script>
 </body>

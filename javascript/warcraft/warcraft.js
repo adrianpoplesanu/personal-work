@@ -1,6 +1,9 @@
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext("2d");
 
+//var fog = document.getElementById("fog");
+//var ctx_fog = fog.getContext("2d");
+
 var width = 800;
 var height = 600;
 
@@ -12,6 +15,7 @@ var accOffsetX = 0;
 var accOffsetY = 0;
 
 var game;
+var player1, player2;
 // ATENTIE!!! TREBUIE SA MA GANDESC CA LUMEA LA ASTA
 // ATENTIE! - formatul unei unitati: 12345100 : 1 - playernum, 2 - unit tyoe, 345 - unit action, 100 - hit points
 // example: 1205095: player 1, grunt, doing action 5, having 95 hit points
@@ -22,11 +26,31 @@ var game;
 // TODO: store target - maybe each player should have a list of units, so you know which one is targeted
 // THIS IS THE MOST IMPORTANT STUFF - THIS MAKES OR BREAKS THE GAME
 
+//VARIANTA 2
+// sa fie o "tabla" cu unitati - numarul playerului si id-ul unitatii
+// id-ul unitatii este indexul din lista de unitati
+// lista de unitati e formata obiecte care au mai multe informatii
+
+//VARIANTA 3
+// sa fie o tabla cu format: 1234567890123
+// 1 - player
+// 2 - unit type
+// 34 - index
+// 56 - target
+// NU CRED CA MERGE
+
 function drawRectangle (x, y, sizex, sizey, color) {
     context.beginPath();
     context.fillStyle = color;
     context.rect(x, y, sizex, sizey);
     context.fill();
+}
+
+function drawFog (x, y, sizex, sizey, color) {
+    ctx_fog.beginPath();
+    ctx_fog.fillStyle = color;
+    ctx_fog.rect(x, y, sizex, sizey);
+    ctx_fog.fill();
 }
 
 function pathFinder (current_point, destination_point) {
@@ -83,7 +107,7 @@ function Game () {
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -100,7 +124,7 @@ function Game () {
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ];
-    var units = [[], []]; // it's just o juxtapunere for tabla
+    //var units = [[], []]; // it's just o juxtapunere for tabla
 };
 
 Game.prototype.update = function () {
@@ -111,7 +135,7 @@ Game.prototype.clearScreen = function () {
     drawRectangle (0, 0, width, height, "black");
 }
 
-Game.prototype.draw = function () {
+Game.prototype.draw = function (playerNum) {
     this.clearScreen();
     // syntax: 0, 0 - x, y starting point from the image, 10, 10 - x, y end point from the image, 0, 0 - starting canvas point where to draw, 100, 100 - end point where to draw
     // context.drawImage(terrain, 0, 0, 10, 10, 0, 0, 100, 100);
@@ -122,6 +146,18 @@ Game.prototype.draw = function () {
     for (i = 0; i < 25; i++) {
         for (j = 0; j < 21; j++) {
             //context.drawImage(terrain, 33 * i + 1, 33 * j + 1, 32, 32, i * 32, j * 32, 32, 32);
+            if (playerNum == 1) {
+                if (player1.fieldOfViewMatrix[j][i] == 0) {
+                    drawRectangle(offsetX + 32 * i, offsetY + 32 * j, 32, 32, "black");
+                    continue;
+                }
+            }
+            if (playerNum == 2) {
+                if (player2.fieldOfViewMatrix[j][i] == 0) {
+                    drawRectangle(offsetX + 32 * i, offsetY + 32 * j, 32, 32, "black");
+                    continue;
+                }
+            }
             switch (game.tabla[j][i]) {
                 case 0:
                     context.drawImage(terrain, 33 * 1 + 1, 33 * 6 + 1, 32, 32, i * 32 + offsetX, j * 32 + offsetY, 32, 32); // done
@@ -156,20 +192,30 @@ Game.prototype.draw = function () {
             }
         }
     }
+    if (playerNum == 1) {
+        var i;
+        for (i = 0; i < player1.units.length; i++) {
+            context.drawImage(archer, 8, 4, 20, 20, player1.units[i].x * 32 + offsetX, player1.units[i].y * 32 + offsetY, 32, 32);
+        }
+    }
+    if (playerNum == 2) {
+
+    }
 }
 
 Game.prototype.drawMouse = function () {
-    context.fillStyle = "#f00";
-    context.beginPath();
-    context.arc(mousex, mousey, RADIUS, 0, degToRad(360), true);
-    context.fill();
+    //context.fillStyle = "#f00";
+    //context.beginPath();
+    //context.arc(mousex, mousey, RADIUS, 0, degToRad(360), true);
+    context.drawImage(cursors, 3, 5 * 32 + 12, 31, 31, mousex, mousey, 20, 20);
+    //context.fill();
 }
 
 Game.prototype.calculateOffset = function () {
     if (mousex == 0) {
         if (accOffsetX < 30) accOffsetX++;
         offsetX += accOffsetX;
-    } else if (mousex >= canvas.width) {
+    } else if (mousex >= canvas.width - 16) {
         if (accOffsetX < 30) accOffsetX++;
         offsetX -= accOffsetX;
     } else {
@@ -178,7 +224,7 @@ Game.prototype.calculateOffset = function () {
     if (mousey == 0) {
         if (accOffsetY < 30) accOffsetY++;
         offsetY += accOffsetY;
-    } else if (mousey >= canvas.height) {
+    } else if (mousey >= canvas.height - 16) {
         if (accOffsetY < 30) accOffsetY++;
         offsetY -= accOffsetY;
     } else {
@@ -193,11 +239,11 @@ function Player () {
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -212,6 +258,10 @@ function Player () {
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ];
+    this.units = [];
+    this.selectedUnits = [];
+    var u = new Unit();
+    this.units.push(u);
 }
 
 Player.prototype.drawUnits = function () {
@@ -220,6 +270,19 @@ Player.prototype.drawUnits = function () {
 
 Player.prototype.drawBuildings = function () {
 
+}
+
+function Unit () {
+    this.x = 5;
+    this.y = 5;
+    this.type = 1;
+    this.hp = 100;
+    this.speed = 1;
+    this.damage_min = 2;
+    this.damage_max = 4;
+    this.target = {x: -1, y: -1};
+    this.index = 0;
+    this.owner = 0; // player 1 or player 2
 }
 
 // MOUSE HANDLING START
@@ -260,14 +323,14 @@ function updatePosition(e) {
     //mousey += e.movementY; // do the add only if it needs to
     var limitedx = false;
     var limitedy = false;
-    if (mousex + e.movementX >= canvas.width) {
-        mousex = canvas.width;
+    if (mousex + e.movementX >= canvas.width - 16) {
+        mousex = canvas.width - 16;
         limitedx = true;
         // i need to adjust the offset
         //offsetX -= 5; // this needs to be done in a different place
     }
-    if (mousey + e.movementY >= canvas.height) {
-        mousey = canvas.height;
+    if (mousey + e.movementY >= canvas.height - 16) {
+        mousey = canvas.height - 16;
         limitedy = true;
         // i need to adjust the offset
         //offsetY -= 5; // this needs to be done in a different place
@@ -289,13 +352,24 @@ function updatePosition(e) {
 }
 // MOUSE HANDLING STOP
 
+// fog of war
+function FogOfWar () {
+    drawFog (0, 0, width, height, "black");
+}
+// end fog of war
+
 function init() {
     game = new Game();
+    player1 = new Player();
+    player1.playerName = "Adrianus";
+    player2 = new Player();
+    player1.playerName = "Ner'zhul";
 }
 
 function loop() {
     game.update();
-    game.draw();
+    game.draw(1);
+    //FogOfWar ();
     game.calculateOffset();
     game.drawMouse(); // this probably needs to be moved to draw() function
 }
