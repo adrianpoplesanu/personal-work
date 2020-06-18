@@ -16,6 +16,7 @@ var accOffsetY = 0;
 
 var game;
 var player1, player2;
+var mainPlayer;
 // ATENTIE!!! TREBUIE SA MA GANDESC CA LUMEA LA ASTA
 // ATENTIE! - formatul unei unitati: 12345100 : 1 - playernum, 2 - unit tyoe, 345 - unit action, 100 - hit points
 // example: 1205095: player 1, grunt, doing action 5, having 95 hit points
@@ -297,8 +298,26 @@ canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointe
 
 document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
 
-canvas.onclick = function() {
+canvas.onclick = function(e) {
+    console.log(e.button);
     canvas.requestPointerLock();
+
+    var clickedX = Math.floor((mousex - offsetX) / 32);
+    var clickedY = Math.floor((mousey - offsetY) / 32);
+    //console.log("s-a dat click aici x: " + (mousex - offsetX) / 32 + " y: " + (mousey - offsetY) / 32);
+    if (mainPlayer == 1) {
+        player1.selectedUnits = [];
+        var i;
+        for (i = 0; i < player1.units.length; i++) {
+            if (player1.units[i].x == clickedX && player1.units[i].y == clickedY) {
+                console.log("s-a selectat unitatea: " + i);
+                player1.selectedUnits.push(i);
+            }
+        }
+    }
+    if (mainPlayer == 2) {
+
+    }
 };
 
 // pointer lock event listeners
@@ -311,7 +330,7 @@ function lockChangeAlert() {
     if (document.pointerLockElement === canvas || document.mozPointerLockElement === canvas) {
         console.log('The pointer lock status is now locked');
         document.addEventListener("mousemove", updatePosition, false);
-        console.log("s-a dat un click x: " + mousex + "y: " + mousey);
+        //console.log("s-a dat un click x: " + mousex + "y: " + mousey);
     } else {
         console.log('The pointer lock status is now unlocked');
         document.removeEventListener("mousemove", updatePosition, false);
@@ -364,11 +383,12 @@ function init() {
     player1.playerName = "Adrianus";
     player2 = new Player();
     player1.playerName = "Ner'zhul";
+    mainPlayer = 1;
 }
 
 function loop() {
     game.update();
-    game.draw(1);
+    game.draw(mainPlayer);
     //FogOfWar ();
     game.calculateOffset();
     game.drawMouse(); // this probably needs to be moved to draw() function
