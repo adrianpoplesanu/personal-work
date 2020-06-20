@@ -129,7 +129,13 @@ function Game () {
 };
 
 Game.prototype.update = function () {
-
+    var i;
+    for (i = 0; i < player1.units.length; i++) {
+        player1.units[i].move();
+    }
+    for (i = 0; i < player2.units.length; i++) {
+        player2.units[i].move();
+    }
 }
 
 Game.prototype.clearScreen = function () {
@@ -196,7 +202,15 @@ Game.prototype.draw = function (playerNum) {
     if (playerNum == 1) {
         var i;
         for (i = 0; i < player1.units.length; i++) {
-            context.drawImage(archer, 8, 4, 20, 20, player1.units[i].x * 32 + offsetX, player1.units[i].y * 32 + offsetY, 32, 32);
+            //context.drawImage(archer, 8, 4, 20, 20, player1.units[i].x * 32 + offsetX, player1.units[i].y * 32 + offsetY, 32, 32);
+            context.drawImage(archer, 8, 4, 20, 20, player1.units[i].pixelx + offsetX, player1.units[i].pixely + offsetY, 32, 32);
+            if (player1.units[i].selected) {
+                context.beginPath();
+                context.lineWidth = "3";
+                context.strokeStyle = "#20fc03";
+                context.rect(player1.units[i].pixelx + offsetX, player1.units[i].pixely + offsetY, 32, 32);
+                context.stroke();
+            }
         }
     }
     if (playerNum == 2) {
@@ -276,6 +290,13 @@ Player.prototype.drawBuildings = function () {
 function Unit () {
     this.x = 5;
     this.y = 5;
+    this.destx = 5;
+    this.desty = 5;
+
+    this.pixelx = 5 * 32;
+    this.pixely = 5 * 32;
+
+    this.selected = false;
     this.type = 1;
     this.hp = 100;
     this.speed = 1;
@@ -284,6 +305,31 @@ function Unit () {
     this.target = {x: -1, y: -1};
     this.index = 0;
     this.owner = 0; // player 1 or player 2
+}
+
+Unit.prototype.move = function () {
+    var movingHorizontaly = false, movingVerticaly = false;
+    if (this.pixelx < this.destx * 32) {
+        this.pixelx+=4;
+        movingHorizontaly = true;
+    }
+    if (this.pixelx > this.destx * 32) {
+        this.pixelx-=4;
+        movingHorizontaly = true;
+    }
+    if (this.pixely < this.desty * 32) {
+        this.pixely+=4;
+        movingVerticaly = true;
+    }
+    if (this.pixely > this.desty * 32) {
+        this.pixely-=4;
+        movingVerticaly = true;
+    }
+    if (movingHorizontaly)
+    if ((this.pixelx == this.destx * 32) && (this.pixely == this.desty * 32)) {
+        this.x = this.destx;
+        this.y = this.desty;
+    }
 }
 
 // MOUSE HANDLING START
@@ -304,19 +350,37 @@ canvas.onclick = function(e) {
 
     var clickedX = Math.floor((mousex - offsetX) / 32);
     var clickedY = Math.floor((mousey - offsetY) / 32);
+    var absoluteClickedX = mousex - offsetX;
+    var absoluteClickedY = mousey - offsetY;
     //console.log("s-a dat click aici x: " + (mousex - offsetX) / 32 + " y: " + (mousey - offsetY) / 32);
-    if (mainPlayer == 1) {
-        player1.selectedUnits = [];
-        var i;
-        for (i = 0; i < player1.units.length; i++) {
-            if (player1.units[i].x == clickedX && player1.units[i].y == clickedY) {
-                console.log("s-a selectat unitatea: " + i);
-                player1.selectedUnits.push(i);
+    if (e.button == 0) {
+        if (mainPlayer == 1) {
+            player1.selectedUnits = [];
+            var i;
+            for (i = 0; i < player1.units.length; i++) {
+                player1.units[i].selected = false;
+                //if (player1.units[i].x == clickedX && player1.units[i].y == clickedY) {
+                if (absoluteClickedX >= player1.units[i].pixelx &&
+                        absoluteClickedX <= player1.units[i].pixelx + 32 &&
+                        absoluteClickedY >= player1.units[i].pixely &&
+                        absoluteClickedY <= player1.units[i].pixely + 32) {
+                    console.log("s-a selectat unitatea: " + i);
+                    player1.selectedUnits.push(i); // nu cred ca trebuie sa imping indexul, ci o referinta catre unitate
+                    player1.units[i].selected = true;
+                }
             }
         }
-    }
-    if (mainPlayer == 2) {
+        if (mainPlayer == 2) {
 
+        }
+    }
+    if (e.button == 2) {
+        if (clickedX >= 0 && clickedY >= 0 && clickedX < 25 && clickedY < 21) {
+            for (i = 0; i < player1.selectedUnits.length; i++) {
+                player1.units[player1.selectedUnits[i]].destx = clickedX;
+                player1.units[player1.selectedUnits[i]].desty = clickedY;
+            }
+        }
     }
 };
 
