@@ -1,3 +1,6 @@
+# image-processor
+GO api for uploading and processing images with Python face recognition
+
 run go main.go
 
 python analyzer.py <file-name.jpg>
