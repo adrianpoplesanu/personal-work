@@ -82,7 +82,7 @@ function Game () {
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],*/
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -330,6 +330,81 @@ Unit.prototype.move = function () {
         this.x = this.destx;
         this.y = this.desty;
     }
+    this.clearFog();
+}
+
+Unit.prototype.clearFog = function () {
+    var x = Math.floor((this.pixelx) / 32);
+    var y = Math.floor((this.pixely) / 32);
+    // y - 2: x - 1, x, x + 1
+    // y - 1: x - 2, x - 1, x, x + 1, x + 2
+    // y: x - 2, x - 1, x, x + 1, x + 2
+    // y + 1: x - 2, x - 1, x, x + 1, x + 2
+    // y + 2: x - 1, x, x + 1
+    if (validateBounds(y - 2, x - 1, 25, 21)) {
+        player1.fieldOfViewMatrix[y - 2][x - 1] = 2;
+    }
+    if (validateBounds(y - 2, x, 25, 21)) {
+        player1.fieldOfViewMatrix[y - 2][x] = 2;
+    }
+    if (validateBounds(y - 2, x + 1, 25, 21)) {
+        player1.fieldOfViewMatrix[y - 2][x + 1] = 2;
+    }
+    if (validateBounds(y - 1, x - 2, 25, 21)) {
+        player1.fieldOfViewMatrix[y - 1][x - 2] = 2;
+    }
+    if (validateBounds(y - 1, x - 1, 25, 21)) {
+        player1.fieldOfViewMatrix[y - 1][x - 1] = 2;
+    }
+    if (validateBounds(y - 1, x, 25, 21)) {
+        player1.fieldOfViewMatrix[y - 1][x] = 2;
+    }
+    if (validateBounds(y - 1, x + 1, 25, 21)) {
+        player1.fieldOfViewMatrix[y - 1][x + 1] = 2;
+    }
+    if (validateBounds(y - 1, x + 2, 25, 21)) {
+        player1.fieldOfViewMatrix[y - 1][x + 2] = 2;
+    }
+    if (validateBounds(y, x - 2, 25, 21)) {
+        player1.fieldOfViewMatrix[y][x - 2] = 2;
+    }
+    if (validateBounds(y, x - 1, 25, 21)) {
+        player1.fieldOfViewMatrix[y][x - 1] = 2;
+    }
+    if (validateBounds(y, x, 25, 21)) {
+        player1.fieldOfViewMatrix[y][x] = 2;
+    }
+    if (validateBounds(y, x + 1, 25, 21)) {
+        player1.fieldOfViewMatrix[y][x + 1] = 2;
+    }
+    if (validateBounds(y, x + 2, 25, 21)) {
+        player1.fieldOfViewMatrix[y][x + 2] = 2;
+    }
+    if (validateBounds(y + 1, x - 2, 25, 21)) {
+        //console.log((y + 1) + " " + (x - 2));
+        player1.fieldOfViewMatrix[y + 1][x - 2] = 2;
+    }
+    if (validateBounds(y + 1, x - 1, 25, 21)) {
+        player1.fieldOfViewMatrix[y + 1][x - 1] = 2;
+    }
+    if (validateBounds(y + 1, x, 25, 21)) {
+        player1.fieldOfViewMatrix[y + 1][x] = 2;
+    }
+    if (validateBounds(y + 1, x + 1, 25, 21)) {
+        player1.fieldOfViewMatrix[y + 1][x + 1] = 2;
+    }
+    if (validateBounds(y + 1, x + 2, 25, 21)) {
+        player1.fieldOfViewMatrix[y + 1][x + 2] = 2;
+    }
+    if (validateBounds(y + 2, x - 1, 25, 21)) {
+        player1.fieldOfViewMatrix[y + 2][x - 1] = 2;
+    }
+    if (validateBounds(y + 2, x, 25, 21)) {
+        player1.fieldOfViewMatrix[y + 2][x] = 2;
+    }
+    if (validateBounds(y + 2, x + 1, 25, 21)) {
+        player1.fieldOfViewMatrix[y + 2][x + 1] = 2;
+    }
 }
 
 // MOUSE HANDLING START
@@ -440,6 +515,14 @@ function FogOfWar () {
     drawFog (0, 0, width, height, "black");
 }
 // end fog of war
+
+function validateBounds(y, x, sizex, sizey) {
+    //console.log(x + " " + y + " " + sizex + " " + sizey);
+    if ((x >= 0) && (x < sizex) && (y >= 0) && (y < sizey)) {
+        return true;
+    }
+    return false;
+}
 
 function init() {
     game = new Game();
