@@ -3,35 +3,35 @@ exports.__esModule = true;
 var express = require("express");
 //import express from "express"; // this doesn't work
 var Application;
-(function (Application_1) {
-    var Application = /** @class */ (function () {
-        function Application(name, port) {
+(function (Application) {
+    var Console = /** @class */ (function () {
+        function Console(name, port) {
             if (port === void 0) { port = 8080; }
             this.name = name;
             this.port = port;
         }
-        Application.prototype.add_router = function (r) {
+        Console.prototype.bind_router = function (app, r) {
             console.log("router added...");
             r.bind('/', 'HomepageController', 'index', 'GET');
-            r.connect(this);
+            r.connect(app);
         };
-        Application.prototype.listen = function () {
+        Console.prototype.listen = function () {
         };
-        Application.prototype.run = function () {
+        Console.prototype.run = function () {
             var _this = this;
             var r = new Routing.Router();
-            this.add_router(r);
             var app = express();
-            app.get("/", function (req, res) {
-                res.send("Hello world with typescript architecture!");
-            });
+            //app.get("/", (req, res) => {
+            //  res.send("Hello world with typescript architecture!");
+            //});
+            this.bind_router(app, r);
             app.listen(this.port, function () {
                 console.log("server is listening on port " + _this.port + "...");
             });
         };
-        return Application;
+        return Console;
     }());
-    Application_1.Application = Application;
+    Application.Console = Console;
 })(Application || (Application = {}));
 var Controllers;
 (function (Controllers) {
@@ -84,6 +84,10 @@ var Routing;
             /*for(bind in this.binds) {
                 console.log(bind.path);
             }*/
+            app.get("/", function (req, res) {
+                eval("console.log('neata!');");
+                res.send("Hello world with typescript architecture from connect method!");
+            });
             this.binds.forEach(function (value) {
                 console.log(value.path);
             });
@@ -92,5 +96,5 @@ var Routing;
     }());
     Routing.Router = Router;
 })(Routing || (Routing = {}));
-var app = new Application.Application("Amazon Console");
+var app = new Application.Console("Amazon Console");
 app.run();

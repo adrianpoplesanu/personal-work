@@ -2,7 +2,7 @@ import * as express from 'express';
 //import express from "express"; // this doesn't work
 
 namespace Application {
-  export class Application {
+  export class Console {
     name: string;
     port: number;
     router: Routing.RouterInterface;
@@ -12,10 +12,10 @@ namespace Application {
       this.port = port;
     }
 
-    add_router(r : Routing.RouterInterface) {
+    bind_router(app : express, r : Routing.RouterInterface) {
       console.log("router added...");
       r.bind('/', 'HomepageController', 'index', 'GET');
-      r.connect(this);
+      r.connect(app);
     }
 
     listen () {
@@ -24,11 +24,11 @@ namespace Application {
 
     run() {
       let r = new Routing.Router();
-      this.add_router(r);
       let app = express();
-      app.get("/", (req, res) => {
-        res.send("Hello world with typescript architecture!");
-      });
+      //app.get("/", (req, res) => {
+      //  res.send("Hello world with typescript architecture!");
+      //});
+      this.bind_router(app, r);
       app.listen(this.port, () => {
         console.log(`server is listening on port ${ this.port }...`);
       });
@@ -71,7 +71,7 @@ namespace Routing {
   export interface RouterInterface {
     binds : Array<Bind>;
     bind(path : string, controller : string, action : string, method : string) : void;
-    connect(app : Application.Application) : void;
+    connect(app : express) : void;
   }
 
   export class Router implements RouterInterface {
@@ -87,10 +87,14 @@ namespace Routing {
       this.binds.push(b);
     }
 
-    connect(app : Application.Application) {
+    connect(app : express) {
       /*for(bind in this.binds) {
           console.log(bind.path);
       }*/
+      app.get("/", (req, res) => {
+        eval("console.log('neata!');");
+        res.send("Hello world with typescript architecture from connect method!");
+      });
       this.binds.forEach(function (value) {
         console.log(value.path);
       });
@@ -98,5 +102,5 @@ namespace Routing {
   }
 }
 
-let app = new Application.Application("Amazon Console");
+let app = new Application.Console("Amazon Console");
 app.run();
