@@ -40,6 +40,13 @@ namespace Controllers {
   export class BaseController {
     // ...
   }
+
+  export class HomepageController {
+    index(req, res) {
+      // ...
+      return "Beautiful";
+    }
+  }
 }
 
 namespace Model {
@@ -91,12 +98,22 @@ namespace Routing {
       /*for(bind in this.binds) {
           console.log(bind.path);
       }*/
-      app.get("/", (req, res) => {
+      /*app.get("/", (req, res) => {
         eval("console.log('neata!');");
         res.send("Hello world with typescript architecture from connect method!");
-      });
+    });*/
       this.binds.forEach(function (value) {
         console.log(value.path);
+        console.log(value.controller);
+        console.log(value.action);
+        console.log(value.method);
+
+        eval(
+          'var c = new Controllers.' + value.controller + '();' +
+          'if (value.method == "GET") {' +
+          '  app.get("/", (req, res) => { res.send(c. ' + value.action + '(req, res)); } );' +
+          '}'
+        );
       });
     }
   }

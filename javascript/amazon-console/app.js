@@ -41,6 +41,16 @@ var Controllers;
         return BaseController;
     }());
     Controllers.BaseController = BaseController;
+    var HomepageController = /** @class */ (function () {
+        function HomepageController() {
+        }
+        HomepageController.prototype.index = function (req, res) {
+            // ...
+            return "Beautiful";
+        };
+        return HomepageController;
+    }());
+    Controllers.HomepageController = HomepageController;
 })(Controllers || (Controllers = {}));
 var Model;
 (function (Model) {
@@ -84,12 +94,19 @@ var Routing;
             /*for(bind in this.binds) {
                 console.log(bind.path);
             }*/
-            app.get("/", function (req, res) {
-                eval("console.log('neata!');");
-                res.send("Hello world with typescript architecture from connect method!");
-            });
+            /*app.get("/", (req, res) => {
+              eval("console.log('neata!');");
+              res.send("Hello world with typescript architecture from connect method!");
+          });*/
             this.binds.forEach(function (value) {
                 console.log(value.path);
+                console.log(value.controller);
+                console.log(value.action);
+                console.log(value.method);
+                eval('var c = new Controllers.HomepageController();' +
+                    'if (value.method == "GET") {' +
+                    '  app.get("/", (req, res) => { res.send(c. ' + value.action + '(req, res)); } );' +
+                    '}');
             });
         };
         return Router;
