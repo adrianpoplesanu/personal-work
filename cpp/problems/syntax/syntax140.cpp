@@ -2,7 +2,7 @@
 using namespace std;
 
 int main (int argc, char *argv[]) {
-    cout << "Hello World!\n"; 
-    cout << system("ls -la"); 
+    cout << "Current directory has this\n"; 
+    cout << system("ls"); 
     return 0;
 }
