@@ -1,0 +1,10 @@
+Problem
+ I: aab, ac, ba, caa, d, baba, da
+O: aab -> 3 [aab, ba, baba]
+     ac -> 2 [ac, caa]
+     d -> 1 [d]
+     da -> 2 [da]
+
+Fiind data secventa I de stringuri alcatuita din litere [a-z], sa se scrie un program in limbajul preferat care afiseaza outputul O,
+unde un rand din output reprezinta numarul de apartii al stringurilor alcatuite din aceleasi litere
+“aab” si “ba” sunt “la fel” dupa cum ele sunt compuse din literele “a” si “b”.
