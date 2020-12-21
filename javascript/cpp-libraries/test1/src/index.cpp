@@ -1,3 +1,4 @@
+// https://github.com/nodejs/node-addon-api#api
 #include <napi.h>
 #include <string>
 #include "greeting.h"
@@ -9,10 +10,19 @@ Napi::String greetHello (const Napi::CallbackInfo& info) {
     return Napi::String::New(env, result);
 }
 
+Napi::Number find5 (const Napi::CallbackInfo& info) {
+    Napi::Env env = info.Env();
+    return Napi::Number::New(env, 77);
+}
+
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
     exports.Set(
         Napi::String::New(env, "greetHello"),
         Napi::Function::New(env, greetHello)
+    );
+    exports.Set(
+        Napi::String::New(env, "find5"),
+        Napi::Function::New(env, find5)
     );
     return exports;
 }

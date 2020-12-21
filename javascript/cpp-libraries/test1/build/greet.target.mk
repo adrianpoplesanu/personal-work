@@ -107,6 +107,7 @@ INCS_Release := \
 
 OBJS := \
 	$(obj).target/$(TARGET)/src/greeting.o \
+	$(obj).target/$(TARGET)/src/search.o \
 	$(obj).target/$(TARGET)/src/index.o
 
 # Add to the list of files we specially track dependencies for.
