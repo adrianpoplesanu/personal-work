@@ -1,3 +1,4 @@
+// n-th prime number calculator
 #include <iostream>
 #include <fstream>
 #include <ctime>
@@ -27,7 +28,7 @@ int main(int argc, char *argv[]) {
         }
         i++;
     }
-    out << i;
+    out << i - 1;
     in.close();
     out.close();
     clock_t end = clock();
