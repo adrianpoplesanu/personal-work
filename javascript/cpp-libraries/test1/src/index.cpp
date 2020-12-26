@@ -15,6 +15,12 @@ Napi::Number find5 (const Napi::CallbackInfo& info) {
     return Napi::Number::New(env, 77);
 }
 
+Napi::Number find6 (const Napi::CallbackInfo& info) {
+    Napi::Env env = info.Env();
+    int result = 0;
+    return Napi::Number::New(env, result);
+}
+
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
     exports.Set(
         Napi::String::New(env, "greetHello"),
@@ -23,6 +29,10 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
     exports.Set(
         Napi::String::New(env, "find5"),
         Napi::Function::New(env, find5)
+    );
+    exports.Set(
+        Napi::String::New(env, "find6"),
+        Napi::Function::New(env, find6)
     );
     return exports;
 }
