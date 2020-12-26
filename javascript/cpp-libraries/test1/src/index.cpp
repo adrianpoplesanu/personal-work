@@ -17,7 +17,14 @@ Napi::Number find5 (const Napi::CallbackInfo& info) {
 
 Napi::Number find6 (const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
+    Napi::Array a = info[0].As<Napi::Array>();
+    int value = info[1].As<Napi::Number>();
     int result = 0;
+    for (unsigned int i = 0; i < a.Length(); ++i) {
+        Napi::Value v = a[i];
+        int current = (int) v.As<Napi::Number>();
+        if (current == value) ++result;
+    }
     return Napi::Number::New(env, result);
 }
 
