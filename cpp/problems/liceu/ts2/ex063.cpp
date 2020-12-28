@@ -14,6 +14,7 @@ int main(int argc, char *argv[]) {
     int a, b;
     cout << "a = "; cin >> a;
     cout << "b = "; cin >> b;
-    cout << cmmdc(a, b) << "\n";
+    int c = cmmdc(a, b);
+    cout << c << "\n" << a * b / c << "\n";
     return 0;
 }
