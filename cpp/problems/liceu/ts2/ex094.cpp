@@ -46,7 +46,6 @@ void sort_normal(int a[100], int n) {
 
 void merge(int a[100], int l, int mid, int r);
 void merge_sort(int a[100], int l, int r) {
-    //cout << l << " " << r << "\n";
     if (l + 1 < r) {
         int mid = (l + r) / 2;
         merge_sort(a, l, mid);
@@ -57,11 +56,6 @@ void merge_sort(int a[100], int l, int r) {
 
 void merge(int a[100], int l, int mid, int r) {
     int i1 = l, i2 = mid, c[100], poz = l;
-    //cout << "l/m/r: " << l << " " << mid << " " << r << "\n";
-    //for (int i = i1; i < mid; i++) cout << a[i] << " ";
-    //cout << "\n";
-    //for (int i = mid; i < r; i++) cout << a[i] << " ";
-    //cout << "\n";
     while(i1 < mid && i2 < r) {
         if (a[i1] < a[i2]) {
             c[poz++] = a[i1++];
@@ -71,9 +65,7 @@ void merge(int a[100], int l, int mid, int r) {
     }
     while(i1 < mid) c[poz++] = a[i1++];
     while(i2 < r) c[poz++] = a[i2++];
-    //cout << " ---- \n";
     for (int i = l; i < r; i++) a[i] = c[i];
-    //cout << "\n";
 }
 
 void quick_sort() {
