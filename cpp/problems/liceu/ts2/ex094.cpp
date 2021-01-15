@@ -46,7 +46,7 @@ void sort_normal(int a[100], int n) {
 
 void merge(int a[100], int l, int mid, int r);
 void merge_sort(int a[100], int l, int r) {
-    if (l + 1 < r) {
+    if (l + 1 < r) { // ATENTION! if l + 1 == r then we only have one element, which is already sorted
         int mid = (l + r) / 2;
         merge_sort(a, l, mid);
         merge_sort(a, mid, r);
