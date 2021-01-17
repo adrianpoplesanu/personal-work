@@ -14,5 +14,5 @@ From project top level:
 /Users/adrianpoplesanu/Documents/git-projects/personal-work/java/goodrich
 
 mkdir classes
-192-168-0-105:goodrich adrianpoplesanu$ javac -d classes/ src/chapter1/*.java
-192-168-0-105:goodrich adrianpoplesanu$ java -cp classes/ chapter1.CounterDemo
+$ javac -d classes/ src/chapter1/*.java
+$ java -cp classes/ chapter1.CounterDemo
