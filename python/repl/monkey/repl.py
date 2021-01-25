@@ -1,9 +1,14 @@
+from lexer import Lexer
+
 class Repl(object):
     def __init__(self):
-        pass
+        #self.lexer = Lexer()
+        self.lexer = None
 
     def loop(self):
         #print '>> ',
         while True:
             line = raw_input('>> ')
-            print line
+            self.lexer = Lexer(line)
+            print self.lexer.nextToken(line[0])
+            #print line

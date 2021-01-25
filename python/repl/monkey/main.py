@@ -1,4 +1,3 @@
-import lexer
 from repl import Repl
 
 if __name__ == '__main__':
