@@ -6,9 +6,7 @@ class Repl(object):
         self.lexer = None
 
     def loop(self):
-        #print '>> ',
         while True:
             line = raw_input('>> ')
             self.lexer = Lexer(line)
             print self.lexer.nextToken(line[0])
-            #print line
