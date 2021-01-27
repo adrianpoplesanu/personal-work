@@ -1,9 +1,16 @@
 class Lexer(object):
-    def __init__(self, input, position=0, readPosition=0, ch=''):
+    def __init__(self, input='', position=0, readPosition=0, ch=''):
         self.input = input
         self.position = position
         self.readPosition = readPosition
         self.ch = ch
+        self.readChar()
+
+    def New(self, input=''):
+        self.input = input
+        self.position = 0
+        self.readPosition = 0
+        self.ch = ''
         self.readChar()
 
     def readChar(self):
@@ -41,13 +48,26 @@ class Lexer(object):
             return Token.keywords[ident]
         return TokenType.IDENT
 
-    def nextToken(self, ch):
+    def nextToken(self):
+        ch = self.ch
         tok = Token()
         self.skipWhitespace()
         if self.ch == '=':
             tok = self.newToken(TokenType.ASSIGN, self.ch)
         elif self.ch == '+':
             tok = self.newToken(TokenType.PLUS, self.ch)
+        elif self.ch == '-':
+            tok = self.newToken(TokenType.MINUS, self.ch)
+        elif self.ch == "!":
+            tok = self.newToken(TokenType.BANG, self.ch)
+        elif self.ch == "/":
+            tok = self.newToken(TokenType.SLASH, self.ch)
+        elif self.ch == "*":
+            tok = self.newToken(TokenType.ASTERISK, self.ch)
+        elif self.ch == "<":
+            tok = self.newToken(TokenType.LT, self.ch)
+        elif self.ch == ">":
+            tok = self.newToken(TokenType.GT, self.ch)
         elif self.ch == ',':
             tok = self.newToken(TokenType.COMMA, self.ch)
         elif self.ch == ';':
@@ -88,6 +108,12 @@ class TokenType(object):
     INT = "INT"
     ASSIGN = "="
     PLUS = "+"
+    MINUS = "-"
+    BANG = "!"
+    ASTERISK = "*"
+    SLASH = "/"
+    LT = "<"
+    GT = ">"
     COMMA = ","
     SEMICOLON = ";"
     LPAREN = "("
@@ -96,6 +122,11 @@ class TokenType(object):
     RBRACE = "}"
     FUNCTION = "FUNCTION"
     LET = "LET"
+    TRUE = "TRUE"
+    FALSE = "FALSE"
+    IF = "IF"
+    ELSE = "ELSE"
+    RETURN = "RETURN"
 
 
 class Token(object):
@@ -107,6 +138,12 @@ class Token(object):
         TokenType.IDENT: "IDENT",
         TokenType.INT: "INT",
         TokenType.PLUS: "PLUS",
+        TokenType.MINUS: "MINUS",
+        TokenType.BANG: "BANG",
+        TokenType.ASTERISK: "ASTERISK",
+        TokenType.SLASH: "SLASH",
+        TokenType.LT: "LT",
+        TokenType.GT: "GT",
         TokenType.COMMA: "COMMA",
         TokenType.SEMICOLON: "SEMICOLON",
         TokenType.LPAREN: "LPAREN",
@@ -115,11 +152,21 @@ class Token(object):
         TokenType.RBRACE: "RBRACE",
         TokenType.FUNCTION: "FUNCTION",
         TokenType.LET: "LET",
+        TokenType.TRUE: "TRUE",
+        TokenType.FALSE: "FALSE",
+        TokenType.IF: "IF",
+        TokenType.ELSE: "ELSE",
+        TokenType.RETURN: "RETURN"
     }
 
     keywords = {
         "fn": TokenType.FUNCTION,
-        "let": TokenType.LET
+        "let": TokenType.LET,
+        "true": TokenType.TRUE,
+        "false": TokenType.FALSE,
+        "if": TokenType.IF,
+        "else": TokenType.ELSE,
+        "return": TokenType.RETURN
     }
 
     def __init__(self, token_type=None, literal=None):
