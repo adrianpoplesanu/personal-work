@@ -48,18 +48,36 @@ class Lexer(object):
             return Token.keywords[ident]
         return TokenType.IDENT
 
+    def peekChar(self):
+        if self.readPosition >= len(self.input):
+            return 0
+        else:
+            return self.input[self.readPosition]
+
     def nextToken(self):
         ch = self.ch
         tok = Token()
         self.skipWhitespace()
         if self.ch == '=':
-            tok = self.newToken(TokenType.ASSIGN, self.ch)
+            if self.peekChar() == '=':
+                current_ch = self.ch
+                self.readChar()
+                literal = current_ch + self.ch
+                tok = self.newToken(TokenType.EQ, literal)
+            else:
+                tok = self.newToken(TokenType.ASSIGN, self.ch)
         elif self.ch == '+':
             tok = self.newToken(TokenType.PLUS, self.ch)
         elif self.ch == '-':
             tok = self.newToken(TokenType.MINUS, self.ch)
         elif self.ch == "!":
-            tok = self.newToken(TokenType.BANG, self.ch)
+            if self.peekChar() == '=':
+                current_ch = self.ch
+                self.readChar()
+                literal = current_ch + self.ch
+                tok = self.newToken(TokenType.NOT_EQ, literal)
+            else:
+                tok = self.newToken(TokenType.BANG, self.ch)
         elif self.ch == "/":
             tok = self.newToken(TokenType.SLASH, self.ch)
         elif self.ch == "*":
@@ -127,6 +145,8 @@ class TokenType(object):
     IF = "IF"
     ELSE = "ELSE"
     RETURN = "RETURN"
+    EQ = "=="
+    NOT_EQ = "!="
 
 
 class Token(object):
@@ -156,7 +176,9 @@ class Token(object):
         TokenType.FALSE: "FALSE",
         TokenType.IF: "IF",
         TokenType.ELSE: "ELSE",
-        TokenType.RETURN: "RETURN"
+        TokenType.RETURN: "RETURN",
+        TokenType.EQ: "EQ",
+        TokenType.NOT_EQ: "NOT_EQ"
     }
 
     keywords = {
