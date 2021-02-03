@@ -1,6 +1,8 @@
 class Node(object):
     def TokenLiteral(self):
         pass
+    def String(self):
+        pass
 
 class Statement(Node):
     def statementNode(self):
@@ -18,3 +20,26 @@ class Program(object):
             return self.statements.TokenLiteral()
         else:
             return ''
+    def String(self):
+        for statement in statements:
+            print statement.String()
+
+class LetStatement(Statement):
+    def __init__(self):
+        self.token = None
+        self.name = None
+        self.value = None
+
+    def statementNode(self):
+        pass
+
+    def TokenLiteral(self):
+        return self.token.literal
+
+    def String(self):
+        out = ''
+        out = out + self.TokenLiteral() + " " + self.name.String() + "=",
+        if self.value:
+            out = out + self.value.String(),
+        out = out + ";"
+        return out
