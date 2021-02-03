@@ -4,25 +4,30 @@ class Node(object):
     def String(self):
         pass
 
+
 class Statement(Node):
     def statementNode(self):
         pass
 
+
 class Expression(Node):
     def expressionNode(self):
         pass
+
 
 class Program(object):
     statements = []
 
     def TokenLiteral(self):
         if len(self.statements) > 0:
-            return self.statements.TokenLiteral()
+            return self.statements[0].TokenLiteral()
         else:
             return ''
+
     def String(self):
         for statement in statements:
             print statement.String()
+
 
 class LetStatement(Statement):
     def __init__(self):
