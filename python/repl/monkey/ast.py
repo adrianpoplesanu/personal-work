@@ -30,8 +30,8 @@ class Program(object):
 
 
 class LetStatement(Statement):
-    def __init__(self):
-        self.token = None
+    def __init__(self, token=None):
+        self.token = token
         self.name = None
         self.value = None
 
@@ -48,3 +48,17 @@ class LetStatement(Statement):
             out = out + self.value.String(),
         out = out + ";"
         return out
+
+class Identifier(object):
+    def __init__(self, token=None, value=''):
+        self.token = token
+        self.value = value
+
+    def expressionNode(self):
+        pass
+
+    def TokenLiteral(self):
+        return self.token.literal
+
+    def String(self):
+        pass
