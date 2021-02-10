@@ -9,8 +9,8 @@ class Parser(object):
         self.lexer = lexer
         self.curToken = None
         self.peekToken = None
-        self.nextToken()
-        self.nextToken()
+        #self.nextToken()
+        #self.nextToken()
 
     def new(self, lexer=None):
         self.lexer = lexer # maybe don't do it like that
