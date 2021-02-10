@@ -25,7 +25,7 @@ class Program(object):
             return ''
 
     def String(self):
-        for statement in statements:
+        for statement in self.statements:
             print statement.String()
 
 
@@ -43,9 +43,9 @@ class LetStatement(Statement):
 
     def String(self):
         out = ''
-        out = out + self.TokenLiteral() + " " + self.name.String() + "=",
+        out = out + self.TokenLiteral() + " " + self.name.String() + " := "
         if self.value:
-            out = out + self.value.String(),
+            out = out + self.value.String()
         out = out + ";"
         return out
 
@@ -61,4 +61,4 @@ class Identifier(object):
         return self.token.literal
 
     def String(self):
-        pass
+        return 'this is identifier token ' + str(self.token) + '; with value ' + self.value

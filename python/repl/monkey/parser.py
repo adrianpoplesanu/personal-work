@@ -1,5 +1,6 @@
 from ast import Program
 from ast import LetStatement
+from ast import Identifier
 from lexer import TokenType
 
 
@@ -8,6 +9,8 @@ class Parser(object):
         self.lexer = lexer
         self.curToken = None
         self.peekToken = None
+        self.nextToken()
+        self.nextToken()
 
     def new(self, lexer=None):
         self.lexer = lexer # maybe don't do it like that
@@ -16,12 +19,13 @@ class Parser(object):
 
     def nextToken(self):
         self.curToken = self.peekToken
-        self.peekToken = self.lexer.NextToken()
+        self.peekToken = self.lexer.nextToken()
 
     def ParseProgram(self):
         program = Program()
-        while self.curToken != TokenType.EOF:
+        while self.curToken.token_type != TokenType.EOF:
             statement = self.parseStatement()
+            print statement
             if statement:
                 program.statements.append(statement)
             self.nextToken()
@@ -34,10 +38,10 @@ class Parser(object):
             return None
 
     def parseLetStatement(self):
-        stamement = LetStatement(self.curToken)
+        statement = LetStatement(self.curToken)
         if not self.expectPeek(TokenType.IDENT):
             return None
-        statement.Name = Identifier(self.curToken, self.curToken.literal)
+        statement.name = Identifier(self.curToken, self.curToken.literal)
         if not self.expectPeek(TokenType.ASSIGN):
             return None
         while not self.curTokenIs(TokenType.SEMICOLON):
@@ -53,6 +57,6 @@ class Parser(object):
     def expectPeek(self, token_type):
         if self.peekTokenIs(token_type):
             self.nextToken()
-            return true
+            return True
         else:
-            return false
+            return False

@@ -55,7 +55,7 @@ class Lexer(object):
             return self.input[self.readPosition]
 
     def nextToken(self):
-        ch = self.ch
+        #ch = self.ch
         tok = Token()
         self.skipWhitespace()
         if self.ch == '=':
