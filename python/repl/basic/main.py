@@ -1,22 +1,5 @@
-import signal
-import sys
-
-def signal_ctrl_c_handler(sig, frame):
-    print "\nleving repl, bye bye!"
-    sys.exit(0)
-
-
-class Repl(object):
-    def __init__(self, interpreter=None):
-        self.interpreter = interpreter
-
-    def loop(self):
-        # register a handler for SIGINT = signal interrupt(ctrl + c)
-        signal.signal(signal.SIGINT, signal_ctrl_c_handler)
-        print "welcome to the repl"
-        while True:
-            line = raw_input('>> ')
-            self.interpreter.execute(line)
+from repl import Repl
+from lexer import Lexer
 
 
 class EchoInterpreter(object):
@@ -26,7 +9,22 @@ class EchoInterpreter(object):
         print line
 
 
+class BasicInterpreter(object):
+    def __init__(self, lexer=None, parser=None):
+        self.lexer = lexer
+        self.parser = parser
+
+    def execute(self, line):
+        self.lexer.new(source=line)
+        tok = self.lexer.next_token()
+        #while tok.token_type != TokenType.EOF:
+        #    print tok
+        #    tok = self.lexer.next_token()
+
+
 if __name__ == '__main__':
-    interpreter = EchoInterpreter()
+    #interpreter = EchoInterpreter()
+    lexer = Lexer()
+    interpreter = BasicInterpreter(lexer=lexer)
     repl = Repl(interpreter=interpreter)
     repl.loop()
