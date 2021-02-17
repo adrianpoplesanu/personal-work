@@ -14,8 +14,17 @@ public class StringCalculator {
 		return count;
 	}
 	
+	public void removePunctuation(StringBuilder s) {
+		String text = s.toString();
+		text = text.replaceAll("\\p{Punct}", "");
+		s.replace(0, s.length(), text);
+	}
+	
 	public static void main(String[] args) {
 		StringCalculator stringCalculator = new StringCalculator();
 		System.out.println(stringCalculator.countVowels("buna dimineata!"));
+		StringBuilder text = new StringBuilder("bu-na dimin,eata!");
+		stringCalculator.removePunctuation(text);
+		System.out.println(text);
 	}
 }
