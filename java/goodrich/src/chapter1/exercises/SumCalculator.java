@@ -8,7 +8,7 @@ public class SumCalculator {
 		return total;
 	}
 	
-	public int oddSum(int n) {
+	public int evenSum(int n) {
 		int total = 0;
 		for (int i = 0; i <= n; ++i) if (i % 2 == 0) total += i;
 		return total;
@@ -19,8 +19,8 @@ public class SumCalculator {
 		System.out.println(sumCalculator.sum(5));
 		System.out.println(sumCalculator.sum(12));
 		System.out.println(sumCalculator.sum(45));
-		System.out.println(sumCalculator.oddSum(5));
-		System.out.println(sumCalculator.oddSum(12));
-		System.out.println(sumCalculator.oddSum(45));
+		System.out.println(sumCalculator.evenSum(5));
+		System.out.println(sumCalculator.evenSum(12));
+		System.out.println(sumCalculator.evenSum(45));
 	}
 }
