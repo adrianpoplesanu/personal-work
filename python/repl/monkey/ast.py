@@ -18,6 +18,9 @@ class Expression(Node):
 class Program(object):
     statements = []
 
+    #def __init__(self):
+    #    self.statements = []
+
     def TokenLiteral(self):
         if len(self.statements) > 0:
             return self.statements[0].TokenLiteral()
@@ -27,6 +30,9 @@ class Program(object):
     def String(self):
         for statement in self.statements:
             print statement.String()
+
+    def reset(self):
+        self.statements = []
 
 
 class LetStatement(Statement):
@@ -49,6 +55,7 @@ class LetStatement(Statement):
         out = out + ";"
         return out
 
+
 class Identifier(object):
     def __init__(self, token=None, value=''):
         self.token = token
@@ -62,3 +69,18 @@ class Identifier(object):
 
     def String(self):
         return 'this is identifier token ' + str(self.token) + '; with value ' + self.value
+
+
+class ReturnStatement(Statement):
+    def __init__(self, token):
+        self.token = token
+        self.expression = None
+
+    def statementNode(self):
+        pass
+
+    def TokenLiteral(self):
+        return self.token.literal
+
+    def String(self):
+        return 'this is identifier token ' + str(self.token) + '; with expresion ' + str(self.expression)
