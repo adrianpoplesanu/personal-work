@@ -55,10 +55,26 @@ class Lexer(object):
         self.read_char()
 
     def next_token(self):
-        pass
+        token = Token()
+        self.skip_whitespace()
+        if self.ch == '=':
+            token = self.new_token(TokenType.ILLEGAL, self.ch)
+        elif self.ch == ';':
+            token = self.new_token(TokenType.ILLEGAL, self.ch)
+        elif self.ch == 0:
+            token = self.new_token(TokenType.EOF, '')
+        else:
+            if self.is_letter:
+                token = self.new_token(TokenType.ILLEGAL, self.ch)
+            elif self.is_number:
+                token = self.new_token(TokenType.ILLEGAL, self.ch)
+            else:
+                token = self.new_token(TokenType.ILLEGAL, self.ch)
+        self.read_char()
+        return token 
 
-    def new_token(self):
-        pass
+    def new_token(self, token_type, literal):
+        return Token(token_type, literal)
 
     def read_char(self):
         if self.read_position >= len(self.source):
@@ -75,22 +91,31 @@ class Lexer(object):
             return self.source[self.read_position]
 
     def read_identifier(self):
-        pass
+        start = self.position
+        while self.is_letter():
+            self.read_char()
+        return self.source[start:self.position]
 
     def read_number(self):
-        pass
+        start = self.position
+        while self.is_digit():
+            self.read_char()
+        return self.source[start:self.position]
 
-    def lookup_identifier(self):
-        pass
+    def lookup_identifier(self, ident):
+        if ident in keywords:
+            return keywords[ident]
+        return TokenType.IDENT
 
     def skip_whitespace(self):
-        pass
+        while self.ch == ' ' or self.ch == '\t' or self.ch == '\n' or self.ch == '\r':
+            self.read_char()
 
     def is_letter(self):
-        pass
+        return ('a' <= self.ch and self.ch <= 'z') or ('A' <= self.ch and self.ch <= 'Z') or self.ch == '_'
 
     def is_digit(self):
-        pass
+        return '0' <= self.ch and self.ch <= '9' 
 
 
 class Token(object):

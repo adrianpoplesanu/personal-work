@@ -1,5 +1,6 @@
 from repl import Repl
 from lexer import Lexer
+from token_type import TokenType
 
 
 class EchoInterpreter(object):
@@ -17,9 +18,9 @@ class BasicInterpreter(object):
     def execute(self, line):
         self.lexer.new(source=line)
         tok = self.lexer.next_token()
-        #while tok.token_type != TokenType.EOF:
-        #    print tok
-        #    tok = self.lexer.next_token()
+        while tok.token_type != TokenType.EOF:
+            print tok
+            tok = self.lexer.next_token()
 
 
 if __name__ == '__main__':
