@@ -1,12 +1,17 @@
 package worker;
 
+import java.util.Arrays;
+
 public class Main {
 
 	public void solve(int a[], int numThreads) {
 		Thread[] t = new Thread[numThreads];
 		int[] results = new int[numThreads];
+		int[] input;
 		for (int i = 0; i < numThreads; i++) {
-			t[i] = new Task(i, a);
+			if (i == 0) input = Arrays.copyOfRange(a, 0, a.length / 2);
+			else input = Arrays.copyOfRange(a, a.length / 2, a.length);
+			t[i] = new Task(i, input);
 			t[i].start();
 		}
 		
