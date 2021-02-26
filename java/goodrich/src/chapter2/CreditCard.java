@@ -6,6 +6,8 @@ public class CreditCard {
 	private String CVV;
 	private String cardBrand;
 	private String name;
+	protected float balance;
+	private float limit;
 	
 	public CreditCard() {
 		this.accountNum = null;
@@ -13,14 +15,31 @@ public class CreditCard {
 		this.CVV = null;
 		this.cardBrand = null;
 		this.name = null;
+		this.balance = 0f;
+		this.limit = 0f;
 	}
 	
-	public CreditCard(String accountNum, String expDate, String cvv, String cardBrand, String name) {
+	public CreditCard(String accountNum, String expDate, String cvv, String cardBrand, 
+					  String name, float balance, float limit) {
 		this.accountNum = accountNum;
 		this.expDate = expDate;
 		this.CVV = cvv;
 		this.cardBrand = cardBrand;
 		this.name = name;
+		this.balance = balance;
+		this.limit = limit;
+	}
+	
+	public boolean charge(float amount) {
+		if (this.balance + amount < this.limit) {
+			this.balance += amount;
+			return true;
+		}
+		return false;
+	}
+	
+	public void makePayment(float amount)  {
+		this.balance -= amount;
 	}
 	
 	public String getAccountNum() {
@@ -63,7 +82,19 @@ public class CreditCard {
 		this.name = name;
 	}
 	
-	public static void main(String[] args) {
-
+	public float getBalance() {
+		return this.balance;
+	}
+	
+	public void setBalance(float balance) {
+		this.balance = balance;
+	}
+	
+	public float getLimit() {
+		return this.limit;
+	}
+	
+	public void setLimit(float limit) {
+		this.limit = limit;
 	}
 }
