@@ -2,6 +2,8 @@ import signal
 import sys
 from lexer import Lexer
 from lexer import TokenType
+from parser import Parser
+from ast import Program
 
 
 def signal_ctrl_c_handler(sig, frame):
@@ -13,6 +15,8 @@ class Repl(object):
     def __init__(self, filename=None):
         self.lexer = Lexer()
         self.filename = filename
+        self.parser = Parser()
+        self.program = Program()
 
     def loop(self):
         signal.signal(signal.SIGINT, signal_ctrl_c_handler)
@@ -20,16 +24,30 @@ class Repl(object):
             data = open(self.filename, 'r').read()
             print data
             self.lexer.New(data)
-            tok = self.lexer.nextToken()
-            while tok.token_type != TokenType.EOF:
-                print tok
-                tok = self.lexer.nextToken()
+
+            self.parser.new(self.lexer)
+            self.program.reset()
+            self.parser.ParseProgram(self.program)
+            print self.program
+            self.program.String()
+
+            #tok = self.lexer.nextToken()
+            #while tok.token_type != TokenType.EOF:
+            #    print tok
+            #    tok = self.lexer.nextToken()
         else:
             while True:
                 line = raw_input('>> ')
                 #self.lexer = Lexer(line)
                 self.lexer.New(line)
-                tok = self.lexer.nextToken()
-                while tok.token_type != TokenType.EOF:
-                    print tok
-                    tok = self.lexer.nextToken()
+
+                self.parser.new(self.lexer)
+                self.program.reset()
+                self.parser.ParseProgram(self.program)
+                print self.program
+                self.program.String()
+
+                #tok = self.lexer.nextToken()
+                #while tok.token_type != TokenType.EOF:
+                #    print tok
+                #    tok = self.lexer.nextToken()
