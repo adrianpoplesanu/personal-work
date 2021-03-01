@@ -75,6 +75,7 @@ class ReturnStatement(Statement):
     def __init__(self, token):
         self.token = token
         self.expression = None
+        self.returnValue = ''
 
     def statementNode(self):
         pass
@@ -83,4 +84,22 @@ class ReturnStatement(Statement):
         return self.token.literal
 
     def String(self):
-        return 'this is identifier token ' + str(self.token) + '; with expresion ' + str(self.expression)
+        #return 'this is identifier token ' + str(self.token) + '; with expresion ' + str(self.expression)
+        out = ''
+        out = out + self.TokenLiteral() + ' '
+        if self.returnValue:
+            out = out + self.returnValue
+        out = out + ';'
+        return out
+
+
+class ExpressionStatement(Node):
+    def __init__(self, token=None, expression=None):
+        self.token = token
+        self.expression = expression
+
+    def statementNode(self):
+        pass
+
+    def TokenLiteral(self):
+        return self.token.literal
