@@ -68,7 +68,8 @@ class Identifier(object):
         return self.token.literal
 
     def String(self):
-        return 'this is identifier token ' + str(self.token) + '; with value ' + self.value
+        #return 'this is identifier token ' + str(self.token) + '; with value ' + self.value
+        return self.value
 
 
 class ReturnStatement(Statement):
@@ -103,3 +104,8 @@ class ExpressionStatement(Node):
 
     def TokenLiteral(self):
         return self.token.literal
+
+    def String(self):
+        if self.expression:
+            return self.expression.String()
+        return ''
