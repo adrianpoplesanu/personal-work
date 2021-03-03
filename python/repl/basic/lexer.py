@@ -7,6 +7,7 @@ keywords = {
     "false": TokenType.FALSE,
     "if": TokenType.IF,
     "else": TokenType.ELSE,
+    "while": TokenType.WHILE,
 }
 
 token_type_map = {
@@ -34,6 +35,7 @@ token_type_map = {
     TokenType.FALSE: "FALSE",
     TokenType.IF: "IF",
     TokenType.ELSE: "ELSE",
+    TokenType.WHILE: "WHILE",
     TokenType.RETURN: "RETURN",
     TokenType.EQ: "EQ",
     TokenType.NOT_EQ: "NOT_EQ"
@@ -55,22 +57,79 @@ class Lexer(object):
         self.read_char()
 
     def next_token(self):
+        skip_last_read = False
         token = Token()
         self.skip_whitespace()
         if self.ch == '=':
-            token = self.new_token(TokenType.ILLEGAL, self.ch)
-        elif self.ch == ';':
-            token = self.new_token(TokenType.ILLEGAL, self.ch)
-        elif self.ch == 0:
-            token = self.new_token(TokenType.EOF, '')
-        else:
-            if self.is_letter:
-                token = self.new_token(TokenType.ILLEGAL, self.ch)
-            elif self.is_number:
-                token = self.new_token(TokenType.ILLEGAL, self.ch)
+            if self.peek_char() == '=':
+                literal = self.ch + self.peek_char()
+                self.read_char()
+                token = self.new_token(TokenType.EQ, literal)
             else:
+                literal = self.ch
+                token = self.new_token(TokenType.ASSIGN, literal)
+        elif self.ch == '+':
+            literal = self.ch
+            token = self.new_token(TokenType.PLUS, literal)
+        elif self.ch == '-':
+            literal = self.ch
+            token = self.new_token(TokenType.MINUS, literal)
+        elif self.ch == '*':
+            literal = self.ch
+            token = self.new_token(TokenType.ASTERISK, literal)
+        elif self.ch == '/':
+            literal = self.ch
+            token = self.new_token(TokenType.SLASH, literal)
+        elif self.ch == '{':
+            literal = self.ch
+            token = self.new_token(TokenType.LBRACE, literal)
+        elif self.ch == '}':
+            literal = self.ch
+            token = self.new_token(TokenType.RBRACE, literal)
+        elif self.ch == '(':
+            literal = self.ch
+            token = self.new_token(TokenType.LPAREN, literal)
+        elif self.ch == ')':
+            literal = self.ch
+            token = self.new_token(TokenType.RPAREN, literal)
+        elif self.ch == '>':
+            literal = self.ch
+            token = self.new_token(TokenType.GT, literal)
+        elif self.ch == '<':
+            literal = self.ch
+            token = self.new_token(TokenType.LT, literal)
+        elif self.ch == ',':
+            literal = self.ch
+            token = self.new_token(TokenType.COMMA, literal)
+        elif self.ch == '!':
+            if self.peek_char() == '=':
+                literal = self.ch + self.peek_char()
+                self.read_char()
+                token = self.new_token(TokenType.NOT_EQ, literal)
+            else:
+                literal = self.ch
+                token = self.new_token(TokenType.BANG, literal)
+        elif self.ch == ';':
+            literal = self.ch
+            token = self.new_token(TokenType.SEMICOLON, literal)
+        elif self.ch == 0:
+            literal = ''
+            token = self.new_token(TokenType.EOF, literal)
+        else:
+            if self.is_letter():
+                literal = self.read_identifier()
+                token_type = self.lookup_identifier(literal)
+                token = self.new_token(token_type, literal)
+                skip_last_read = True
+            elif self.is_digit():
+                literal = self.read_number()
+                token = self.new_token(TokenType.INT, literal)
+                skip_last_read = True
+            else:
+                literal = self.ch
                 token = self.new_token(TokenType.ILLEGAL, self.ch)
-        self.read_char()
+        if not skip_last_read:
+            self.read_char()
         return token 
 
     def new_token(self, token_type, literal):

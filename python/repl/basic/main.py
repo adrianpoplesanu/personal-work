@@ -1,5 +1,7 @@
 from repl import Repl
 from lexer import Lexer
+from parser import Parser
+from ast import Program
 from token_type import TokenType
 
 
@@ -26,6 +28,8 @@ class BasicInterpreter(object):
 if __name__ == '__main__':
     #interpreter = EchoInterpreter()
     lexer = Lexer()
-    interpreter = BasicInterpreter(lexer=lexer)
-    repl = Repl(interpreter=interpreter)
+    parser = Parser(lexer)
+    program = Program()
+    interpreter = BasicInterpreter(lexer=lexer, parser=parser)
+    repl = Repl(interpreter=interpreter, program=program)
     repl.loop()

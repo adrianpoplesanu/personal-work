@@ -24,6 +24,7 @@ class TokenType(object):
     FALSE = "FALSE"
     IF = "IF"
     ELSE = "ELSE"
+    WHILE = "WHILE"
     RETURN = "RETURN"
     EQ = "=="
     NOT_EQ = "!="

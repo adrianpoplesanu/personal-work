@@ -1,5 +1,6 @@
 class Node(object):
-    pass
+    def __str__(self):
+        return 'Node Interface - method not impremented in subclass'
 
 class Statement(Node):
     pass
@@ -14,6 +15,10 @@ class Program(object):
         else:
             self.statements = []
 
+    def debug(self):
+        for statement in statements:
+            print statement
+
 class LetStatement(Statement):
     pass
 
@@ -26,5 +31,5 @@ class ExpressionStatement(Statement):
 class IfExpression(Expression):
     pass
 
-class ForExpression(Expression):
+class WhileExpression(Expression):
     pass
