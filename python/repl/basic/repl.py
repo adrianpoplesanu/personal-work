@@ -17,4 +17,7 @@ class Repl(object):
         print "welcome to the repl"
         while True:
             line = raw_input('>> ')
-            self.interpreter.execute(line)
+            self.interpreter.execute(line, self.program)
+
+    def execute_file(self, source):
+        pass

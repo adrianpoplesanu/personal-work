@@ -17,12 +17,14 @@ class BasicInterpreter(object):
         self.lexer = lexer
         self.parser = parser
 
-    def execute(self, line):
-        self.lexer.new(source=line)
-        tok = self.lexer.next_token()
-        while tok.token_type != TokenType.EOF:
-            print tok
-            tok = self.lexer.next_token()
+    def execute(self, line, program):
+        self.parser.reset(source=line)
+        self.parser.build_program_statements(program)
+        program.debug()
+        #tok = self.lexer.next_token()
+        #while tok.token_type != TokenType.EOF:
+        #    print tok
+        #    tok = self.lexer.next_token()
 
 
 if __name__ == '__main__':

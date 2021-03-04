@@ -16,7 +16,7 @@ class Program(object):
             self.statements = []
 
     def debug(self):
-        for statement in statements:
+        for statement in self.statements:
             print statement
 
 class LetStatement(Statement):
