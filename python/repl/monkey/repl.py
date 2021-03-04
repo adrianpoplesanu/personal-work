@@ -28,7 +28,7 @@ class Repl(object):
             self.parser.new(self.lexer)
             self.program.reset()
             self.parser.ParseProgram(self.program)
-            print self.program
+            #print self.program
             self.program.String()
 
             #tok = self.lexer.nextToken()
@@ -44,7 +44,7 @@ class Repl(object):
                 self.parser.new(self.lexer)
                 self.program.reset()
                 self.parser.ParseProgram(self.program)
-                print self.program
+                #print self.program
                 self.program.String()
 
                 #tok = self.lexer.nextToken()

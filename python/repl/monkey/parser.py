@@ -2,10 +2,15 @@ from ast import Program
 from ast import LetStatement
 from ast import ReturnStatement
 from ast import Identifier
+from ast import ExpressionStatement
 from lexer import TokenType
 
 
 class Parser(object):
+    prefixParseFns = {}
+    infixParseFns = {}
+    errors = []
+
     def __init__(self, lexer=None):
         self.lexer = lexer
         self.curToken = None
@@ -17,10 +22,18 @@ class Parser(object):
         self.lexer = lexer # maybe don't do it like that
         self.nextToken()
         self.nextToken()
+        self.prefixParseFns = {}
+        self.registerPrefix(TokenType.IDENT, self.parseIdentifier)
 
     def nextToken(self):
         self.curToken = self.peekToken
         self.peekToken = self.lexer.nextToken()
+
+    def registerPrefix(self, token_type, fn):
+        self.prefixParseFns[token_type] = fn
+
+    def registerInfix(self, token_type, fn):
+        self.infixParseFns[token_type] = fn
 
     def ParseProgram(self, program):
         #program = Program()
@@ -38,7 +51,7 @@ class Parser(object):
         elif self.curToken.token_type == TokenType.RETURN:
             return self.parseReturnStatement()
         else:
-            return None
+            return self.parseExpressionStatement()
 
     def parseLetStatement(self):
         statement = LetStatement(self.curToken)
@@ -69,3 +82,30 @@ class Parser(object):
             return True
         else:
             return False
+
+    def parseExpressionStatement(self):
+        statement = ExpressionStatement(self.curToken)
+        statement.expression = self.parseExpression(ParseType.LOWEST)
+        if self.peekTokenIs(TokenType.SEMICOLON):
+            self.nextToken()
+        return statement
+
+    def parseExpression(self, precedence):
+        prefix = self.prefixParseFns[self.curToken.token_type]
+        if not prefix:
+            return None
+        leftExp = prefix()
+        return leftExp
+
+    def parseIdentifier(self):
+        return Identifier(token = self.curToken, value=self.curToken.literal)
+
+
+class ParseType(object):
+    LOWEST = 1
+    EQUALS = 2
+    LESSGREATER = 3
+    SUM = 4
+    PRODUCT = 5
+    PREFIX = 6
+    CALL = 7
