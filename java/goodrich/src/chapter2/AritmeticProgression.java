@@ -1,6 +1,6 @@
 package chapter2;
 
-public class AritmeticProgression extends Progression {
+public class AritmeticProgression extends AbstractProgression {
 	protected long increment;
 
 	public AritmeticProgression() {
@@ -18,5 +18,10 @@ public class AritmeticProgression extends Progression {
 	
 	protected void advance() {
 		current += increment;
+	}
+	
+	public static void main(String[] args) {
+		AritmeticProgression ap = new AritmeticProgression(3, 1);
+		ap.printProgression(6);
 	}
 }
