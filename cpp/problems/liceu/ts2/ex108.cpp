@@ -44,12 +44,50 @@ void InsertAfter(Node* &start, Node* &end, int searched, int val) {
     }
 }
 
-void InsertBefore(Node* &start, int searched, int val) {
-
+void InsertBefore(Node* &start, Node* &end, int searched, int val) {
+    Node *c = start, *prev;
+    while(c->info != searched) {
+        if (c == end) {
+            cout << "Value " << searched << " not found\n";
+            return;
+        }
+        prev = c;
+        c = c->next;
+    }
+    if (c == start) {
+        prev = new Node();
+        prev->info = val;
+        prev->next = start;
+        start = prev;
+    } else {
+        Node *current = new Node();
+        current->info = val;
+        current->next = c;
+        prev->next = current;
+    }
 }
 
-void Delete(Node* &start, int searched) {
-
+void Delete(Node* &start, Node* &end, int searched) {
+    Node *c = start, *prev;
+    while(c->info != searched) {
+        if (c == end) {
+            cout << "Value " << searched << " not found\n";
+            return;
+        }
+        prev = c;
+        c = c->next;
+    }
+    if (c == start) {
+        start = c->next;
+        delete c;
+    } else if (c == end) {
+        prev->next = NULL;
+        end = prev;
+        delete c;
+    } else {
+        prev->next = c->next;
+        delete c;
+    }
 }
 
 int main(int argc, char *argv[]) {
@@ -61,5 +99,13 @@ int main(int argc, char *argv[]) {
     InsertAfter(start, end, 3, 9);
     InsertAfter(start, end, 9, 2);
     List(start);
+    Delete(start, end, 1);
+    List(start);
+    Delete(start, end, 2);
+    List(start);
+    Delete(start, end, 2);
+    List(start);
+    Delete(start, end, 2);
+    List(start);    
     return 0;
 }
