@@ -56,22 +56,6 @@ class LetStatement(Statement):
         return out
 
 
-class Identifier(object):
-    def __init__(self, token=None, value=''):
-        self.token = token
-        self.value = value
-
-    def expressionNode(self):
-        pass
-
-    def TokenLiteral(self):
-        return self.token.literal
-
-    def String(self):
-        #return 'this is identifier token ' + str(self.token) + '; with value ' + self.value
-        return self.value
-
-
 class ReturnStatement(Statement):
     def __init__(self, token):
         self.token = token
@@ -109,3 +93,50 @@ class ExpressionStatement(Node):
         if self.expression:
             return self.expression.String()
         return ''
+
+
+class Identifier(object):
+    def __init__(self, token=None, value=''):
+        self.token = token
+        self.value = value
+
+    def expressionNode(self):
+        pass
+
+    def TokenLiteral(self):
+        return self.token.literal
+
+    def String(self):
+        #return 'this is identifier token ' + str(self.token) + '; with value ' + self.value
+        return self.value
+
+
+class IntegerLiteral(object):
+    def __init__(self, token=None, value=0):
+        self.token = token
+        self.value = value
+
+    def expressionNode(self):
+        pass
+
+    def TokenLiteral(self):
+        return self.token.literal
+
+    def String(self):
+        return self.token.literal
+
+
+class PrefixExpression(object):
+    def __init__(self, token=None, operator='', right=None):
+        self.token = token
+        self.operator = operator
+        self.right = right
+
+    def expressionNode(self):
+        pass
+
+    def TokenLiteral(self):
+        return self.token.literal
+
+    def String(self):
+        pass

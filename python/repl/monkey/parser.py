@@ -2,6 +2,7 @@ from ast import Program
 from ast import LetStatement
 from ast import ReturnStatement
 from ast import Identifier
+from ast import IntegerLiteral
 from ast import ExpressionStatement
 from lexer import TokenType
 
@@ -24,6 +25,7 @@ class Parser(object):
         self.nextToken()
         self.prefixParseFns = {}
         self.registerPrefix(TokenType.IDENT, self.parseIdentifier)
+        self.registerPrefix(TokenType.INT, self.parseIntegerLiteral)
 
     def nextToken(self):
         self.curToken = self.peekToken
@@ -99,6 +101,12 @@ class Parser(object):
 
     def parseIdentifier(self):
         return Identifier(token = self.curToken, value=self.curToken.literal)
+
+    def parseIntegerLiteral(self):
+        lit = IntegerLiteral(token = self.curToken)
+        val = int(self.curToken.literal)
+        lit.value = val
+        return lit
 
 
 class ParseType(object):
