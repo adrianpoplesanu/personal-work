@@ -139,4 +139,5 @@ class PrefixExpression(object):
         return self.token.literal
 
     def String(self):
-        pass
+        out = '(' + self.operator + self.right.String() + ')'
+        return out

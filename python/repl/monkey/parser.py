@@ -4,6 +4,7 @@ from ast import ReturnStatement
 from ast import Identifier
 from ast import IntegerLiteral
 from ast import ExpressionStatement
+from ast import PrefixExpression
 from lexer import TokenType
 
 
@@ -16,6 +17,7 @@ class Parser(object):
         self.lexer = lexer
         self.curToken = None
         self.peekToken = None
+        self.errors = []
         #self.nextToken()
         #self.nextToken()
 
@@ -23,9 +25,12 @@ class Parser(object):
         self.lexer = lexer # maybe don't do it like that
         self.nextToken()
         self.nextToken()
+        self.errors = []
         self.prefixParseFns = {}
         self.registerPrefix(TokenType.IDENT, self.parseIdentifier)
         self.registerPrefix(TokenType.INT, self.parseIntegerLiteral)
+        self.registerPrefix(TokenType.BANG, self.pasrsePrefixExpression)
+        self.registerPrefix(TokenType.MINUS, self.pasrsePrefixExpression)
 
     def nextToken(self):
         self.curToken = self.peekToken
@@ -93,8 +98,9 @@ class Parser(object):
         return statement
 
     def parseExpression(self, precedence):
-        prefix = self.prefixParseFns[self.curToken.token_type]
+        prefix = self.prefixParseFns.get(self.curToken.token_type)
         if not prefix:
+            self.noPrefixParseFnError(self.curToken.token_type)
             return None
         leftExp = prefix()
         return leftExp
@@ -107,6 +113,16 @@ class Parser(object):
         val = int(self.curToken.literal)
         lit.value = val
         return lit
+
+    def noPrefixParseFnError(self, token_type):
+        self.errors.append('no prefix parse function for ' + token_type)
+        print 'no prefix parse function for ' + token_type
+
+    def pasrsePrefixExpression(self):
+        expression = PrefixExpression(token=self.curToken, operator=self.curToken.literal)
+        self.nextToken()
+        expression.right = self.parseExpression(ParseType.PREFIX)
+        return expression
 
 
 class ParseType(object):
