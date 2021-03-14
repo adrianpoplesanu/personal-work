@@ -8,6 +8,7 @@ public:
     ~Test();
     int GetTestID();
     void RunTokenTypeTest();
+    void RunLexerTest();
 
 private:
     int id;

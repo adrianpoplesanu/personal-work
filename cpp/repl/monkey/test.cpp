@@ -3,6 +3,8 @@
 #include "test.h"
 #include "token.h"
 #include "token.cpp"
+#include "lexer.h"
+#include "lexer.cpp"
 
 using namespace std;
 
@@ -68,4 +70,15 @@ void Test::RunTokenTypeTest() {
     cout << t.GetTokenType() << "\n";
     t.SetTokenType(NOT_EQ);
     cout << t.GetTokenType() << "\n";
+}
+
+void Test::RunLexerTest() {
+    string s = "let a = 5;";
+    Lexer l;
+    l.Load(s);
+    while(l.NextToken() != 0) {
+        cout << l.NextToken();
+        l.ReadChar();
+    }
+    cout << '\n';
 }
