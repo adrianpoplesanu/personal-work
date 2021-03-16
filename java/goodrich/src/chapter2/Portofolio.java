@@ -16,9 +16,21 @@ public class Portofolio<T> {
 		data[index] = element;
 	}
 	
+	public static class Etapa {
+		public String name;
+		
+		Etapa(String n) {
+			name = n;
+		}
+	}
+	
 	public static void main(String[] args) {
 		Portofolio<String> p = new Portofolio<String>(10);
 		p.SetAt("teeest", 7);
 		System.out.println(p.GetAt(7));
+		
+		Portofolio<Etapa> e = new Portofolio<Etapa>(5);
+		e.SetAt(new Etapa("aaa"), 3);
+		System.out.println(e.GetAt(3).name);
 	}
 }
