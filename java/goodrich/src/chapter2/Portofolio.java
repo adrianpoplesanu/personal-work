@@ -16,11 +16,25 @@ public class Portofolio<T> {
 		data[index] = element;
 	}
 	
+	public void GetMatches() {
+		Portofolio<Match> p = new Portofolio<Match>(4);
+		p.SetAt(new Match("rma - ata"), 2);
+		System.out.println(p.GetAt(2).description);
+	}
+	
 	public static class Etapa {
 		public String name;
 		
 		Etapa(String n) {
 			name = n;
+		}
+	}
+	
+	public class Match {
+		public String description;
+		
+		Match(String d) {
+			description = d;
 		}
 	}
 	
@@ -32,5 +46,6 @@ public class Portofolio<T> {
 		Portofolio<Etapa> e = new Portofolio<Etapa>(5);
 		e.SetAt(new Etapa("aaa"), 3);
 		System.out.println(e.GetAt(3).name);
+		e.GetMatches(); // trebuie incapsulat altfel
 	}
 }
