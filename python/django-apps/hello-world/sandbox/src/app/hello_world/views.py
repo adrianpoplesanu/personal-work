@@ -17,14 +17,16 @@ def dispatch(request, path=None):
     print (path)
     controller = BaseController()
     action = 'index'
-    template = controller.index()
-    # temaplate = getattr(controller, 'index')()
+    #template = controller.index()
+    template = getattr(controller, 'index')()
     template.set_request(request)
     return template()
     #return render(request, template.template, template.env)
 
 def get_routes():
-    return {}
+    return [
+        ('/home', BaseController, 'home'),
+    ]
 
 
 class BaseController():
@@ -34,6 +36,10 @@ class BaseController():
 
     def index(self):
         env = {'username': 'AdriAnus'}
+        return TemplateResponse(template='index.html', env=env)
+
+    def home(self):
+        env = {'username': 'Adrianus-home'}
         return TemplateResponse(template='index.html', env=env)
 
 
