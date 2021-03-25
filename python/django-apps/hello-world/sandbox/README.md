@@ -12,3 +12,7 @@ cd sandbox/src
 django-admin startproject helloworld
 
 python manage.py runserver
+
+pentru crearea tabelelor:
+python manage.py migrate --run-syncdb
+https://stackoverflow.com/questions/25771755/django-operationalerror-no-such-table
