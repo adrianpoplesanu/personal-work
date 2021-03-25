@@ -141,3 +141,21 @@ class PrefixExpression(object):
     def String(self):
         out = '(' + self.operator + self.right.String() + ')'
         return out
+
+
+class InflixExpression(object):
+    def __init__(self, token=None, left=None, operator=None, right=None):
+        self.token = token
+        self.left = left
+        self.operator = operator if operator else ''
+        self.right = right
+
+    def expressionNode(self):
+        pass
+
+    def TokenLiteral(self):
+        return self.token.literal
+
+    def String(self):
+        out = '(' + self.left.String() + self.operator + self.right.String() + ')'
+        return out

@@ -5,6 +5,7 @@ from ast import Identifier
 from ast import IntegerLiteral
 from ast import ExpressionStatement
 from ast import PrefixExpression
+from ast import InflixExpression
 from lexer import TokenType
 
 
@@ -12,12 +13,23 @@ class Parser(object):
     prefixParseFns = {}
     infixParseFns = {}
     errors = []
+    precedences = {}
 
     def __init__(self, lexer=None):
         self.lexer = lexer
         self.curToken = None
         self.peekToken = None
         self.errors = []
+        self.precedences = {
+            TokenType.EQ: ParseType.EQUALS,
+            TokenType.NOT_EQ: ParseType.EQUALS,
+            TokenType.LT: ParseType.LESSGREATER,
+            TokenType.GT: ParseType.LESSGREATER,
+            TokenType.PLUS: ParseType.SUM,
+            TokenType.MINUS: ParseType.SUM,
+            TokenType.SLASH: ParseType.PRODUCT,
+            TokenType.ASTERISK: ParseType.PRODUCT
+        }
         #self.nextToken()
         #self.nextToken()
 
@@ -27,10 +39,19 @@ class Parser(object):
         self.nextToken()
         self.errors = []
         self.prefixParseFns = {}
+        self.inflixParseFns = {}
         self.registerPrefix(TokenType.IDENT, self.parseIdentifier)
         self.registerPrefix(TokenType.INT, self.parseIntegerLiteral)
         self.registerPrefix(TokenType.BANG, self.pasrsePrefixExpression)
         self.registerPrefix(TokenType.MINUS, self.pasrsePrefixExpression)
+        self.registerInflix(TokenType.PLUS, self.parseInflixExpression)
+        self.registerInflix(TokenType.MINUS, self.parseInflixExpression)
+        self.registerInflix(TokenType.SLASH, self.parseInflixExpression)
+        self.registerInflix(TokenType.ASTERISK, self.parseInflixExpression)
+        self.registerInflix(TokenType.EQ, self.parseInflixExpression)
+        self.registerInflix(TokenType.NOT_EQ, self.parseInflixExpression)
+        self.registerInflix(TokenType.LT, self.parseInflixExpression)
+        self.registerInflix(TokenType.GT, self.parseInflixExpression)
 
     def nextToken(self):
         self.curToken = self.peekToken
@@ -39,8 +60,8 @@ class Parser(object):
     def registerPrefix(self, token_type, fn):
         self.prefixParseFns[token_type] = fn
 
-    def registerInfix(self, token_type, fn):
-        self.infixParseFns[token_type] = fn
+    def registerInflix(self, token_type, fn):
+        self.inflixParseFns[token_type] = fn
 
     def ParseProgram(self, program):
         #program = Program()
@@ -103,6 +124,13 @@ class Parser(object):
             self.noPrefixParseFnError(self.curToken.token_type)
             return None
         leftExp = prefix()
+
+        while not self.peekTokenIs(TokenType.SEMICOLON) and precedence < self.peekPrecedence():
+            inflix = self.inflixParseFns[self.peekToken.token_type]
+            if not inflix:
+                return leftExp
+            self.nextToken()
+            leftExp = inflix(leftExp)
         return leftExp
 
     def parseIdentifier(self):
@@ -122,6 +150,25 @@ class Parser(object):
         expression = PrefixExpression(token=self.curToken, operator=self.curToken.literal)
         self.nextToken()
         expression.right = self.parseExpression(ParseType.PREFIX)
+        return expression
+
+    def peekPrecedence(self):
+        preced = self.precedences.get(self.peekToken.token_type)
+        if preced:
+            return preced
+        return ParseType.LOWEST
+
+    def curPrecedence(self):
+        preced = self.precedences.get(self.curToken.token_type)
+        if preced:
+            return preced
+        return ParseType.LOWEST
+
+    def parseInflixExpression(self, left):
+        expression = InflixExpression(token=self.curToken, operator=self.curToken.literal, left=left)
+        preced = self.curPrecedence()
+        self.nextToken()
+        expression.right = self.parseExpression(preced)
         return expression
 
 
