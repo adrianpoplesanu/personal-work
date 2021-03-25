@@ -1,6 +1,8 @@
 from django.shortcuts import render
 #from django.http import HttpResponse, JsonResponse
 from core.http import HttpResponse, JsonResponse, TemplateResponse
+from hello_world.models.user import User23
+#from hello_world.models import User45
 
 
 def index(request):
@@ -12,6 +14,8 @@ def index(request):
 def dispatch(request, path=None):
     #return HttpResponse('this works')
     #return JsonResponse({'status': 'it works'})
+    #b = User23(first_name='aaa', last_name='bbb')
+    #b.save()
     routes = get_routes()
     print (request.path)
     print (path)
