@@ -19,6 +19,8 @@ class BasicInterpreter(object):
 
     def execute(self, line, program):
         self.parser.reset(source=line)
+        # program.reset() might not be needed anymore once eval() happens
+        program.reset()
         self.parser.build_program_statements(program)
         program.debug()
         #tok = self.lexer.next_token()
