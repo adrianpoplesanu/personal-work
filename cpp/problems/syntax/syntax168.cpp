@@ -29,5 +29,10 @@ int main(int argc, char *argv[]) {
     test = (void *)p2;
     // unboxing a function pointer
     ((void (*)(int))test)(2);
+
+    m.insert(pair<int, void *>(0, (void *)p));
+    m.insert(pair<int, void *>(1, (void *)p2));
+
+    ((void (*)(int))m.find(1)->second)(4);
     return 0;
 }
