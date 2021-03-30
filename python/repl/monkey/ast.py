@@ -180,7 +180,7 @@ class Boolean(object):
 class IfExpression(object):
     def __init__(self, token=None, condition=None, consequence=None, alternative=None):
         self.token = token
-        self.conditon = condition
+        self.condition = condition
         self.consequence = consequence
         self.alternative = alternative
 
@@ -192,7 +192,10 @@ class IfExpression(object):
 
     def String(self):
         out = ''
-        out = 'if' + self.condition.String() + " " + self.consequence.String()
+        out = 'if'
+        out = out + self.condition.String()
+        out = out + " "
+        out = out + self.consequence.String()
         if self.alternative:
             out = out + "else " + self.alternative.String()
         return out
@@ -211,6 +214,6 @@ class BlockStatement(object):
 
     def String(self):
         out = ''
-        for statement in statements:
-            out = out + statemetn.String()
+        for statement in self.statements:
+            out = out + statement.String()
         return out

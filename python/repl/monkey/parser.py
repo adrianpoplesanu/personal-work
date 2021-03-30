@@ -193,22 +193,29 @@ class Parser(object):
         if not self.expectPeek(TokenType.LPAREN):
             return None
         self.nextToken()
-        expression.codition = self.parseExpression(ParseType.LOWEST)
+        expression.condition = self.parseExpression(ParseType.LOWEST)
         if not self.expectPeek(TokenType.RPAREN):
             return None
-        if not self.expextPeek(TokenType.LBRACE):
+        if not self.expectPeek(TokenType.LBRACE):
             return None
         expression.consequence = self.parseBlockStatement()
+
+        if self.peekTokenIs(TokenType.ELSE):
+            self.nextToken()
+            if not self.expectPeek(TokenType.LBRACE):
+                return None
+            expression.alternative = self.parseBlockStatement()
+
         return expression
 
     def parseBlockStatement(self):
-        block = BlockStatement(token=self.curToken)
+        block = BlockStatement(token=self.curToken, statements=None)
         block.statements = []
         self.nextToken()
         while not self.curTokenIs(TokenType.RBRACE) and not self.curTokenIs(TokenType.EOF):
             statement = self.parseStatement()
             if statement:
-                slock.statements.append(statement)
+                block.statements.append(statement)
             self.nextToken()
         return block
 
