@@ -159,3 +159,58 @@ class InflixExpression(object):
     def String(self):
         out = '(' + self.left.String() + self.operator + self.right.String() + ')'
         return out
+
+
+class Boolean(object):
+    def __init__(self, token=None, value=None):
+        self.token = token
+        self.value = value
+
+    def expressionNode(self):
+        pass
+
+    def TokenLiteral(self):
+        return self.token.literal
+
+    def String(self):
+        out = '[' + self.token.literal + ']'
+        return out
+
+
+class IfExpression(object):
+    def __init__(self, token=None, condition=None, consequence=None, alternative=None):
+        self.token = token
+        self.conditon = condition
+        self.consequence = consequence
+        self.alternative = alternative
+
+    def expressionNode(self):
+        pass
+
+    def TokenLiteral(self):
+        return self.token.literal
+
+    def String(self):
+        out = ''
+        out = 'if' + self.condition.String() + " " + self.consequence.String()
+        if self.alternative:
+            out = out + "else " + self.alternative.String()
+        return out
+
+
+class BlockStatement(object):
+    def __init__(self, token, statements):
+        self.token = token
+        self.statements = statements
+
+    def statementNode(self):
+        pass
+
+    def TokenLiteral(self):
+        return self.token.literal
+
+    def String(self):
+        out = ''
+        for statement in statements:
+            out = out + statemetn.String()
+        return out

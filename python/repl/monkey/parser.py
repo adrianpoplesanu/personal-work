@@ -6,6 +6,9 @@ from ast import IntegerLiteral
 from ast import ExpressionStatement
 from ast import PrefixExpression
 from ast import InflixExpression
+from ast import Boolean
+from ast import IfExpression
+from ast import BlockStatement
 from lexer import TokenType
 
 
@@ -44,6 +47,10 @@ class Parser(object):
         self.registerPrefix(TokenType.INT, self.parseIntegerLiteral)
         self.registerPrefix(TokenType.BANG, self.pasrsePrefixExpression)
         self.registerPrefix(TokenType.MINUS, self.pasrsePrefixExpression)
+        self.registerPrefix(TokenType.TRUE, self.parseBoolean)
+        self.registerPrefix(TokenType.FALSE, self.parseBoolean)
+        self.registerPrefix(TokenType.LPAREN, self.parseGroupedExpression)
+        self.registerPrefix(TokenType.IF, self.parseIfExpression)
         self.registerInflix(TokenType.PLUS, self.parseInflixExpression)
         self.registerInflix(TokenType.MINUS, self.parseInflixExpression)
         self.registerInflix(TokenType.SLASH, self.parseInflixExpression)
@@ -170,6 +177,40 @@ class Parser(object):
         self.nextToken()
         expression.right = self.parseExpression(preced)
         return expression
+
+    def parseBoolean(self):
+        return Boolean(token=self.curToken, value=self.curTokenIs(TokenType.TRUE))
+
+    def parseGroupedExpression(self):
+        self.nextToken()
+        exp = self.parseExpression(ParseType.LOWEST)
+        if not self.expectPeek(TokenType.RPAREN):
+            return None
+        return exp
+
+    def parseIfExpression(self):
+        expression = IfExpression(token=self.curToken)
+        if not self.expectPeek(TokenType.LPAREN):
+            return None
+        self.nextToken()
+        expression.codition = self.parseExpression(ParseType.LOWEST)
+        if not self.expectPeek(TokenType.RPAREN):
+            return None
+        if not self.expextPeek(TokenType.LBRACE):
+            return None
+        expression.consequence = self.parseBlockStatement()
+        return expression
+
+    def parseBlockStatement(self):
+        block = BlockStatement(token=self.curToken)
+        block.statements = []
+        self.nextToken()
+        while not self.curTokenIs(TokenType.RBRACE) and not self.curTokenIs(TokenType.EOF):
+            statement = self.parseStatement()
+            if statement:
+                slock.statements.append(statement)
+            self.nextToken()
+        return block
 
 
 class ParseType(object):
