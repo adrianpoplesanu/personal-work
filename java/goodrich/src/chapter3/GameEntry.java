@@ -13,8 +13,16 @@ public class GameEntry {
 		return name;
 	}
 	
+	public void setName(String n) {
+		name = n;
+	}
+	
 	public int getScore() {
 		return score;
+	}
+	
+	public void setScore(int s) {
+		score = s;
 	}
 	
 	public String toString() {
