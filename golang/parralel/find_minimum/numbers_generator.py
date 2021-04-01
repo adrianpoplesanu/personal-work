@@ -4,8 +4,8 @@ import random
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("-o", "--output", help="output file with random numbers")
-    parser.add_argument("-s", "--size", help="number of random entries in the file")
+    parser.add_argument("-o", "--output", help="output file with random numbers", required=True)
+    parser.add_argument("-s", "--size", help="number of random entries in the file", required=True)
     args = parser.parse_args()
 
     filename = args.output
