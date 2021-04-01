@@ -1,5 +1,8 @@
 #include "token.h"
 #include "ast.h"
+#include <string>
+using namespace std;
+
 
 Token::Token() {
     BuildTokenTypeMap();
@@ -58,4 +61,8 @@ TokenType Token::GetTokenType() {
 
 void Token::SetTokenType(TokenType tt) {
     token_type = tt;
+}
+
+string Token::ToString() {
+    return token_type_map[token_type] + "[" + literal + "]";
 }

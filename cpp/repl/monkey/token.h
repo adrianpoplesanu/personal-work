@@ -32,12 +32,12 @@ enum TokenType {
     TRUE,
     FALSE,
     IF,
-    ELSE
+    ELSE,
+    END
 };
 
 class Token {
 private:
-    TokenType token_type;
     void BuildTokenTypeMap();
     void BuildKeywordsMap();
 public:
@@ -48,7 +48,9 @@ public:
     void SetTokenType(TokenType);
     map<TokenType, string> token_type_map;
     map<string, TokenType> keywords_map;
-    int a;
+    TokenType token_type;
+    string literal;
+    string ToString();
 };
 
 #endif

@@ -26,6 +26,12 @@ int Test::GetTestID() {
     return id;
 }
 
+void Test::RunAllTests() {
+    //RunTokenTypeTest();
+    RunLexerTest();
+    //RunToStringTest();
+}
+
 void Test::RunTokenTypeTest() {
     cout << "runnint test id: " << id << "\n";
     Token t(ILLEGAL);
@@ -49,6 +55,8 @@ void Test::RunTokenTypeTest() {
     t.SetTokenType(LET);
     cout << t.GetTokenType() << "\n";
     t.SetTokenType(RETURN);
+    cout << t.GetTokenType() << "\n";
+    t.SetTokenType(END);
     cout << t.GetTokenType() << "\n";
     t.SetTokenType(WHILE);
     cout << t.GetTokenType() << "\n";
@@ -75,12 +83,13 @@ void Test::RunTokenTypeTest() {
 }
 
 void Test::RunLexerTest() {
-    string s = "let a = 5;";
+    string s = "let test = 5; let a=7; if ert;;  let     g       =       67      ;";
     Lexer l;
     l.Load(s);
-    while(l.NextToken() != 0) {
-        cout << l.NextToken();
-        l.ReadChar();
+    Token current_token = l.NextToken();
+    while(current_token.token_type != END) {
+        cout << current_token.ToString() << "\n";
+        current_token = l.NextToken();
     }
     cout << '\n';
 }
@@ -94,11 +103,11 @@ void TestToString2(Statement *stmt) { // nu-mi place ca trebuie sa fie un pointe
 }
 
 void Test::RunToStringTest() {
-    //LetStatement *stmt = new LetStatement();
-    //stmt->ToString();
+    LetStatement *stmt = new LetStatement();
+    stmt->ToString();
     LetStatement s;
     s.ToString();
     TestToString(s);
-    //TestToString2(stmt);
-    //delete stmt;
+    TestToString2(stmt);
+    delete stmt;
 }

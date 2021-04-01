@@ -1,5 +1,6 @@
 #include "lexer.h"
 #include "token.h"
+#include <iostream>
 #include <string>
 using namespace std;
 
@@ -29,13 +30,60 @@ void Lexer::ReadChar() {
     readPosition++;
 }
 
-char Lexer::NextToken() {
+Token Lexer::NextToken() {
+    Token token;
+    SkipWhitespace();
     switch(current_char) {
         case 0:
-            return 0;
-            break;
+            token.SetTokenType(END);
+            token.literal = "";
+            //return token;
+        break;
+        case '=':
+            token.SetTokenType(ASSIGN);
+            token.literal = "=";
+            //return token;
+        break;
+        case ';':
+            token.SetTokenType(SEMICOLON);
+            token.literal = ";";
+            //return token;
+        break;
         default:
-            return current_char;
-            break;
+            if (IsLetter()) {
+                string ident = ReadIdentifier();
+                token.SetTokenType(IDENT);
+                token.literal = ident;
+                //return token;
+            } else if (IsDigit()) {
+                token.SetTokenType(INT);
+                token.literal = current_char;
+            } else {
+                token.SetTokenType(ILLEGAL);
+                token.literal = current_char;
+            }
+        break;
     }
+    if (token.token_type != IDENT) ReadChar();
+    return token;
+}
+
+void Lexer::SkipWhitespace() {
+    while(current_char == ' ') ReadChar();
+}
+
+bool Lexer::IsLetter() {
+    return (('a' <= current_char) && (current_char <= 'z')) || (('A' <= current_char) && (current_char <= 'Z')) || (current_char == '_');
+}
+
+bool Lexer::IsDigit() {
+    return ('0' <= current_char) && (current_char <= '9');
+}
+
+string Lexer::ReadIdentifier() {
+    int start = position;
+    while (IsLetter()) {
+        ReadChar();
+    }
+    return source.substr(start, position - start);
 }

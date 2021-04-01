@@ -7,6 +7,7 @@ public:
     Test(int);
     ~Test();
     int GetTestID();
+    void RunAllTests();
     void RunTokenTypeTest();
     void RunLexerTest();
     void RunToStringTest();

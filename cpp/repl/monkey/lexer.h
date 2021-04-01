@@ -2,6 +2,7 @@
 #define __LEXER_H
 
 #include <string>
+#include "token.h"
 using namespace std;
 
 class Lexer {
@@ -10,7 +11,11 @@ public:
     ~Lexer();
     void Load(string);
     void ReadChar();
-    char NextToken();
+    Token NextToken();
+    void SkipWhitespace();
+    bool IsLetter();
+    bool IsDigit();
+    string ReadIdentifier();
 
 private:
     string source;
