@@ -27,7 +27,12 @@ enum TokenType {
     LT,
     GT,
     EQ,
-    NOT_EQ
+    NOT_EQ,
+    FUNCTION,
+    TRUE,
+    FALSE,
+    IF,
+    ELSE
 };
 
 class Token {
@@ -42,7 +47,7 @@ public:
     TokenType GetTokenType();
     void SetTokenType(TokenType);
     map<TokenType, string> token_type_map;
-    map<string, TokenType> keywords;
+    map<string, TokenType> keywords_map;
     int a;
 };
 

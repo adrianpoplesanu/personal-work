@@ -5,6 +5,8 @@
 #include "token.cpp"
 #include "lexer.h"
 #include "lexer.cpp"
+#include "ast.h"
+#include "ast.cpp"
 
 using namespace std;
 
@@ -81,4 +83,22 @@ void Test::RunLexerTest() {
         l.ReadChar();
     }
     cout << '\n';
+}
+
+void TestToString(Statement &stmt) { // yaaay!!! merge cu referinta, that's how we go about it
+    stmt.ToString();
+}
+
+void TestToString2(Statement *stmt) { // nu-mi place ca trebuie sa fie un pointer aici
+    stmt->ToString();
+}
+
+void Test::RunToStringTest() {
+    //LetStatement *stmt = new LetStatement();
+    //stmt->ToString();
+    LetStatement s;
+    s.ToString();
+    TestToString(s);
+    //TestToString2(stmt);
+    //delete stmt;
 }

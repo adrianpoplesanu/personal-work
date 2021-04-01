@@ -9,5 +9,7 @@ int main(int argc, char *argv[]) {
     test33.RunTokenTypeTest();
     Test test34(34);
     test34.RunLexerTest();
+    Test test45(45);
+    test45.RunToStringTest();
     return 0;
 }

@@ -9,6 +9,7 @@ public:
     int GetTestID();
     void RunTokenTypeTest();
     void RunLexerTest();
+    void RunToStringTest();
 
 private:
     int id;
