@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-void func(int p, ...) { // iti trebuie minim un argument pozitional, altfel nu vrea
+void func(int p, ...) { // iti trebuie minim un argument pozitional, altfel nu vreas
     va_list args;
     va_start(args, p);
     cout << "buna dimineata!\n";
