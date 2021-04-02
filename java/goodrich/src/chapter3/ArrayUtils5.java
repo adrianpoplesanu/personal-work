@@ -13,12 +13,20 @@ public class ArrayUtils5 {
 		}
 	}
 	
-	public static <T> void copyOf(T[] a, int n) {
-		//...
+	public static void fill(int[] a, int val) {
+		for (int i = 0; i < a.length; i++) {
+			a[i] = val;
+		}
 	}
 	
-	public static void copyOf(int[] a, int n) {
-		//...
+	public static <T> T[] copyOf(T[] a, int n) {
+		// TODO: implement it
+		return null;
+	}
+	
+	public static int[] copyOf(int[] a, int n) {
+		// TODO: implement it
+		return null;
 	}
 	
 	public static void main(String args[]) {
