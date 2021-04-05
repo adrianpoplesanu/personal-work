@@ -9,6 +9,8 @@ from ast import InflixExpression
 from ast import Boolean
 from ast import IfExpression
 from ast import BlockStatement
+from ast import FunctionLiteral
+from ast import CallExpression
 from lexer import TokenType
 
 
@@ -31,7 +33,8 @@ class Parser(object):
             TokenType.PLUS: ParseType.SUM,
             TokenType.MINUS: ParseType.SUM,
             TokenType.SLASH: ParseType.PRODUCT,
-            TokenType.ASTERISK: ParseType.PRODUCT
+            TokenType.ASTERISK: ParseType.PRODUCT,
+            TokenType.LPAREN: ParseType.CALL
         }
         #self.nextToken()
         #self.nextToken()
@@ -51,6 +54,7 @@ class Parser(object):
         self.registerPrefix(TokenType.FALSE, self.parseBoolean)
         self.registerPrefix(TokenType.LPAREN, self.parseGroupedExpression)
         self.registerPrefix(TokenType.IF, self.parseIfExpression)
+        self.registerPrefix(TokenType.FUNCTION, self.parseFunctionLiteral)
         self.registerInflix(TokenType.PLUS, self.parseInflixExpression)
         self.registerInflix(TokenType.MINUS, self.parseInflixExpression)
         self.registerInflix(TokenType.SLASH, self.parseInflixExpression)
@@ -59,6 +63,7 @@ class Parser(object):
         self.registerInflix(TokenType.NOT_EQ, self.parseInflixExpression)
         self.registerInflix(TokenType.LT, self.parseInflixExpression)
         self.registerInflix(TokenType.GT, self.parseInflixExpression)
+        self.registerInflix(TokenType.LPAREN, self.parseCallExpression)
 
     def nextToken(self):
         self.curToken = self.peekToken
@@ -95,12 +100,16 @@ class Parser(object):
         statement.name = Identifier(self.curToken, self.curToken.literal)
         if not self.expectPeek(TokenType.ASSIGN):
             return None
-        while not self.curTokenIs(TokenType.SEMICOLON):
+        self.nextToken()
+        statement.value = self.parseExpression(ParseType.LOWEST)
+        if self.curTokenIs(TokenType.SEMICOLON):
             self.nextToken()
         return statement
 
     def parseReturnStatement(self):
         statement = ReturnStatement(self.curToken)
+        self.nextToken()
+        staetement.returnValue = self.parseExpression(ParseType.LOWEST)
         while not self.curTokenIs(TokenType.SEMICOLON):
             self.nextToken()
         return statement
@@ -116,6 +125,7 @@ class Parser(object):
             self.nextToken()
             return True
         else:
+            self.peekError(token_type)
             return False
 
     def parseExpressionStatement(self):
@@ -171,6 +181,10 @@ class Parser(object):
             return preced
         return ParseType.LOWEST
 
+    def peekError(self, token_type):
+        msg = "expected next token to be {0}, got {1} instead".format(token_type, self.peekToken.token_type)
+        self.errors.append(msg)
+
     def parseInflixExpression(self, left):
         expression = InflixExpression(token=self.curToken, operator=self.curToken.literal, left=left)
         preced = self.curPrecedence()
@@ -218,6 +232,53 @@ class Parser(object):
                 block.statements.append(statement)
             self.nextToken()
         return block
+
+    def parseFunctionLiteral(self):
+        function_literal = FunctionLiteral(self.curToken)
+        if not self.expectPeek(TokenType.LPAREN):
+            return None
+        function_literal.parameters = self.parseFunctionParameters()
+        if not self.expectPeek(TokenType.LBRACE):
+            return None
+        function_literal.body = self.parseBlockStatement()
+        return function_literal
+
+    def parseFunctionParameters(self):
+        identifiers = []
+        if self.peekTokenIs(TokenType.RPAREN):
+            self.nextToken()
+            return identifiers
+        self.nextToken()
+        ident = Identifier(token=self.curToken, value=self.curToken.literal)
+        identifiers.append(ident)
+        while self.peekTokenIs(TokenType.COMMA):
+            self.nextToken()
+            self.nextToken()
+            ident = Identifier(token=self.curToken, value=self.curToken.literal)
+            identifiers.append(ident)
+        if not self.peekTokenIs(TokenType.RPAREN):
+            return None
+        return identifiers
+
+    def parseCallExpression(self, function):
+        exp = CallExpression(self.curToken, function=function)
+        exp.arguments = self.parseCallArguments()
+        return exp
+
+    def parseCallArguments(self):
+        args = []
+        if self.peekTokenIs(TokenType.RPAREN):
+            self.nextToken()
+            return args
+        self.nextToken()
+        args.append(self.parseExpression(ParseType.LOWEST))
+        while self.peekTokenIs(TokenType.COMMA):
+            self.nextToken()
+            self.nextToken()
+            args.append(self.parseExpression(ParseType.LOWEST))
+        if not self.expectPeek(TokenType.RPAREN):
+            return None
+        return args
 
 
 class ParseType(object):

@@ -29,6 +29,11 @@ class Repl(object):
             self.program.reset()
             self.parser.ParseProgram(self.program)
             #print self.program
+            print self.parser.errors
+            #if self.parser.errors:
+            #    print "ERRORS!!!"
+            #    for error in self.parser.errors:
+            #        print "\t" + error
             self.program.String()
 
             #tok = self.lexer.nextToken()
@@ -45,6 +50,7 @@ class Repl(object):
                 self.program.reset()
                 self.parser.ParseProgram(self.program)
                 #print self.program
+                print self.parser.errors
                 self.program.String()
 
                 #tok = self.lexer.nextToken()

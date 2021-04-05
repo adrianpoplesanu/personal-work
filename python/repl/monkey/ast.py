@@ -217,3 +217,48 @@ class BlockStatement(object):
         for statement in self.statements:
             out = out + statement.String()
         return out
+
+
+class FunctionLiteral(object):
+    def __init__(self, token, parameters=None, body=None):
+        self.token = token
+        self.parameters = parameters
+        self.body = body
+
+    def expressionNode(self):
+        pass
+
+    def TokenLiteral(self):
+        return self.token.literal
+
+    def String(self):
+        out = ''
+        params = ', '.join([param.String() for param in self.parameters])
+        out = out + self.TokenLiteral()
+        out = out + '('
+        out = out + params
+        out = out + ')'
+        out = out + self.body.String()
+        return out
+
+
+class CallExpression(object):
+    def __init__(self, token, function=None, arguments=None):
+        self.token = token
+        self.function = function
+        self.arguments = arguments
+
+    def expressionNode(self):
+        pass
+
+    def TokenLiteral(self):
+        return self.token.literal
+
+    def String(self):
+        out = ''
+        args = ', '.join([argument.String() for argument in self.arguments])
+        out = out + self.function.String()
+        out = out + '('
+        out = out + args
+        out = out + ')'
+        return out
