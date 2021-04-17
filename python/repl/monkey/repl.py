@@ -4,6 +4,7 @@ from lexer import Lexer
 from lexer import TokenType
 from parser import Parser
 from ast import Program
+from evaluator import Eval
 
 
 def signal_ctrl_c_handler(sig, frame):
@@ -50,8 +51,12 @@ class Repl(object):
                 self.program.reset()
                 self.parser.ParseProgram(self.program)
                 #print self.program
-                print self.parser.errors
-                self.program.String()
+                #print self.parser.errors
+                #self.program.String()
+                evaluated = Eval(self.program)
+                if evaluated:
+                    #print evaluated.Inspect()
+                    evaluated.Inspect()
 
                 #tok = self.lexer.nextToken()
                 #while tok.token_type != TokenType.EOF:

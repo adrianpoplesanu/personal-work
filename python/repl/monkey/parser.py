@@ -79,7 +79,8 @@ class Parser(object):
         #program = Program()
         while self.curToken.token_type != TokenType.EOF:
             statement = self.parseStatement()
-            print statement
+            #print statement # am comentat printul asta pentru ca nu mai am nevoie de el
+            #print 'buna dimineata!!!'
             if statement:
                 program.statements.append(statement)
             self.nextToken()
