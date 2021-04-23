@@ -91,23 +91,28 @@ void Test::RunLexerTest() {
         cout << current_token.ToString() << "\n";
         current_token = l.NextToken();
     }
-    cout << '\n';
+    //cout << '\n';
 }
 
-void TestToString(Statement &stmt) { // yaaay!!! merge cu referinta, that's how we go about it
+void TestToString(ast::Statement &stmt) { // yaaay!!! merge cu referinta, that's how we go about it
     stmt.ToString();
 }
 
-void TestToString2(Statement *stmt) { // nu-mi place ca trebuie sa fie un pointer aici
+void TestToString2(ast::Statement *stmt) { // nu-mi place ca trebuie sa fie un pointer aici
     stmt->ToString();
 }
 
 void Test::RunToStringTest() {
-    LetStatement *stmt = new LetStatement();
+    ast::LetStatement *stmt = new ast::LetStatement();
     stmt->ToString();
-    LetStatement s;
+    ast::LetStatement s;
     s.ToString();
     TestToString(s);
     TestToString2(stmt);
     delete stmt;
+}
+
+void Test::RunToStringSimpleTest() {
+    ast::LetStatement s;
+    s.ToString();
 }

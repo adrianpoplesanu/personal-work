@@ -16,6 +16,9 @@ public:
     bool IsLetter();
     bool IsDigit();
     string ReadIdentifier();
+    string ReadInteger();
+    TokenType LookupIdent();
+    char PeekChar();
 
 private:
     string source;

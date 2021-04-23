@@ -1,6 +1,8 @@
 #include <iostream>
 #include "test.h"
 #include "test.cpp"
+#include "program.h"
+#include "program.cpp"
 using namespace std;
 
 int main(int argc, char *argv[]) {
@@ -12,5 +14,11 @@ int main(int argc, char *argv[]) {
     //test34.RunLexerTest(); //... passed
     //Test test45(45);
     //test45.RunToStringTest(); //... passed
+
+    Test test46(46);
+    test46.RunToStringSimpleTest();
+
+    Program program;
+    program.Loop();
     return 0;
 }

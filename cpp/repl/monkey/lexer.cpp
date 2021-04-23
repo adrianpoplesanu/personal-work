@@ -37,17 +37,58 @@ Token Lexer::NextToken() {
         case 0:
             token.SetTokenType(END);
             token.literal = "";
-            //return token;
         break;
         case '=':
             token.SetTokenType(ASSIGN);
-            token.literal = "=";
-            //return token;
+            token.literal = current_char;
         break;
         case ';':
             token.SetTokenType(SEMICOLON);
-            token.literal = ";";
-            //return token;
+            token.literal = current_char;
+        break;
+        case '+':
+            token.SetTokenType(PLUS);
+            token.literal = current_char;
+        break;
+        case '-':
+            token.SetTokenType(MINUS);
+            token.literal = current_char;
+        break;
+        case '*':
+            token.SetTokenType(ASTERICKS);
+            token.literal = current_char;
+        break;
+        case '/':
+            token.SetTokenType(SLASH);
+            token.literal = current_char;
+        break;
+        case '{':
+            token.SetTokenType(LBRACE);
+            token.literal = current_char;
+        break;
+        case '}':
+            token.SetTokenType(RBRACE);
+            token.literal = current_char;
+        break;
+        case  '(':
+            token.SetTokenType(LPAREN);
+            token.literal = current_char;
+        break;
+        case ')':
+            token.SetTokenType(RPAREN);
+            token.literal = current_char;
+        break;
+        case '<':
+            token.SetTokenType(LT);
+            token.literal = current_char;
+        break;
+        case '>':
+            token.SetTokenType(GT);
+            token.literal = current_char;
+        break;
+        case ',':
+            token.SetTokenType(COLON);
+            token.literal = current_char;
         break;
         default:
             if (IsLetter()) {
@@ -86,4 +127,21 @@ string Lexer::ReadIdentifier() {
         ReadChar();
     }
     return source.substr(start, position - start);
+}
+
+string Lexer::ReadInteger() {
+    int start = position;
+    while(IsDigit()) {
+        ReadChar();
+    }
+    return source.substr(start, position - start);
+}
+
+TokenType Lexer::LookupIdent() {
+    // TODO
+    return IDENT;
+}
+
+char Lexer::PeekChar() {
+    return 0;
 }

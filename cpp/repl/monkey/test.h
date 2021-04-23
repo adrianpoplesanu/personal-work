@@ -11,6 +11,7 @@ public:
     void RunTokenTypeTest();
     void RunLexerTest();
     void RunToStringTest();
+    void RunToStringSimpleTest();
 
 private:
     int id;
