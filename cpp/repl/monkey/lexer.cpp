@@ -143,5 +143,6 @@ TokenType Lexer::LookupIdent() {
 }
 
 char Lexer::PeekChar() {
+    // TODO
     return 0;
 }
