@@ -80,21 +80,36 @@ ll_remove_nth_node(linked_list_t* list, unsigned int n)
     ll_node_t* prev = 0x0;
     ll_node_t* current = list->head;
     /* struct ll_node_t* to_be_deleted; */
-    while(i < n && current->next) {
-        prev = current;
-        current = current->next;
-        i++;
-    }
-    if (prev) {
-        prev->next = current->next;
-        list->size--;
-        return current;
-    } else {
-        /* current = head; */
+
+    if (n == 0) {
         list->head = list->head->next;
-        list->size--;
-        return current;
+    } else {
+        if (n < list->size) {
+            while(n) {
+                prev = current;
+                current = current->next;
+                n--;
+            }
+            if (prev) {
+                prev->next = current->next;
+            } else {
+                current = list->head;
+                list->head = list->head->next;
+            }
+        } else {
+            while(current->next) {
+                prev = current;
+                current = current->next;
+            }
+            if (prev) {
+                prev->next = 0x0;
+            } else {
+                list->head = 0x0;
+            }
+        }
     }
+    list->size--;
+    return current;
 }
 
 /*
