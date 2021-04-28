@@ -1,7 +1,7 @@
 from ast import IntegerLiteral
 from object import ObjectType
-from object import Integer
-from object import Boollean
+from object import Integer as IntegerObject
+from object import Boolean as BooleanObject
 from ast import Program, IntegerLiteral, ExpressionStatement, Boolean
 
 
@@ -13,10 +13,10 @@ def Eval(node):
     if type(node) == Program:
         return evalStatements(node.statements)
     elif type(node) == IntegerLiteral:
-        return Integer(Value=node.value)
+        return IntegerObject(Value=node.value)
     elif type(node) == Boolean:
         #print '###' + str(node.value) + '###'
-        return Boollean(Value=node.value)
+        return BooleanObject(Value=node.value)
     elif type(node) == ExpressionStatement:
         return Eval(node.expression)
     else:

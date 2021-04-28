@@ -17,14 +17,15 @@ class Integer(object):
         self.Value = Value
 
     def Inspect(self):
-        print type(self.Value)
+        # linia de mai jos printeaza exact tipul din Python asociat valorii stocate mai jos, si e <type 'int'> ceea ce e bine si cool
+        #print type(self.Value)
         print "{0}".format(self.Value)
 
     def Type(self):
         return ObjectType.INTEGER_OBJ
 
 
-class Boollean(object):
+class Boolean(object):
     def __init__(self, Value=False):
         self.Value = Value
 
