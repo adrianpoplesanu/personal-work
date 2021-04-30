@@ -4,6 +4,9 @@ all:
 	g++ lexer.cpp -c -o lexer.o
 	g++ parser.cpp -c -o parser.o
 	g++ program.cpp -c -o program.o
+	g++ objects.cpp -c -o objects.o
+	g++ evaluator.cpp -c -o evaluator.o
+	g++ test.cpp -c -o test.o
 	g++ main.cpp -c -o main.o
 	g++ main.o -o main
 clean:

@@ -70,7 +70,7 @@ Token Lexer::NextToken() {
             token.SetTokenType(RBRACE);
             token.literal = current_char;
         break;
-        case  '(':
+        case '(':
             token.SetTokenType(LPAREN);
             token.literal = current_char;
         break;

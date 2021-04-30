@@ -7,6 +7,10 @@
 #include "lexer.cpp"
 #include "ast.h"
 #include "ast.cpp"
+#include "parser.h"
+#include "parser.cpp"
+#include "evaluator.h"
+#include "evaluator.cpp"
 
 using namespace std;
 
@@ -115,4 +119,14 @@ void Test::RunToStringTest() {
 void Test::RunToStringSimpleTest() {
     ast::LetStatement s;
     s.ToString();
+}
+
+void Test::RunParserBuildStatementsTest() {
+    Parser p;
+    p.BuildStatements();
+}
+
+void Test::RunObjectReferenceTest() {
+    Evaluator e;
+    e.Eval();
 }

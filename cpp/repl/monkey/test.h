@@ -12,6 +12,8 @@ public:
     void RunLexerTest();
     void RunToStringTest();
     void RunToStringSimpleTest();
+    void RunParserBuildStatementsTest();
+    void RunObjectReferenceTest();
 
 private:
     int id;

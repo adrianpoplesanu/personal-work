@@ -10,7 +10,8 @@ private:
 public:
     Parser();
     ~Parser();
-    std::vector<ast::Node> BuildStatements();
+    std::vector<ast::Node> BuildStatements_old();
+    std::vector<ast::Node*> BuildStatements();
 };
 
 #endif
