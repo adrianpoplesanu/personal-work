@@ -143,7 +143,7 @@ class PrefixExpression(object):
         return out
 
 
-class InflixExpression(object):
+class InfixExpression(object):
     def __init__(self, token=None, left=None, operator=None, right=None):
         self.token = token
         self.left = left
