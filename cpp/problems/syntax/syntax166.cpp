@@ -7,7 +7,7 @@ struct Node {
 };
 
 void test_memory_segment_used() {
-    // pointerul e declarat in metoda iar adresa lui e stodaca in stiva
+    // pointerul e declarat in metoda iar adresa lui e stocata in stiva
     // pointerul "pointeaza" insa spre o adresa din heap pentru ca e asignat cu operatorul new
     Node *p = new Node();
     cout << &p << '\n'; // stored in stack
