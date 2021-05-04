@@ -3,7 +3,7 @@ from object import ObjectType
 from object import Integer as IntegerObject
 from object import Boolean as BooleanObject
 from object import Null as NullObject
-from ast import Program, IntegerLiteral, ExpressionStatement, Boolean, PrefixExpression, InfixExpression
+from ast import Program, IntegerLiteral, ExpressionStatement, Boolean, PrefixExpression, InfixExpression, BlockStatement, IfExpression
 
 NULL = NullObject()
 TRUE = BooleanObject(Value=True)
@@ -31,6 +31,10 @@ def Eval(node):
         left = Eval(node.left)
         right = Eval(node.right)
         return evalInfixExpression(node.operator, left, right)
+    elif type(node) == BlockStatement:
+        return evalStatements(node.statements)
+    elif type(node) == IfExpression:
+        return evalIfExpression(node)
     else:
         print 'evaluatorul nu stie ce sa faca cu nodul asta'
         #raise Exception("Evaluatorul nu stie ce sa faca cu nodul asta")
@@ -73,8 +77,12 @@ def evalMinusPrefixOperatorExpression(right):
 def evalInfixExpression(operator, left, right):
     if left.Type() == ObjectType.INTEGER_OBJ and right.Type() == ObjectType.INTEGER_OBJ:
         return evalIntegerInfixExpression(operator, left, right)
+    elif operator == '==':
+        return nativeBoolToBooleanObject(left == right)
+    elif operator == '!=':
+        return nativeBoolToBooleanObject(left != right)
     else:
-        return None
+        return NULL
 
 def evalIntegerInfixExpression(operator, left, right):
     leftVal = left.Value
@@ -87,5 +95,33 @@ def evalIntegerInfixExpression(operator, left, right):
         return IntegerObject(Value=leftVal/rightVal)
     elif operator == '*':
         return IntegerObject(Value=leftVal*rightVal)
+    elif operator == '<':
+        # print type(leftVal) # asta returneaza tipul nativ din python
+        return nativeBoolToBooleanObject(leftVal < rightVal)
+    elif operator == '>':
+        return nativeBoolToBooleanObject(leftVal > rightVal)
+    elif operator == '==':
+        return nativeBoolToBooleanObject(leftVal == rightVal)
+    elif operator == '!=':
+        return nativeBoolToBooleanObject(leftVal != rightVal)
     else:
         return NULL
+
+def evalIfExpression(node):
+    condition = Eval(node.condition)
+    if isTruthy(condition):
+        return Eval(node.consequence)
+    elif node.alternative:
+        return Eval(node.alternative)
+    else:
+        return NULL
+
+def isTruthy(obj):
+    if obj == NULL:
+        return False
+    elif obj == TRUE:
+        return True
+    elif obj == FALSE:
+        return False
+    else:
+        return True

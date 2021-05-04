@@ -10,6 +10,7 @@ class ObjectType(object):
     INTEGER_OBJ = "INTEGER"
     BOOLEAN_OBJ = "BOOLEAN"
     NULL_OBJ = "NULL"
+    RETURN_VALUE_OBJ = "RETURN_VALUE"
 
 
 class Integer(object):
@@ -43,5 +44,17 @@ class Null(object):
     def Inspect(self):
         print "null"
 
-    def Type(slf):
+    def Type(self):
         return ObjectType.NULL_OBJ
+
+
+class ReturnValue(object):
+    def __init__(self, Value=None):
+        self.Value = Value
+
+    def Inspect(self):
+        # la cum e returnul, ma gandesc ca Value e un olt obiect care are la randul lui o implementare pentru Inspect()
+        return self.Value.Inspect()
+
+    def Type(self):
+        return ObjectType.RETURN_VALUE_OBJ
