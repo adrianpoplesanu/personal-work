@@ -11,6 +11,7 @@ class ObjectType(object):
     BOOLEAN_OBJ = "BOOLEAN"
     NULL_OBJ = "NULL"
     RETURN_VALUE_OBJ = "RETURN_VALUE"
+    ERROR_OBJ = "ERROR"
 
 
 class Integer(object):
@@ -54,7 +55,19 @@ class ReturnValue(object):
 
     def Inspect(self):
         # la cum e returnul, ma gandesc ca Value e un olt obiect care are la randul lui o implementare pentru Inspect()
+        # ce e interesat e ca Inspect() la toate celealte obiecte nu returneaza nimic, ci face doar print... hmmmm
         return self.Value.Inspect()
 
     def Type(self):
         return ObjectType.RETURN_VALUE_OBJ
+
+class Error(object):
+    def __init__(self, message=None):
+        self.message = message
+
+    def Inspect(self):
+        print "ERROR: " + self.message # le-am pus pe amandoua pentru ca ReturnValue e diferit de toate celelate
+        return "ERROR: " + self.message # ReturnValue returneaza ceva, celelalte doar printeaza ceva
+
+    def Type(self):
+        return ObjectType.ERROR_OBJ

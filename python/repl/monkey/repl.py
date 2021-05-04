@@ -57,6 +57,11 @@ class Repl(object):
                 if evaluated:
                     #print evaluated.Inspect()
                     evaluated.Inspect()
+                    # de asta o sa fie nevoie cand o sa vreau sa vad raspunsul cand evaluated returneaza un obiect nativ
+                    #try:
+                    #    evaluated.Inspect()
+                    #except:
+                    #    print evaluated
 
                 #tok = self.lexer.nextToken()
                 #while tok.token_type != TokenType.EOF:

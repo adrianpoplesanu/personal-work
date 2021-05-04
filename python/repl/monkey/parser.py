@@ -110,7 +110,7 @@ class Parser(object):
     def parseReturnStatement(self):
         statement = ReturnStatement(self.curToken)
         self.nextToken()
-        staetement.returnValue = self.parseExpression(ParseType.LOWEST)
+        statement.returnValue = self.parseExpression(ParseType.LOWEST)
         while not self.curTokenIs(TokenType.SEMICOLON):
             self.nextToken()
         return statement

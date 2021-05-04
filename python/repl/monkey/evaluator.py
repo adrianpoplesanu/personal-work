@@ -3,7 +3,11 @@ from object import ObjectType
 from object import Integer as IntegerObject
 from object import Boolean as BooleanObject
 from object import Null as NullObject
-from ast import Program, IntegerLiteral, ExpressionStatement, Boolean, PrefixExpression, InfixExpression, BlockStatement, IfExpression
+from object import ReturnValue as ReturnValue
+from object import Error as Error
+from ast import Program, IntegerLiteral, ExpressionStatement, \
+                Boolean, PrefixExpression, InfixExpression, BlockStatement, \
+                IfExpression, ReturnStatement
 
 NULL = NullObject()
 TRUE = BooleanObject(Value=True)
@@ -15,7 +19,7 @@ def Eval(node):
     #print type(Program)
     #print type(node) == Program
     if type(node) == Program:
-        return evalStatements(node.statements)
+        return evalProgram(node)
     elif type(node) == IntegerLiteral:
         return IntegerObject(Value=node.value) # in python there is a list of small ints and a small int value is returned from that list
     elif type(node) == Boolean:
@@ -26,24 +30,55 @@ def Eval(node):
         return Eval(node.expression)
     elif type(node) == PrefixExpression:
         right = Eval(node.right)
+        if isError(right):
+            return right
         return evalPrefixExpression(node.operator, right)
     elif type(node) == InfixExpression:
         left = Eval(node.left)
+        if isError(left):
+            return left
         right = Eval(node.right)
+        if isError(right):
+            return right
         return evalInfixExpression(node.operator, left, right)
     elif type(node) == BlockStatement:
-        return evalStatements(node.statements)
+        return evalBlockStatement(node)
     elif type(node) == IfExpression:
         return evalIfExpression(node)
+    elif type(node) == ReturnStatement:
+        val = Eval(node.returnValue)
+        if isError(val):
+            return val
+        return ReturnValue(Value=val)
     else:
         print 'evaluatorul nu stie ce sa faca cu nodul asta'
         #raise Exception("Evaluatorul nu stie ce sa faca cu nodul asta")
     return None
 
-def evalStatements(statements):
+def evalProgram(node):
     result = None
-    for statement in statements:
+    for statement in node.statements:
         result = Eval(statement)
+        # i don't understand the Go code here in order to translate it
+        try:
+            #returnValue, ok = result.returnValue
+            if result and type(result) == ReturnValue:
+                #return result.Value.Value # this might need to be uncommented in the future
+                return result.Value
+            elif result and type(result) == Error:
+                return result
+        except:
+            pass
+    return result
+
+def evalBlockStatement(node):
+    result = None
+    for statement in node.statements:
+        result = Eval(statement)
+        if result:
+            rt = result.Type()
+            if rt == ObjectType.RETURN_VALUE_OBJ or rt == ObjectType.ERROR_OBJ:
+                return result
     return result
 
 def nativeBoolToBooleanObject(value):
@@ -56,7 +91,8 @@ def evalPrefixExpression(operator, right):
         return evalBangOperatorExpression(right)
     if operator == '-':
         return evalMinusPrefixOperatorExpression(right)
-    return NULL
+    #return NULL
+    return newError("unknown operator: {0}{0}".format(operator, right.Type()))
 
 def evalBangOperatorExpression(right):
     if right == TRUE:
@@ -69,6 +105,8 @@ def evalBangOperatorExpression(right):
         return FALSE
 
 def evalMinusPrefixOperatorExpression(right):
+    if right.Type() != object.INTEGER_OBJ:
+        return newError("unknown operator: -{0}".format(right.Type()))
     if right.Type() != ObjectType.INTEGER_OBJ:
         return None
     value = right.Value;
@@ -81,8 +119,10 @@ def evalInfixExpression(operator, left, right):
         return nativeBoolToBooleanObject(left == right)
     elif operator == '!=':
         return nativeBoolToBooleanObject(left != right)
+    elif left.Type() != right.Type():
+        return newError("type mismatch: {0} {1} {2}".format(left.Type(), operator, right.Type()))
     else:
-        return NULL
+        return newError("unknown operator: {0} {1} {2}".format(left.Type(), operator, right.Type()))
 
 def evalIntegerInfixExpression(operator, left, right):
     leftVal = left.Value
@@ -105,10 +145,13 @@ def evalIntegerInfixExpression(operator, left, right):
     elif operator == '!=':
         return nativeBoolToBooleanObject(leftVal != rightVal)
     else:
-        return NULL
+        #return NULL
+        return newError("unknown operator: %s %s %s".format(left.Type(), operator, right.Type()))
 
 def evalIfExpression(node):
     condition = Eval(node.condition)
+    if isError(condition):
+        return condition
     if isTruthy(condition):
         return Eval(node.consequence)
     elif node.alternative:
@@ -125,3 +168,9 @@ def isTruthy(obj):
         return False
     else:
         return True
+
+def newError(text):
+    return Error(message=text)
+
+def isError(obj):
+    return obj.Type() == ERROR_OBJ
