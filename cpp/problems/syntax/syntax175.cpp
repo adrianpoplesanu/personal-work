@@ -21,7 +21,7 @@ public:
     ~SingleLinkedList() {
 	while(head) {
             Node<T>* next = head->next;
-            delete head->info;
+            delete head->info; // TODO: i belive this is required, and also cool
             delete head;
             head = next;
         }
@@ -56,10 +56,11 @@ public:
 };
 
 int main(int argc, char *argv[]) {
-    SingleLinkedList<int> lista;
-    lista.Append(5);
-    lista.Append(7);
-    lista.Println();
+    // TODO: finish the implementation
+    SingleLinkedList<int> numbers;
+    numbers.Append(5);
+    numbers.Append(7);
+    numbers.Println();
 
     SingleLinkedList<string> users;
     users.Append("Adrianus");
