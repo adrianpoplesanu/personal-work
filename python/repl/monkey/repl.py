@@ -5,6 +5,7 @@ from lexer import TokenType
 from parser import Parser
 from ast import Program
 from evaluator import Eval
+from environment import NewEnvironment
 
 
 def signal_ctrl_c_handler(sig, frame):
@@ -23,19 +24,23 @@ class Repl(object):
         signal.signal(signal.SIGINT, signal_ctrl_c_handler)
         if self.filename:
             data = open(self.filename, 'r').read()
-            print data
+            #print data
             self.lexer.New(data)
 
             self.parser.new(self.lexer)
             self.program.reset()
             self.parser.ParseProgram(self.program)
+            env = NewEnvironment()
+            evaluated = Eval(self.program, env)
+            if evaluated:
+                evaluated.Inspect()
             #print self.program
-            print self.parser.errors
+            #print self.parser.errors
             #if self.parser.errors:
             #    print "ERRORS!!!"
             #    for error in self.parser.errors:
             #        print "\t" + error
-            self.program.String()
+            #self.program.String()
 
             #tok = self.lexer.nextToken()
             #while tok.token_type != TokenType.EOF:
@@ -53,7 +58,8 @@ class Repl(object):
                 #print self.program
                 #print self.parser.errors
                 #self.program.String()
-                evaluated = Eval(self.program)
+                env = NewEnvironment()
+                evaluated = Eval(self.program, env)
                 if evaluated:
                     #print evaluated.Inspect()
                     evaluated.Inspect()

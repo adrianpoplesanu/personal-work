@@ -7,19 +7,20 @@ from object import ReturnValue as ReturnValue
 from object import Error as Error
 from ast import Program, IntegerLiteral, ExpressionStatement, \
                 Boolean, PrefixExpression, InfixExpression, BlockStatement, \
-                IfExpression, ReturnStatement
+                IfExpression, ReturnStatement, LetStatement, Identifier
 
 NULL = NullObject()
 TRUE = BooleanObject(Value=True)
 FALSE = BooleanObject(Value=False)
+ERROR_OBJ = Error(message="nu stiu ce e cu eroare asta")
 
-def Eval(node):
+def Eval(node, env):
     #print node
     #print type(node)
     #print type(Program)
     #print type(node) == Program
     if type(node) == Program:
-        return evalProgram(node)
+        return evalProgram(node, env)
     elif type(node) == IntegerLiteral:
         return IntegerObject(Value=node.value) # in python there is a list of small ints and a small int value is returned from that list
     elif type(node) == Boolean:
@@ -27,38 +28,49 @@ def Eval(node):
         #return BooleanObject(Value=node.value)
         return nativeBoolToBooleanObject(node.value)
     elif type(node) == ExpressionStatement:
-        return Eval(node.expression)
+        return Eval(node.expression, env)
     elif type(node) == PrefixExpression:
-        right = Eval(node.right)
+        right = Eval(node.right, env)
         if isError(right):
             return right
         return evalPrefixExpression(node.operator, right)
     elif type(node) == InfixExpression:
-        left = Eval(node.left)
+        left = Eval(node.left, env)
         if isError(left):
             return left
-        right = Eval(node.right)
+        right = Eval(node.right, env)
         if isError(right):
             return right
         return evalInfixExpression(node.operator, left, right)
     elif type(node) == BlockStatement:
-        return evalBlockStatement(node)
+        return evalBlockStatement(node, env)
     elif type(node) == IfExpression:
-        return evalIfExpression(node)
+        return evalIfExpression(node, env)
     elif type(node) == ReturnStatement:
-        val = Eval(node.returnValue)
+        val = Eval(node.returnValue, env)
         if isError(val):
             return val
         return ReturnValue(Value=val)
+    elif type(node) == LetStatement:
+        val = Eval(node.value, env)
+        if isError(val):
+            return val
+        env.Set(node.name.String(), val) # aici poate e doar node.name, sau node.value
+    elif type(node) == Identifier:
+        return evalIdentifier(node, env)
     else:
+        # daca node e None, probabil nodul e ;
+        # if a new ast node EmptyInstruction is implemented, i could check for that
+        if not node:
+            return None
         print 'evaluatorul nu stie ce sa faca cu nodul asta'
         #raise Exception("Evaluatorul nu stie ce sa faca cu nodul asta")
     return None
 
-def evalProgram(node):
+def evalProgram(node, env):
     result = None
     for statement in node.statements:
-        result = Eval(statement)
+        result = Eval(statement, env)
         # i don't understand the Go code here in order to translate it
         try:
             #returnValue, ok = result.returnValue
@@ -71,10 +83,10 @@ def evalProgram(node):
             pass
     return result
 
-def evalBlockStatement(node):
+def evalBlockStatement(node, env):
     result = None
     for statement in node.statements:
-        result = Eval(statement)
+        result = Eval(statement, env)
         if result:
             rt = result.Type()
             if rt == ObjectType.RETURN_VALUE_OBJ or rt == ObjectType.ERROR_OBJ:
@@ -148,16 +160,22 @@ def evalIntegerInfixExpression(operator, left, right):
         #return NULL
         return newError("unknown operator: %s %s %s".format(left.Type(), operator, right.Type()))
 
-def evalIfExpression(node):
-    condition = Eval(node.condition)
+def evalIfExpression(node, env):
+    condition = Eval(node.condition, env)
     if isError(condition):
         return condition
     if isTruthy(condition):
-        return Eval(node.consequence)
+        return Eval(node.consequence, env)
     elif node.alternative:
-        return Eval(node.alternative)
+        return Eval(node.alternative, env)
     else:
         return NULL
+
+def evalIdentifier(node, env):
+    val, check = env.Get(node.value)
+    if not check:
+        return newError("identifier referenced before assign")
+    return val
 
 def isTruthy(obj):
     if obj == NULL:
