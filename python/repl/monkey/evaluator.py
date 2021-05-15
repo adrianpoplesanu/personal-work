@@ -60,7 +60,7 @@ def Eval(node, env):
         return evalIdentifier(node, env)
     else:
         # daca node e None, probabil nodul e ;
-        # if a new ast node EmptyInstruction is implemented, i could check for that
+        # TODO: if a new ast node EmptyInstruction is implemented, i could check for that
         if not node:
             return None
         print 'evaluatorul nu stie ce sa faca cu nodul asta'

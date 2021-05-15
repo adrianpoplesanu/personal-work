@@ -33,7 +33,7 @@ class Repl(object):
             env = NewEnvironment()
             evaluated = Eval(self.program, env)
             if evaluated:
-                evaluated.Inspect()
+                evaluated.Inspect() # this prints only the last evaluation, i need to find a way to print all evaluations
             #print self.program
             #print self.parser.errors
             #if self.parser.errors:

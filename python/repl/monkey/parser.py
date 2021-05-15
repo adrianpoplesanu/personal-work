@@ -163,7 +163,7 @@ class Parser(object):
     def noPrefixParseFnError(self, token_type):
         if token_type == ';':
             # do nothing with ;
-            # todo create an ast node for EmptyInstruction for ;
+            # TODO: create an ast node for EmptyInstruction for ;
             return
         self.errors.append('no prefix parse function for ' + token_type)
         print 'no prefix parse function for ' + token_type
