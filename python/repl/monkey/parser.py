@@ -36,8 +36,6 @@ class Parser(object):
             TokenType.ASTERISK: ParseType.PRODUCT,
             TokenType.LPAREN: ParseType.CALL
         }
-        #self.nextToken()
-        #self.nextToken()
 
     def new(self, lexer=None):
         self.lexer = lexer # maybe don't do it like that
@@ -76,15 +74,11 @@ class Parser(object):
         self.infixParseFns[token_type] = fn
 
     def ParseProgram(self, program):
-        #program = Program()
         while self.curToken.token_type != TokenType.EOF:
             statement = self.parseStatement()
-            #print statement # am comentat printul asta pentru ca nu mai am nevoie de el
-            #print 'buna dimineata!!!'
             if statement:
                 program.statements.append(statement)
             self.nextToken()
-        #return program
 
     def parseStatement(self):
         if self.curToken.token_type == TokenType.LET:
@@ -261,7 +255,7 @@ class Parser(object):
             self.nextToken()
             ident = Identifier(token=self.curToken, value=self.curToken.literal)
             identifiers.append(ident)
-        if not self.peekTokenIs(TokenType.RPAREN):
+        if not self.expectPeek(TokenType.RPAREN):
             return None
         return identifiers
 

@@ -15,17 +15,11 @@ FALSE = BooleanObject(Value=False)
 ERROR_OBJ = Error(message="nu stiu ce e cu eroare asta")
 
 def Eval(node, env):
-    #print node
-    #print type(node)
-    #print type(Program)
-    #print type(node) == Program
     if type(node) == Program:
         return evalProgram(node, env)
     elif type(node) == IntegerLiteral:
         return IntegerObject(Value=node.value) # in python there is a list of small ints and a small int value is returned from that list
     elif type(node) == Boolean:
-        #print '###' + str(node.value) + '###'
-        #return BooleanObject(Value=node.value)
         return nativeBoolToBooleanObject(node.value)
     elif type(node) == ExpressionStatement:
         return Eval(node.expression, env)

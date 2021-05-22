@@ -18,9 +18,6 @@ class Expression(Node):
 class Program(object):
     statements = []
 
-    #def __init__(self):
-    #    self.statements = []
-
     def TokenLiteral(self):
         if len(self.statements) > 0:
             return self.statements[0].TokenLiteral()
@@ -69,7 +66,6 @@ class ReturnStatement(Statement):
         return self.token.literal
 
     def String(self):
-        #return 'this is identifier token ' + str(self.token) + '; with expresion ' + str(self.expression)
         out = ''
         out = out + self.TokenLiteral() + ' '
         if self.returnValue:
@@ -107,7 +103,6 @@ class Identifier(object):
         return self.token.literal
 
     def String(self):
-        #return 'this is identifier token ' + str(self.token) + '; with value ' + self.value
         return self.value
 
 

@@ -9,7 +9,7 @@ from environment import NewEnvironment
 
 
 def signal_ctrl_c_handler(sig, frame):
-    print "\nleving repl, bye bye!"
+    print "\nleaving repl, bye bye!"
     sys.exit(0)
 
 
@@ -24,7 +24,6 @@ class Repl(object):
         signal.signal(signal.SIGINT, signal_ctrl_c_handler)
         if self.filename:
             data = open(self.filename, 'r').read()
-            #print data
             self.lexer.New(data)
 
             self.parser.new(self.lexer)
@@ -34,42 +33,16 @@ class Repl(object):
             evaluated = Eval(self.program, env)
             if evaluated:
                 evaluated.Inspect() # this prints only the last evaluation, i need to find a way to print all evaluations
-            #print self.program
-            #print self.parser.errors
-            #if self.parser.errors:
-            #    print "ERRORS!!!"
-            #    for error in self.parser.errors:
-            #        print "\t" + error
-            #self.program.String()
-
-            #tok = self.lexer.nextToken()
-            #while tok.token_type != TokenType.EOF:
-            #    print tok
-            #    tok = self.lexer.nextToken()
         else:
             while True:
                 line = raw_input('>> ')
-                #self.lexer = Lexer(line)
                 self.lexer.New(line)
 
                 self.parser.new(self.lexer)
                 self.program.reset()
                 self.parser.ParseProgram(self.program)
-                #print self.program
-                #print self.parser.errors
-                #self.program.String()
                 env = NewEnvironment()
                 evaluated = Eval(self.program, env)
                 if evaluated:
-                    #print evaluated.Inspect()
                     evaluated.Inspect()
-                    # de asta o sa fie nevoie cand o sa vreau sa vad raspunsul cand evaluated returneaza un obiect nativ
-                    #try:
-                    #    evaluated.Inspect()
-                    #except:
-                    #    print evaluated
 
-                #tok = self.lexer.nextToken()
-                #while tok.token_type != TokenType.EOF:
-                #    print tok
-                #    tok = self.lexer.nextToken()

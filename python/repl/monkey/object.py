@@ -12,6 +12,7 @@ class ObjectType(object):
     NULL_OBJ = "NULL"
     RETURN_VALUE_OBJ = "RETURN_VALUE"
     ERROR_OBJ = "ERROR"
+    FUNCTION_OBJ = "FUNCTION"
 
 
 class Integer(object):
@@ -61,6 +62,7 @@ class ReturnValue(object):
     def Type(self):
         return ObjectType.RETURN_VALUE_OBJ
 
+
 class Error(object):
     def __init__(self, message=None):
         self.message = message
@@ -71,3 +73,16 @@ class Error(object):
 
     def Type(self):
         return ObjectType.ERROR_OBJ
+
+
+class Function(object):
+    def __init__(self):
+        self.parameters = []
+        self.body = None # block statement
+        self.env = None # environment
+
+    def Inspect(self):
+        pass
+
+    def Type(self):
+        pass
