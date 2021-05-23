@@ -34,6 +34,7 @@ class Repl(object):
             if evaluated:
                 evaluated.Inspect() # this prints only the last evaluation, i need to find a way to print all evaluations
         else:
+            env = NewEnvironment()
             while True:
                 line = raw_input('>> ')
                 self.lexer.New(line)
@@ -41,7 +42,6 @@ class Repl(object):
                 self.parser.new(self.lexer)
                 self.program.reset()
                 self.parser.ParseProgram(self.program)
-                env = NewEnvironment()
                 evaluated = Eval(self.program, env)
                 if evaluated:
                     evaluated.Inspect()

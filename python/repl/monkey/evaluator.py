@@ -4,10 +4,13 @@ from object import Integer as IntegerObject
 from object import Boolean as BooleanObject
 from object import Null as NullObject
 from object import ReturnValue as ReturnValue
+from object import Function as FunctionObject
 from object import Error as Error
 from ast import Program, IntegerLiteral, ExpressionStatement, \
                 Boolean, PrefixExpression, InfixExpression, BlockStatement, \
-                IfExpression, ReturnStatement, LetStatement, Identifier
+                IfExpression, ReturnStatement, LetStatement, Identifier, \
+                CallExpression, FunctionLiteral
+from environment import NewEnclosedEnvironment
 
 NULL = NullObject()
 TRUE = BooleanObject(Value=True)
@@ -52,6 +55,18 @@ def Eval(node, env):
         env.Set(node.name.String(), val) # aici poate e doar node.name, sau node.value
     elif type(node) == Identifier:
         return evalIdentifier(node, env)
+    elif type(node) == CallExpression:
+        function = Eval(node.function, env)
+        if isError(function):
+            return function
+        args = evalExpressions(node.arguments, env)
+        if len(args) == 1 and isError(args[0]):
+            return args[0]
+        return applyFunction(function, args)
+    elif type(node) == FunctionLiteral:
+        params = node.parameters
+        body = node.body
+        return FunctionObject(parameters=params, body=body, env=env)
     else:
         # daca node e None, probabil nodul e ;
         # TODO: if a new ast node EmptyInstruction is implemented, i could check for that
@@ -170,6 +185,34 @@ def evalIdentifier(node, env):
     if not check:
         return newError("identifier referenced before assign")
     return val
+
+def evalExpressions(exps, env):
+    result = []
+    for exp in exps:
+        evaluated = Eval(exp, env)
+        if isError(evaluated):
+            return evaluated
+        result.append(evaluated)
+    return result
+
+def applyFunction(fn, args):
+    if type(fn) != FunctionObject:
+        return newError("not a function {0}".format(fn.Type()))
+    extendedEnv = extendFunctionEnv(fn, args)
+    evaluated = Eval(fn.body, extendedEnv)
+    return unwrapReturnValue(evaluated)
+
+def extendFunctionEnv(fn, args):
+    env = NewEnclosedEnvironment(fn.env)
+
+    for i, param in enumerate(fn.parameters):
+        env.Set(param.value, args[i])
+    return env
+
+def unwrapReturnValue(obj):
+    if type(obj) == ReturnValue:
+        return obj.Value
+    return obj
 
 def isTruthy(obj):
     if obj == NULL:

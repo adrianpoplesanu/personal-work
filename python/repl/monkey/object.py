@@ -76,13 +76,13 @@ class Error(object):
 
 
 class Function(object):
-    def __init__(self):
-        self.parameters = []
-        self.body = None # block statement
-        self.env = None # environment
+    def __init__(self, parameters=None, body=None, env=None):
+        self.parameters = parameters
+        self.body = body # block statement
+        self.env = env # environment
 
     def Inspect(self):
-        pass
+        print 'FunctionObject'
 
     def Type(self):
-        pass
+        return ObjectType.FUNCTION_OBJ
