@@ -196,4 +196,4 @@ class Token(object):
         self.literal = literal
 
     def __str__(self):
-        return '{Type: ' + self.token_type_map[self.token_type] + ', Literal: ' + self.literal + '}'
+        return 'Token[type: ' + self.token_type_map[self.token_type] + ', literal: ' + self.literal + ']'

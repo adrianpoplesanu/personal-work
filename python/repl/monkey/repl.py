@@ -6,6 +6,7 @@ from parser import Parser
 from ast import Program
 from evaluator import Eval
 from environment import NewEnvironment
+from utils import print_ast_node
 
 
 def signal_ctrl_c_handler(sig, frame):
@@ -46,3 +47,9 @@ class Repl(object):
                 if evaluated:
                     evaluated.Inspect()
 
+    def test_parse_program_ast_node(self):
+        self.lexer.New("let a = 1; let add = fn(a,b) { 1+2+3; } ; werty; ; 1 + 2 - 3 * 4; add(a, 747); if (3 > 1) { 1001; } else { 1002; } let a = true; let b = false;")
+        self.parser.new(self.lexer)
+        self.program.reset()
+        self.parser.ParseProgram(self.program)
+        print_ast_node(self.program, 0)
