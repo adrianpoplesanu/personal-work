@@ -1,0 +1,8 @@
+ag-logging
+configs-wrapper
+stomppy==4.1.17a0
+cx-Oracle
+payment-api
+payment-api-server
+monitoring
+flask
