@@ -8,3 +8,5 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 (sandbox) 192-168-0-103:test-setup adrianpoplesanu$ pip --version
 pip 21.1.2 from /Users/adrianpoplesanu/Documents/git-projects/personal-work/python/test-setup/sandbox/lib/python3.6/site-packages/pip (python 3.6)
+
+The only requirement for replicating: python 3.6.5 (jenkins box has 3.5.0) and pip 21.1.2 (jenkins box has 20.3.3)
