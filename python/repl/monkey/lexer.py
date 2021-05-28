@@ -43,6 +43,13 @@ class Lexer(object):
             self.readChar()
         return self.input[start:self.position]
 
+    def readString(self):
+        start = self.position + 1
+        self.readChar()
+        while (self.ch != '"' and self.ch != 0):
+            self.readChar()
+        return self.input[start:self.position]
+
     def LookupIdent(self, ident):
         if ident in Token.keywords:
             return Token.keywords[ident]
@@ -100,6 +107,9 @@ class Lexer(object):
             tok = self.newToken(TokenType.RBRACE, self.ch)
         elif self.ch == 0:
             tok = self.newToken(TokenType.EOF, '')
+        elif self.ch == '"':
+            literal = self.readString()
+            tok = self.newToken(TokenType.STRING, literal)
         else:
             if self.isLetter(self.ch):
                 tok.literal = self.readIdentifier()
@@ -147,6 +157,7 @@ class TokenType(object):
     RETURN = "RETURN"
     EQ = "=="
     NOT_EQ = "!="
+    STRING = "STRING"
 
 
 class Token(object):
@@ -178,7 +189,8 @@ class Token(object):
         TokenType.ELSE: "ELSE",
         TokenType.RETURN: "RETURN",
         TokenType.EQ: "EQ",
-        TokenType.NOT_EQ: "NOT_EQ"
+        TokenType.NOT_EQ: "NOT_EQ",
+        TokenType.STRING: "STRING"
     }
 
     keywords = {
