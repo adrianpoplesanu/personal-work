@@ -11,6 +11,7 @@ from ast import IfExpression
 from ast import BlockStatement
 from ast import FunctionLiteral
 from ast import CallExpression
+from ast import StringLiteral
 from lexer import TokenType
 
 
@@ -53,6 +54,7 @@ class Parser(object):
         self.registerPrefix(TokenType.LPAREN, self.parseGroupedExpression)
         self.registerPrefix(TokenType.IF, self.parseIfExpression)
         self.registerPrefix(TokenType.FUNCTION, self.parseFunctionLiteral)
+        self.registerPrefix(TokenType.STRING, self.parseStringLiteral)
         self.registerInfix(TokenType.PLUS, self.parseInfixExpression)
         self.registerInfix(TokenType.MINUS, self.parseInfixExpression)
         self.registerInfix(TokenType.SLASH, self.parseInfixExpression)
@@ -278,6 +280,9 @@ class Parser(object):
         if not self.expectPeek(TokenType.RPAREN):
             return None
         return args
+
+    def parseStringLiteral(self):
+        return StringLiteral(token=self.curToken, value=self.curToken.literal)
 
 
 class ParseType(object):

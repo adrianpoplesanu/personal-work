@@ -5,11 +5,12 @@ from object import Boolean as BooleanObject
 from object import Null as NullObject
 from object import ReturnValue as ReturnValue
 from object import Function as FunctionObject
+from object import String as StringObject
 from object import Error as Error
 from ast import Program, IntegerLiteral, ExpressionStatement, \
                 Boolean, PrefixExpression, InfixExpression, BlockStatement, \
                 IfExpression, ReturnStatement, LetStatement, Identifier, \
-                CallExpression, FunctionLiteral
+                CallExpression, FunctionLiteral, StringLiteral
 from environment import NewEnclosedEnvironment
 
 NULL = NullObject()
@@ -67,12 +68,14 @@ def Eval(node, env):
         params = node.parameters
         body = node.body
         return FunctionObject(parameters=params, body=body, env=env)
+    elif type(node) == StringLiteral:
+        return StringObject(value=node.value)
     else:
         # daca node e None, probabil nodul e ;
         # TODO: if a new ast node EmptyInstruction is implemented, i could check for that
         if not node:
             return None
-        print 'evaluatorul nu stie ce sa faca cu nodul asta'
+        print 'evaluatorul nu stie ce sa faca cu nodul asta: ' + str(node)
         #raise Exception("Evaluatorul nu stie ce sa faca cu nodul asta")
     return None
 
@@ -136,6 +139,8 @@ def evalMinusPrefixOperatorExpression(right):
 def evalInfixExpression(operator, left, right):
     if left.Type() == ObjectType.INTEGER_OBJ and right.Type() == ObjectType.INTEGER_OBJ:
         return evalIntegerInfixExpression(operator, left, right)
+    elif left.Type() == ObjectType.STRING_OBJ and right.Type() == ObjectType.STRING_OBJ:
+        return evalStringInfixExpression(operator, left, right)
     elif operator == '==':
         return nativeBoolToBooleanObject(left == right)
     elif operator == '!=':
@@ -168,6 +173,13 @@ def evalIntegerInfixExpression(operator, left, right):
     else:
         #return NULL
         return newError("unknown operator: %s %s %s".format(left.Type(), operator, right.Type()))
+
+def evalStringInfixExpression(operator, left, right):
+    if operator != '+':
+        return newError("unknown operator: %s %s %s".format(left.Type(), operator, right.Type()))
+    left_val = left.value
+    right_val = right.value
+    return StringObject(value=left_val+right_val)
 
 def evalIfExpression(node, env):
     condition = Eval(node.condition, env)

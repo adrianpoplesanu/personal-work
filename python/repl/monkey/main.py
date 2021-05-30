@@ -9,5 +9,5 @@ if __name__ == '__main__':
     else:
         print 'welcome to mokey'
         r = Repl()
-        r.test_parse_program_ast_node()
+        #r.test_parse_program_ast_node()
         r.loop()

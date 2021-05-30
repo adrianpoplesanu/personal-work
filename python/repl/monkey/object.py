@@ -13,6 +13,7 @@ class ObjectType(object):
     RETURN_VALUE_OBJ = "RETURN_VALUE"
     ERROR_OBJ = "ERROR"
     FUNCTION_OBJ = "FUNCTION"
+    STRING_OBJ = "STRING"
 
 
 class Integer(object):
@@ -86,3 +87,14 @@ class Function(object):
 
     def Type(self):
         return ObjectType.FUNCTION_OBJ
+
+
+class String(object):
+    def __init__(self, value=None):
+        self.value = value
+
+    def Inspect(self):
+        print '"{0}"'.format(self.value)
+
+    def Type(self):
+        return ObjectType.STRING_OBJ

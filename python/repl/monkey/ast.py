@@ -257,3 +257,15 @@ class CallExpression(object):
         out = out + args
         out = out + ')'
         return out
+
+
+class StringLiteral(object):
+    def __init__(self, token, value=None):
+        self.token = token
+        self.value = value
+
+    def TokenLiteral(self):
+        return self.token.literal
+
+    def String(self):
+        return self.token.literal
