@@ -14,6 +14,7 @@ class ObjectType(object):
     ERROR_OBJ = "ERROR"
     FUNCTION_OBJ = "FUNCTION"
     STRING_OBJ = "STRING"
+    BUILTIN_OBJ = "BUILTIN"
 
 
 class Integer(object):
@@ -98,3 +99,14 @@ class String(object):
 
     def Type(self):
         return ObjectType.STRING_OBJ
+
+
+class Builtin(object):
+    def __init__(self, builtin_function):
+        self.builtin_function = builtin_function
+
+    def Inspect(self):
+        print "built-in function"
+
+    def Type(self):
+        return ObjectType.BUILTIN_OBJ

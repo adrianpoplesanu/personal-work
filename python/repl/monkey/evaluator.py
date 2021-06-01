@@ -7,11 +7,14 @@ from object import ReturnValue as ReturnValue
 from object import Function as FunctionObject
 from object import String as StringObject
 from object import Error as Error
+from object import Builtin as BuiltinObject
 from ast import Program, IntegerLiteral, ExpressionStatement, \
                 Boolean, PrefixExpression, InfixExpression, BlockStatement, \
                 IfExpression, ReturnStatement, LetStatement, Identifier, \
                 CallExpression, FunctionLiteral, StringLiteral
+from builtins import builtins_map
 from environment import NewEnclosedEnvironment
+from utils import print_ast_node
 
 NULL = NullObject()
 TRUE = BooleanObject(Value=True)
@@ -82,6 +85,7 @@ def Eval(node, env):
 def evalProgram(node, env):
     result = None
     for statement in node.statements:
+        #print_ast_node(statement, 0)
         result = Eval(statement, env)
         # i don't understand the Go code here in order to translate it
         try:
@@ -129,8 +133,8 @@ def evalBangOperatorExpression(right):
         return FALSE
 
 def evalMinusPrefixOperatorExpression(right):
-    if right.Type() != object.INTEGER_OBJ:
-        return newError("unknown operator: -{0}".format(right.Type()))
+    #if right.Type() != object.INTEGER_OBJ:
+    #    return newError("unknown operator: -{0}".format(right.Type()))
     if right.Type() != ObjectType.INTEGER_OBJ:
         return None
     value = right.Value;
@@ -194,9 +198,11 @@ def evalIfExpression(node, env):
 
 def evalIdentifier(node, env):
     val, check = env.Get(node.value)
-    if not check:
-        return newError("identifier referenced before assign")
-    return val
+    if check:
+        return val
+    if node.value in builtins_map:
+        return builtins_map[node.value]
+    return newError("identifier referenced before assign")
 
 def evalExpressions(exps, env):
     result = []
@@ -208,11 +214,13 @@ def evalExpressions(exps, env):
     return result
 
 def applyFunction(fn, args):
-    if type(fn) != FunctionObject:
-        return newError("not a function {0}".format(fn.Type()))
-    extendedEnv = extendFunctionEnv(fn, args)
-    evaluated = Eval(fn.body, extendedEnv)
-    return unwrapReturnValue(evaluated)
+    if type(fn) == FunctionObject:
+        extendedEnv = extendFunctionEnv(fn, args)
+        evaluated = Eval(fn.body, extendedEnv)
+        return unwrapReturnValue(evaluated)
+    elif type(fn) == BuiltinObject:
+        return fn.builtin_function(*args)
+    return newError("not a function {0}".format(fn.Type()))
 
 def extendFunctionEnv(fn, args):
     env = NewEnclosedEnvironment(fn.env)
