@@ -1,6 +1,4 @@
 #include <iostream>
-#include <string>
-using namespace std;
 
 template<typename T>
 struct Node {
@@ -46,31 +44,32 @@ public:
         return objects[i].data;
     }
     void print() {
-        cout << "[";
+        std::cout << "[";
         if (size > 0) {
-            for (int i = 0; i < size - 1; i++) cout << objects[i].data << ", ";
-            cout << objects[size - 1].data;
+            for (int i = 0; i < size - 1; i++) std::cout << objects[i].data << ", ";
+            std::cout << objects[size - 1].data;
         }
-        cout << "]\n";
+        std::cout << "]\n";
     }
     void print_memory_addresses() {
-        cout << "objects: ";
-        for (int i = 0; i < size; i++) cout << &objects[i] << " ";
-        cout << "\n";
+        std::cout << "objects: ";
+        for (int i = 0; i < size; i++) std::cout << &objects[i] << " ";
+        std::cout << "\n";
     }
 };
 
 void test_memory() {
-    ArrayList<string> *words = new ArrayList<string>();
+    // nu-mi place asta, o sa fac o implementarea in care sa nu fie nevoie un pointer si o referinta catre array list
+    ArrayList<std::string> *words = new ArrayList<std::string>();
     //int *c = new int(4);
-    cout << words->getCapacity() << "\n";
+    std::cout << words->getCapacity() << "\n";
     words->add("dexiciul");
     words->add("ramonice");
     words->add("adrianus");
-    cout << words->getCapacity() << "\n";
+    std::cout << words->getCapacity() << "\n";
     words->print();
-    string test = words->getAt(1);
-    cout << test << "\n";
+    std::string test = words->getAt(1);
+    std::cout << test << "\n";
     //int *a = new int(5);
     words->print_memory_addresses();
     delete words;
@@ -83,10 +82,12 @@ void test_memory() {
 }
 
 int main(int argc, char *argv[]) {
+    // TODO: continue this
+    // TODO: create an ArrayList without it having to be a pointer reference in order to use it
     int *a = new int(1);
     test_memory();
     test_memory();
     int *b = new int(2);
-    cout << "main pointers: " << a << " " << b << "\n";
+    std::cout << "main pointers: " << a << " " << b << "\n";
     return 0;
 }
