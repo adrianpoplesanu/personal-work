@@ -37,13 +37,33 @@ public:
         }
     }
     void Remove(T e) {
-
+        int i;
+        for (i = 0; i < size; i++) {
+            if (objs[i].data == e) {
+                break;
+            }
+        }
+        bool removed = false;
+        for (int j = i; j < size - 1; j++) {
+            objs[i].data = objs[i + 1].data;
+            removed = true;
+        }
+        if (removed) --size;
     }
     int Index(T e) {
-
+        int i;
+        for (i = 0; i < size; i++) {
+            if (objs[i].data == e) return i;
+        }
+        return -1;
     }
     T Pop() {
-        
+        if (size > 0) {
+            size--;
+            return objs[size - 1].data;
+        }
+        T empty;
+        return empty;
     }
     void Print() {
         for (int i = 0; i < size; i++) {
@@ -63,6 +83,8 @@ int main(int argc, char *argv[]) {
     words.Append("Italia");
     words.Append("Belgia");
     words.Append("Franta");
+    words.Print();
+    words.Remove("Belgia");
     words.Print();
     return 0;
 }
