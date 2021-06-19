@@ -1,0 +1,5 @@
+#chromedriver-binary==92.0.4515.43.0
+selenium==3.141.0
+urllib3==1.26.5
+#chromedriver-binary==91.0.4472.114
+chromedriver-binary==91.0.4472.101.0
