@@ -1,0 +1,5 @@
+.Python
+sandbox/bin
+sandbox/include
+sandbox/lib
+sandbox/pip-selfcheck.json
