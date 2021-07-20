@@ -269,3 +269,39 @@ class StringLiteral(object):
 
     def String(self):
         return self.token.literal
+
+
+class ArrayLiteral(object):
+    def __init__(self, token, elements=None):
+        self.token = token
+        self.elements = elements
+
+    def TokenLiteral(self):
+        return self.token.literal
+
+    def String(self):
+        out = '['
+        all_elements = []
+        for element in elements:
+            all.append(element.String())
+        out += ', '.join(all_elements)
+        out += ']'
+        return out
+
+
+class IndexExpression(object):
+    def __init__(self, token):
+        self.token = token
+        self.left = None
+        self.index = None
+
+    def TokenLiteral(self):
+        return self.token.literal
+
+    def String(self):
+        out = "("
+        out += self.left.String()
+        out += "["
+        out += self.index.String()
+        out += "])"
+        return out

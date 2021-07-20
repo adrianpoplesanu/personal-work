@@ -12,6 +12,7 @@ from ast import BlockStatement
 from ast import FunctionLiteral
 from ast import CallExpression
 from ast import StringLiteral
+from ast import ArrayLiteral
 from lexer import TokenType
 
 
@@ -55,6 +56,7 @@ class Parser(object):
         self.registerPrefix(TokenType.IF, self.parseIfExpression)
         self.registerPrefix(TokenType.FUNCTION, self.parseFunctionLiteral)
         self.registerPrefix(TokenType.STRING, self.parseStringLiteral)
+        self.registerPrefix(TokenType.LBRACKET, self.parseArrayLiteral)
         self.registerInfix(TokenType.PLUS, self.parseInfixExpression)
         self.registerInfix(TokenType.MINUS, self.parseInfixExpression)
         self.registerInfix(TokenType.SLASH, self.parseInfixExpression)
@@ -283,6 +285,26 @@ class Parser(object):
 
     def parseStringLiteral(self):
         return StringLiteral(token=self.curToken, value=self.curToken.literal)
+
+    def parseArrayLiteral(self):
+        arr = ArrayLiteral(token=self.curToken)
+        arr.elements = self.parseExpressionList(TokenType.RBRACKET)
+        return arr
+
+    def parseExpressionList(self, end):
+        result = []
+        if self.peekTokenIs(end):
+            self.nextToken()
+            return result
+        self.nextToken()
+        result.append(self.parseExpression(ParseType.LOWEST))
+        while self.peekTokenIs(TokenType.COMMA):
+            self.nextToken()
+            self.nextToken()
+            result.append(self.parseExpression(ParseType.LOWEST))
+        if not self.expectPeek(end):
+            return None
+        return result
 
 
 class ParseType(object):

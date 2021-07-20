@@ -105,6 +105,10 @@ class Lexer(object):
             tok = self.newToken(TokenType.LBRACE, self.ch)
         elif self.ch == '}':
             tok = self.newToken(TokenType.RBRACE, self.ch)
+        elif self.ch == '[':
+            tok = self.newToken(TokenType.LBRACKET, self.ch)
+        elif self.ch == ']':
+            tok = self.newToken(TokenType.RBRACKET, self.ch)
         elif self.ch == 0:
             tok = self.newToken(TokenType.EOF, '')
         elif self.ch == '"':
@@ -158,6 +162,8 @@ class TokenType(object):
     EQ = "=="
     NOT_EQ = "!="
     STRING = "STRING"
+    LBRACKET = "["
+    RBRACKET = "]"
 
 
 class Token(object):
@@ -190,7 +196,9 @@ class Token(object):
         TokenType.RETURN: "RETURN",
         TokenType.EQ: "EQ",
         TokenType.NOT_EQ: "NOT_EQ",
-        TokenType.STRING: "STRING"
+        TokenType.STRING: "STRING",
+        TokenType.LBRACKET: "LBRACKET",
+        TokenType.RBRACKET: "RBRACKET"
     }
 
     keywords = {
