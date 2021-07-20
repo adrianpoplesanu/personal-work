@@ -8,10 +8,11 @@ from object import Function as FunctionObject
 from object import String as StringObject
 from object import Error as Error
 from object import Builtin as BuiltinObject
+from object import ArrayObject as ArrayObject
 from ast import Program, IntegerLiteral, ExpressionStatement, \
                 Boolean, PrefixExpression, InfixExpression, BlockStatement, \
                 IfExpression, ReturnStatement, LetStatement, Identifier, \
-                CallExpression, FunctionLiteral, StringLiteral
+                CallExpression, FunctionLiteral, StringLiteral, ArrayLiteral
 from builtins import builtins_map
 from environment import NewEnclosedEnvironment
 from utils import print_ast_node
@@ -73,6 +74,11 @@ def Eval(node, env):
         return FunctionObject(parameters=params, body=body, env=env)
     elif type(node) == StringLiteral:
         return StringObject(value=node.value)
+    elif type(node) == ArrayLiteral:
+        elements = evalExpressions(node.elements, env)
+        if len(elements) == 1 and isError(element[0]):
+            return elements[0]
+        return ArrayObject(elements=elements)
     else:
         # daca node e None, probabil nodul e ;
         # TODO: if a new ast node EmptyInstruction is implemented, i could check for that

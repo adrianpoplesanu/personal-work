@@ -15,6 +15,7 @@ class ObjectType(object):
     FUNCTION_OBJ = "FUNCTION"
     STRING_OBJ = "STRING"
     BUILTIN_OBJ = "BUILTIN"
+    ARRAY_OBJ = "ARRAY"
 
 
 class Integer(object):
@@ -24,7 +25,7 @@ class Integer(object):
     def Inspect(self):
         # linia de mai jos printeaza exact tipul din Python asociat valorii stocate mai jos, si e <type 'int'> ceea ce e bine si cool
         #print type(self.Value)
-        print "{0}".format(self.Value)
+        return "{0}".format(self.Value)
 
     def Type(self):
         return ObjectType.INTEGER_OBJ
@@ -35,7 +36,7 @@ class Boolean(object):
         self.Value = Value
 
     def Inspect(self):
-        print "{0}".format(self.Value)
+        return "{0}".format(self.Value)
 
     def Type(self):
         return ObjectType.BOOLEAN_OBJ
@@ -46,7 +47,7 @@ class Null(object):
         pass
 
     def Inspect(self):
-        print "null"
+        return "null"
 
     def Type(self):
         return ObjectType.NULL_OBJ
@@ -95,7 +96,7 @@ class String(object):
         self.value = value
 
     def Inspect(self):
-        print '"{0}"'.format(self.value)
+        return '"{0}"'.format(self.value)
 
     def Type(self):
         return ObjectType.STRING_OBJ
@@ -110,3 +111,20 @@ class Builtin(object):
 
     def Type(self):
         return ObjectType.BUILTIN_OBJ
+
+class ArrayObject(object):
+    def __init__(self, elements=None):
+        self.elements = elements
+
+    def Inspect(self):
+        out = '['
+        all_elements = []
+        for element in self.elements:
+            #print element
+            all_elements.append(element.Inspect())
+        out += ', '.join(all_elements)
+        out += ']'
+        return out
+
+    def Type(self):
+        return ObjectType.ARRAY_OBJ

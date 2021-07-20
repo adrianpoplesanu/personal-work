@@ -290,10 +290,10 @@ class ArrayLiteral(object):
 
 
 class IndexExpression(object):
-    def __init__(self, token):
+    def __init__(self, token, left=None, index=None):
         self.token = token
-        self.left = None
-        self.index = None
+        self.left = left
+        self.index = index
 
     def TokenLiteral(self):
         return self.token.literal

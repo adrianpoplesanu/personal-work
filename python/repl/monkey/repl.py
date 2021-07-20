@@ -33,7 +33,7 @@ class Repl(object):
             env = NewEnvironment()
             evaluated = Eval(self.program, env)
             if evaluated:
-                evaluated.Inspect() # this prints only the last evaluation, i need to find a way to print all evaluations
+                print evaluated.Inspect() # this prints only the last evaluation, i need to find a way to print all evaluations
         else:
             env = NewEnvironment()
             while True:
@@ -45,7 +45,7 @@ class Repl(object):
                 self.parser.ParseProgram(self.program)
                 evaluated = Eval(self.program, env)
                 if evaluated:
-                    evaluated.Inspect()
+                    print evaluated.Inspect()
 
     def test_parse_program_ast_node(self):
         self.lexer.New("let a = 1; let add = fn(a,b) { 1+2+3; } ; werty; ; 1 + 2 - 3 * 4; add(a, 747); if (3 > 1) { 1001; } else { 1002; } let a = true; let b = false;")

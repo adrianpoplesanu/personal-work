@@ -36,7 +36,8 @@ class Parser(object):
             TokenType.MINUS: ParseType.SUM,
             TokenType.SLASH: ParseType.PRODUCT,
             TokenType.ASTERISK: ParseType.PRODUCT,
-            TokenType.LPAREN: ParseType.CALL
+            TokenType.LPAREN: ParseType.CALL,
+            TokenType.LBRACKET: ParseType.INDEX
         }
 
     def new(self, lexer=None):
@@ -66,6 +67,7 @@ class Parser(object):
         self.registerInfix(TokenType.LT, self.parseInfixExpression)
         self.registerInfix(TokenType.GT, self.parseInfixExpression)
         self.registerInfix(TokenType.LPAREN, self.parseCallExpression)
+        self.registerInfix(TokenType.LBRACKET, self.parseIndexExpression)
 
     def nextToken(self):
         self.curToken = self.peekToken
@@ -306,6 +308,14 @@ class Parser(object):
             return None
         return result
 
+    def parseIndexExpression(self,left):
+        exp = IndexExpression(token=self.curToken, left=left)
+        self.nextToken()
+        exp.index = self.parseExpression(ParseType.LOWEST)
+        if not self.expectPeek(TokenType.RBRACKET):
+            return None
+        return exp
+
 
 class ParseType(object):
     LOWEST = 1
@@ -315,3 +325,4 @@ class ParseType(object):
     PRODUCT = 5
     PREFIX = 6
     CALL = 7
+    INDEX = 8
