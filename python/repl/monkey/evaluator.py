@@ -12,7 +12,8 @@ from object import ArrayObject as ArrayObject
 from ast import Program, IntegerLiteral, ExpressionStatement, \
                 Boolean, PrefixExpression, InfixExpression, BlockStatement, \
                 IfExpression, ReturnStatement, LetStatement, Identifier, \
-                CallExpression, FunctionLiteral, StringLiteral, ArrayLiteral
+                CallExpression, FunctionLiteral, StringLiteral, ArrayLiteral, \
+                IndexExpression
 from builtins import builtins_map
 from environment import NewEnclosedEnvironment
 from utils import print_ast_node
@@ -79,6 +80,14 @@ def Eval(node, env):
         if len(elements) == 1 and isError(element[0]):
             return elements[0]
         return ArrayObject(elements=elements)
+    elif type(node) == IndexExpression:
+        left = Eval(node.left, env)
+        if isError(left):
+            return left
+        index = Eval(node.index, env)
+        if isError(index):
+            return index
+        return evalIndexExpression(left, index)
     else:
         # daca node e None, probabil nodul e ;
         # TODO: if a new ast node EmptyInstruction is implemented, i could check for that
@@ -239,6 +248,20 @@ def unwrapReturnValue(obj):
     if type(obj) == ReturnValue:
         return obj.Value
     return obj
+
+def evalIndexExpression(left, index):
+    if left.Type() == ObjectType.ARRAY_OBJ and index.Type() == ObjectType.INTEGER_OBJ:
+        return evalArrayIndexExpression(left, index)
+    else:
+        return newError("error evaluating index expression")
+
+def evalArrayIndexExpression(left, index):
+    array_object = left
+    idx = index.Value
+    max = len(array_object.elements) - 1
+    if idx < 0 or idx > max:
+        return None
+    return array_object.elements[idx]
 
 def isTruthy(obj):
     if obj == NULL:

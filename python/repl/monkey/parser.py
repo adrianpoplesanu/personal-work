@@ -13,6 +13,7 @@ from ast import FunctionLiteral
 from ast import CallExpression
 from ast import StringLiteral
 from ast import ArrayLiteral
+from ast import IndexExpression
 from lexer import TokenType
 
 
