@@ -1,0 +1,13 @@
+<html>
+<h1>Pagina de payment</h1>
+{{ version }}
+{% if os == 'windws' %}
+   <p>windows</p>
+{% else %}
+   <p>macos</p>
+{% endif %}
+
+{% for mop in mops %}
+   <p>{{ mop }}</p>
+{% endfor %}
+</html>
