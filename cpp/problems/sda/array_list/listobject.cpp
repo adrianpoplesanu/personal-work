@@ -10,10 +10,6 @@ ListObject<T>::ListObject() {
 
 template<typename T>
 ListObject<T>::~ListObject() {
-    //for (int i = 0; i < capacity; i++) {
-    //    delete elements[i];
-    //}
-    // or this might work:
     delete[] elements;
 }
 
@@ -55,7 +51,20 @@ void ListObject<T>::print_memory_addresses() {
 
 template<typename T>
 T ListObject<T>::pop() { // if i return a memory address then i can return null, in this case i return an int, if size = 0 this should be NULL
+    // TODO find a way to return null here
     T e = elements[size - 1].data;
     size--; // this should do pop-up
+    return e;
+}
+
+template<typename T>
+T ListObject<T>::first() {
+    T e;
+    return e;
+}
+
+template<typename T>
+T ListObject<T>::last() {
+    T e;
     return e;
 }
