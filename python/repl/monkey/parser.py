@@ -309,7 +309,7 @@ class Parser(object):
             return None
         return result
 
-    def parseIndexExpression(self,left):
+    def parseIndexExpression(self, left):
         exp = IndexExpression(token=self.curToken, left=left)
         self.nextToken()
         exp.index = self.parseExpression(ParseType.LOWEST)

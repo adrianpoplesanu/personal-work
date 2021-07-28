@@ -305,3 +305,14 @@ class IndexExpression(object):
         out += self.index.String()
         out += "])"
         return out
+
+
+class HashLiteral(object):
+    def __init__(self):
+        pass
+
+    def TokenLiteral(self):
+        pass
+
+    def String(self):
+        pass

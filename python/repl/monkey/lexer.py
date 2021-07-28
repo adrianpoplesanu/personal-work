@@ -109,6 +109,8 @@ class Lexer(object):
             tok = self.newToken(TokenType.LBRACKET, self.ch)
         elif self.ch == ']':
             tok = self.newToken(TokenType.RBRACKET, self.ch)
+        elif self.ch == ':':
+            tok = self.newToken(TokenType.COLON, self.ch)
         elif self.ch == 0:
             tok = self.newToken(TokenType.EOF, '')
         elif self.ch == '"':
@@ -164,6 +166,7 @@ class TokenType(object):
     STRING = "STRING"
     LBRACKET = "["
     RBRACKET = "]"
+    COLON = ':'
 
 
 class Token(object):
@@ -198,7 +201,8 @@ class Token(object):
         TokenType.NOT_EQ: "NOT_EQ",
         TokenType.STRING: "STRING",
         TokenType.LBRACKET: "LBRACKET",
-        TokenType.RBRACKET: "RBRACKET"
+        TokenType.RBRACKET: "RBRACKET",
+        TokenType.COLON: "COLON"
     }
 
     keywords = {
