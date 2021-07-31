@@ -23,7 +23,7 @@ public class ArrayUtils5 {
 	
 	@SuppressWarnings("unchecked")
 	public static <T> T[] copyOf(T[] a, int n) {
-		//T b[] = (T[]) new Object[n];
+		//T b[] = (T[]) new Object[n]; // Ljava.lang.Object; cannot be cast to [Ljava.lang.String;
 		T b[] = (T[]) Array.newInstance(a.getClass().getComponentType(), n);
 		for (int i = 0; i < n; i++) {
 			if (i < a.length) b[i] = a[i];
@@ -76,6 +76,9 @@ public class ArrayUtils5 {
 		System.out.println(os2.length);
 		for (int i = 0; i < os2.length; i++) {
 			System.out.println(os2[i]);
+			if (os2[i] != null ) {
+				System.out.println(os2[i].getName());
+			}
 		}
 	}
 }
