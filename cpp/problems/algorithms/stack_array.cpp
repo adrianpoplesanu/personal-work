@@ -1,23 +1,23 @@
 #include <iostream>
 
 template<typename T>
-class Queue {
+class Stack {
 private:
     int capacity;
     int idx;
     T* data;
 public:
-    Queue() {
+    Stack() {
         capacity = 3;
         idx = -1;
         data = new T[capacity];
     }
-    Queue(int c) {
+    Stack(int c) {
         capacity = c;
         idx = -1;
         data = new T[c];
     }
-    ~Queue() {
+    ~Stack() {
         delete[] data;
     }
     void Push(T e) {
@@ -53,14 +53,14 @@ public:
 };
 
 int main(int argc, char* argv[]) {
-    Queue<std::string> queue;
-    queue.Push("dexiciul");
-    queue.Push("ramunitz");
-    queue.Push("adrianus");
-    queue.Push("buna dimineata");
-    std::cout << queue.Pop() << "\n";
-    std::cout << queue.Pop() << "\n";
-    std::cout << queue.Pop() << "\n";
-    std::cout << queue.Pop() << "\n";
+    Stack<std::string> stack;
+    stack.Push("dexiciul");
+    stack.Push("ramunitz");
+    stack.Push("adrianus");
+    stack.Push("buna dimineata");
+    std::cout << stack.Pop() << "\n";
+    std::cout << stack.Pop() << "\n";
+    std::cout << stack.Pop() << "\n";
+    std::cout << stack.Pop() << "\n";
     return 0;
 }
