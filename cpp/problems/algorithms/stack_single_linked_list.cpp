@@ -7,16 +7,16 @@ struct Node {
 };
 
 template <typename T>
-class Queue {
+class Stack {
 private:
     Node<T>* head;
     Node<T>* tail;
     int size;
 public:
-    Queue() {
+    Stack() {
         size = 0;
     }
-    ~Queue() {
+    ~Stack() {
         Node<T>* current = tail;
         while(current) {
             tail = current;
@@ -62,12 +62,12 @@ public:
 
 int main(int argc, char* argv[]) {
     std::cout << "running queue implementation...\n";
-    Queue<std::string> queue;
-    queue.Push("dexiciul");
-    queue.Push("ramunitz");
-    queue.Push("adrianus");
-    queue.Print();
-    std::cout << queue.Pop() << "\n";
-    queue.Print();
+    Stack<std::string> stack;
+    stack.Push("dexiciul");
+    stack.Push("ramunitz");
+    stack.Push("adrianus");
+    stack.Print();
+    std::cout << stack.Pop() << "\n";
+    stack.Print();
     return 0;
 }
