@@ -29,8 +29,12 @@ public class StackUtils {
 		reverse(words);
 		System.out.println(Arrays.toString(words));
 		
-		int[] a = { 4, 5, 2 };
+		int[] a = { 4, 5, 2, 6 };
 		reverse(a);
 		System.out.println(Arrays.toString(a));
+
+		Integer[] numbers = { 5, 7, 6, 2 };
+		reverse(numbers);
+		System.out.println(Arrays.toString(numbers));
 	}
 }
