@@ -24,6 +24,23 @@ public class StackUtils {
 		}		
 	}
 
+	public static boolean isMatched(String expression) {
+		final String opening = "([{";
+		final String closing = ")]}";
+		Stack<Character> stack = new LinkedListStack<Character>();
+		for (char c : expression.toCharArray()) {
+			if (opening.indexOf(c) != -1) {
+				stack.push(c);
+			} else {
+				if (closing.indexOf(c) != -1) {
+					if (stack.isEmpty()) return false;
+					if (closing.indexOf(c) != opening.indexOf(stack.pop())) return false;
+				}
+			}
+		}
+		return stack.isEmpty();
+	}
+
 	public static void main(String[] args) {
 		String[] words = { "adrianus", "ramunitz", "dexiciul" };
 		reverse(words);
@@ -36,5 +53,12 @@ public class StackUtils {
 		Integer[] numbers = { 5, 7, 6, 2 };
 		reverse(numbers);
 		System.out.println(Arrays.toString(numbers));
+
+		System.out.println(isMatched("( )(( )){([( )])}"));
+		System.out.println(isMatched("((( )(( )){([( )])}))"));
+		System.out.println(isMatched(")(()){([()])}"));
+		System.out.println(isMatched("({[])}"));
+		System.out.println(isMatched(" ("));
+		System.out.println(isMatched(" )"));
 	}
 }
