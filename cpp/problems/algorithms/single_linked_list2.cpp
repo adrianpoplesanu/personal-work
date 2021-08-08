@@ -70,11 +70,11 @@ public:
     }
 
     T first() {
-        return head;
+        return head->data;
     }
 
     T last() {
-        return tail;
+        return tail->data;
     }
 
     void Print() {

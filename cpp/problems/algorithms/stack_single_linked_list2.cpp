@@ -46,6 +46,7 @@ int main(int argc, char *argv[]) {
 
     stack.Push("bebe");
     stack.Push("dex");
+    std::cout << stack.Top() << "\n";
     stack.Push("e");
     stack.Push("scump");
 
