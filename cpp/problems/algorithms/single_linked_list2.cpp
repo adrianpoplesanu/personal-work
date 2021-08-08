@@ -60,6 +60,15 @@ public:
         }
     }
 
+    T PopFirst() {
+        Node<T>* result = head;
+        T data = result->data;
+        head = head->next;
+        size--;
+        delete result;
+        return data;
+    }
+
     T first() {
         return head;
     }
