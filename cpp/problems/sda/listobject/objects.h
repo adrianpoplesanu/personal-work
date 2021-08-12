@@ -2,6 +2,7 @@
 #define __OBJECTS_H
 
 #include <string>
+#include "listobject.h"
 
 enum ObjectType {
     OT_NULL,
@@ -36,6 +37,23 @@ public:
     Ad_Integer_Object();
     Ad_Integer_Object(int);
     ~Ad_Integer_Object();
+};
+
+class Ad_String_Object : Ad_Object {
+public:
+    std::string value;
+
+    Ad_String_Object();
+    Ad_String_Object(std::string);
+    ~Ad_String_Object();
+};
+
+class Ad_List_Object : Ad_Object {
+public:
+    Ad_List<Ad_Object*> list;
+
+    Ad_List_Object();
+    ~Ad_List_Object();
 };
 
 #endif
