@@ -1,21 +1,24 @@
 #ifndef __LISTOBJECT_H
 #define __LISTOBJECT_H
 
-template<typename T>
+#include "objects.h"
+
 class Ad_List {
 private:
     int capacity;
     int size;
-    T *data;
+    Ad_Object **data;
 public:
     Ad_List();
     ~Ad_List();
     int Size();
     bool IsEmpty();
-    T get(int);
-    void set(int, T);
-    void add(T);
-    T remove(int);
+    Ad_Object* get(int);
+    void set(int, Ad_Object*);
+    void add(Ad_Object*);
+    Ad_Object* remove(int);
+
+    void Inspect();
 };
 
 #endif
