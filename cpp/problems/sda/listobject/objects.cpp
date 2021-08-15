@@ -1,4 +1,5 @@
 #include "objects.h"
+#include "listobject.h"
 
 #include <iostream>
 
@@ -33,4 +34,9 @@ ObjectType Ad_String_Object::Type() {
 
 void Ad_String_Object::Print() {
     std::cout << value;
+}
+
+Ad_List_Object::Ad_List_Object() {
+    type = OT_LISTOBJECT;
+    list = new Ad_List();
 }

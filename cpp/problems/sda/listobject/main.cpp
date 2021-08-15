@@ -10,14 +10,14 @@ int main(int argc, char *argv[]) {
 
     std::cout << obj << "\n";
 
-    list.add(obj);
-    list.add(new Ad_String_Object("dimineata"));
-    list.add(new Ad_String_Object("pe"));
-    list.add(new Ad_String_Object("racoare"));
+    list.add(0, obj);
+    list.add(1, new Ad_String_Object("dimineata"));
+    list.add(2, new Ad_String_Object("pe"));
+    list.add(3, new Ad_String_Object("racoare"));
 
     list.Inspect();
 
-    list.add(new Ad_String_Object("dex"));
+    list.add(4, new Ad_String_Object("dex"));
 
     list.Inspect();
 

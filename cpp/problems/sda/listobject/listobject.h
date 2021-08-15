@@ -15,9 +15,10 @@ public:
     bool IsEmpty();
     Ad_Object* get(int);
     void set(int, Ad_Object*);
-    void add(Ad_Object*);
+    void add(int, Ad_Object*);
     Ad_Object* remove(int);
 
+    bool ValidBounds(int);
     void Inspect();
 };
 

@@ -51,9 +51,11 @@ public:
     virtual void Print();
 };
 
+class Ad_List;
+
 class Ad_List_Object : public Ad_Object {
 public:
-    //Ad_List list;
+    Ad_List *list; // forward declaration requires, a pointer to the declrared object, this means i'll have to be extremely carefull with freeing memory
 
     Ad_List_Object();
     ~Ad_List_Object();
