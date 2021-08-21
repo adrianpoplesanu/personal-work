@@ -1,9 +1,9 @@
 package chapter7;
 
 public class ArrayList<E> implements List<E> {
-	private E[] data;
-	public static final int capacity = 4;
-	private int size = 0;
+	protected E[] data;
+	public static int capacity = 4; // this can be final for fixed length, i inherit this in my dynamic implementation so it can't be final anymore
+	protected int size = 0;
 
 	public ArrayList() {
 		this(capacity);
@@ -15,8 +15,12 @@ public class ArrayList<E> implements List<E> {
 	}
 	
 	@Override
-	public int size() {
+	public int getSize() {
 		return size;
+	}
+	
+	public int getCapacity() {
+		return capacity;
 	}
 
 	@Override
@@ -42,7 +46,7 @@ public class ArrayList<E> implements List<E> {
 	public void add(int i, E e) throws IndexOutOfBoundsException {
 		if (i < 0 || i >= size + 1) throw new IndexOutOfBoundsException("Index " + i + " is out of bounds.");
 		if (size == capacity) throw new IndexOutOfBoundsException("List is full.");
-		for (int j = size - 1; j > i; j--) data[j] = data[j - 1];
+		for (int j = size; j > i; j--) data[j] = data[j - 1];
 		data[i] = e;
 		size++;
 	}

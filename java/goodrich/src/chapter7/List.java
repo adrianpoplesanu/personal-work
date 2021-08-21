@@ -1,7 +1,7 @@
 package chapter7;
 
 public interface List<E> {
-    int size();
+    int getSize();
     boolean isEmpty();
     E get(int i) throws IndexOutOfBoundsException;
     E set(int i, E e) throws IndexOutOfBoundsException;
