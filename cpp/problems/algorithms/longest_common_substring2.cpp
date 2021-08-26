@@ -6,12 +6,11 @@
 
 void print(int drum[100][100], std::string text, int i, int j) {
     if (i == 0 || j == 0) {
-        if (drum[i + 1][j + 1] == STANGA_SUS) std::cout << text[i]; // if-ul asta nu era in cormen, a trebuit sa-l adaug eu
         return;
     }
     if (drum[i][j] == STANGA_SUS) {
         print(drum, text, i - 1, j - 1);
-        std::cout << text[i];
+        std::cout << text[i - 1];
     } else if (drum[i][j] == SUS) {
         print(drum, text, i - 1, j);
     } else {
@@ -34,9 +33,9 @@ int main(int argc, char* argv[]) {
     int n = text2.size();
     for (int i = 0; i < m; i++) dp[i][0] = 0;
     for (int j = 0; j < n; j++) dp[0][j] = 0;
-    for (int i = 1; i < m; i++) {
-        for (int j = 1; j < n; j++) {
-            if (text1[i] == text2[j]) {
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (text1[i - 1] == text2[j - 1]) {
                 dp[i][j] = dp[i - 1][j - 1] + 1;
                 drum[i][j] = STANGA_SUS;
             } else if (dp[i - 1][j] >= dp[i][j - 1]) {
@@ -49,19 +48,19 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    /*for (int i = 0; i < m; i++) {
-        for (int j = 0; j < n; j++) std::cout << dp[i][j] << " ";
+    /*for (int i = 0; i <= m; i++) {
+        for (int j = 0; j <= n; j++) std::cout << dp[i][j] << " ";
         std::cout << "\n";
     }
     std::cout << "\n";
 
-    for (int i = 0; i < m; i++) {
-        for (int j = 0; j < n; j++) std::cout << drum[i][j] << " ";
+    for (int i = 0; i <= m; i++) {
+        for (int j = 0; j <= n; j++) std::cout << drum[i][j] << " ";
         std::cout << "\n";
     }
     std::cout << "\n";*/
 
-    print(drum, text1, m - 1, n - 1);
+    print(drum, text1, m, n);
     std::cout << "\n";
     return 0;
 }
