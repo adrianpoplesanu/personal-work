@@ -19,5 +19,30 @@ int main(int argc, char *argv[]) {
 
     list.Inspect();
 
+    Ad_List test;
+    test.Add(0, obj);
+    test.Add(1, obj);
+    test.Add(2, obj);
+    test.Add(3, obj);
+    test.Add(4, obj);
+
+    std::cout << test.Size() << " " << list.Capacity() << "\n"; 
+
+    std::cout << test.Remove(4) << "\n";
+
+    std::cout << test.Size() << " " << test.Capacity() << "\n";
+
+    std::cout << test.Remove(3) << "\n";
+
+    std::cout << test.Size() << " " << test.Capacity() << "\n";
+
+    test.Append(obj);
+
+    std::cout << test.Size() << " " << test.Capacity() << "\n";
+
+    test.Append(obj);
+
+    std::cout << test.Size() << " " << test.Capacity() << "\n";
+
     return 0;
 }

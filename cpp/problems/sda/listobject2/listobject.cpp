@@ -4,15 +4,21 @@
 
 Ad_List::Ad_List() {
     capacity = 4;
+    size = 0;
     data = new Ad_Object*[capacity];
 }
 
 Ad_List::~Ad_List() {
-
+    //for (int i = 0; i < size; i++) delete data[i];
+    delete[] data;
 }
 
 int Ad_List::Size() {
     return size;
+}
+
+int Ad_List::Capacity() {
+    return capacity;
 }
 
 bool Ad_List::IsEmpty() {
@@ -33,19 +39,27 @@ void Ad_List::Add(int i, Ad_Object* e) {
         return;
     }
     if (size == capacity) {
-        Ad_Object **current = data;
-        capacity *= 2;
-        data = new Ad_Object*[capacity];
-        for (int j = 0; j < capacity / 2; j++) data[j] = current[j];
-        delete[] current;
+        Resize(capacity * 2);
     }
     for (int j = size - 1; j > i; j--) data[j] = data[j - 1];
     data[i] = e;
     size++;
 }
 
+void Ad_List::Append(Ad_Object* obj) {
+    Add(size, obj);
+}
+
 Ad_Object* Ad_List::Remove(int i) {
-    return NULL;
+    Ad_Object* result = data[i];
+    for (int j = i; j < size - 1; j++) {
+        data[j] = data[j + 1];
+    }
+    size--;
+    if (size < capacity / 2 && capacity > 4) {
+        Resize(capacity / 2);
+    }
+    return result;
 }
 
 bool Ad_List::ValidBounds(int i) {
@@ -53,6 +67,14 @@ bool Ad_List::ValidBounds(int i) {
          return false;
      }
      return true;
+}
+
+void Ad_List::Resize(int n) {
+    Ad_Object **current = data;
+    data = new Ad_Object*[n];
+    for (int i = 0; i < size; i++) data[i] = current[i];
+    capacity = n;
+    delete[] current;
 }
 
 void Ad_List::Inspect() {
