@@ -1,0 +1,4 @@
+o incercare de a implementa array_list3 folosind:
+vector<PyObject> objs;
+in loc de:
+PyObject **objs;
