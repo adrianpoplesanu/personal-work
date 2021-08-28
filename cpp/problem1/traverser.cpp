@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <map>
-#include <algorithm>
+//#include <algorithm>
 using namespace std;
 
 string generate_hash(string word) {
