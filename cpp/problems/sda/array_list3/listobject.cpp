@@ -11,7 +11,10 @@ PyObjectList::PyObjectList() {
 };
 
 PyObjectList::~PyObjectList() {
-
+    for (int i = 0; i < size; i++) {
+        delete objs[i]; // elibereaza memoria fiecarui element din lista
+    }
+    delete[] objs; // elibereaza vectorul de adrese care pointeaza catre adresa de memorie a fiecarui element
 }
 
 std::string PyObjectList::str() {
@@ -46,5 +49,5 @@ void PyObjectList::append(PyObject *e) {
 }
 
 void PyObjectList::upsize() {
-    
+
 }

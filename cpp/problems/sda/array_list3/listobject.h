@@ -9,7 +9,7 @@ class PyObjectList : public PyObject {
 private:
     int size;
     int capacity;
-    PyObject **objs;
+    PyObject **objs; // sunt curios daca pot face o implementare cu un vector<PyObject> in loc de PyObject**
 public:
     PyObjectList();
     ~PyObjectList();
