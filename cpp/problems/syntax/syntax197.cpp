@@ -7,6 +7,8 @@ int main(int argc, char *argv[]) {
     };
     int *p;
     p = a[0];
+    for (int i = 0; i < 3; i++) std::cout << p[i]<< " ";
+    std::cout <<"\n";
     int (*b)[3];
     b = a;
     for (int i = 0; i < 2; i++) {
