@@ -1,0 +1,49 @@
+// https://www.infoarena.ro/problema/custi
+#include <fstream>
+using namespace std;
+ 
+int min(int a, int b, int c) {
+    if (a <= b && a <= c) return a;
+    if (b <= a && b <= c) return b;
+    if (c <= a && c <= b) return c;
+    return -10000;
+}
+ 
+int main(int argc, char *argv[]) {
+    int a[1000][1000], n;
+    ifstream in("custi.in");
+    in >> n;
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            in >> a[i][j];
+        }
+    }
+    in.close();
+ 
+    int dp[1000][1000];
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            if (i == 0) dp[i][j] = a[i][j];
+            else if (j == 0) dp[i][j] = a[i][j];
+            else {
+                if (a[i][j] == 1) {
+                    dp[i][j] = min(dp[i][j - 1], dp[i - 1][j - 1], dp[i - 1][j]) + a[i][j];
+                } else {
+                    dp[i][j] = 0;
+                }
+            }
+        }
+    }
+ 
+    int count[1000];
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            for (int k = 1; k <= dp[i][j]; ++k) ++count[k];
+        }
+    }
+    ofstream out("custi.out");
+    for (int i = 1; i <= n; ++i) out << count[i] << '\n';
+    out.close();
+ 
+    return 0;
+}
