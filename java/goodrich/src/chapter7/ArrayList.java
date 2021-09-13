@@ -1,6 +1,9 @@
 package chapter7;
 
-public class ArrayList<E> implements List<E> {
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+public class ArrayList<E> implements List<E>, Iterable<E> {
 	protected E[] data;
 	public static int capacity = 4; // this can be final for fixed length, i inherit this in my dynamic implementation so it can't be final anymore
 	protected int size = 0;
@@ -58,5 +61,35 @@ public class ArrayList<E> implements List<E> {
 		for (int j = i; j < size - 1; j++) data[j] = data[j + 1];
 		size--;
 		return res;
+	}
+	
+	// iterators
+	private class ArrayIterator implements Iterator<E> {
+		private int j = 0;
+		private boolean removable = false;
+
+		@Override
+		public boolean hasNext() {
+			return j < size;
+		}
+
+		@Override
+		public E next() throws NoSuchElementException {
+			if (j == size) throw new NoSuchElementException("No next element.");
+			removable = true;
+			return data[j++];
+		}
+		
+		public void remove() throws IllegalStateException {
+			if (!removable) throw new IllegalStateException("Nothing to remove.");
+			ArrayList.this.remove(j - 1);
+			j--;
+			removable = false;
+		}
+	}
+
+	@Override
+	public Iterator<E> iterator() {
+		return new ArrayIterator();
 	}
 }
