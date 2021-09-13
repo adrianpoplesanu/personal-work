@@ -1,6 +1,9 @@
 package chapter7;
 
-public class LinkedPositionalList<E> implements PositionalList<E> {
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+public class LinkedPositionalList<E> implements PositionalList<E>, Iterable<E> {
 	private static class Node<E> implements Position<E> {
 		private E element;
 		private Node<E> prev;
@@ -145,5 +148,65 @@ public class LinkedPositionalList<E> implements PositionalList<E> {
 		node.setNext(null);
 		node.setPrev(null);
 		return answer;
+	}
+	
+	// iterators
+	private class PositionIterator implements Iterator<Position<E>> {
+		private Position<E> cursor = first();
+		private Position<E> recent = null;
+
+		@Override
+		public boolean hasNext() {
+			return cursor != null;
+		}
+
+		@Override
+		public Position<E> next() throws NoSuchElementException {
+			if (cursor == null) throw new NoSuchElementException("No next element.");
+			recent = cursor;
+			cursor = after(cursor);
+			return recent;
+		}
+		
+		public void remove() throws IllegalStateException {
+			if (recent == null) throw new IllegalStateException("Nothing to remove");
+			LinkedPositionalList.this.remove(recent);
+			recent = null;
+		}
+	}
+	
+	private class PositionIterable implements Iterable<Position<E>> {
+		@Override
+		public Iterator<Position<E>> iterator() {
+			return new PositionIterator();
+		}
+	}
+	
+	public Iterable<Position<E>> position() {
+		return new PositionIterable();
+	}
+	
+	public class ElementIterator implements Iterator<E> {
+		Iterator<Position<E>> posIterator = new PositionIterator();
+
+		@Override
+		public boolean hasNext() {
+			return posIterator.hasNext();
+		}
+
+		@Override
+		public E next() {
+			return posIterator.next().getElement();
+		}
+		
+		public void remove() {
+			posIterator.remove();
+		}
+		
+	}
+
+	@Override
+	public Iterator<E> iterator() {
+		return new ElementIterator();
 	}
 }
