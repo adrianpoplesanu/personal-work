@@ -46,6 +46,7 @@ void print_elements(std::vector<GenericObject*> objects, int n) {
 }
 
 int main(int argc, char *argv[]) {
+    // TODO: clean this and do it so as it's usable in the compiler
     std::vector<GenericObject*> objects;
     StringObject a;
     IntObject b;
@@ -60,7 +61,7 @@ int main(int argc, char *argv[]) {
     print_elements(objects, 2);*/
 
     ListObject lo;
-    StringObject *o1 = new StringObject();
+    StringObject *o1 = new StringObject(); // cred ca asta e aproach-ul cel mai bun, pentru ca aloca memorie in heap, ce ramane alocata pana la delete
     o1->data = "test";
     o1->type = OBJ_TYPE_STRING;
     IntObject *o2 = new IntObject();
