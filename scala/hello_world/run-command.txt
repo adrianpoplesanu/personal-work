@@ -1,0 +1,3 @@
+scalac hello.scala
+
+scala HelloWorld 
