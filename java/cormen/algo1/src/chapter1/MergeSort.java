@@ -32,6 +32,6 @@ public class MergeSort {
 	public static void main(String[] args) {
 		int a[] = {3, 8, 2, 6, 7, 1, 4, 9, 5};
 		sort(a, 0, a.length - 1);
-		print(a);
+		SimpleArrayUtils.printSimpleArray(a);
 	}
 }
