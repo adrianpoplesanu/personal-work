@@ -8,6 +8,11 @@ public class LinkedListPositionalTest {
 		words.addLast("dimineata");
 		words.addLast("bebe");
 		words.addLast("dex");
+		System.out.println(words.get(3));
+		
+		words.add(0, "aaa");
+		words.add(words.size(), "bbb");
+		
 		Position<String> cursor = words.first();
 		while(cursor != null) {
 			System.out.println(cursor.getElement());

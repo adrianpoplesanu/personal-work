@@ -78,14 +78,28 @@ public class LinkedListPositional<E> implements PositionalList<E>, Iterable<E> {
 
 	@Override
 	public void add(int i, E e) {
-		// TODO Auto-generated method stub
-		
+		if (i >= size()) {
+			addLast(e);
+		} else {
+			int j = 0;
+			Node<E> current = head;
+			while(j < i) {
+				j++;
+				current = (Node<E>) after(current);
+			}
+			addBetween(e, current.getPrev(), current);
+		}
 	}
 
 	@Override
 	public E get(int i) {
-		// TODO Auto-generated method stub
-		return null;
+		int j = 0;
+		Position<E> result = head;
+		while(j < i) {
+			result = after(result);
+			j++;
+		}
+		return result.getElement();
 	}
 
 	@Override
