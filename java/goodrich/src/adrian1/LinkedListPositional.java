@@ -170,14 +170,22 @@ public class LinkedListPositional<E> implements PositionalList<E>, Iterable<E> {
 	
 	@Override
 	public E removeFirst() {
-		// TODO Auto-generated method stub
-		return null;
+		Position<E> removed = head;
+		head = head.getNext();
+		head.setPrev(null);
+		E result = removed.getElement();
+		removed = null;
+		return result;
 	}
 
 	@Override
 	public E removeLast() {
-		// TODO Auto-generated method stub
-		return null;
+		Position<E> removed = tail;
+		tail = tail.getPrev();
+		tail.setNext(null);
+		E result = removed.getElement();
+		removed = null;
+		return result;
 	}
 	
 	@Override

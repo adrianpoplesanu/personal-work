@@ -1,8 +1,6 @@
 package adrian1;
 
 public interface PositionalList<E> extends List<E> {
-	int size();
-	boolean isEmpty();
 	
 	Position<E> first();
 	Position<E> last();

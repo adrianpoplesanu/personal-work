@@ -15,7 +15,15 @@ public class LinkedListPositionalTest {
 		
 		Position<String> cursor = words.first();
 		while(cursor != null) {
-			System.out.println(cursor.getElement());
+			System.out.print(cursor.getElement() + " ");
+			cursor = words.after(cursor);
+		}
+		System.out.println();
+		
+		System.out.println(words.removeLast());
+		cursor = words.first();
+		while(cursor != null) {
+			System.out.print(cursor.getElement() + " ");
 			cursor = words.after(cursor);
 		}
 	}
