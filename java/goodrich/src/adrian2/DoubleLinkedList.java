@@ -31,29 +31,42 @@ public class DoubleLinkedList<E> implements LinkedList<E>, Iterable<E> {
 	
 	private Node<E> head;
 	private Node<E> tail;
+	private int size = 0;
 
 	@Override
 	public int size() {
 		// TODO Auto-generated method stub
-		return 0;
+		return size;
 	}
 
 	@Override
 	public boolean isEmpty() {
 		// TODO Auto-generated method stub
-		return false;
+		return size == 0;
 	}
 
 	@Override
 	public void add(int i, E e) {
-		// TODO Auto-generated method stub
-		
+		Node<E> new_node = new Node<E>();
+		new_node.setValue(e);
+		if (tail == null) {
+			new_node.setNext(null);
+			new_node.setPrev(null);
+			head = tail = new_node;
+		} else {
+			tail.setNext(new_node);
+			new_node.setPrev(tail);
+			tail = new_node;
+		}
 	}
 
 	@Override
 	public E get(int i) {
-		// TODO Auto-generated method stub
-		return null;
+		Node<E> current = head;
+		while(i-- > 0) {
+			current = head.getNext();
+		}
+		return current.getValue();
 	}
 
 	@Override

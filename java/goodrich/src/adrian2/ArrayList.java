@@ -1,5 +1,5 @@
 package adrian2;
 
-public class ArrayList {
+public interface ArrayList<E> extends List<E> {
 
 }
