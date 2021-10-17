@@ -21,6 +21,13 @@ public:
     void Print() {
 
     }
+    int GetChildrenNumber(Node<T>* node) {
+        int num_children = 0;
+        if (node->left != NULL) num_children++;
+        if (node->right != NULL) num_children++;
+        return num_children;
+    }
+    //void AddLeftChild(Node<T>* node) {}
 };
 
 int main(int argc, char *argv[]) {
