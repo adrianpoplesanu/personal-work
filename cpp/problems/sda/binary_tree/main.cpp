@@ -27,7 +27,18 @@ public:
         if (node->right != NULL) num_children++;
         return num_children;
     }
-    //void AddLeftChild(Node<T>* node) {}
+    void AddRoot(T e) {
+        root = new Node<T>();
+        root->left = NULL;
+        root->right = NULL;
+        root->data = e;
+    }
+    void AddLeftChild(Node<T>* node, T t) {
+
+    }
+    void AddRightChild(Node<T>* node, T t) {
+
+    }
 };
 
 int main(int argc, char *argv[]) {
