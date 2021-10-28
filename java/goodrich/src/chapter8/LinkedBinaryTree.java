@@ -1,6 +1,8 @@
 package chapter8;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
 	
@@ -173,17 +175,35 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
 		node.setParent(node); // arbitrary condition that marks a node as deleted, i don't like it
 		return temp;
 	}
+	
+	private class ElementIterator implements Iterator<E> {
+		Iterator<Position<E>> posIterator = positions().iterator();
+
+		@Override
+		public boolean hasNext() {
+			return posIterator.hasNext();
+		}
+
+		@Override
+		public E next() {
+			return posIterator.next().getElement();
+		}
+		
+		public void remove() {
+			posIterator.remove();
+		}
+		
+	}
 
 	@Override
 	public Iterator<E> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ElementIterator();
 	}
 
 	@Override
 	public Iterable<Position<E>> positions() {
-		// TODO Auto-generated method stub
-		return null;
+		//return postorder();
+		//return preorder();
+		return preorder_lazy_iterator();
 	}
-
 }
