@@ -9,8 +9,12 @@ public class WorkTest {
         tree.addRight(tree.root(), "3");
         tree.addLeft(tree.left(tree.root()), "4");
         tree.addRight(tree.left(tree.root()), "5");
-        for (Position<String> p : tree.positions()) {
+        /*for (Position<String> p : tree.positions()) {
             System.out.println(p.getElement());
-        }
+        }*/
+
+        tree.SimplePrint();
+
+        LinkedBinaryTreeUtils.IndentationPrint(tree, tree.root(), 0);
     }
 }

@@ -206,4 +206,10 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
 		//return preorder();
 		return preorder_lazy_iterator();
 	}
+
+	public void SimplePrint() {
+		for (Position<E> p : preorder()) {
+			System.out.println(p.getElement());
+		}
+	}
 }
