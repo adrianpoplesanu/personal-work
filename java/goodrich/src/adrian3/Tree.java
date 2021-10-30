@@ -1,4 +1,7 @@
 package adrian3;
 
-public interface Tree {
+import java.util.Iterator;
+
+public interface Tree<E> extends Iterable<E> {
+    Iterator<E> iterator();
 }

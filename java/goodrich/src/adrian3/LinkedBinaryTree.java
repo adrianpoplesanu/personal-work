@@ -1,4 +1,10 @@
 package adrian3;
 
-public class LinkedBinaryTree {
+import java.util.Iterator;
+
+public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
+    @Override
+    public Iterator<E> iterator() {
+        return null;
+    }
 }
