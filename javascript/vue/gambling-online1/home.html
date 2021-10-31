@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="index.css">
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    </head>
+    <body>
+        
+        <div id="app">
+            <h1>{{ title }}</h1>
+        </div>
+
+        <div id="example-1">
+            <button v-on:click="counter += 1">Add 1</button>
+            <button v-on:click="test()">Add 5</button>
+            <p>The button above has been clicked {{ counter }} times.</p>
+        </div>
+        
+        <script src="home.js"></script>
+    </body>
+</html>
