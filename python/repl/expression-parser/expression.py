@@ -56,20 +56,29 @@ class ASTInteger(object):
         self.token = token
 
     def __str__(self):
-        return self.token['val']
+        return str(self.token['val'])
 
 
 class ASTPrefixExpression(object):
+    token = None
+    right = None
+
     def __str__(self):
-        return 'bbb'
+        return '(-' + str(self.right) + ')'
 
 
 class ASTExpressionStatement(object):
+    expression = None
+
     def __str__(self):
         return str(self.expression)
 
 
 class ASTInfixExpression(object):
+    left = None
+    operator = None
+    right = None
+
     def __str__(self):
         return '(' + str(self.left) + self.operator + str(self.right) + ')'
 
