@@ -12,9 +12,15 @@ public class BigNumber {
         int max_size = numberRepr.length();
         int i = 127;
         while (max_size > 0) {
-            String digit = numberRepr.substring(max_size - digit_len, max_size);
-            digits[i--] = Integer.valueOf(digit);
-            max_size -= digit_len;
+            if (max_size < digit_len) {
+                String digit = numberRepr.substring(0, max_size);
+                digits[i--] = Integer.valueOf(digit);
+                max_size -= digit_len;
+            } else {
+                String digit = numberRepr.substring(max_size - digit_len, max_size);
+                digits[i--] = Integer.valueOf(digit);
+                max_size -= digit_len;
+            }
         }
     }
 
