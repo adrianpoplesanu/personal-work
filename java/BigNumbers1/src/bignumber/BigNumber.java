@@ -5,6 +5,7 @@ public class BigNumber {
 
     public BigNumber() {
         digits = new int[128];
+        for (int i = 0; i < 128; i++) digits[i] = 0;
     }
 
     public void load(String numberRepr) {
@@ -22,6 +23,18 @@ public class BigNumber {
                 max_size -= digit_len;
             }
         }
+    }
+
+    public void load(BigNumber number) {
+        for (int i = 0; i < 128; i++) digits[i] = number.getDigit(i);
+    }
+
+    public int getDigit(int pos) {
+        return digits[pos];
+    }
+
+    public void setDigit(int pos, int val) {
+        digits[pos] = val;
     }
 
     public void inspect() {
