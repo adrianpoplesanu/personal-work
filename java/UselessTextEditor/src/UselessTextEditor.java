@@ -1,6 +1,22 @@
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
+
 public class UselessTextEditor {
     public static String readFile(String filename) {
-        return "adrianus per scorillo";
+        StringBuilder contentBuilder = new StringBuilder();
+
+        try (Stream<String> stream = Files.lines( Paths.get(filename), StandardCharsets.UTF_8)) {
+            //stream.forEach(s -> contentBuilder.append(s).append("\n")); // asta e originalul de a copia continutul unui fisier intr-un String
+            stream.forEach(s -> contentBuilder.append(s));
+        }
+		catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return contentBuilder.toString();
     }
 
     public static void drawMatrix(String content, int size) throws InterruptedException {
@@ -12,10 +28,10 @@ public class UselessTextEditor {
         for (int i = 0; i < a.length; i++) a[i] = 0;
         for (int i = 0; i < a.length; i++) count[i] = 0;
         while(true) {
-            /*while(content.charAt(textPos) == ' ') {
+            while(content.charAt(textPos) == ' ' || content.charAt(textPos) == '\n' || content.charAt(textPos) == '\r' || content.charAt(textPos) == '\t') {
                 textPos++;
                 if (textPos > content.length() - 1) textPos = 0;
-            }*/
+            }
             Thread.sleep(100);
             String output = "\u001b[32m";
             for (int j = 0; j < a.length; j++) {
@@ -46,7 +62,6 @@ public class UselessTextEditor {
     }
 
     public static void main(String[] args) {
-        //System.out.println("\u001b[32mTest culoare matrix...\u001b[0m");
         String filename = args[0];
         int size = Integer.valueOf(args[1]);
 
