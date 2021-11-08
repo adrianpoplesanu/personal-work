@@ -15,4 +15,19 @@ public class BigNumberUtils {
         }
         return result;
     }
+
+    public static boolean greaterThan(BigNumber number1, BigNumber number2) {
+        for (int i = 127; i >= 0; i--) {
+            if (number1.getDigit(i) > number2.getDigit(i)) return true;
+            else if (number2.getDigit(i) > number1.getDigit(i)) return false;
+        }
+        return false;
+    }
+
+    public static boolean equal(BigNumber number1, BigNumber number2) {
+        for (int i = 127; i >= 0; i--) {
+            if (number1.getDigit(i) != number2.getDigit(i)) return false;
+        }
+        return true;
+    }
 }
