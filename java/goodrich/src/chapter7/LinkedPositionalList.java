@@ -182,7 +182,7 @@ public class LinkedPositionalList<E> implements PositionalList<E>, Iterable<E> {
 		}
 	}
 	
-	public Iterable<Position<E>> position() {
+	public Iterable<Position<E>> positions() {
 		return new PositionIterable();
 	}
 	
