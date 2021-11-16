@@ -18,7 +18,7 @@ public class HomepageController {
         //boolean is_match = encoder.matches("test in consola", "$2a$10$mr8Ej3rxkoItTzVMw/l6deManqUIOPBfgyqxBa83wI4ZmeMsUyB4m");
         //System.out.println(is_match);
         mv.setViewName("homepage");
-        mv.getModel().put("data", "Welcome home man");
+        mv.getModel().put("anunt", "buna dimineata 2");
         return mv;
     }
 }
