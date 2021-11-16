@@ -24,5 +24,6 @@ public class WorkTest {
 
         ArrayList<Integer> path = new ArrayList<>();
         LinkedBinaryTreeUtils.IndentationLabeledPrint(tree, tree.root(), path);
+        LinkedBinaryTreeUtils.parenthesize(tree, tree.root());
     }
 }
