@@ -1,7 +1,7 @@
 package dp1;
 
 public class DynamicProgramming02 {
-    public static void main(String[] args) {
+    public static void solve() {
         int n = 4, m = 4;
         int a[][] = {
                 {1, 4, 2, 3},

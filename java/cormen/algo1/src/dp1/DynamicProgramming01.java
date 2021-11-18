@@ -36,7 +36,7 @@ public class DynamicProgramming01 {
         }
     }
 
-    public static void main(String[] args) {
+    public static void solve() {
         int n = 3;
         int a[][] = {
                 {1, 2, 3},
