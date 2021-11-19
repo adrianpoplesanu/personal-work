@@ -2,13 +2,37 @@
 
 int min(int heap[100], int size) {
     if (size > 0) {
-        return heap[size - 1];
+        return heap[0];
     }
     return 0;
 }
 
 int removeMin(int heap[100], int &size) {
-    return 0;
+    int min = heap[0];
+    int poz = 0;
+    //size--;
+    while(poz < size) {
+        int temp, next;
+        bool has_children = false;
+        if (poz * 2 + 1 < size) {
+            temp = heap[poz * 2 + 1];
+            next = poz * 2 + 1;
+            has_children = true;
+        }
+        if (poz * 2 + 2 < size) {
+            temp = heap[poz * 2 + 2];
+            next = poz * 2 + 2;
+            has_children = true;
+        }
+        if (has_children) {
+            heap[poz] = temp;
+            poz = next;
+        } else {
+            break;
+        }
+    }
+    size--;
+    return min;
 }
 
 void insert(int heap[100], int &size, int e) {
@@ -47,9 +71,10 @@ int main(int argc, char *argv[]) {
         } else if (command == "print") {
             print(heap, size);
         } else if (command == "min") {
-            std::cout << min(heap, size);
+            std::cout << min(heap, size) << "\n";
         } else if (command == "remove") {
-
+            int result = removeMin(heap, size);
+            std::cout << result << "\n";
         } else if (command == "exit") {
             break;
         }
