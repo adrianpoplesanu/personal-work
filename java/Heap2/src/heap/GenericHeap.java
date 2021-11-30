@@ -1,7 +1,5 @@
 package heap;
 
-import java.util.Comparator;
-
 public class GenericHeap<E> implements Heap<E> {
 
     private class Node<E> {
@@ -20,7 +18,6 @@ public class GenericHeap<E> implements Heap<E> {
         }
     }
 
-    private Comparator<E> comp;
     private Node<E>[] heap;
     int size;
 
@@ -71,7 +68,10 @@ public class GenericHeap<E> implements Heap<E> {
                     has_children = true;
                 }
             }
-            if (!has_children) break;
+            if (!has_children) {
+                for (int i = poz; i < size - 1; i++) heap[i] = heap[i + 1];
+                break;
+            }
             heap[poz].setElement(minValue);
             poz = next;
         }
