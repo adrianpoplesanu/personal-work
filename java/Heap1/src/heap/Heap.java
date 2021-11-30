@@ -45,7 +45,10 @@ public class Heap implements HeapInterface {
                     next = poz * 2 + 2;
                 }
             }
-            if (!has_children) break;
+            if (!has_children) {
+                for (int i = poz; i < size; i++) heap[i] = heap[i + 1];
+                break;
+            }
             heap[poz] = minChild;
             poz = next;
         }
