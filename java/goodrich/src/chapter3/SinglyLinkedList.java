@@ -89,4 +89,13 @@ public class SinglyLinkedList<E> {
 		out = out + "]";
 		return out;
 	}
+
+	public int hashCode() {
+		int h = 0;
+		for (Node walk = head; walk != null; walk = walk.getNext()) {
+			h ^= walk.getElement().hashCode();
+			h = (h << 5) | (h >>> 27);
+		}
+		return h;
+	}
 }
