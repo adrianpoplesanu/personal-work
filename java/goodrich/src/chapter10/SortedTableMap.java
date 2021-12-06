@@ -3,7 +3,7 @@ package chapter10;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class SortedTableMap<K, V> extends AbstractSortedMap<K, V> {
+public class SortedTableMap<K, V> extends AbstractSortedMap<K, V> implements SortedMap<K, V> {
     private ArrayList<MapEntry<K, V>> table = new ArrayList<>();
 
     public SortedTableMap() {
