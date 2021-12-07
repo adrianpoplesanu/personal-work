@@ -1,6 +1,7 @@
 package com.adrianpoplesanu.AnifScheduler.Controllers.Status;
 
 import com.adrianpoplesanu.AnifScheduler.Models.Status.StatusModel;
+import com.adrianpoplesanu.AnifScheduler.Views.PlainView;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,5 +20,10 @@ public class StatusController {
     @GetMapping("/check2")
     StatusModel check2() {
         return new StatusModel(200,"Everything looks fine!");
+    }
+
+    @GetMapping("/test-view")
+    PlainView test_view() {
+        return new PlainView();
     }
 }
