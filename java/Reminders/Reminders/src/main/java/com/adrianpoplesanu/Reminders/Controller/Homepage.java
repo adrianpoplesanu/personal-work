@@ -15,7 +15,7 @@ public class Homepage {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value="/", method= RequestMethod.GET)
+    @RequestMapping(value="/", method=RequestMethod.GET)
     @ResponseBody
     User index() {
         List<User> users = userService.getUser("adrianus@adrianus.ro", "aaa");
@@ -24,5 +24,10 @@ public class Homepage {
         }
         return users.get(0);
         //return "bebe dex e frumesh";
+    }
+
+    @RequestMapping(value="/test", method=RequestMethod.GET)
+    String test() {
+        return "homepage";
     }
 }
