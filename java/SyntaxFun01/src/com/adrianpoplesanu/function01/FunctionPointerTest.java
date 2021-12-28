@@ -3,7 +3,7 @@ package com.adrianpoplesanu.function01;
 import java.util.function.Function;
 
 public class FunctionPointerTest {
-    Function<String, Integer> callback;
+    private Function<String, Integer> callback;
 
     private int test(String param) {
         System.out.println(param);

@@ -1,5 +1,6 @@
 import com.adrianpoplesanu.function01.FunctionPointerTest;
 import com.adrianpoplesanu.function01.PredicatePointerTest;
+import com.adrianpoplesanu.function01.SupplierPointerTest;
 
 public class MainApplication {
     public static void main(String[] args) {
@@ -10,5 +11,9 @@ public class MainApplication {
         PredicatePointerTest predicatePointerTest = new PredicatePointerTest();
         predicatePointerTest.testPredicatePointer();
         predicatePointerTest.testPredicatePointer2();
+
+        SupplierPointerTest supplierPointerTest = new SupplierPointerTest();
+        supplierPointerTest.testSupplierPointer();
+        supplierPointerTest.testSupplierPointer();
     }
 }

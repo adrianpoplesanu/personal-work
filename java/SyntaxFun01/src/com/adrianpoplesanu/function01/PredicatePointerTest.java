@@ -3,7 +3,7 @@ package com.adrianpoplesanu.function01;
 import java.util.function.Predicate;
 
 public class PredicatePointerTest {
-    Predicate<String> callback;
+    private Predicate<String> callback;
 
     private boolean filterName(String name) {
         return name.contains("adrianus");
