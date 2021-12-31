@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class LoginController {
-    @RequestMapping(value="/authenticate", method= RequestMethod.POST)
+    @RequestMapping(value="/authenticate", method=RequestMethod.POST)
     @ResponseBody
     String authenthicate(HttpRequest request, HttpResponse response, HttpSession session) {
         // i'm not 100% with these imports
