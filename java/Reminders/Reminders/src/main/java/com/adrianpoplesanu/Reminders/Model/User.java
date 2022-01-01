@@ -23,6 +23,9 @@ public class User {
     private String password;
 
     @Column
+    private String externalRef;
+
+    @Column
     private String idpSource;
 
     public long getId() {
@@ -71,5 +74,13 @@ public class User {
 
     public void setIdpSource(String idpSource) {
         this.idpSource = idpSource;
+    }
+
+    public String getExternalRef() {
+        return externalRef;
+    }
+
+    public void setExternalRef(String externalRef) {
+        this.externalRef = externalRef;
     }
 }
