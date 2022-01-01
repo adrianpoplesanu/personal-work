@@ -1,4 +1,4 @@
-package com.adrianpoplesanu.AnifScheduler.Models.Status;
+package com.adrianpoplesanu.AnifScheduler.Model.Status;
 
 public class StatusModel {
     public int code;

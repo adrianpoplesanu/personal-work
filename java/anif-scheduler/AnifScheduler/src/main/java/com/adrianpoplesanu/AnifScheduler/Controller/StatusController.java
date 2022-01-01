@@ -1,7 +1,7 @@
-package com.adrianpoplesanu.AnifScheduler.Controllers.Status;
+package com.adrianpoplesanu.AnifScheduler.Controller;
 
-import com.adrianpoplesanu.AnifScheduler.Models.Status.StatusModel;
-import com.adrianpoplesanu.AnifScheduler.Views.PlainView;
+import com.adrianpoplesanu.AnifScheduler.Model.Status.StatusModel;
+import com.adrianpoplesanu.AnifScheduler.View.PlainView;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

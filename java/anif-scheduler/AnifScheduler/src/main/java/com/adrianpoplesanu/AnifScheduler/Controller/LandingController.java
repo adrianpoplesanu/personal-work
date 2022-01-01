@@ -1,6 +1,6 @@
-package com.adrianpoplesanu.AnifScheduler.Controllers.Landing;
+package com.adrianpoplesanu.AnifScheduler.Controller;
 
-import com.adrianpoplesanu.AnifScheduler.Views.PlainView;
+import com.adrianpoplesanu.AnifScheduler.View.PlainView;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

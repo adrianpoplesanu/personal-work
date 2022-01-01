@@ -1,4 +1,4 @@
-package com.adrianpoplesanu.AnifScheduler.Views;
+package com.adrianpoplesanu.AnifScheduler.View;
 
 import org.springframework.web.servlet.view.AbstractView;
 

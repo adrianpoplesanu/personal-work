@@ -1,28 +1,27 @@
-package com.adrianpoplesanu.AnifScheduler.Models.DataAccesors;
+package com.adrianpoplesanu.AnifScheduler.Model;
 
 import javax.persistence.*;
-import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
-@Table(name = "Users")
-public class User {
+@Table
+public class Task {
     @Column
     @Id
     @GeneratedValue
     private int id;
 
     @Column
-    private String firstname;
+    private int userid;
 
     @Column
-    private String lastname;
+    private String description;
 
     @Column
-    private String email;
+    private String status;
 
     @Column
-    private String password;
+    private String seap_status;
 
     @Column(name = "createddate", insertable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -31,5 +30,4 @@ public class User {
     @Column(name = "modifieddate", insertable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date modifiedDate;
-
 }
