@@ -18,6 +18,7 @@ public class HomepageController {
         //System.out.println(is_match);
         mv.setViewName("homepage");
         mv.getModel().put("anunt", "buna dimineata 2");
+        //mv.getModel().put("errorMessage", "error");
         return mv;
     }
 }

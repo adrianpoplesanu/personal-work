@@ -23,3 +23,5 @@ seap_status VARCHAR(50),
 createddate TIMESTAMP,
 modifieddate TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+INSERT INTO Users(firstname, lastname, email, password) values('Adrianus', 'per Scorillo', 'aaa@aaa.aaa', 'bbb');
