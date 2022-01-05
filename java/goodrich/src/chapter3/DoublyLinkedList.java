@@ -79,14 +79,14 @@ public class DoublyLinkedList<E> {
 		return remove(trailer.getPrev());
 	}
 	
-	public void addBetween(E e, Node<E> precedessor, Node<E> successor) {
+	private void addBetween(E e, Node<E> precedessor, Node<E> successor) {
 		Node<E> newest = new Node<E>(e, precedessor, successor);
 		precedessor.setNext(newest);
 		successor.setPrev(newest);
 		size++;
 	}
 	
-	public E remove(Node<E> node) {
+	private E remove(Node<E> node) {
 		Node<E> precedessor = node.getPrev();
 		Node<E> successor = node.getNext();
 		precedessor.setNext(successor);
