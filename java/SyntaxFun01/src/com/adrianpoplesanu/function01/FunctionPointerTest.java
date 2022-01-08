@@ -15,4 +15,9 @@ public class FunctionPointerTest {
         int res = callback.apply("buna dimineata");
         System.out.println(res);
     }
+
+    public static void main(String[] args) {
+        FunctionPointerTest functionPointerTest = new FunctionPointerTest();
+        functionPointerTest.testFunctionMethod();
+    }
 }

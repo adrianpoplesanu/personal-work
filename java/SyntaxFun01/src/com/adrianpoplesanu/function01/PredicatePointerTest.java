@@ -24,4 +24,10 @@ public class PredicatePointerTest {
         System.out.println(callback.and(callback2).test("adrianus per scorillor"));
         System.out.println(callback.and(callback2).test("adrianus si bedush"));
     }
+
+    public static void main(String[] args) {
+        PredicatePointerTest predicatePointerTest = new PredicatePointerTest();
+        predicatePointerTest.testPredicatePointer();
+        predicatePointerTest.testPredicatePointer2();
+    }
 }

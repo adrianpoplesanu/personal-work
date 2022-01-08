@@ -13,4 +13,9 @@ public class SupplierPointerTest {
         callback = this::test;
         System.out.println(callback.get());
     }
+
+    public static void main(String[] args) {
+        SupplierPointerTest supplierPointerTest = new SupplierPointerTest();
+        supplierPointerTest.testSupplierPointer();
+    }
 }
