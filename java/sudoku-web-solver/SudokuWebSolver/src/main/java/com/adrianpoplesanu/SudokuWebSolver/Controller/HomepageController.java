@@ -11,6 +11,7 @@ public class HomepageController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public String index() {
+        //SudokuSolver s;
         return "buna dimineata!";
     }
 }
