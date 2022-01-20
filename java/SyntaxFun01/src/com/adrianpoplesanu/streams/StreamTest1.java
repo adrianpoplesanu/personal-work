@@ -2,6 +2,7 @@ package com.adrianpoplesanu.streams;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StreamTest1 {
     public static void main(String[] args) {
@@ -11,6 +12,7 @@ public class StreamTest1 {
         words.add("e");
         words.add("frumesh");
         words.stream().forEach(x -> System.out.println(x.toUpperCase()));
-        System.out.println(words);
+        List<String> keywords = words.stream().map(x -> x.toUpperCase()).filter(x -> true).collect(Collectors.toList());
+        System.out.println(keywords);
     }
 }
