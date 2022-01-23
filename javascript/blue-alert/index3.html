@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Blue Alert Game</title>
+        <style>
+            body { margin: 0; }
+        </style>
+    </head>
+    <body>
+        <script src="lib/three.js"></script>
+
+        <script>
+            function generateSprite(resourcePath, x, y) {
+                var map = new THREE.TextureLoader().load( resourcePath );
+                var material = new THREE.SpriteMaterial( { map: map, color: 0xffffff } );
+                var sprite = new THREE.Sprite( material );
+                sprite.position.x = x;
+                sprite.position.y = y;
+                return sprite;
+            }
+
+            function generateRandomBackground() {
+                var background = [
+                    "res/background/pixil-frame-0.png",
+                    "res/background/pixil-frame-1.png",
+                    "res/background/pixil-frame-2.png",
+                    "res/background/pixil-frame-3.png",
+                    "res/background/pixil-frame-4.png",
+                    "res/background/pixil-frame-5.png",
+                    "res/background/pixil-frame-6.png",
+                    "res/background/pixil-frame-7.png",
+                    "res/background/pixil-frame-8.png"
+                ];
+                var max = 8, min = 0;
+                var i = Math.floor(Math.random() * (max - min + 1) + min);
+                return background[i];
+            }
+        </script>
+
+        <script>
+            const scene = new THREE.Scene();
+
+            var width = window.innerWidth;
+            var height = window.innerHeight;
+            var factor = 0.03;
+
+            const camera = new THREE.OrthographicCamera( width / - 2 * factor, width / 2 * factor, height / 2 * factor, height / - 2 * factor, 1, 1000 );
+            scene.add( camera );
+            camera.position.set( 0, 0, 10 );
+
+            const renderer = new THREE.WebGLRenderer();
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            document.body.appendChild( renderer.domElement );
+
+            var elements = [];
+
+            //var map = new THREE.TextureLoader().load( "res/grizly-tank/pixil-frame-0.png" );
+            //var material = new THREE.SpriteMaterial( { map: map, color: 0xffffff } );
+            //var sprite = new THREE.Sprite( material );
+
+            var offset = -10;
+            for (var i = 0; i < 20; i++) {
+                for (var j = 0; j < 20; j++) {
+                    //var backgroundTile = generateSprite("res/background/pixil-frame-0.png", i + offset, j + offset);
+                    var backgroundTile = generateSprite(generateRandomBackground(), i + offset, j + offset);
+                    scene.add ( backgroundTile );
+                }
+            }
+
+            var unit1 = generateSprite("res/grizly-tank/pixil-frame-0.png", 0, 0);
+            scene.add( unit1 );
+
+            var unit2 = generateSprite("res/grizly-tank/pixil-frame-0.png", 1, 1);
+            scene.add( unit2 );
+
+
+            //const geometry2 = new THREE.PlaneGeometry( 1, 1 );
+            //const material2 = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+            //const plane = new THREE.Mesh( geometry2, material2 );
+            //plane.position.x = 1;
+            //plane.position.y = 1;
+            //scene.add( plane );
+
+            function loop() {
+                //...
+            }
+
+            function animate() {
+                requestAnimationFrame( animate );
+                loop();
+
+                renderer.render( scene, camera );
+            };
+
+            animate();
+        </script>
+    </body>
+</html>
