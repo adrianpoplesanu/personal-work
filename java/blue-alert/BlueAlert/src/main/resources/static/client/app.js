@@ -15,12 +15,16 @@ function setConnected(connected) {
 function connect() {
     var socket = new SockJS('http://localhost:8080/blue-alert-websocket');
     stompClient = Stomp.over(socket);
-    stompClient.connect({}, function (frame) {
+    stompClient.connect({username: "adishor",}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/register', function (greeting) {
             console.log(greeting);
             showGreeting(JSON.parse(greeting.body));
+        });
+        stompClient.subscribe('/user/topic/reply', function (message) {
+            console.log("reply-to-user");
+            console.log(message);
         });
     });
 }
