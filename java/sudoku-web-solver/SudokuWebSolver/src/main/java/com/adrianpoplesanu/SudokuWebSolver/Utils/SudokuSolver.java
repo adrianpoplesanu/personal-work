@@ -68,7 +68,7 @@ public class SudokuSolver {
         return solution;
     }
 
-    public void testSolver() {
+    public int[][] testSolver() {
         int[][] board = {
                 {7, 2, 0, 0, 0, 1, 9, 5, 0},
                 {0, 4, 0, 0, 0, 8, 7, 3, 2},
@@ -87,5 +87,6 @@ public class SudokuSolver {
             }
             System.out.println();
         }
+        return result;
     }
 }

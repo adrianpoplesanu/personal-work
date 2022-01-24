@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sudoku Solver test</title>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            console.log("aaa");
+            $("#submit").on('click', function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/solve/v2",
+                    //data: '{"board": "teeest"}',
+                    //data: JSON.stringify({"board": "teeest"}),
+                    data: JSON.stringify({"board": [[1, 2, 3], [4, 5, 6], [7, 8, 9]]}),
+                    dataType : "json",
+                    success: function(){},
+                    contentType : "application/json",
+                    accept : "application/json"
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <form method="post" action="/solve">
+        <input type="submit" name="submit" value="Solve" />
+    </form>
+
+    <br><br><br>
+
+    <form>
+        <input type="button" id="submit" value="Solve v2" />
+    </form>
+</body>
+</html>
