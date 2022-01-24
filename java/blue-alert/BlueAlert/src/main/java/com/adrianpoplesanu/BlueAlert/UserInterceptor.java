@@ -25,6 +25,7 @@ public class UserInterceptor implements ChannelInterceptor {
 
             if (raw instanceof Map) {
                 Object name = ((Map) raw).get("username");
+                System.out.println(name);
 
                 if (name instanceof ArrayList) {
                     accessor.setUser(new StompPrincipal(((ArrayList<String>) name).get(0).toString()));
