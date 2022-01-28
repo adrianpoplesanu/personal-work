@@ -24,7 +24,7 @@ int removeMin(int heap[100], int &size) {
             next = poz * 2 + 2;
             has_children = true;
         }
-        if (has_children) {
+        if (has_children) { // this is wrong
             heap[poz] = temp;
             poz = next;
         } else {
