@@ -30,6 +30,13 @@
 
 		<dependency>
 			<groupId>com.adrianpoplesanu</groupId>
+			<artifactId>aaa</artifactId>
+			<scope>provided</scope>
+			<systemPath>${pom.basedir}/res/SudokuSolver.jar</systemPath>
+		</dependency>
+
+		<dependency>
+			<groupId>com.adrianpoplesanu</groupId>
 			<artifactId>MavenTest</artifactId>
 			<version>1.0-SNAPSHOT</version>
 			<scope>system</scope>
