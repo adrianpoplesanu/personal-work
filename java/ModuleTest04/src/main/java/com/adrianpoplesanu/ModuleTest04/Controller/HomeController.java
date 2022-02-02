@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class HomeController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseBody
-    public String index(@Value("${text}") String text) {
+    public String index(@Value("${blu}") String text) {
         return text;
     }
 }
