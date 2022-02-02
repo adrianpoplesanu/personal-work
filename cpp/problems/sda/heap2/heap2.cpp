@@ -39,7 +39,7 @@ int remove(int heap[100], int& size) {
             }
         }
         if (!has_children) {
-            for (int i = poz; i < size; i++) heap[poz] = heap[poz + 1];
+            for (int i = poz; i < size; i++) heap[i] = heap[i + 1];
             break;
         }
         heap[poz] = temp;
