@@ -24,22 +24,22 @@ public class StatusController {
     UserService userService;
 
     @GetMapping("/status")
-    StatusModel status() {
+    public StatusModel status() {
         return new StatusModel(200,"Everything looks fine!");
     }
 
     @GetMapping("/check2")
-    StatusModel check2() {
+    public StatusModel check2() {
         return new StatusModel(200,"Everything looks fine!");
     }
 
     @GetMapping("/test-view-old")
-    ModelAndView test_view(Model model, HttpServletRequest request) {
+    public ModelAndView test_view(Model model, HttpServletRequest request) {
         return new ModelAndView(new PlainView());
     }
 
     @GetMapping("/test-user/{userId}")
-    User testUser(@PathVariable int userId) {
+    public User testUser(@PathVariable int userId) {
         User user = userService.getUser(userId);
         if (user != null) {
             return user;
@@ -49,21 +49,28 @@ public class StatusController {
     }
 
     @GetMapping("/test-all-users")
-    List<User> testAllUsers() {
+    public List<User> testAllUsers() {
         return userService.getUsers();
     }
 
     @PostMapping(value = "/test-add-user", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    User testAddUser(@RequestBody User user) {
+    public User testAddUser(@RequestBody User user) {
         //return "{\"status\": \"ok\"}";
-        //userService.addUser(user);
+        userService.addUser(user);
         return user;
     }
 
     @PutMapping(value = "/test-update-user", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    User testUpdateUser(@RequestBody User user) {
+    public User testUpdateUser(@RequestBody User user) {
+        // TODO: implement update here
         return user;
+    }
+
+    @DeleteMapping(value = "/test-delete-user/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String testDeleteUser(@PathVariable int userId) {
+        userService.deleteUser(userId);
+        return "{\"status\": \"ok\"}";
     }
 }
