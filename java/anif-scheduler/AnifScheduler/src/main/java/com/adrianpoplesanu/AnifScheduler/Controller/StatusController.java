@@ -3,6 +3,8 @@ package com.adrianpoplesanu.AnifScheduler.Controller;
 import com.adrianpoplesanu.AnifScheduler.Model.Status.StatusModel;
 import com.adrianpoplesanu.AnifScheduler.Model.User;
 import com.adrianpoplesanu.AnifScheduler.Service.UserService;
+import com.adrianpoplesanu.AnifScheduler.TestBean;
+import com.adrianpoplesanu.AnifScheduler.TestBeanConcrete;
 import com.adrianpoplesanu.AnifScheduler.View.PlainView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -22,6 +24,15 @@ public class StatusController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    TestBean testBean;
+
+    @Autowired
+    TestBean testBean2;
+
+    //@Autowired
+    //TestBeanConcrete testBeanConcrete;
 
     @GetMapping("/status")
     public StatusModel status() {
@@ -47,6 +58,21 @@ public class StatusController {
             return new User();
         }
     }
+
+    @GetMapping("/test-bean")
+    public String testBean() {
+        return testBean.data();
+    }
+
+    @GetMapping("/test-bean2")
+    public String testBean2() {
+        return testBean2.data();
+    }
+
+    //@GetMapping("/test-bean-concrete")
+    //public String testBeanConcrete() {
+    //    return testBeanConcrete.data();
+    //}
 
     @GetMapping("/test-all-users")
     public List<User> testAllUsers() {
