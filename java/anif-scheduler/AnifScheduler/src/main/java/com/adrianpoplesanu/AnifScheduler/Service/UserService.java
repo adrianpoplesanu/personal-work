@@ -32,4 +32,8 @@ public class UserService {
         User user = getUser(userId);
         userRepository.delete(user);
     }
+
+    public void updateUser(User user) {
+        userRepository.save(user);
+    }
 }

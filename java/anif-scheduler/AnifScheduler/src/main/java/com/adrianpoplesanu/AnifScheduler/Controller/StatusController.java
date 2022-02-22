@@ -64,11 +64,11 @@ public class StatusController {
     @PutMapping(value = "/test-update-user", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public User testUpdateUser(@RequestBody User user) {
-        // TODO: implement update here
+        userService.updateUser(user);
         return user;
     }
 
-    @DeleteMapping(value = "/test-delete-user/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/test-delete-user/{userId}")
     public String testDeleteUser(@PathVariable int userId) {
         userService.deleteUser(userId);
         return "{\"status\": \"ok\"}";
