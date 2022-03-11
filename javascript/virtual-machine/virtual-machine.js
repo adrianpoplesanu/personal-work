@@ -1,6 +1,6 @@
-let PUSH = 'PUSH';
-let ADD = 'ADD';
-let MINUS = 'MINUS';
+const PUSH = 'PUSH';
+const ADD = 'ADD';
+const MINUS = 'MINUS';
 
 let virtualMachine = function(program) {
     let stack = [];
