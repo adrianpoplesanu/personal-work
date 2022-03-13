@@ -1,0 +1,5 @@
+print (int.from_bytes(b'\x00\x10', byteorder='big'))
+print (int.from_bytes(b'\x00\x10', byteorder='little'))
+print (int.from_bytes(b'\xfc\x00', byteorder='big', signed=True))
+print (int.from_bytes(b'\xfc\x00', byteorder='big', signed=False))
+print (int.from_bytes([255, 0, 0], byteorder='big'))
