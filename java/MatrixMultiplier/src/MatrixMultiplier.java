@@ -17,6 +17,7 @@ public class MatrixMultiplier {
             for (int j = 0; j < 2; j++) System.out.print(a[i][j] + " ");
             System.out.println();
         }
+        System.out.println("------");
     }
 
     public static void main(String[] args) {
@@ -28,10 +29,20 @@ public class MatrixMultiplier {
                 {1, 2},
                 {3, 4}
         };
-        int[][] c = multiply(a, b);
-        print(c);
-
-        int[][] d = multiply(b, a);
+        int[][] c = {
+                {3, 4},
+                {-5, -6}
+        };
+        int[][] d = multiply(a, b);
         print(d);
+
+        int[][] e = multiply(b, a);
+        print(e);
+
+        int[][] f = multiply(b, c);
+        print(f);
+
+        int[][] g = multiply(c, b);
+        print(g);
     }
 }
