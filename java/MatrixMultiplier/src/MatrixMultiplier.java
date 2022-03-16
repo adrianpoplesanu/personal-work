@@ -30,5 +30,8 @@ public class MatrixMultiplier {
         };
         int[][] c = multiply(a, b);
         print(c);
+
+        int[][] d = multiply(b, a);
+        print(d);
     }
 }
