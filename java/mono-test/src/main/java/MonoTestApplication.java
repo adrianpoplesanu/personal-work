@@ -9,6 +9,10 @@ public class MonoTestApplication {
         return Mono.just(1);
     }
 
+    private static Mono<String> getCountry() {
+        return Mono.just("UZB");
+    }
+
     private static void testName() {
         Mono<?> monoResult = getName();
         monoResult.subscribe(x -> {
@@ -29,8 +33,17 @@ public class MonoTestApplication {
         });
     }
 
+    private static void testCountry() {
+        Mono<?> monoResult = getCountry();
+        monoResult.doOnSuccessOrError((res, throwable) -> {
+            System.out.println("received this country iso3 code:");
+            System.out.println(res);
+        }).subscribe(x -> System.out.println("doing something with the retrieved country") );
+    }
+
     public static void main(String[] args) {
         testName();
         testAge();
+        testCountry();
     }
 }
