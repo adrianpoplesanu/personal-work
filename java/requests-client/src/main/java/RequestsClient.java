@@ -141,13 +141,56 @@ public class RequestsClient {
         return "unimplemented";
     }
 
+    public String getFootballData(String path, Map<String, String> headers, Map<String, String> params, boolean checkCertificates) throws IOException, KeyManagementException {
+        URL url = new URL(path);
+
+        SSLSocketFactory old = HttpsURLConnection.getDefaultSSLSocketFactory();
+        if (!checkCertificates) {
+            SSLContext sc;
+            try {
+                sc = SSLContext.getInstance("SSL");
+                sc.init(null, trustAllCerts, new java.security.SecureRandom());
+                HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+            } catch (NoSuchAlgorithmException | KeyManagementException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        HttpURLConnection httpClient = (HttpURLConnection) url.openConnection();
+        httpClient.setRequestMethod("GET");
+
+        for (Map.Entry<String, String> header : headers.entrySet()) {
+            httpClient.setRequestProperty(header.getKey(), header.getValue());
+        }
+
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(httpClient.getInputStream()));
+        String inputLine;
+        StringBuffer content = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+            content.append(inputLine);
+        }
+        in.close();
+
+        if (!checkCertificates) {
+            HttpsURLConnection.setDefaultSSLSocketFactory(old);
+        }
+        return content.toString();
+    }
+
     public static void main(String[] args) throws IOException, KeyManagementException {
         System.out.println("running RequestsClient v1.0");
 
         RequestsClient requestsClient = new RequestsClient();
-        String data = requestsClient.get("https://example.com");
-        System.out.println(data);
+        //String data = requestsClient.get("https://example.com");
+        //System.out.println(data);
         //requestsClient.post(null, null, null);
-        requestsClient.post2(null, null, null, false);
+        //requestsClient.post2(null, null, null, false);
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("X-Auth-Token", "f5c1f45ccb174b739541ad43203c7183");
+        String football = requestsClient.getFootballData("https://api.football-data.org/v2/competitions/PL/matches", headers, null, false);
+        System.out.println(football);
     }
 }
