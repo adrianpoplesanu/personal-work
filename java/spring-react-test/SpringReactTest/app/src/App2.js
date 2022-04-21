@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import './App.css';
+import './App2.css';
 
-class App extends Component {
+class App2 extends Component {
   state = {
     isLoading: true,
     message: "aaa"
@@ -25,7 +25,7 @@ class App extends Component {
     console.log(message);
 
     return (
-      <div className="App">
+      <div className="App2">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>{message}</p>
@@ -46,4 +46,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default App2;
