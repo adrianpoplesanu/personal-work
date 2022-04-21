@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Blogs from "./pages/Blogs";
 import Contact from "./pages/Contact";
 import NoPage from "./pages/NoPage";
+import Logout from "./pages/Logout";
 import App2 from "./App2"
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="blogs" element={<Blogs />} />
           <Route path="contact" element={<Contact />} />
           <Route path="aaa" element={<App2 />} />
+          <Route path="logout" element={<Logout />} />
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>
