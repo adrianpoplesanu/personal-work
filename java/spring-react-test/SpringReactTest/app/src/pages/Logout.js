@@ -11,7 +11,7 @@ class Logout extends Component {
     //const body = await response.text();
     this.setState({ isLoading: false });
     //this.props.history.push('/');
-    window.location.href = 'http://localhost:8080';
+    window.location.href = '/';
   };
 
   render() {

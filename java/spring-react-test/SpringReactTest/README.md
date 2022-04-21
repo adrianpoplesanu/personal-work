@@ -17,3 +17,6 @@ Spring Initializer - only Web dependency
 #### start react app
 <code>cd app</code>  
 <code>yarn start</code>
+
+#### add routes module to react app
+<code>npm i -D react-router-dom@latest</code>
