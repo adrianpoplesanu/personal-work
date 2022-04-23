@@ -4,21 +4,21 @@ import java.util.Arrays;
 
 public class CustomArrayList<T> implements CustomArrayListInterface<T> {
     private int capacity = 4;
-    private T[] data;
+    private T[] elements;
     int size = 0;
 
     public CustomArrayList() {
-        data = (T[]) new Object[capacity];
+        elements = (T[]) new Object[capacity];
     }
 
     public CustomArrayList(int capacity) {
         this.capacity = capacity;
-        data = (T[]) new Object[capacity];
+        elements = (T[]) new Object[capacity];
     }
 
     public CustomArrayList(CustomArrayList<T> oldArray) {
         this.capacity = oldArray.capacity;
-        data = Arrays.copyOf(oldArray.data, oldArray.size());
+        elements = Arrays.copyOf(oldArray.elements, oldArray.size());
     }
 
     @Override
@@ -46,6 +46,7 @@ public class CustomArrayList<T> implements CustomArrayListInterface<T> {
         if (size >= capacity) {
             growSize();
         }
+        elements[size++] = element;
     }
 
     @Override
@@ -58,13 +59,20 @@ public class CustomArrayList<T> implements CustomArrayListInterface<T> {
     }
 
     private void growSize() {
-        T[] oldArray = data;
+        T[] oldArray = elements;
         capacity = capacity >> 1;
-        data = (T[]) new Object[capacity];
+        elements = (T[]) new Object[capacity];
         // TODO: just need to copy it over
     }
 
     private void shrinkSize() {
         // TODO: implement this
+    }
+
+    public void testPrint() {
+        for (int i = 0; i < size; i++) {
+            System.out.print(elements[i] + " ");
+        }
+        System.out.println();
     }
 }
