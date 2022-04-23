@@ -12,7 +12,10 @@ enum TokenType {
     TT_DIVIDE,
     TT_BIGNUMBER,
     TT_LPAREN,
-    TT_RPAREN
+    TT_RPAREN,
+    TT_SEMICOLON,
+    TT_IDENT,
+    TT_ASSIGN
 };
 
 std::map<TokenType, std::string> token_type_converter = {
@@ -23,7 +26,10 @@ std::map<TokenType, std::string> token_type_converter = {
     {TT_DIVIDE, "DIVIDE"},
     {TT_BIGNUMBER, "BIGNUMBER"},
     {TT_LPAREN, "LPAREN"},
-    {TT_RPAREN, "RPAREN"}
+    {TT_RPAREN, "RPAREN"},
+    {TT_SEMICOLON, "SEMICOLON"},
+    {TT_IDENT, "IDENTIFIER"},
+    {TT_ASSIGN, "ASSIGN"}
 };
 
 std::map<std::string, TokenType> keywords = {

@@ -1,11 +1,15 @@
 #include <iostream>
 #include <fstream>
+#include "big_number.h"
+#include "big_number.cpp"
 #include "repl.h"
 #include "repl.cpp"
 #include "parser.h"
 #include "parser.cpp"
 #include "lexer.h"
 #include "lexer.cpp"
+#include "ast.h"
+#include "ast.cpp"
 
 int main(int argc, char* argv[]) {
     Repl repl;
