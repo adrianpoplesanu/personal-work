@@ -2,6 +2,10 @@
 #include <fstream>
 #include "repl.h"
 #include "repl.cpp"
+#include "parser.h"
+#include "parser.cpp"
+#include "lexer.h"
+#include "lexer.cpp"
 
 int main(int argc, char* argv[]) {
     Repl repl;

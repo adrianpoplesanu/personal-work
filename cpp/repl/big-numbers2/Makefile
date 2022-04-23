@@ -1,4 +1,6 @@
 all:
+	g++ -g -std=c++17 token.cpp -c -o token.o
+	g++ -g -std=c++17 lexer.cpp -c -o lexer.o
 	g++ -g -std=c++17 parser.cpp -c -o parser.o
 	g++ -g -std=c++17 repl.cpp -c -o repl.o
 	g++ -g -std=c++17 bn.cpp -c -o bn.o
