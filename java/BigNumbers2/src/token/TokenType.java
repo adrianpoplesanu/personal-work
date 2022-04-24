@@ -11,5 +11,13 @@ public enum TokenType {
     BIG_NUMBER,
     SEMICOLON,
     IDENT,
-    ASSIGN
+    ASSIGN,
+    IF,
+    TRUE,
+    FALSE,
+    LET,
+    GT,
+    LT,
+    GTE,
+    LTE
 }

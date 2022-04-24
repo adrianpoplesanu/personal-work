@@ -1,4 +1,12 @@
 package ast;
 
 public enum AstNodeType {
+    UNDEFINED,
+    PROGRAM,
+    ASSIGN_STATEMENT,
+    PREFIX_EXPRESSION,
+    INFIX_EXPRESSION,
+    IF_STATEMENT,
+    LET_STATEMENT,
+    BIG_NUMBER
 }

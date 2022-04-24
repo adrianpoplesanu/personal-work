@@ -20,4 +20,8 @@ public class Repl {
             lexer.load(line);
         }
     }
+
+    public void executeFile() {
+        
+    }
 }
