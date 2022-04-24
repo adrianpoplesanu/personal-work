@@ -6,6 +6,7 @@ all:
 	g++ -g -std=c++17 repl.cpp -c -o repl.o
 	g++ -g -std=c++17 objects.cpp -c -o objects.o
 	g++ -g -std=c++17 environment.cpp -c -o environment.o
+	g++ -g -std=c++17 evaluator.cpp -c -o evaluator.o
 	g++ -g -std=c++17 bn.cpp -c -o bn.o
 	g++ -g -std=c++17 bn.o -o bn
 

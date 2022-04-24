@@ -14,7 +14,9 @@ enum AstNodeType {
     AT_PREFIX_EXPRESSION,
     AT_INFIX_EXPRESSION,
     AT_IDENTIFIER,
-    AT_ASSIGN_STATEMENT
+    AT_ASSIGN_STATEMENT,
+    AT_IF_STATEMENT,
+    AT_LET_STATEMENT
 };
 
 std::map<AstNodeType, std::string> ast_node_type_converter = {
@@ -24,13 +26,15 @@ std::map<AstNodeType, std::string> ast_node_type_converter = {
     {AT_PREFIX_EXPRESSION, "AstPrefixExpression"},
     {AT_INFIX_EXPRESSION, "AstInfixExpression"},
     {AT_IDENTIFIER, "AstIdentifier"},
-    {AT_ASSIGN_STATEMENT, "AstAssignStatement"}
+    {AT_ASSIGN_STATEMENT, "AstAssignStatement"},
+    {AT_IF_STATEMENT, "AstIfStatement"},
+    {AT_LET_STATEMENT, "AstLetStatement"}
 };
 
 class AstNode {
     public:
         AstNodeType type;
-        unsigned int ref_count;
+        int ref_count;
 
         virtual std::string tokenLiteral();
         virtual std::string toString();

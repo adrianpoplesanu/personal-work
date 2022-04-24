@@ -22,11 +22,16 @@ std::map<TokenType, PrecedenceType> precedences = {
 };
 
 class Parser {
-    public:
-        typedef AstNode* (Parser::*PrefixCallback)();
-        typedef AstNode* (Parser::*InfixCallback)(AstNode*);
+    typedef AstNode* (Parser::*PrefixCallback)();
+    typedef AstNode* (Parser::*InfixCallback)(AstNode*);
+
+    private:
         std::map<TokenType, PrefixCallback> prefixParseFns;
         std::map<TokenType, InfixCallback> infixParseFns;
+
+    public:
+        Parser();
+        ~Parser();
 };
 
 #endif

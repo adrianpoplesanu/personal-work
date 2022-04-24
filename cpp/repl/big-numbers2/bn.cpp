@@ -10,6 +10,8 @@
 #include "lexer.cpp"
 #include "ast.h"
 #include "ast.cpp"
+#include "evaluator.h"
+#include "evaluator.cpp"
 
 int main(int argc, char* argv[]) {
     Repl repl;
