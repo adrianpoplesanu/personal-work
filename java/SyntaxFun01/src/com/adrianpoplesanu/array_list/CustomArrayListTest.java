@@ -5,6 +5,8 @@ public class CustomArrayListTest {
         CustomArrayList<String> names = new CustomArrayList<>();
         names.add("buna");
         names.add("dimineata");
+        names.add("dimineata");
+        names.add("dimineata");
         names.add("!");
         names.testPrint();
     }

@@ -6,5 +6,5 @@ public interface CustomArrayListInterface<T> {
     T get(int index);
     void set(int index, T element);
     void add(T element);
-    void remove(int index);
+    T remove(int index);
 }

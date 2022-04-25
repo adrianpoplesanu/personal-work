@@ -33,12 +33,14 @@ public class CustomArrayList<T> implements CustomArrayListInterface<T> {
 
     @Override
     public T get(int index) {
-        return null;
+        checkRange(index);
+        return elements[index];
     }
 
     @Override
     public void set(int index, T element) {
-
+        checkRange(index);
+        elements[index] = element;
     }
 
     @Override
@@ -50,23 +52,40 @@ public class CustomArrayList<T> implements CustomArrayListInterface<T> {
     }
 
     @Override
-    public void remove(int index) {
-
+    public T remove(int index) {
+        checkRange(index);
+        T element = elements[index];
+        for (int i = index; i < size() - 1; i++) {
+            elements[i] = elements[i + 1];
+        }
+        size--;
+        if (size < capacity / 4) {
+            if (capacity >> 1 >= 4) {
+                shrinkSize();
+            }
+        }
+        return element;
     }
 
     private void checkRange(int index) {
-        // TODO: if index is out of bounds raise OutOfBounds
+        if (index >= size() || index < 0) {
+            throw new IndexOutOfBoundsException();
+        }
     }
 
     private void growSize() {
         T[] oldArray = elements;
-        capacity = capacity >> 1;
+        capacity = capacity << 1;
         elements = (T[]) new Object[capacity];
-        // TODO: just need to copy it over
+        for (int i = 0 ; i < oldArray.length; i++) elements[i] = oldArray[i];
     }
 
     private void shrinkSize() {
-        // TODO: implement this
+        T[] oldArray = elements;
+        capacity = capacity >> 1;
+        elements = (T[]) new Object[capacity];
+        // TODO: test this
+        for (int i = 0 ; i < elements.length; i++) elements[i] = oldArray[i];
     }
 
     public void testPrint() {
