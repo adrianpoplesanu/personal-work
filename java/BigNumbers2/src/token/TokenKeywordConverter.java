@@ -3,12 +3,20 @@ package token;
 import java.util.HashMap;
 
 public class TokenKeywordConverter {
-    public static HashMap<TokenType, String> keywordsMap = new HashMap<TokenType, String>() {
+    private static HashMap<String, TokenType> keywordsMap = new HashMap<String, TokenType>() {
         {
-            put(TokenType.IF, "IF");
-            put(TokenType.TRUE, "TRUE");
-            put(TokenType.FALSE, "FALSE");
-            put(TokenType.LET, "LET");
+            put("IF", TokenType.IF);
+            put("TRUE", TokenType.TRUE);
+            put("FALSE", TokenType.FALSE);
+            put("LET", TokenType.LET);
         }
     };
+
+    public static TokenType convertKeyword(String literal) {
+        return keywordsMap.get(literal);
+    }
+
+    public static boolean checkKeyword(String literal) {
+        return keywordsMap.containsKey(literal);
+    }
 }

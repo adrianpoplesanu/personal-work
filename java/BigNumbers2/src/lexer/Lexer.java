@@ -1,6 +1,8 @@
 package lexer;
 
 import token.Token;
+import token.TokenKeywordConverter;
+import token.TokenType;
 
 public class Lexer {
     private String source;
@@ -17,6 +19,7 @@ public class Lexer {
         this.source = source;
         position = 0;
         readPosition = 0;
+        readChar();
     }
 
     private void skipWhitespaces() {
@@ -39,11 +42,66 @@ public class Lexer {
     }
 
     private String readBigNumber() {
+        int start = position;
+        while(isDigit()) {
+            readChar();
+        }
+        return source.substring(start, position);
+    }
+
+    private boolean isDigit() {
+        return '0' <= currentChar && currentChar <= '9';
+    }
+
+    private boolean isLetter() {
+        return ('a' <= currentChar && currentChar <= 'z') || ('A' <= currentChar && currentChar <= 'Z') || currentChar == '_';
+    }
+
+    private boolean isFloatDot() {
+        return currentChar == '.';
+    }
+
+    private String readIdentifier() {
         return null;
+    }
+
+    private TokenType lookupKeyword(String literal) {
+        if (TokenKeywordConverter.checkKeyword(literal)) return TokenKeywordConverter.convertKeyword(literal);
+        return TokenType.IDENT;
     }
 
     public Token nextToken() {
         skipWhitespaces();
-        return null;
+        boolean readNextChar = true;
+        Token result = new Token();
+
+        switch (currentChar) {
+            case 0:
+                result.setTokenLiteral("");
+                result.setType(TokenType.EOF);
+                break;
+            case '+':
+                result.setTokenLiteral("+");
+                result.setType(TokenType.SUM);
+                break;
+            default:
+                if (isLetter()) {
+                    readNextChar = false;
+                } else if (isDigit()) {
+                    readNextChar = false;
+                    String literal = readBigNumber();
+                    result.setTokenLiteral(literal);
+                    result.setType(TokenType.BIG_NUMBER);
+                } else {
+                    result.setTokenLiteral(String.valueOf(currentChar));
+                    result.setType(TokenType.UNDEFINED);
+                }
+                break;
+        }
+
+        if (readNextChar) {
+            readChar();
+        }
+        return result;
     }
 }

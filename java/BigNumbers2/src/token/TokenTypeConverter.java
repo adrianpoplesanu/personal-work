@@ -15,6 +15,20 @@ public class TokenTypeConverter {
             put(TokenType.LPAREN, "LPAREN");
             put(TokenType.RPAREN, "RPAREN");
             put(TokenType.SEMICOLON, "SEMICOLON");
+            put(TokenType.IF, "IF");
+            put(TokenType.TRUE, "IF");
+            put(TokenType.FALSE, "IF");
+            put(TokenType.LET, "IF");
+            put(TokenType.DOT, "DOT");
+            put(TokenType.GT, "GT");
+            put(TokenType.LT, "LT");
+            put(TokenType.GTE, "GTE");
+            put(TokenType.LTE, "LTE");
+            put(TokenType.EOF, "EOF");
         }
     };
+
+    public static String convertTokenType(TokenType key) {
+        return tokenTypeMap.get(key);
+    }
 }

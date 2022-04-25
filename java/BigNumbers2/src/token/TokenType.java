@@ -19,5 +19,7 @@ public enum TokenType {
     GT,
     LT,
     GTE,
-    LTE
+    LTE,
+    DOT,
+    EOF
 }

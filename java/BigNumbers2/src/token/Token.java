@@ -27,4 +27,8 @@ public class Token {
     public void setTokenLiteral(String tokenLiteral) {
         this.tokenLiteral = tokenLiteral;
     }
+
+    public String toString() {
+        return "Token [" + TokenTypeConverter.convertTokenType(type) +"] <" + tokenLiteral + ">";
+    }
 }
