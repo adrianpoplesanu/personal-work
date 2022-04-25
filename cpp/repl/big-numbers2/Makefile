@@ -1,4 +1,5 @@
 all:
+	g++ -g -std=c++17 big_number.cpp -c -o big_number.o
 	g++ -g -std=c++17 token.cpp -c -o token.o
 	g++ -g -std=c++17 ast.cpp -c -o ast.o
 	g++ -g -std=c++17 lexer.cpp -c -o lexer.o

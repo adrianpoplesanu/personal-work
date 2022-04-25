@@ -7,8 +7,8 @@
 class Repl {
 private:
     bool ParseLine(std::string);
-public:
     Parser parser;
+public:
 
     Repl();
     ~Repl();

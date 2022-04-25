@@ -1,6 +1,8 @@
 #ifndef __BIG_NUMBER_H
 #define __BIG_NUMBER_H
 
+#include <iostream>
+
 class BigNumber {
     public:
         int digits[100];

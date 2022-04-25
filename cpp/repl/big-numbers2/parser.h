@@ -2,8 +2,8 @@
 #define __PARSER_H
 
 #include <map>
-#include "lexer.h"
 #include "token.h"
+#include "lexer.h"
 #include "ast.h"
 
 enum PrecedenceType {
@@ -28,10 +28,17 @@ class Parser {
     private:
         std::map<TokenType, PrefixCallback> prefixParseFns;
         std::map<TokenType, InfixCallback> infixParseFns;
+        Lexer lexer;
+        Token currentToken;
+        Token peekToken;
 
     public:
         Parser();
         ~Parser();
+
+        void nextToken();
+        void load(std::string);
+        void buildProgramStatements();
 };
 
 #endif

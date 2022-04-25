@@ -25,7 +25,8 @@ enum TokenType {
     TT_TRUE,
     TT_FALSE,
     TT_IF,
-    TT_LET
+    TT_LET,
+    TT_EOF
 };
 
 std::map<TokenType, std::string> token_type_converter = {
@@ -49,7 +50,8 @@ std::map<TokenType, std::string> token_type_converter = {
     {TT_TRUE, "TRUE"},
     {TT_FALSE, "FALSE"},
     {TT_IF, "IF"},
-    {TT_LET, "LET"}
+    {TT_LET, "LET"},
+    {TT_EOF, "EOF"}
 };
 
 std::map<std::string, TokenType> keywords = {

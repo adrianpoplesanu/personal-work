@@ -25,5 +25,8 @@ void Repl::ExecuteFile(std::ifstream& target) {
 }
 
 bool Repl::ParseLine(std::string line) {
-    return line == "exit";
+    if (line == "exit") return true;
+    parser.load(line);
+    parser.buildProgramStatements();
+    return false;
 }
