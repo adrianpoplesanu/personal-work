@@ -58,6 +58,18 @@ Token Lexer::nextToken() {
             result.setLiteral("+");
             result.setType(TT_SUM);
         break;
+        case '-':
+            result.setLiteral("-");
+            result.setType(TT_MINUS);
+        break;
+        case '*':
+            result.setLiteral("*");
+            result.setType(TT_MULTIPLY);
+        break;
+        case '/':
+            result.setLiteral("/");
+            result.setType(TT_DIVIDE);
+        break;
         default:
             if (isLetter()) {
 
