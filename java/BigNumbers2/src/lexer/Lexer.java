@@ -84,6 +84,18 @@ public class Lexer {
                 result.setTokenLiteral("+");
                 result.setType(TokenType.SUM);
                 break;
+            case '-':
+                result.setTokenLiteral("-");
+                result.setType(TokenType.MINUS);
+                break;
+            case '*':
+                result.setTokenLiteral("*");
+                result.setType(TokenType.MULTIPLY);
+                break;
+            case '/':
+                result.setTokenLiteral("/");
+                result.setType(TokenType.DIVIDE);
+                break;
             default:
                 if (isLetter()) {
                     readNextChar = false;

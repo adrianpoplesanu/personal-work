@@ -1,5 +1,9 @@
 package big_number;
 
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
+
 public class BigNumber {
     private int[] digits = new int[100];
     private int[] floatDigits = new int[100];
@@ -22,9 +26,18 @@ public class BigNumber {
     }
 
     public void print() {
-        for (int i = 0; i < size; i++) {
+        /*for (int i = 0; i < size; i++) {
             System.out.println("digit" + i + ": " + digits[i]);
         }
+
+        AtomicInteger i = new AtomicInteger();
+        Arrays.stream(digits).forEach(x -> {
+            System.out.println("digit" + i.getAndIncrement() + ": " + x);
+        });*/
+
+        IntStream.range(0, size).forEach(i -> {
+            System.out.println("digit" + i + ": " + digits[i]);
+        });
     }
 
     public static void main(String[] args) {
