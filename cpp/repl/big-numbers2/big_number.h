@@ -7,6 +7,7 @@ class BigNumber {
     public:
         int digits[100];
         int float_digits[100];
+        int size;
         int NUMBER_BASE;
 
         BigNumber();
@@ -14,6 +15,7 @@ class BigNumber {
         std::string inspect();
         void load(std::string);
         BigNumber& operator+(const BigNumber&);
+        void print();
 };
 
 #endif
