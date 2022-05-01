@@ -1,0 +1,5 @@
+PL - premier league, id: 2021
+EC - european championship, id: 2018
+CL - champions league, id: 2001
+SA - serie a, id: 2019
+PD - primera division, id: 2000
