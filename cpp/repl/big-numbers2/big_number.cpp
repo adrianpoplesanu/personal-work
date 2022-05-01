@@ -27,12 +27,32 @@ void BigNumber::load(std::string source) {
     size = i;
 }
 
-BigNumber& BigNumber::operator+(const BigNumber& other) {
-    return *this;
+BigNumber BigNumber::operator+(const BigNumber& other) {
+    // https://www.programiz.com/cpp-programming/operator-overloading
+    BigNumber result;
+
+    for (int i = 0; i < 100; i++) {
+        result.digits[i] = 0;
+    }
+    result.size = 1;
+
+    return result;
 }
 
 void BigNumber::print() {
-    for (int i = 0; i < size; i++) {
+    /*for (int i = 0; i < size; i++) {
         std::cout << "digit" << i << ": " << digits[i] << "\n";
+    }*/
+    std::string result = "";
+    for (int i = size - 1; i >= 0; i--) {
+        std::string digit = std::to_string(digits[i]);
+        if (i == size - 1) {
+            result += digit;
+        } else {
+            unsigned int number_of_zeros = 4 - digit.length(); // add 2 zeros
+            digit.insert(0, number_of_zeros, '0');
+            result += digit;
+        }
     }
+    std::cout << result << "\n";
 }

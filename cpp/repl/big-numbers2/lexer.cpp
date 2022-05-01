@@ -35,6 +35,17 @@ std::string Lexer::readBigNumber() {
     return source.substr(start, position - start);
 }
 
+std::string Lexer::readLiteral() {
+    int start = position;
+    while(isLetter()) {
+        readChar();
+    }
+    while(isLetter() || isDigit()) {
+        readChar();
+    }
+    return source.substr(start, position - start);
+}
+
 void Lexer::readChar() {
     if (readPosition >= source.length()) {
         current_char = 0;
@@ -43,6 +54,11 @@ void Lexer::readChar() {
     }
     position = readPosition;
     readPosition++;
+}
+
+TokenType Lexer::lookupKeyword(std::string literal) {
+    if (keywords.find(literal) != keywords.end()) return keywords.find(literal)->second;
+    return TT_IDENT;
 }
 
 Token Lexer::nextToken() {
@@ -72,7 +88,10 @@ Token Lexer::nextToken() {
         break;
         default:
             if (isLetter()) {
-
+                read_next_char = false;
+                std::string literal = readLiteral();
+                result.setLiteral(literal);
+                result.setType(lookupKeyword(literal));
             } else if (isDigit()) {
                 read_next_char = false;
                 std::string literal = readBigNumber();

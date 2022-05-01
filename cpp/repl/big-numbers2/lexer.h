@@ -22,7 +22,9 @@ class Lexer {
         bool isFloatDot();
         void readChar();
         std::string readBigNumber();
+        std::string readLiteral();
         Token nextToken();
+        TokenType lookupKeyword(std::string);
 };
 
 #endif

@@ -14,7 +14,7 @@ class BigNumber {
         ~BigNumber();
         std::string inspect();
         void load(std::string);
-        BigNumber& operator+(const BigNumber&);
+        BigNumber operator+(const BigNumber&);
         void print();
 };
 
