@@ -49,6 +49,17 @@ public class Lexer {
         return source.substring(start, position);
     }
 
+    private String readLiteral() {
+        int start = position;
+        while(isLetter()) {
+            readChar();
+        }
+        while(isLetter() || isDigit()) {
+            readChar();
+        }
+        return source.substring(start, position);
+    }
+
     private boolean isDigit() {
         return '0' <= currentChar && currentChar <= '9';
     }
@@ -99,6 +110,9 @@ public class Lexer {
             default:
                 if (isLetter()) {
                     readNextChar = false;
+                    String literal = readLiteral();
+                    result.setTokenLiteral(literal);
+                    result.setType(lookupKeyword(literal));
                 } else if (isDigit()) {
                     readNextChar = false;
                     String literal = readBigNumber();

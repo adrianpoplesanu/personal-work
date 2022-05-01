@@ -13,6 +13,7 @@ public class AstNodeTypeConverter {
             put(AstNodeType.LET_STATEMENT, "LET_STATEMENT");
             put(AstNodeType.IF_STATEMENT, "IF_STATEMENT");
             put(AstNodeType.BIG_NUMBER, "BIG_NUMBER");
+            put(AstNodeType.BOOLEAN, "BOOLEAN");
         }
     };
 

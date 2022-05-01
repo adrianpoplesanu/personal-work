@@ -8,5 +8,6 @@ public enum AstNodeType {
     INFIX_EXPRESSION,
     IF_STATEMENT,
     LET_STATEMENT,
-    BIG_NUMBER
+    BIG_NUMBER,
+    BOOLEAN
 }

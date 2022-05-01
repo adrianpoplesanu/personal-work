@@ -8,6 +8,7 @@ public class BigNumber {
     private int[] digits = new int[100];
     private int[] floatDigits = new int[100];
     private static final int NUMBER_BASE = 10000;
+    public static final int CAPACITY = 100;
     private int size;
 
     public void load(String source) {
@@ -26,24 +27,47 @@ public class BigNumber {
     }
 
     public void print() {
-        /*for (int i = 0; i < size; i++) {
-            System.out.println("digit" + i + ": " + digits[i]);
+        String text = "";
+        for (int i = size - 1; i >= 0; i--) {
+            if (i == size - 1) {
+                text += String.valueOf(digits[i]);
+            } else {
+                text += String.format("%04d", digits[i]);
+            }
         }
+        System.out.println(text);
 
-        AtomicInteger i = new AtomicInteger();
+        /*AtomicInteger i = new AtomicInteger();
         Arrays.stream(digits).forEach(x -> {
             System.out.println("digit" + i.getAndIncrement() + ": " + x);
         });*/
 
-        IntStream.range(0, size).forEach(i -> {
+        /*IntStream.range(0, size).forEach(i -> {
             System.out.println("digit" + i + ": " + digits[i]);
-        });
+        });*/
+    }
+
+    public int getDigit(int i) {
+        return digits[i];
+    }
+
+    public void setDigit(int i, int value) {
+        digits[i] = value;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 
     public static void main(String[] args) {
         System.out.println("testing BigNumber object implementation, delete when done...");
-        BigNumber bigNumber = new BigNumber();
-        bigNumber.load("11122223333");
-        bigNumber.print();
+        BigNumber bigNumber1 = new BigNumber();
+        bigNumber1.load("11122223333");
+
+        BigNumber bigNumber2 = new BigNumber();
+        bigNumber2.load("11122226667");
+
+        BigNumber bigNumber3 = BigNumberUtils.add(bigNumber1, bigNumber2);
+        bigNumber3.print();
     }
 }

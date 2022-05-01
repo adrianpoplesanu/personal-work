@@ -2,5 +2,6 @@ package objects;
 
 public enum ObjectType {
     NULL,
-    BIG_NUMBER
+    BIG_NUMBER,
+    BOOLEAN
 }
