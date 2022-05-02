@@ -7,20 +7,21 @@ import java.util.stream.IntStream;
 public class BigNumber {
     private int[] digits = new int[100];
     private int[] floatDigits = new int[100];
-    private static final int NUMBER_BASE = 10000;
+    public static final int NUMBER_BASE = 10000;
     public static final int CAPACITY = 100;
+    public static final int DIGIT_SIZE = 4;
     private int size;
 
     public void load(String source) {
         int len = source.length();
-        int start = len - 4, end = len;
+        int start = len - DIGIT_SIZE, end = len;
         int i = 0;
         while (end > 0) {
             if (start < 0) start = 0;
             String digit = source.substring(start, end);
             digits[i] = Integer.valueOf(digit);
-            start -= 4;
-            end -= 4;
+            start -= DIGIT_SIZE;
+            end -= DIGIT_SIZE;
             i++;
         }
         size = i;
