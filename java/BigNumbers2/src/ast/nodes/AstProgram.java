@@ -1,6 +1,7 @@
 package ast.nodes;
 
 import ast.AstNode;
+import ast.AstNodeType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ public class AstProgram extends AstNode {
     List<AstNode> statements;
 
     public AstProgram() {
+        type = AstNodeType.PROGRAM;
         statements = new ArrayList<>();
     }
 
@@ -28,5 +30,9 @@ public class AstProgram extends AstNode {
 
     public void setStatements(List<AstNode> statements) {
         this.statements = statements;
+    }
+
+    public void reset() {
+        statements.clear();
     }
 }

@@ -16,10 +16,17 @@ public enum TokenType {
     TRUE,
     FALSE,
     LET,
+    EQ,
+    NON_EQ,
     GT,
     LT,
     GTE,
     LTE,
     DOT,
-    EOF
+    EOF,
+    ELSE,
+    LBRACKET,
+    RBRACKET,
+    AND,
+    OR
 }

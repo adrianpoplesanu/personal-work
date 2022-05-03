@@ -9,5 +9,6 @@ public enum AstNodeType {
     IF_STATEMENT,
     LET_STATEMENT,
     BIG_NUMBER,
-    BOOLEAN
+    BOOLEAN,
+    EXPRESSION_STATEMENT
 }

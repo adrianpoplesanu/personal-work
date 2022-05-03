@@ -5,10 +5,13 @@ import java.util.HashMap;
 public class TokenKeywordConverter {
     private static HashMap<String, TokenType> keywordsMap = new HashMap<String, TokenType>() {
         {
-            put("IF", TokenType.IF);
-            put("TRUE", TokenType.TRUE);
-            put("FALSE", TokenType.FALSE);
-            put("LET", TokenType.LET);
+            put("if", TokenType.IF);
+            put("true", TokenType.TRUE);
+            put("false", TokenType.FALSE);
+            put("let", TokenType.LET);
+            put("else", TokenType.ELSE);
+            put("and", TokenType.AND);
+            put("or", TokenType.OR);
         }
     };
 

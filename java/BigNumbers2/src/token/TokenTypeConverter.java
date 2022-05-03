@@ -25,6 +25,13 @@ public class TokenTypeConverter {
             put(TokenType.GTE, "GTE");
             put(TokenType.LTE, "LTE");
             put(TokenType.EOF, "EOF");
+            put(TokenType.ELSE, "ELSE");
+            put(TokenType.LBRACKET, "LBRACKET");
+            put(TokenType.RBRACKET, "RBRACKET");
+            put(TokenType.EQ, "EQ");
+            put(TokenType.NON_EQ, "NON_EQ");
+            put(TokenType.AND, "AND");
+            put(TokenType.OR, "OR");
         }
     };
 
