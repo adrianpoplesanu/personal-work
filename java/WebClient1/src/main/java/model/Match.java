@@ -4,6 +4,7 @@ public class Match {
     private String status;
     private Team homeTeam;
     private Team awayTeam;
+    private Score score;
 
     public String getStatus() {
         return status;
@@ -27,5 +28,13 @@ public class Match {
 
     public void setAwayTeam(Team awayTeam) {
         this.awayTeam = awayTeam;
+    }
+
+    public Score getScore() {
+        return score;
+    }
+
+    public void setScore(Score score) {
+        this.score = score;
     }
 }
