@@ -1,0 +1,25 @@
+<html>
+<head>
+    <script src="jquery.js"></script>
+</head>
+<body>
+    <input type="file" id="file"></input>
+
+
+<input type="file" onchange="loadFile(event)">
+<img id="output"/>
+<script>
+  var loadFile = function(event) {
+    var reader = new FileReader();
+    reader.onload = function(){
+      //var output = document.getElementById('output');
+      //output.src = reader.result;
+      console.log(reader.result);
+    };
+    console.log(event.target.files[0]);
+    reader.readAsDataURL(event.target.files[0]);
+  };
+</script>
+
+</body>
+</html>
