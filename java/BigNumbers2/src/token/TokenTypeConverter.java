@@ -18,7 +18,7 @@ public class TokenTypeConverter {
             put(TokenType.IF, "IF");
             put(TokenType.TRUE, "IF");
             put(TokenType.FALSE, "IF");
-            put(TokenType.LET, "IF");
+            put(TokenType.LET, "LET");
             put(TokenType.DOT, "DOT");
             put(TokenType.GT, "GT");
             put(TokenType.LT, "LT");
@@ -32,6 +32,7 @@ public class TokenTypeConverter {
             put(TokenType.NON_EQ, "NON_EQ");
             put(TokenType.AND, "AND");
             put(TokenType.OR, "OR");
+            put(TokenType.IDENT, "IDENT");
         }
     };
 

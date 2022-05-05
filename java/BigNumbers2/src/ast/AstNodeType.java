@@ -10,5 +10,6 @@ public enum AstNodeType {
     LET_STATEMENT,
     BIG_NUMBER,
     BOOLEAN,
-    EXPRESSION_STATEMENT
+    EXPRESSION_STATEMENT,
+    IDENT
 }

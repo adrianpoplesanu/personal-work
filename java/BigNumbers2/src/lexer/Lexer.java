@@ -107,6 +107,10 @@ public class Lexer {
                 result.setTokenLiteral("/");
                 result.setType(TokenType.DIVIDE);
                 break;
+            case '=':
+                result.setTokenLiteral("=");
+                result.setType(TokenType.ASSIGN);
+                break;
             default:
                 if (isLetter()) {
                     readNextChar = false;

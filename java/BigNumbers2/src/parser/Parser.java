@@ -2,6 +2,8 @@ package parser;
 
 import ast.AstNode;
 import ast.nodes.AstBoolean;
+import ast.nodes.AstIdentifier;
+import ast.nodes.AstLetStatement;
 import ast.nodes.AstProgram;
 import lexer.Lexer;
 import token.Token;
@@ -51,6 +53,14 @@ public class Parser {
         return peekToken.getType() == tokenType;
     }
 
+    private boolean expectPeek(TokenType tokenType) {
+        if (peekTokenIs(tokenType)) {
+            nextToken();
+            return true;
+        }
+        return false;
+    }
+
     public void buildProgramStatements(AstProgram program) {
         while(currentToken.getType() != TokenType.EOF) {
             System.out.println(currentToken);
@@ -61,14 +71,35 @@ public class Parser {
     }
 
     private AstNode parseStatement() {
-        return null;
+        if (currentToken.getType() == TokenType.LET) {
+            return parseLetStatement();
+        }
+        return parseExpressionStatement();
+    }
+
+    private AstNode parseLetStatement() {
+        AstLetStatement stmt = new AstLetStatement();
+        if (!expectPeek(TokenType.IDENT)) {
+            return null;
+        }
+        stmt.setName(new AstIdentifier(currentToken));
+        if (!expectPeek(TokenType.ASSIGN)) {
+            return null;
+        }
+        nextToken();
+        AstNode expr = parseExpression(PrecedenceType.LOWEST);
+        stmt.setValue(expr);
+        if (currentTokenIs(TokenType.SEMICOLON)) {
+            nextToken();
+        }
+        return stmt;
     }
 
     private AstNode parseExpressionStatement() {
         return null;
     }
 
-    private AstNode parseExpression() {
+    private AstNode parseExpression(PrecedenceType precedence) {
         return null;
     }
 
