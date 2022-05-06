@@ -26,6 +26,7 @@ public class Parser {
         prefixParseFunctions = new HashMap<>();
         infixParseFunctions = new HashMap<>();
 
+        prefixParseFunctions.put(TokenType.IDENT, this::parseIdentifier);
         prefixParseFunctions.put(TokenType.BIG_NUMBER, this::parseBigNumber);
         prefixParseFunctions.put(TokenType.TRUE, this::parseTrueLiteral);
         prefixParseFunctions.put(TokenType.FALSE, this::parseFalseLiteral);
@@ -59,6 +60,13 @@ public class Parser {
             return true;
         }
         return false;
+    }
+
+    private PrecedenceType peekPrecedence() {
+        if (PrecedenceTypeConverter.precedenceMap.containsKey(peekToken.getType())) {
+            return PrecedenceTypeConverter.precedenceMap.get(peekToken.getType());
+        }
+        return PrecedenceType.LOWEST;
     }
 
     public void buildProgramStatements(AstProgram program) {
@@ -100,7 +108,22 @@ public class Parser {
     }
 
     private AstNode parseExpression(PrecedenceType precedence) {
-        return null;
+        if (!prefixParseFunctions.containsKey(currentToken.getType())) {
+            return null;
+        }
+        Supplier<AstNode> prefix = prefixParseFunctions.get(currentToken.getType());
+        AstNode leftExpression = prefix.get();
+        while (!peekTokenIs(TokenType.SEMICOLON) && precedence.ordinal() < peekPrecedence().ordinal()) {
+            if (!infixParseFunctions.containsKey(peekToken.getType())) return leftExpression;
+            Function<AstNode, AstNode> infix = infixParseFunctions.get(peekToken.getType());
+            nextToken();
+            leftExpression = infix.apply(leftExpression);
+        }
+        return leftExpression;
+    }
+
+    private AstNode parseIdentifier() {
+        return new AstIdentifier(currentToken);
     }
 
     private AstNode parseBigNumber() {

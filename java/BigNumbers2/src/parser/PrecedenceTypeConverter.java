@@ -5,7 +5,7 @@ import token.TokenType;
 import java.util.HashMap;
 
 public class PrecedenceTypeConverter {
-    private HashMap<TokenType, PrecedenceType> precedenceMap = new HashMap<TokenType, PrecedenceType>() {
+    public static HashMap<TokenType, PrecedenceType> precedenceMap = new HashMap<TokenType, PrecedenceType>() {
         {
             put(TokenType.SUM, PrecedenceType.SUM);
             put(TokenType.MINUS, PrecedenceType.SUM);
