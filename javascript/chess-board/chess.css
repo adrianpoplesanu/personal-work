@@ -1,0 +1,63 @@
+.square {
+    width: 49px;
+    height: 49px;
+    float: left;
+    position: relative;
+}
+
+.white {
+    background-color: #f0d9b5;
+    color: #b58863;
+}
+
+.black {
+    background-color: #b58863;
+    color: #f0d9b5;
+}
+
+.numeric {
+    top: 2px;
+    left:2px;
+}
+
+.letter {
+    bottom: 1px;
+    right: 3px;
+}
+
+.notation {
+    cursor: default;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    position: absolute;
+}
+
+#board {
+    border: 2px solid #404040;
+    -moz-box-sizing: content box;
+    box-sizing: content-box;
+    width: 392px;
+    height: 392px;
+}
+
+#piece-chooser {
+    border: 2px solid #404040;
+    -moz-box-sizing: content box;
+    box-sizing: content-box;
+    width: 294px;
+    height: 98px;
+}
+
+.piece img {
+    width: 49px;
+    height: 49px;
+}
+
+.white.highlight {
+    background-color: #a9a9a9;
+    color: #000;
+}
+
+.black.highlight {
+    background-color: #696969;
+}
