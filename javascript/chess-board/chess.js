@@ -7,7 +7,11 @@ var END_PIECE = '';
 function addEvents() {
     $('.square').mousedown(function () {
         START_POSITION = $(this).attr('id');
-        START_PIECE = $(this).data('piece');
+        if (START_POSITION.indexOf('chooser') != -1) {
+            START_PIECE = $(this).data('piece');
+        } else {
+            START_PIECE = board.get_piece(START_POSITION);
+        }
     });
     $('.square').mouseup(function () {
         END_POSITION = $(this).attr('id');
@@ -33,6 +37,7 @@ function addEvents() {
         }
 
     });
+
     $('body').mouseup(function () {
         if (START_POSITION == '') {
             return false;
@@ -42,6 +47,11 @@ function addEvents() {
         }
         board.deletePiece(START_POSITION);
     });
+
+    $('#flip-board').mousedown(function () {
+        START_POSITION = '';
+    });
+
     $('#flip-board').on('click', function () {
         board.flipBoard();
     });
