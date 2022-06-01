@@ -2,8 +2,12 @@ package ast;
 
 import token.Token;
 
-public class AstPrefixExpression {
-    private Token token;
-    private String operator;
-    private AstNode right;
+public class AstPrefixExpression extends AstNode {
+    public Token token;
+    public String operator;
+    public AstNode right;
+
+    public String toString() {
+        return "[AstPrefixExpression] <" + operator + "> <" + right + ">";
+    }
 }

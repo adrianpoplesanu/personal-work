@@ -22,7 +22,7 @@ public class AstExpressionStatement extends AstNode {
 
     @Override
     public String toString() {
-        if (expression != null) expression.toString();
+        if (expression != null) return "[AstExpressionStatement] <" + expression + ">";
         return null;
     }
 

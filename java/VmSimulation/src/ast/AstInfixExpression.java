@@ -2,9 +2,13 @@ package ast;
 
 import token.Token;
 
-public class AstInfixExpression {
-    private Token token;
-    private String operator;
-    private AstNode left;
-    private AstNode right;
+public class AstInfixExpression extends AstNode {
+    public Token token;
+    public String operator;
+    public AstNode left;
+    public AstNode right;
+
+    public String toString() {
+        return "[AstInfixExpression] <" + left + " " + operator + " " + right + ">";
+    }
 }

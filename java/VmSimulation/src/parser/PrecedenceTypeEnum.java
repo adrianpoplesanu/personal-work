@@ -1,5 +1,8 @@
 package parser;
 
 public enum PrecedenceTypeEnum {
-    LOWEST
+    LOWEST,
+    SUM,
+    PRODUCT,
+    PREFIX
 }
