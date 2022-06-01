@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class Code {
 
-    public Instructions instructions;
+    public Instructions instructions = new Instructions();
     private byte iota = 0;
 
     private Opcode OpConstant = new Opcode(iota++);
@@ -23,7 +23,7 @@ public class Code {
     }
 
     public byte[] make(Opcode op, int... operands) {
-        Definition def = definitions.get(op);
+        Definition def = definitions.get(op.opcode);
 
         int instructionLen = 1;
         for (int w : def.operandWidths) {
@@ -53,22 +53,71 @@ public class Code {
         return instruction;
     }
 
-    @Override
-    public String toString() {
-        return "todo";
+    public String print() {
+        String out = "";
+        int i = 0;
+        while (i < instructions.instructions.size()) {
+            Definition def = lookup(instructions.instructions.get(i));
+            Object[] res = readOperands(def, instructions, i + 1);
+            int[] operands;
+            int read;
+            operands = (int[]) res[0];
+            read = (int) res[1];
+            //System.out.println("some formatting here");
+            out += String.format("%04d %s\n", i, fmtInstruction(def, operands));
+            i += 1 + read;
+        }
+        return out;
     }
 
     private String fmtInstruction(Definition def, int[] operands) {
-        return null;
+        int operandCount = def.operandWidths.length;
+        switch (operandCount) {
+            case 0:
+                return def.name;
+            case 1:
+                return String.format("%s %d", def.name, operands[0]);
+        }
+        return String.format("ERROR: unhandled operandCount for %s\n", def.name);
     }
 
-    private Object[] readOperands(Definition def, Instructions ins) {
-        int[] a = {}; // todo
-        int b = 5; // todo
-        return new Object[] {a, b};
+    private Object[] readOperands(Definition def, Instructions ins, int i) {
+        int[] operands = new int[def.operandWidths.length];
+        int offset = 0;
+
+        int j = 0;
+        for (int width : def.operandWidths) {
+            switch (width) {
+                case 2:
+                    operands[j++] = (int) readUint16(ins, offset + i);
+            }
+            offset += width;
+        }
+
+        return new Object[] {operands, offset};
     }
 
-    private int readUint16(Instructions ins) {
-        return 0;
+    private int readUint16(Instructions ins, int offset) {
+        // https://mkyong.com/java/java-convert-byte-to-int-and-vice-versa/
+        ByteBuffer b = ByteBuffer.allocate(4); // int has 4 bytes, ignore first 2 for int16
+        byte[] result = {0, 0, ins.instructions.get(offset), ins.instructions.get(offset + 1)};
+        return ByteBuffer.wrap(result).getInt();
+    }
+
+    public static void main(String[] args) {
+        Code code = new Code();
+        byte[][] instructions = {
+            code.make(code.OpAdd),
+            code.make(code.OpConstant, 2),
+            code.make(code.OpConstant, 65535)
+        };
+
+        for (int i = 0; i < instructions.length; i++) {
+            for (int j = 0; j < instructions[i].length; j++) {
+                //System.out.print(instructions[i][j] + " ");
+                code.instructions.instructions.add(instructions[i][j]);
+            }
+        }
+        System.out.println(code.print());
     }
 }
