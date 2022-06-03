@@ -7,6 +7,10 @@ public class AstPrefixExpression extends AstNode {
     public String operator;
     public AstNode right;
 
+    public AstPrefixExpression() {
+        type = AstNodeType.PREFIX_EXPRESSION;
+    }
+
     public String toString() {
         return "[AstPrefixExpression] <" + operator + "> <" + right + ">";
     }

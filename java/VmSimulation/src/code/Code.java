@@ -9,8 +9,8 @@ public class Code {
     public Instructions instructions = new Instructions();
     private byte iota = 0;
 
-    private Opcode OpConstant = new Opcode(iota++);
-    private Opcode OpAdd = new Opcode(iota++);
+    public Opcode OpConstant = new Opcode(iota++);
+    public Opcode OpAdd = new Opcode(iota++);
     private Map<Byte, Definition> definitions = new HashMap<>();
 
     public Code () {

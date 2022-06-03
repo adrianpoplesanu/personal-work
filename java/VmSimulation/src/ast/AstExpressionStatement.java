@@ -7,11 +7,11 @@ public class AstExpressionStatement extends AstNode {
     private AstNode expression;
 
     public AstExpressionStatement() {
-        //type = AstNodeTypeEnum.EXPRESSION_STATEMENT;
+        type = AstNodeType.EXPRESSION_STATEMENT;
     }
 
     public AstExpressionStatement(Token token) {
-        //type = AstNodeTypeEnum.EXPRESSION_STATEMENT;
+        type = AstNodeType.EXPRESSION_STATEMENT;
         this.token = token;
     }
 
