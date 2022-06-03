@@ -97,7 +97,7 @@ public class Code {
         return new Object[] {operands, offset};
     }
 
-    private int readUint16(Instructions ins, int offset) {
+    public int readUint16(Instructions ins, int offset) {
         // https://mkyong.com/java/java-convert-byte-to-int-and-vice-versa/
         ByteBuffer b = ByteBuffer.allocate(4); // int has 4 bytes, ignore first 2 for int16
         byte[] result = {0, 0, ins.instructions.get(offset), ins.instructions.get(offset + 1)};
