@@ -39,7 +39,7 @@ public class Parser {
         while (currentToken.getType() != TokenType.EOF) {
             //System.out.println(currentToken);
             AstNode node = parseStatement();
-            System.out.println(node);
+            //System.out.println(node);
             if (node != null) {
                 program.statements.add(node);
             }

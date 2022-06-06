@@ -1,10 +1,15 @@
 package repl;
 
 import ast.AstProgram;
+import compiler.Bytecode;
+import compiler.Compiler;
 import environment.Environment;
 import environment.EnvironmentUtils;
 import evaluator.Evaluator;
+import objects.VIntegerObject;
+import objects.VObject;
 import parser.Parser;
+import vm.VM;
 
 import java.util.Scanner;
 
@@ -13,12 +18,16 @@ public class Repl {
     private Parser parser;
     private AstProgram astProgram;
     private Evaluator evaluator;
+    private Compiler compiler;
+    private VM vm;
 
     public Repl () {
         scanner = new Scanner(System.in);
         parser = new Parser();
         astProgram = new AstProgram();
         evaluator = new Evaluator();
+        compiler = new Compiler();
+        vm = new VM();
     }
 
     public void loop () {
@@ -32,7 +41,15 @@ public class Repl {
                 parser.load(line);
                 astProgram.reset();
                 parser.buildProgramStatements(astProgram);
-                evaluator.eval(astProgram, env);
+
+                compiler.init();
+                compiler.compile(astProgram);
+                Bytecode bytecode = compiler.bytecode();
+
+                vm.init(bytecode);
+                vm.run();
+                VObject stackElem = vm.stackTop();
+                System.out.println(((VIntegerObject) stackElem).value);
             }
         }
     }
