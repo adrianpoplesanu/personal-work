@@ -1,7 +1,14 @@
 <html>
 <head>
+    <script
+  src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+  integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+  crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+
+    var start_value = 0;
+    var end_value = 360;
 
     function getLabels() {
         return ['00:00:00', '00:04:00', '00:08:00', '00:12:00', '00:16:00', '00:20:00', '00:24:00', '00:28:00', '00:32:00', '00:36:00', '00:40:00', '00:44:00', '00:48:00', '00:52:00', '00:56:00', '01:00:00', '01:04:00', '01:08:00', '01:12:00', '01:16:00', '01:20:00', '01:24:00', '01:28:00', '01:32:00', '01:36:00', '01:40:00', '01:44:00', '01:48:00', '01:52:00', '01:56:00', '02:00:00', '02:04:00', '02:08:00', '02:12:00', '02:16:00', '02:20:00', '02:24:00', '02:28:00', '02:32:00', '02:36:00', '02:40:00', '02:44:00',
@@ -107,11 +114,22 @@
         <canvas id="myChart"></canvas>
     </div>
 
+    <input type="range" id="start-date" name="vol" min="0" max="360">
+    <input type="range" id="end-date" name="vol" min="0" max="360">
+
     <script>
         const myChart = new Chart(
             document.getElementById('myChart'),
             config
         );
+    </script>
+
+    <script>
+    $(document).ready(function () {
+        //console.log("ready");
+        $('#start-date').val = start_value;
+        $('#end-date').val = end_value;
+    });
     </script>
 </body>
 </html>
