@@ -47,6 +47,23 @@
         ctx.stroke();
     }
 
+    function drawSquares() {
+        reset();
+        var c = document.getElementById("myChart");
+        var ctx = c.getContext("2d");
+        ctx.globalAlpha = 0.5;
+
+        ctx.beginPath();
+        ctx.fillRect(44, 32, start_value * 2.10, 309);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.fillRect(44 + 756 - ((360 - end_value) * 2.10), 32, 756, 309);
+        ctx.stroke();
+
+        ctx.globalAlpha = 1;
+    }
+
     function reset() {
         var c = document.getElementById("myChart");
         var ctx = c.getContext("2d");
@@ -54,14 +71,14 @@
         myChart.render();
     }
 
-    const labels = [
+    /*const labels = [
         'January',
         'February',
         'March',
         'April',
         'May',
         'June',
-    ];
+    ];*/
 
     const data = {
         labels: getLabels(),
@@ -110,7 +127,7 @@
 
 </head>
 <body>
-    <div>
+    <div style="width: 800px;">
         <canvas id="myChart"></canvas>
     </div>
 
@@ -127,8 +144,30 @@
     <script>
     $(document).ready(function () {
         //console.log("ready");
-        $('#start-date').val = start_value;
-        $('#end-date').val = end_value;
+        $('#start-date').val(start_value);
+        $('#end-date').val(end_value);
+
+        $('#start-date').on('change', function () {
+            start_value = $('#start-date').val();
+            console.log(start_value);
+            drawSquares();
+        });
+
+        $('#end-date').on('change', function () {
+            end_value = $('#end-date').val();
+            drawSquares();
+        });
+    });
+
+    $(document).on('input', '#start-date', function () {
+        //console.log("aaa");
+        start_value = $(this).val();
+        drawSquares();
+    });
+
+    $(document).on('input', '#end-date', function () {
+        end_value = $(this).val();
+        drawSquares();
     });
     </script>
 </body>
