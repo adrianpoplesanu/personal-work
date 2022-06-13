@@ -134,6 +134,11 @@
     <input type="range" id="start-date" name="vol" min="0" max="360">
     <input type="range" id="end-date" name="vol" min="0" max="360">
 
+    <br>
+    <input type="file" id="file1">
+    <br>
+    <input type="file" id="file2">
+
     <script>
         const myChart = new Chart(
             document.getElementById('myChart'),
@@ -156,6 +161,14 @@
         $('#end-date').on('change', function () {
             end_value = $('#end-date').val();
             drawSquares();
+        });
+
+        $('#file1').on('change', function () {
+            console.log('bbb');
+        });
+
+        $('#file2').on('change', function () {
+            console.log('ccc');
         });
     });
 
