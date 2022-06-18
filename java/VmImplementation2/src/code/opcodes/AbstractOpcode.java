@@ -1,6 +1,6 @@
 package code.opcodes;
 
-public class AbstractOpcode implements Opcode {
+public abstract class AbstractOpcode implements Opcode {
     protected byte byteCode;
 
     @Override
