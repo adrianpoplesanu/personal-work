@@ -1,4 +1,7 @@
 package ast;
 
-public abstract class AstNode {
+public interface AstNode {
+    AstNodeType getType();
+
+    String inspect();
 }
