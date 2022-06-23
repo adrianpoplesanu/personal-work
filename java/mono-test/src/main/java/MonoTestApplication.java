@@ -1,3 +1,4 @@
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public class MonoTestApplication {
@@ -41,9 +42,19 @@ public class MonoTestApplication {
         }).subscribe(x -> System.out.println("doing something with the retrieved country") );
     }
 
+    private static Flux<String> convert(Mono<String> data) {
+        return data.flatMapMany(x -> Mono.just(x));
+    }
+
     public static void main(String[] args) {
         testName();
         testAge();
         testCountry();
+
+        String firstElement = convert(getName()).blockFirst();
+
+        System.out.println("...");
+
+        System.out.println(firstElement);
     }
 }
