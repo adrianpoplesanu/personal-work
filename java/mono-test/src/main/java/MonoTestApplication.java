@@ -1,6 +1,10 @@
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class MonoTestApplication {
     private static Mono<String> getName() {
         return Mono.just("adrianus per scorillo");
@@ -12,6 +16,10 @@ public class MonoTestApplication {
 
     private static Mono<String> getCountry() {
         return Mono.just("UZB");
+    }
+
+    private static Mono<List<String>> getAddresses() {
+        return Mono.just(Arrays.asList("Buc Noi", "Berceni"));
     }
 
     private static void testName() {
@@ -46,6 +54,12 @@ public class MonoTestApplication {
         return data.flatMapMany(x -> Mono.just(x));
     }
 
+    private static Flux<String> convertAddreses(Mono<List<String>> data) {
+        return data.flatMapMany(x -> {
+            return Flux.fromIterable(x);
+        });
+    }
+
     public static void main(String[] args) {
         testName();
         testAge();
@@ -56,5 +70,10 @@ public class MonoTestApplication {
         System.out.println("...");
 
         System.out.println(firstElement);
+
+        System.out.println("...");
+
+        Flux<String> addresses = convertAddreses(getAddresses());
+        addresses.subscribe(x -> System.out.println(x));
     }
 }
