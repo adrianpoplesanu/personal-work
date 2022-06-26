@@ -27,15 +27,19 @@ public class FluxTest01 {
         addressMono = Mono.just("aaa");
         addressFlux = addressMono
                 .flatMapMany(x -> Mono.just(x.toUpperCase()));
-        System.out.println(addressFlux.);
+        addressFlux.subscribe(System.out::println);
     }
 
     public static void testConvertFluxToFlux() {
-        Flux<String> numbersStrings;
+        Flux<String> numbersStrings = Flux.just("unu", "unu", "doi", "doi");
         Flux<Integer> numbersInts;
+        numbersInts = numbersStrings.map(x -> mapper.get(x));
+        numbersStrings.subscribe(System.out::println);
+        numbersInts.subscribe(System.out::println);
     }
 
     public static void main(String[] args) {
         testConvertMonoToFlux();
+        testConvertFluxToFlux();
     }
 }
