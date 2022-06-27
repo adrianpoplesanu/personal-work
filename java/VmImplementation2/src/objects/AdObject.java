@@ -1,4 +1,5 @@
 package objects;
 
-public abstract class AdObject {
+public interface AdObject {
+    AdObjectType getType();
 }
