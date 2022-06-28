@@ -25,4 +25,20 @@ class ASTExpressionStatement : ASTNode {
 
 };
 
+class ASTInfixExpression : ASTNode {
+
+};
+
+class ASTPrefixExpression : ASTNode {
+
+};
+
+class ASTInteger : ASTNode {
+
+};
+
+class ASTIdentifier : ASTNode {
+
+};
+
 #endif

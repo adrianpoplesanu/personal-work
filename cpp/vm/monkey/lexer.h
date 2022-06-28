@@ -12,6 +12,7 @@ private:
     char currentChar;
 
 public:
+    Lexer();
     void load(std::string);
     void readChar();
     Token nextToken();
