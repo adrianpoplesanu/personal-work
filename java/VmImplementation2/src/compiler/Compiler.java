@@ -51,4 +51,8 @@ public class Compiler {
     public void setBytecode(Bytecode bytecode) {
         this.bytecode = bytecode;
     }
+
+    public static void main(String[] args) {
+        System.out.println("testing compiler");
+    }
 }

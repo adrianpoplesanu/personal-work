@@ -3,8 +3,10 @@ package code;
 import code.opcodes.OpAdd;
 import code.opcodes.OpConstant;
 import code.opcodes.Opcode;
+import code.opcodes.OpcodeEnum;
 import code.utils.Definition;
 import code.utils.Instructions;
+import code.utils.Operands;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;
@@ -13,14 +15,12 @@ import java.util.Map;
 public class Code {
 
     private Instructions instructions = new Instructions();
-    private OpConstant opConstant = new OpConstant();
-    private OpAdd opAdd = new OpAdd();
 
     private Map<Byte, Definition> definitionsMap = new HashMap<>();
 
     public Code() {
-        definitionsMap.put(opConstant.getByteCode(), new Definition("OpConstant", new int[]{2} ));
-        definitionsMap.put(opAdd.getByteCode(), new Definition("OpAdd", new int[]{} ));
+        definitionsMap.put((byte) OpcodeEnum.OP_CONSTANT.ordinal(), new Definition("OpConstant", new int[]{2} ));
+        definitionsMap.put((byte) OpcodeEnum.OP_ADD.ordinal(), new Definition("OpAdd", new int[]{} ));
     }
 
     public Definition lookup(byte op) {
@@ -62,16 +62,16 @@ public class Code {
         int i = 0;
         while(i < instructions.size()) {
             Definition definition = lookup(instructions.get(i));
-            Object[] res = readOperands(definition, instructions, i + 1);
-            int[] operands = (int[]) res[0];
-            int read = (int) res[1];
+            Operands res = readOperands(definition, instructions, i + 1);
+            int[] operands = res.getOperands();
+            int read = res.getOffset();
             out += String.format("%04d %s\n", i, formatInstruction(definition, operands));
             i += 1 + read;
         }
         return out;
     }
 
-    private Object[] readOperands(Definition definition, Instructions instructions, int start) {
+    private Operands readOperands(Definition definition, Instructions instructions, int start) {
         int[] operands = new int[definition.getOperandWidths().length];
         int offset = 0;
 
@@ -84,7 +84,8 @@ public class Code {
             }
             offset += width;
         }
-        return new Object[] {operands, offset};
+        //return new Object[] {operands, offset};
+        return new Operands(operands, offset);
     }
 
     private int readUint16(Instructions instructions, int offset) {
@@ -108,9 +109,9 @@ public class Code {
 
         Code code = new Code();
         byte[][] instructions = {
-                code.make(code.opAdd),
-                code.make(code.opConstant, 2),
-                code.make(code.opConstant, 65535)
+                code.make(new OpAdd()),
+                code.make(new OpConstant(), 2),
+                code.make(new OpConstant(), 65535)
         };
 
         for (int i = 0; i < instructions.length; i++) {
