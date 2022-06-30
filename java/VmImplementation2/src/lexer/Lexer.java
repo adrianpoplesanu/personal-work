@@ -1,5 +1,7 @@
 package lexer;
 
+import token.Token;
+
 public class Lexer {
     private String source;
     private int position;
@@ -20,7 +22,7 @@ public class Lexer {
         this.currentChar = 0;
     }
 
-    public void readChar() {
+    private void readChar() {
         if (readPosition >= source.length()) {
             currentChar = 0;
         } else {
@@ -30,19 +32,52 @@ public class Lexer {
         }
     }
 
-    public void skipWhitespaces() {
+    private void skipWhitespaces() {
+        while (currentChar == ' ' || currentChar == '\r' || currentChar == '\t' || currentChar == '\n') readChar();
+    }
+
+    private void peekChar() {
 
     }
 
-    public void peekChar() {
-
+    private String readIdentifier() {
+        int start = position;
+        while(isLetter()) {
+            readChar();
+        }
+        return source.substring(start, position);
     }
 
-    public String readIdentifier() {
-        return null;
+    private String readNumber() {
+        int start = position;
+        while (isDigit()) {
+            readChar();
+        }
+        return source.substring(start, position);
     }
 
-    public String readNumber() {
-        return null;
+    private boolean isDigit() {
+        return currentChar >= '0' && currentChar <= '9';
+    }
+
+    private boolean isLetter() {
+        return (currentChar >= 'a' && currentChar <= 'z') || (currentChar >= 'A' && currentChar <= 'Z') || currentChar == '_';
+    }
+
+    public Token nextToken() {
+        Token token = new Token();
+        skipWhitespaces();
+        switch (currentChar) {
+            case '+':
+                break;
+            default:
+                if (isDigit()) {
+                    //...
+                }
+                if (isLetter()) {
+                    //...
+                }
+        }
+        return token;
     }
 }
