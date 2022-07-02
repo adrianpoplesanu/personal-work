@@ -24,5 +24,7 @@ public enum TokenType {
     GTE,
     LTE,
     BANG,
-    STRING
+    STRING,
+    LET,
+    EOF
 }

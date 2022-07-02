@@ -19,4 +19,8 @@ public class Token {
     public void setLiteral(String literal) {
         this.literal = literal;
     }
+
+    public String toString() {
+        return "Token [" + type.name() + "] <" + literal + ">";
+    }
 }

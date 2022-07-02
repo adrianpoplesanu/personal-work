@@ -1,4 +1,10 @@
 package ast.nodes;
 
-public class AstInteger {
+import ast.AbstractAstNode;
+
+public class AstInteger extends AbstractAstNode {
+    @Override
+    public String inspect() {
+        return null;
+    }
 }
