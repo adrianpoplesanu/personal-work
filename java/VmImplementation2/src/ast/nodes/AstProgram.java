@@ -25,8 +25,8 @@ public class AstProgram extends AbstractAstNode {
     }
 
     @Override
-    public String inspect() {
-        return null;
+    public String toString() {
+        return "AstProgram";
     }
 
     public List<AstNode> getStatements() {

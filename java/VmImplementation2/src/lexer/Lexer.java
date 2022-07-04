@@ -48,8 +48,11 @@ public class Lexer {
         while (currentChar == ' ' || currentChar == '\r' || currentChar == '\t' || currentChar == '\n') readChar();
     }
 
-    private void peekChar() {
-
+    private char peekChar() {
+        if (readPosition >= source.length()) {
+            return 0;
+        }
+        return source.charAt(readPosition);
     }
 
     private String readIdentifier() {
@@ -93,6 +96,18 @@ public class Lexer {
             case '+':
                 token.setLiteral("+");
                 token.setType(TokenType.PLUS);
+                break;
+            case '-':
+                token.setLiteral("-");
+                token.setType(TokenType.MINUS);
+                break;
+            case '*':
+                token.setLiteral("*");
+                token.setType(TokenType.MULTIPLY);
+                break;
+            case '/':
+                token.setLiteral("/");
+                token.setType(TokenType.DIVIDE);
                 break;
             case '=':
                 token.setLiteral("=");

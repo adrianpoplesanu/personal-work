@@ -1,6 +1,7 @@
 package compiler;
 
-import ast.AbstractAstNode;
+import ast.AstNode;
+import ast.nodes.AstProgram;
 import code.Code;
 import code.opcodes.Opcode;
 
@@ -17,10 +18,13 @@ public class Compiler {
         bytecode = new Bytecode();
     }
 
-    public void compile(AbstractAstNode node) {
+    public void compile(AstNode node) {
         switch(node.getType()) {
             case PROGRAM:
-                break;
+                AstProgram program = (AstProgram) node;
+                for (AstNode stmt : program.getStatements()) {
+                    compile(stmt);
+                }
             case EXPRESSION_STATEMENT:
                 break;
             case INFIX_EXPRESSION:

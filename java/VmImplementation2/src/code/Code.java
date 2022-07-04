@@ -6,7 +6,6 @@ import code.opcodes.Opcode;
 import code.opcodes.OpcodeEnum;
 import code.utils.Definition;
 import code.utils.Instructions;
-import code.utils.Operands;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;
@@ -62,16 +61,16 @@ public class Code {
         int i = 0;
         while(i < instructions.size()) {
             Definition definition = lookup(instructions.get(i));
-            Operands res = readOperands(definition, instructions, i + 1);
-            int[] operands = res.getOperands();
-            int read = res.getOffset();
+            Object[] res = readOperands(definition, instructions, i + 1);
+            int[] operands = (int[]) res[0];
+            int read = (int) res[1];
             out += String.format("%04d %s\n", i, formatInstruction(definition, operands));
             i += 1 + read;
         }
         return out;
     }
 
-    private Operands readOperands(Definition definition, Instructions instructions, int start) {
+    private Object[] readOperands(Definition definition, Instructions instructions, int start) {
         int[] operands = new int[definition.getOperandWidths().length];
         int offset = 0;
 
@@ -84,8 +83,8 @@ public class Code {
             }
             offset += width;
         }
-        //return new Object[] {operands, offset};
-        return new Operands(operands, offset);
+        return new Object[] {operands, offset}; // maybe this was a better approach
+        //return new Operands(operands, offset);
     }
 
     private int readUint16(Instructions instructions, int offset) {

@@ -6,5 +6,6 @@ public enum AstNodeType {
     INFIX_EXPRESSION,
     PREFIX_EXPRESSION,
     INTEGER,
-    IDENT
+    IDENT,
+    ASSIGN_EXPRESSION
 }
