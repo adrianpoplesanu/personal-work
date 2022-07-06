@@ -52,7 +52,6 @@ public class Parser {
 
     public void buildStatements(AstProgram program) {
         while (currentToken.getType() != TokenType.EOF) {
-            System.out.println(currentToken);
             AstNode statement = parseStatement();
             if (statement != null) {
                 System.out.println(statement);

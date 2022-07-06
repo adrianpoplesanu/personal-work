@@ -16,7 +16,7 @@ public class AstAssignExpression extends AbstractAstNode {
 
     @Override
     public String toString() {
-        return "AstAssignExpression [] <><>";
+        return "AstAssignExpression [" + token + "] <" + name + "> <" + value + ">";
     }
 
     public AstNode getName() {

@@ -8,6 +8,11 @@ public class AdIntegerObject implements AdObject {
         type = AdObjectType.INT;
     }
 
+    public AdIntegerObject(int value) {
+        this();
+        this.value = value;
+    }
+
     public int getValue() {
         return value;
     }
