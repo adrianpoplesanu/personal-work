@@ -2,6 +2,13 @@
 
 Brainfuck::Brainfuck() {
     commandsMap['>'] = MOVE_RIGHT;
+    commandsMap['<'] = MOVE_LEFT;
+    commandsMap['+'] = INCREMENT;
+    commandsMap['-'] = DECREMENT;
+    commandsMap['.'] = PRINT;
+    commandsMap[','] = READ;
+    commandsMap['['] = JUMP_FORWARD;
+    commandsMap[']'] = JUMP_BACKWARD;
 }
 
 void Brainfuck::load(std::string s) {
@@ -36,9 +43,43 @@ void Brainfuck::parse() {
 }
 
 void Brainfuck::execute() {
+    memset(ptr, 0, 1000);
+    cp = 0;
     int i = 0;
     while (i < commands.size()) {
-        std::cout << commands[i].type << "\n";
+        switch (commands[i].type) {
+            case MOVE_RIGHT:
+                cp++;
+            break;
+            case MOVE_LEFT:
+                cp--;
+            break;
+            case INCREMENT:
+                ptr[cp]++;
+            break;
+            case DECREMENT:
+                ptr[cp]--;
+            break;
+            case PRINT:
+                std::cout << (char)ptr[cp];
+            break;
+            case READ:
+                std::cin >> ptr[cp];
+            break;
+            case JUMP_FORWARD:
+                if (ptr[cp] == 0) {
+                    i = commands[i].matchingBracket;
+                }
+            break;
+            case JUMP_BACKWARD:
+                if (ptr[cp] != 0) {
+                    i = commands[i].matchingBracket;
+                }
+            break;
+            case UNKNOWN:
+                // do nothing
+            break;
+        }
         i++;
     }
 }

@@ -29,6 +29,8 @@ public:
     std::string source;
     std::map<char, CommandType> commandsMap;
     std::vector<Command> commands;
+    int ptr[1000];
+    int cp;
 
     Brainfuck();
     void load(std::string);
