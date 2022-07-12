@@ -7,3 +7,11 @@ std::string ASTNode::toString() {
 std::string ASTNode::inspect() {
     return "unimplemented in subclass";
 }
+
+void Ad_INCREF(ASTNode* node) {
+    if (node) node->ref_count++;
+}
+
+void Ad_DECREF(ASTNode* node) {
+    if (node) node->ref_count--;
+}

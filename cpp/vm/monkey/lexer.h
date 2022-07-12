@@ -22,6 +22,8 @@ public:
     TokenType lookupIdentifier(std::string);
     char peekChar();
     bool isEOF();
+    bool isDigit();
+    bool isLetter();
 };
 
 #endif
