@@ -26,6 +26,9 @@ public:
 class AstProgram : ASTNode {
 public:
     std::vector<ASTNode> statements;
+
+    virtual std::string inspect();
+    virtual std::string toString();   
 };
 
 class ASTExpressionStatement : ASTNode {

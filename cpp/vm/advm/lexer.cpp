@@ -32,19 +32,39 @@ bool Lexer::isEOF() {
     return currentChar == 0;
 }
 
+bool Lexer::isDigit() {
+    return '0' <= currentChar && currentChar <= '9'; 
+}
+
+bool Lexer::isLetter() {
+    return ('a' <= currentChar && currentChar <= 'z') || ('A' <= currentChar && currentChar <= 'Z') || currentChar == '_';
+}
+
 Token Lexer::nextToken() {
     bool readNextChar = true;
     Token token;
     skipWhitespaces();
     switch (currentChar) {
         case '+':
-        token.stringLiteral = '+';
-        token.type = TokenType::TT_PLUS;
-        break;
+            token.stringLiteral = '+';
+            token.type = TT_PLUS;
+            break;
+        case '-':
+            token.stringLiteral = '-';
+            token.type = TT_MINUS;
+            break;
+        case '*':
+            token.stringLiteral = '*';
+            token.type = TT_MULTIPLY;
+            break;
+        case '/':
+            token.stringLiteral = '/';
+            token.type = TT_DIVIDE;
+            break;
         default:
-        token.stringLiteral = currentChar;
-        token.type = TokenType::TT_UNDEFINED;
-        break;
+            token.stringLiteral = currentChar;
+            token.type = TT_UNDEFINED;
+            break;
     }
     if (readNextChar) readChar();
     return token;
