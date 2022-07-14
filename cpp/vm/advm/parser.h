@@ -4,6 +4,12 @@
 #include "lexer.h"
 #include "ast.h"
 
+enum PrecedenceType {
+    PT_LOWEST,
+    PT_SUM,
+    PT_PRODUCT
+};
+
 class Parser {
 public:
     Lexer lexer;
@@ -11,6 +17,13 @@ public:
     Parser();
     void load(std::string);
     void buildProgramStatement(AstProgram&);
+
+    // parseExpressionStatement
+    // parseLetStatement
+    // parseReturnStatement
+    // parseExpression(LOWEST)
+    // parsePrefixExpression
+    // parseInfixExpression
 };
 
 #endif

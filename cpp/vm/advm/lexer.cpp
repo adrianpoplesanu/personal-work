@@ -40,6 +40,22 @@ bool Lexer::isLetter() {
     return ('a' <= currentChar && currentChar <= 'z') || ('A' <= currentChar && currentChar <= 'Z') || currentChar == '_';
 }
 
+std::string Lexer::readIdentifier() {
+    int start = position;
+    while (isLetter()) {
+        readChar();
+    }
+    return source.substr(start, position - start);
+}
+
+std::string Lexer::readNumber() {
+    int start = position;
+    while (isDigit()) {
+        readChar();
+    }
+    return source.substr(start, position - start);
+}
+
 Token Lexer::nextToken() {
     bool readNextChar = true;
     Token token;
@@ -62,8 +78,18 @@ Token Lexer::nextToken() {
             token.type = TT_DIVIDE;
             break;
         default:
-            token.stringLiteral = currentChar;
-            token.type = TT_UNDEFINED;
+            if (isLetter()) {
+                readNextChar = false;
+                token.stringLiteral = readIdentifier();
+                token.type = TT_IDENT;
+            } else if (isDigit()) {
+                readNextChar = false;
+                token.stringLiteral = readNumber();
+                token.type = TT_INT;
+            } else {
+                token.stringLiteral = currentChar;
+                token.type = TT_UNDEFINED;
+            }
             break;
     }
     if (readNextChar) readChar();
