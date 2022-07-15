@@ -56,6 +56,22 @@ public class Code {
         return instruction;
     }
 
+    public Instructions getInstructions() {
+        return instructions;
+    }
+
+    public void setInstructions(Instructions instructions) {
+        this.instructions = instructions;
+    }
+
+    public Map<Byte, Definition> getDefinitionsMap() {
+        return definitionsMap;
+    }
+
+    public void setDefinitionsMap(Map<Byte, Definition> definitionsMap) {
+        this.definitionsMap = definitionsMap;
+    }
+
     public String print() {
         String out = "";
         int i = 0;

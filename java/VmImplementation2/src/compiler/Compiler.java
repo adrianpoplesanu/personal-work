@@ -9,19 +9,29 @@ import code.Code;
 import code.opcodes.OpAdd;
 import code.opcodes.OpConstant;
 import code.opcodes.Opcode;
+import code.utils.Instructions;
 import objects.AdIntegerObject;
 import objects.AdObject;
+import parser.Parser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Compiler {
+    private Instructions instructions;
     private Bytecode bytecode;
     private Code code;
+    private List<AdObject> constants;
 
     public Compiler() {
+        instructions = new Instructions();
         bytecode = new Bytecode();
         code = new Code();
+        constants = new ArrayList<>();
     }
 
     public void init() {
+        instructions = new Instructions();
         bytecode = new Bytecode();
     }
 
@@ -32,8 +42,10 @@ public class Compiler {
                 for (AstNode stmt : program.getStatements()) {
                     compile(stmt);
                 }
+                break;
             case EXPRESSION_STATEMENT:
                 compile(((AstExpressionStatement) node).getExpression());
+                break;
             case INFIX_EXPRESSION:
                 AstInfixExpression infixExpression = (AstInfixExpression) node;
                 compile(infixExpression.getLeft());
@@ -43,6 +55,7 @@ public class Compiler {
                         emit(new OpAdd());
                         break;
                 }
+                break;
             case PREFIX_EXPRESSION:
                 break;
             case INTEGER:
@@ -62,15 +75,21 @@ public class Compiler {
     }
 
     private int addInstruction(byte[] ins) {
-        return 0;
+        int posNewInstruction = instructions.size();
+        for (byte b : ins) {
+            instructions.add(b);
+        }
+        return posNewInstruction;
     }
 
     private int addConstant(AdObject obj) {
-        //...
-        return 0;
+        constants.add(obj);
+        return constants.size() - 1;
     }
 
     public Bytecode getBytecode() {
+        bytecode.setInstructions(instructions);
+        bytecode.setConstants(constants);
         return bytecode;
     }
 
@@ -78,7 +97,44 @@ public class Compiler {
         this.bytecode = bytecode;
     }
 
+    public Instructions getInstructions() {
+        return instructions;
+    }
+
+    public void setInstructions(Instructions instructions) {
+        this.instructions = instructions;
+    }
+
+    public Code getCode() {
+        return code;
+    }
+
+    public void setCode(Code code) {
+        this.code = code;
+    }
+
+    public List<AdObject> getConstants() {
+        return constants;
+    }
+
+    public void setConstants(List<AdObject> constants) {
+        this.constants = constants;
+    }
+
     public static void main(String[] args) {
         System.out.println("testing compiler");
+
+        Compiler compiler = new Compiler();
+
+        Parser parser = new Parser();
+        parser.load("1+2");
+        AstProgram program = new AstProgram();
+        program.reset();
+        parser.buildStatements(program);
+        compiler.init();
+        compiler.compile(program);
+        Bytecode bytecode = compiler.getBytecode();
+        compiler.getCode().setInstructions(bytecode.getInstructions());
+        System.out.println(compiler.getCode().print());
     }
 }

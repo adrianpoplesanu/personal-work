@@ -14,7 +14,7 @@ public class AstInteger extends AbstractAstNode {
         this.token = token;
     }
     public AstInteger(Token token, int value) {
-        this.token = token;
+        this(token);
         this.value = value;
     }
     @Override
