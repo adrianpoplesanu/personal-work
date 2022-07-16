@@ -10,20 +10,38 @@ enum PrecedenceType {
     PT_PRODUCT
 };
 
+std::map<TokenType, PrecedenceType> precedenceMap = {
+    {TT_PLUS, PT_SUM},
+    {TT_MINUS, PT_SUM},
+    {TT_MULTIPLY, PT_PRODUCT},
+    {TT_DIVIDE, PT_PRODUCT}
+};
+
 class Parser {
 public:
     Lexer lexer;
+    Token currentToken;
+    Token peekToken;
+
+    typedef ASTNode* (Parser::*PrefixCallback)();
+    typedef ASTNode* (Parser::*InfixCallback)(ASTNode*);
+
+    std::map<TokenType, PrefixCallback> prefixParseFns;
+    std::map<TokenType, InfixCallback> infixParseFns;
 
     Parser();
     void load(std::string);
-    void buildProgramStatement(AstProgram&);
+    void buildProgramStatement(ASTProgram&);
 
-    // parseExpressionStatement
-    // parseLetStatement
-    // parseReturnStatement
-    // parseExpression(LOWEST)
-    // parsePrefixExpression
-    // parseInfixExpression
+    PrecedenceType currentPrecedence();
+    PrecedenceType peekPrecedence();
+    ASTNode* parseExpressionStatement();
+    ASTNode* parseLetStatement();
+    ASTNode* parseReturnStatement();
+    ASTNode* parseExpression(PrecedenceType);
+    ASTNode* parsePrefixExpression();
+    ASTNode* parseInfixExpression(ASTNode*);
+    ASTNode* parseIdent();
 };
 
 #endif

@@ -6,7 +6,7 @@
 class Repl {
     public:
     Parser parser;
-    AstProgram program;
+    ASTProgram program;
 
     void loop();
 };

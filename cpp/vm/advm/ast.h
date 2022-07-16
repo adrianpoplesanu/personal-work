@@ -23,12 +23,14 @@ public:
     virtual std::string toString();
 };
 
-class AstProgram : ASTNode {
+class ASTProgram : ASTNode {
 public:
     std::vector<ASTNode> statements;
 
+    ASTProgram();
     virtual std::string inspect();
-    virtual std::string toString();   
+    virtual std::string toString();
+    void reset();
 };
 
 class ASTExpressionStatement : ASTNode {
@@ -44,11 +46,20 @@ class ASTPrefixExpression : ASTNode {
 };
 
 class ASTInteger : ASTNode {
+public:
+    int value;
+
+    ASTInteger();
+    ASTInteger(Token);
+    ASTInteger(Token, int);
+    virtual std::string inspect();
+    virtual std::string toString();
 
 };
 
 class ASTIdentifier : ASTNode {
-
+public:
+    std::string value;
 };
 
 void Ad_INCREF(ASTNode*);

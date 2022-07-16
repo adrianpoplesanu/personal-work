@@ -8,11 +8,15 @@ std::string ASTNode::inspect() {
     return "unimplemented in subclass";
 }
 
-std::string AstProgram::toString() {
+ASTProgram::ASTProgram() {
+    //...
+}
+
+std::string ASTProgram::toString() {
     return "AstProgram";
 }
 
-std::string AstProgram::inspect() {
+std::string ASTProgram::inspect() {
     return "AstProgram";
 }
 
