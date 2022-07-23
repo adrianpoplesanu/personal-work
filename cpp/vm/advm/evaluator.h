@@ -7,7 +7,12 @@
 
 class Evaluator {
     public:
+    std::vector<Environment*> environment_gc_list;
+
     AdObject* eval(ASTNode* node, Environment* env);
+
+    void initEnvironmentGarbageCollection();
+    void garbageCollectEnvironments();
 };
 
 #endif

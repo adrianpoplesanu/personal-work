@@ -1,8 +1,10 @@
 #ifndef __OBJECTS_H
 #define __OBJECTS_H
 
+#include <iostream>
+
 enum ObjectType {
-    INT
+    OT_INT
 };
 
 class AdObject {
@@ -18,6 +20,7 @@ class AdObjectInteger : public AdObject {
 public:
     int value;
 
+    AdObjectInteger();
     virtual std::string inspect();
     virtual std::string toString();
 };

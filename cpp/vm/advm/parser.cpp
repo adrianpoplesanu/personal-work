@@ -3,7 +3,7 @@
 Parser::Parser() {
     prefixParseFns.insert(std::make_pair(TT_IDENT, &Parser::parseIdent));
     prefixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parsePrefixExpression));
-
+    infixParseFns.insert(std::make_pair(TT_PLUS, &Parser::parseInfixExpression));
 }
 
 PrecedenceType Parser::currentPrecedence() {
@@ -30,5 +30,9 @@ ASTNode* Parser::parseIdent() {
 }
 
 ASTNode* Parser::parsePrefixExpression() {
+    return NULL;
+}
+
+ASTNode* Parser::parseInfixExpression(ASTNode* left) {
     return NULL;
 }
