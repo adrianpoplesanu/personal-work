@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/pages")
 public class HomepageController {
-    @GetMapping("/")
+    @GetMapping("/home")
     @ResponseBody
     String index() {
         return "home page, welcome";

@@ -16,4 +16,11 @@ public class AdminController {
     public ResponseEntity<String> info() {
         return ResponseEntity.ok("admin info");
     }
+
+    @GetMapping(value = "/token", produces = MediaType.TEXT_PLAIN_VALUE)
+    @ResponseStatus(OK)
+    public ResponseEntity<String> token() {
+        String apiToken = "aaa";
+        return ResponseEntity.ok("api token: " + apiToken);
+    }
 }
