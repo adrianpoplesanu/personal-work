@@ -39,6 +39,11 @@ class Parser {
         void nextToken();
         void load(std::string);
         void buildProgramStatements();
+        AstNode* parseStatement();
+        AstNode* parseExpressionStatement();
+        AstNode* parseExpression(PrecedenceType);
+        AstNode* parseIdentifier();
+        AstNode* parseBigNumber();
 };
 
 #endif

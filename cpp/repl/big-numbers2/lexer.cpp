@@ -86,6 +86,14 @@ Token Lexer::nextToken() {
             result.setLiteral("/");
             result.setType(TT_DIVIDE);
         break;
+        case '{':
+            result.setLiteral("{");
+            result.setType(TT_LBRACKET);
+        break;
+        case '}':
+            result.setLiteral("}");
+            result.setType(TT_RBRACKET);
+        break;
         default:
             if (isLetter()) {
                 read_next_char = false;
@@ -98,8 +106,10 @@ Token Lexer::nextToken() {
                 result.setLiteral(literal);
                 result.setType(TT_BIGNUMBER);
             } else {
-                result.setLiteral("bla bla bla");
-                result.setType(TT_UNDEFINED);
+                std::string literal;
+                literal.push_back(current_char);
+                result.setLiteral(literal);
+                result.setType(TT_ILLEGAL);
             }
         break;
     }

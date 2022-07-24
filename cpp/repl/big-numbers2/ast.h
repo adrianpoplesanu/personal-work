@@ -11,6 +11,7 @@ enum AstNodeType {
     AT_UNDEFINED,
     AT_PROGRAM,
     AT_BIGNUMBER,
+    AT_EXPRESSION_STATEMENT,
     AT_PREFIX_EXPRESSION,
     AT_INFIX_EXPRESSION,
     AT_IDENTIFIER,
@@ -23,6 +24,7 @@ std::map<AstNodeType, std::string> ast_node_type_converter = {
     {AT_UNDEFINED, "AstUndefined"},
     {AT_PROGRAM, "AstProgram"},
     {AT_BIGNUMBER, "AstBigNumber"},
+    {AT_EXPRESSION_STATEMENT, "ExpressionStatement"},
     {AT_PREFIX_EXPRESSION, "AstPrefixExpression"},
     {AT_INFIX_EXPRESSION, "AstInfixExpression"},
     {AT_IDENTIFIER, "AstIdentifier"},
@@ -74,5 +76,10 @@ class AstBigNumber : AstNode {
         virtual std::string tokenLiteral();
         virtual std::string toString();
 };
+
+void BN_INCREF(AstNode*);
+void BN_DECREF(AstNode*);
+void free_AST_node_memory(AstNode*);
+void printAstSubTree(AstNode*, int);
 
 #endif

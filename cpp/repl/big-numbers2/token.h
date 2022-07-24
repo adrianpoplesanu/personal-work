@@ -5,7 +5,7 @@
 #include <map>
 
 enum TokenType {
-    TT_UNDEFINED,
+    TT_ILLEGAL,
     TT_SUM,
     TT_MINUS,
     TT_MULTIPLY,
@@ -26,11 +26,15 @@ enum TokenType {
     TT_FALSE,
     TT_IF,
     TT_LET,
-    TT_EOF
+    TT_EOF,
+    TT_ELSE,
+    TT_LBRACKET,
+    TT_RBRACKET,
+    TT_BANG
 };
 
 std::map<TokenType, std::string> token_type_converter = {
-    {TT_UNDEFINED, "UNDEFINED"},
+    {TT_ILLEGAL, "ILLEGAL"},
     {TT_SUM, "SUM"},
     {TT_MINUS, "MINUS"},
     {TT_MULTIPLY, "MULTIPLY"},
@@ -51,14 +55,19 @@ std::map<TokenType, std::string> token_type_converter = {
     {TT_FALSE, "FALSE"},
     {TT_IF, "IF"},
     {TT_LET, "LET"},
-    {TT_EOF, "EOF"}
+    {TT_EOF, "EOF"},
+    {TT_ELSE, "ELSE"},
+    {TT_LBRACKET, "LBRACKET"},
+    {TT_RBRACKET, "RBRACKET"},
+    {TT_BANG, "BANG"}
 };
 
 std::map<std::string, TokenType> keywords = {
     {"true", TT_TRUE},
     {"false", TT_FALSE},
     {"if", TT_IF},
-    {"let", TT_LET}
+    {"let", TT_LET},
+    {"else", TT_ELSE}
 };
 
 class Token {

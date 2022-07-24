@@ -1,5 +1,7 @@
 #include "objects.h"
 
+/* utils */
+
 void BN_INCREF(BNObject* obj) {
     if (obj) {
         obj->ref_count++;

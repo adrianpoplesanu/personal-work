@@ -41,4 +41,8 @@ class BNBigNumberObject : BNObject {
         virtual BNObject* copy();
 };
 
+void BN_INCREF(BNObject*);
+void BN_DECREF(BNObject*);
+void free_BN_object_memory(BNObject*);
+
 #endif
