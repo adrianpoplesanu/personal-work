@@ -4,6 +4,9 @@ Parser::Parser() {
     prefixParseFns.insert(std::make_pair(TT_IDENT, &Parser::parseIdent));
     prefixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parsePrefixExpression));
     infixParseFns.insert(std::make_pair(TT_PLUS, &Parser::parseInfixExpression));
+    infixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parseInfixExpression));
+    infixParseFns.insert(std::make_pair(TT_MULTIPLY, &Parser::parseInfixExpression));
+    infixParseFns.insert(std::make_pair(TT_DIVIDE, &Parser::parseInfixExpression));
 }
 
 PrecedenceType Parser::currentPrecedence() {
@@ -26,13 +29,20 @@ void Parser::buildProgramStatement(ASTProgram& program) {
 }
 
 ASTNode* Parser::parseIdent() {
-    return NULL;
+    ASTIdentifier *ident = new ASTIdentifier(currentToken, currentToken.stringLiteral);
+    return ident;
 }
 
 ASTNode* Parser::parsePrefixExpression() {
+    ASTPrefixExpression *expr = new ASTPrefixExpression();
     return NULL;
 }
 
 ASTNode* Parser::parseInfixExpression(ASTNode* left) {
+    return NULL;
+}
+
+ASTNode* Parser::parseExpression(PrecedenceType precedence) {
+    //...
     return NULL;
 }

@@ -23,7 +23,7 @@ public:
     virtual std::string toString();
 };
 
-class ASTProgram : ASTNode {
+class ASTProgram : public ASTNode {
 public:
     std::vector<ASTNode> statements;
 
@@ -33,19 +33,26 @@ public:
     void reset();
 };
 
-class ASTExpressionStatement : ASTNode {
+class ASTExpressionStatement : public ASTNode {
+public:
+    ASTNode* expression;
+
+    ASTExpressionStatement();
+    ASTExpressionStatement(Token);
+    ASTExpressionStatement(Token, ASTNode*);
+    virtual std::string inspect();
+    virtual std::string toString();
+};
+
+class ASTInfixExpression : public ASTNode {
 
 };
 
-class ASTInfixExpression : ASTNode {
+class ASTPrefixExpression : public ASTNode {
 
 };
 
-class ASTPrefixExpression : ASTNode {
-
-};
-
-class ASTInteger : ASTNode {
+class ASTInteger : public ASTNode {
 public:
     int value;
 
@@ -57,9 +64,14 @@ public:
 
 };
 
-class ASTIdentifier : ASTNode {
+class ASTIdentifier : public ASTNode {
 public:
     std::string value;
+
+    ASTIdentifier();
+    ASTIdentifier(Token, std::string);
+    virtual std::string inspect();
+    virtual std::string toString();
 };
 
 void Ad_INCREF(ASTNode*);

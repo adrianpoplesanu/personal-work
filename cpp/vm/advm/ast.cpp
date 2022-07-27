@@ -20,6 +20,25 @@ std::string ASTProgram::inspect() {
     return "AstProgram";
 }
 
+ASTIdentifier::ASTIdentifier() {
+    // ...
+}
+
+ASTIdentifier::ASTIdentifier(Token t, std::string val) {
+    type = AT_IDENTIFIER;
+    ref_count = 0;
+    token = t;
+    value = val;
+}
+
+std::string ASTIdentifier::toString() {
+    return "ASTIdentifier";
+}
+
+std::string ASTIdentifier::inspect() {
+    return "ASTIdentifier";
+}
+
 void Ad_INCREF(ASTNode* node) {
     if (node) node->ref_count++;
 }
