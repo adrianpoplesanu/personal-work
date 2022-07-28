@@ -19,13 +19,25 @@ PrecedenceType Parser::peekPrecedence() {
 
 void Parser::load(std::string source) {
     lexer.load(source);
+    nextToken();
+    nextToken();
 }
 
 void Parser::buildProgramStatement(ASTProgram& program) {
-    while(!lexer.isEOF()) {
-        Token token = lexer.nextToken();
-        std::cout << token.toString() << "\n";
+    while(currentToken.type != TT_EOF) {
+        std::cout << currentToken.toString() << "\n";
+        ASTNode* stmt = parseStatement();
+        nextToken();
     }
+}
+
+void Parser::nextToken() {
+    currentToken = peekToken;
+    peekToken = lexer.nextToken();
+}
+
+ASTNode* Parser::parseStatement() {
+    return NULL;
 }
 
 ASTNode* Parser::parseIdent() {

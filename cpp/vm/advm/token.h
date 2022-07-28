@@ -6,6 +6,7 @@
 
 enum TokenType {
     TT_UNDEFINED,
+    TT_EOF,
     TT_INT,
     TT_PLUS,
     TT_MINUS,
@@ -18,6 +19,7 @@ enum TokenType {
 
 std::map<TokenType, std::string> tokenTypeConverter = {
     {TT_UNDEFINED, "UNDEFINED"},
+    {TT_EOF, "EOF"},
     {TT_INT, "INT"},
     {TT_PLUS, "PLUS"},
     {TT_MINUS, "MINUS"},

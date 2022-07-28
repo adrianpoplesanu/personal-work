@@ -61,6 +61,10 @@ Token Lexer::nextToken() {
     Token token;
     skipWhitespaces();
     switch (currentChar) {
+        case 0:
+            token.stringLiteral = "";
+            token.type = TT_EOF;
+            break;
         case '+':
             token.stringLiteral = '+';
             token.type = TT_PLUS;

@@ -33,8 +33,10 @@ public:
     void load(std::string);
     void buildProgramStatement(ASTProgram&);
 
+    void nextToken();
     PrecedenceType currentPrecedence();
     PrecedenceType peekPrecedence();
+    ASTNode* parseStatement();
     ASTNode* parseExpressionStatement();
     ASTNode* parseLetStatement();
     ASTNode* parseReturnStatement();
