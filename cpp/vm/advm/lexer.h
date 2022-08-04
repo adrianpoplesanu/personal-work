@@ -24,6 +24,7 @@ public:
     bool isEOF();
     bool isDigit();
     bool isLetter();
+    TokenType lookupKeyword(std::string);
 };
 
 #endif

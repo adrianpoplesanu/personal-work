@@ -56,6 +56,13 @@ std::string Lexer::readNumber() {
     return source.substr(start, position - start);
 }
 
+TokenType Lexer::lookupKeyword(std::string literal) {
+    if (keywords.find(literal) != keywords.end()) {
+        return keywords.at(literal);
+    }
+    return TT_IDENT;
+}
+
 Token Lexer::nextToken() {
     bool readNextChar = true;
     Token token;
@@ -81,11 +88,27 @@ Token Lexer::nextToken() {
             token.stringLiteral = '/';
             token.type = TT_DIVIDE;
             break;
+        case '(':
+            token.stringLiteral = '(';
+            token.type = TT_LPAREN;
+            break;
+        case ')':
+            token.stringLiteral = ')';
+            token.type = TT_RPAREN;
+            break;
+        case '{':
+            token.stringLiteral = '{';
+            token.type = TT_LBRACE;
+            break;
+        case '}':
+            token.stringLiteral = '}';
+            token.type = TT_RBRACE;
+            break;
         default:
             if (isLetter()) {
                 readNextChar = false;
                 token.stringLiteral = readIdentifier();
-                token.type = TT_IDENT;
+                token.type = lookupKeyword(token.stringLiteral);
             } else if (isDigit()) {
                 readNextChar = false;
                 token.stringLiteral = readNumber();

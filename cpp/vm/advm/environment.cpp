@@ -10,3 +10,17 @@ Environment* newEnvironmentWithOuter(Environment* outer) {
     env->outer = outer;
     return env;
 }
+
+AdObject* Environment::get(std::string key) {
+    if (store.find(key) != store.end()) {
+        return store.at(key);
+    }
+    if (outer->store.find(key) != outer->store.end()) {
+        return outer->store.at(key);
+    }
+    return NULL;
+}
+
+void Environment::save(std::string key, AdObject* obj) {
+    
+}

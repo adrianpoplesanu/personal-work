@@ -14,7 +14,16 @@ enum TokenType {
     TT_DIVIDE,
     TT_IDENT,
     TT_ASSIGN,
-    TT_LET
+    TT_LET,
+    TT_RETURN,
+    TT_FUNCTION,
+    TT_DEF,
+    TT_IF,
+    TT_ELSE,
+    TT_LPAREN,
+    TT_RPAREN,
+    TT_LBRACE,
+    TT_RBRACE
 };
 
 std::map<TokenType, std::string> tokenTypeConverter = {
@@ -27,7 +36,26 @@ std::map<TokenType, std::string> tokenTypeConverter = {
     {TT_DIVIDE, "DIVIDE"},
     {TT_IDENT, "IDENT"},
     {TT_ASSIGN, "ASSIGN"},
-    {TT_LET, "LET"}
+    {TT_LET, "LET"},
+    {TT_RETURN, "RETURN"},
+    {TT_FUNCTION, "FUNCTION"},
+    {TT_DEF, "DEF"},
+    {TT_IF, "IF"},
+    {TT_ELSE, "ELSE"},
+    {TT_LPAREN, "LPAREN"},
+    {TT_RPAREN, "RPAREN"},
+    {TT_LBRACE, "LBRACE"},
+    {TT_RBRACE, "RBRACE"}
+};
+
+std::map<std::string, TokenType> keywords = {
+    {"let", TT_LET},
+    {"return", TT_RETURN},
+    {"fun", TT_FUNCTION},
+    {"def", TT_DEF},
+    {"if", TT_IF},
+    {"else", TT_ELSE},
+    //{""}
 };
 
 class Token {

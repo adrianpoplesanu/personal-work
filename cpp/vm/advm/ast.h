@@ -10,7 +10,11 @@ enum ASTType {
     AT_IDENTIFIER,
     AT_INTEGER,
     AT_INFIX_EXPRESSION,
-    AT_PREFIX_EXPRESSSION
+    AT_PREFIX_EXPRESSION,
+    AT_LET_STATEMENT,
+    AT_RETURN_STATEMENT,
+    AT_FUNCTION_STATEMENT,
+    AT_DEF_STATEMENT
 };
 
 class ASTNode {
@@ -45,10 +49,37 @@ public:
 };
 
 class ASTInfixExpression : public ASTNode {
+public:
+    ASTNode* left;
+    ASTNode* right;
+    std::string operand;
 
+    ASTInfixExpression();
+    ASTInfixExpression(Token);
+    ASTInfixExpression(Token, ASTNode*, ASTNode*, std::string);
+    virtual std::string inspect();
+    virtual std::string toString();
 };
 
 class ASTPrefixExpression : public ASTNode {
+public:
+    ASTNode* right;
+    std::string operand;
+};
+
+class ASTLetStatement : public ASTNode {
+
+};
+
+class ASTReturnStatement : public ASTNode {
+    
+};
+
+class ASTFunctionStatement : public ASTNode {
+
+};
+
+class ASTDefStatement : public ASTNode {
 
 };
 

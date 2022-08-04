@@ -10,6 +10,8 @@ public:
     Environment* outer;
 
     Environment();
+    AdObject* get(std::string);
+    void save(std::string, AdObject*);
 };
 
 Environment* newEnvironment();
