@@ -23,7 +23,11 @@ enum TokenType {
     TT_LPAREN,
     TT_RPAREN,
     TT_LBRACE,
-    TT_RBRACE
+    TT_RBRACE,
+    TT_TRUE,
+    TT_FALSE,
+    TT_WHILE,
+    TT_FOR
 };
 
 std::map<TokenType, std::string> tokenTypeConverter = {
@@ -45,7 +49,11 @@ std::map<TokenType, std::string> tokenTypeConverter = {
     {TT_LPAREN, "LPAREN"},
     {TT_RPAREN, "RPAREN"},
     {TT_LBRACE, "LBRACE"},
-    {TT_RBRACE, "RBRACE"}
+    {TT_RBRACE, "RBRACE"},
+    {TT_TRUE, "TRUE"},
+    {TT_FALSE, "FALSE"},
+    {TT_WHILE, "WHILE"},
+    {TT_FOR, "FOR"}
 };
 
 std::map<std::string, TokenType> keywords = {
@@ -55,7 +63,10 @@ std::map<std::string, TokenType> keywords = {
     {"def", TT_DEF},
     {"if", TT_IF},
     {"else", TT_ELSE},
-    //{""}
+    {"true", TT_TRUE},
+    {"false", TT_FALSE},
+    {"while", TT_WHILE},
+    {"for", TT_FOR}
 };
 
 class Token {
