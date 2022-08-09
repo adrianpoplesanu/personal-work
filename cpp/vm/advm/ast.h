@@ -14,7 +14,10 @@ enum ASTType {
     AT_LET_STATEMENT,
     AT_RETURN_STATEMENT,
     AT_FUNCTION_STATEMENT,
-    AT_DEF_STATEMENT
+    AT_DEF_STATEMENT,
+    AT_WHILE_STATEMENT,
+    AT_FOR_STATEMENT,
+    AT_IF_STATEMENT
 };
 
 class ASTNode {
@@ -101,6 +104,33 @@ public:
 
     ASTIdentifier();
     ASTIdentifier(Token, std::string);
+    virtual std::string inspect();
+    virtual std::string toString();
+};
+
+class ASTWhileStatement : public ASTNode {
+public:
+
+    ASTWhileStatement();
+    ASTWhileStatement(Token);
+    virtual std::string inspect();
+    virtual std::string toString();
+};
+
+class ASTForStatement : public ASTNode {
+public:
+
+    ASTForStatement();
+    ASTForStatement(Token);
+    virtual std::string inspect();
+    virtual std::string toString();
+};
+
+class ASTIfStatement : public ASTNode {
+public:
+
+    ASTIfStatement();
+    ASTIfStatement(Token);
     virtual std::string inspect();
     virtual std::string toString();
 };
