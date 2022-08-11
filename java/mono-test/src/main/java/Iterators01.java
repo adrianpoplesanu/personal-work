@@ -58,11 +58,23 @@ public class Iterators01 {
         monoResult.block();
     }
 
+    private static void testThenWithImbricatedFlux() {
+        Mono<String> nameMono = Mono.just("adish");
+        Flux<String> addresses = Flux.just("Bdul Buc Noi", "Str Anton Bacal", "Oltenitei");
+
+        Mono<Void> monoResult =
+                nameMono.flatMap(name -> addresses
+                                            .flatMap(address -> { System.out.println(name + ": " + address); return Mono.empty(); })
+                                            .then());
+        monoResult.block();
+    }
+
     public static void main(String[] args) {
         testImbricatedIterators();
         testImbricatedCartesianProduct();
         testImbricatedFlux();
         testImbricatedFluxCartesianProduct();
         testThen();
+        testThenWithImbricatedFlux();
     }
 }
