@@ -1,5 +1,5 @@
 %:
-	g++ -o $* $*.cpp
+	g++ -std=c++17 -o $* $*.cpp
 clean:
 	find . -type f  ! -name "*.*" ! -name "Makefile" ! -name "README.md" -delete
 test:
