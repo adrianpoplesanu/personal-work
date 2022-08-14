@@ -11,11 +11,10 @@ int main(int argc, char* argv[]) {
     int n = 3;
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            int sum = 0;
+            c[i][j] = 0;
             for (int k = 0; k < n; k++) {
-                sum += a[i][k] * b[k][j];
+                c[i][j] += a[i][k] * b[k][j];
             }
-            c[i][j] = sum;
         }
     }
 
