@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class HomeController {
 
     @Autowired
-    TestClass1 testClass1;
+    SomeService someService;
 
     @GetMapping("/")
     @ResponseBody
     public String index() {
-        return testClass1.aaa();
+        return someService.getAAA();
     }
 }
