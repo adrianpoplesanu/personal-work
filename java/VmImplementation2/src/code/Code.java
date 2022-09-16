@@ -103,7 +103,7 @@ public class Code {
         //return new Operands(operands, offset);
     }
 
-    private int readUint16(Instructions instructions, int offset) {
+    public int readUint16(Instructions instructions, int offset) {
         byte[] result = {0, 0, instructions.get(offset), instructions.get(offset + 1)};
         return ByteBuffer.wrap(result).getInt();
     }
