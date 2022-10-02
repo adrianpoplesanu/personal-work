@@ -25,6 +25,7 @@ const char *fragmentShaderSource = "#version 330 core\n"
 
 int main()
 {
+    // https://learnopengl.com/Getting-started/Hello-Triangle
     // glfw: initialize and configure
     // ------------------------------
     glfwInit();
