@@ -99,12 +99,12 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <built.by>lwjglgamedev</built.by>
+        <built.by>adrianus</built.by>
         <main.class>com.adrianpoplesanu.game.MainApplication</main.class>
         <!-- Versions -->
         <imgui-java.version>1.86.4</imgui-java.version>
         <exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
-        <!-- <java.version>17</java.version> -->
+        <java.version>8</java.version>
         <joml.version>1.10.5</joml.version>
         <joml-primitives.version>1.10.4</joml-primitives.version>
         <lwjgl.version>3.3.1</lwjgl.version>

@@ -12,10 +12,11 @@ import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class HelloWorld {
-    // The window handle
     private long window;
 
     public static void main(String[] args) {
+        // https://github.com/lwjglgamedev/lwjglbook
+        // https://ahbejarano.gitbook.io/lwjglgamedev/
         new HelloWorld().run();
     }
 
@@ -62,7 +63,7 @@ public class HelloWorld {
     private void loop() {
         GL.createCapabilities();
 
-        glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+        glClearColor(0.05f, 0.1f, 0.05f, 0.0f);
 
         while (!glfwWindowShouldClose(window)) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
