@@ -17,7 +17,8 @@ public class HelloWorld {
     public static void main(String[] args) {
         // https://github.com/lwjglgamedev/lwjglbook
         // https://ahbejarano.gitbook.io/lwjglgamedev/
-        new HelloWorld().run();
+        HelloWorld helloWorld = new HelloWorld();
+        helloWorld.run();
     }
 
     private void init() {
@@ -30,7 +31,7 @@ public class HelloWorld {
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
-        window = glfwCreateWindow(300, 300, "Adish Engine!", NULL, NULL);
+        window = glfwCreateWindow(800, 600, "Adish Engine!", NULL, NULL);
         if (window == NULL)
             throw new RuntimeException("Failed to create the GLFW window");
 
