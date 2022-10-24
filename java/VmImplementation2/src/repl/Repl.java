@@ -45,7 +45,7 @@ public class Repl {
             Bytecode bytecode = compiler.getBytecode();
             //compiler.getCode().setInstructions(bytecode.getInstructions());
             //System.out.println(compiler.getCode().print());
-            vm.init(bytecode);
+            vm.load(bytecode);
             vm.run();
             AdObject stackElem = vm.stackTop();
             System.out.println(((AdIntegerObject) stackElem).getValue());

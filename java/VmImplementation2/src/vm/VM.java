@@ -21,7 +21,7 @@ public class VM {
         sp = 0;
     }
 
-    public void init(Bytecode bytecode) {
+    public void load(Bytecode bytecode) {
         constants = bytecode.getConstants();
         instructions = bytecode.getInstructions();
         stack = new AdObject[stackSize];
