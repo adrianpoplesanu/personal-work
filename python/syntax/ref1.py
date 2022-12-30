@@ -33,3 +33,15 @@ writer = Writer()
 print (writer.name)
 change_writer(writer)
 print (writer.name)
+
+def change_writer2(w):
+    w = Writer()
+
+change_writer(writer)
+print (writer.name)
+
+def change_numbers3(numbers):
+    numbers.append(9)
+
+change_numbers3(numbers)
+print (numbers)
