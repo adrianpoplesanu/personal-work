@@ -14,6 +14,9 @@ public:
     void load(std::string);
     void readChar();
     Token nextToken();
+    std::string readNumber();
+    bool isDigit();
+    void skipWhitespaces();
 };
 
 #endif

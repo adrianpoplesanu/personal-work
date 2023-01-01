@@ -9,7 +9,9 @@ void Program::loop() {
         std::string line;
         std::cout << ">> ";
         std::cin >> line;
+        if (line == "exit") break;
         parser.load(line);
-
+        ASTProgram program;
+        parser.parseProgram(program);
     }
 }

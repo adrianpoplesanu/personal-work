@@ -4,6 +4,7 @@
 #include "lexer.h"
 #include "evaluator.h"
 #include "parser.h"
+#include "ast.h"
 
 class Program {
 public:
