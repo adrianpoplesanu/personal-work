@@ -65,6 +65,14 @@ public class Lexer {
                 token.setType(TokenTypeEnum.DIVIDE);
                 token.setTokenLiteral("/");
                 break;
+            case '(':
+                token.setType(TokenTypeEnum.LPAREN);
+                token.setTokenLiteral("(");
+                break;
+            case ')':
+                token.setType(TokenTypeEnum.RPAREN);
+                token.setTokenLiteral(")");
+                break;
             default:
                 if (isDigit()) {
                     int start = position;
