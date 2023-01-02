@@ -51,6 +51,10 @@ Token Lexer::nextToken() {
             token.type = TT_RPAREN;
             token.tokenLiteral = ")";
         break;
+        case ';':
+            token.type = TT_SEMICOLON;
+            token.tokenLiteral = ";";
+        break;
         default:
             if (isDigit()) {
                 int startPos = position;

@@ -12,7 +12,8 @@ enum TokenTypeEnum {
     TT_MULTIPLY,
     TT_DIVIDE,
     TT_LPAREN,
-    TT_RPAREN
+    TT_RPAREN,
+    TT_SEMICOLON
 };
 
 std::map<TokenTypeEnum, std::string> tokenTypeMap = {
@@ -24,7 +25,8 @@ std::map<TokenTypeEnum, std::string> tokenTypeMap = {
     {TT_MULTIPLY, "MULTIPLY"},
     {TT_DIVIDE, "DIVIDE"},
     {TT_LPAREN, "LPAREN"},
-    {TT_RPAREN, "RPAREN"}
+    {TT_RPAREN, "RPAREN"},
+    {TT_SEMICOLON, "SEMICOLON"}
 };
 
 std::map<std::string, TokenTypeEnum> keywords = {

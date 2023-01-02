@@ -10,6 +10,7 @@ class Program {
 public:
     Evaluator evaluator;
     Parser parser;
+    Environment *env;
 
     Program();
 
