@@ -2,6 +2,7 @@ package token;
 
 public enum TokenTypeEnum {
     ILLEGAL,
+    EOF,
     PLUS,
     MINUS,
     MULTIPLY,

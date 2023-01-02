@@ -1,5 +1,6 @@
 package program;
 
+import ast.ASTProgram;
 import parser.Parser;
 
 import java.util.Scanner;
@@ -19,6 +20,8 @@ public class Basic2Program {
             String line = scanner.nextLine();
             if ("exit".equals(line)) break;
             parser.load(line);
+            ASTProgram program = new ASTProgram();
+            parser.parseProgram(program);
         }
     }
 }
