@@ -9,5 +9,6 @@ public enum TokenTypeEnum {
     DIVIDE,
     INT,
     LPAREN,
-    RPAREN
+    RPAREN,
+    SEMICOLON
 }

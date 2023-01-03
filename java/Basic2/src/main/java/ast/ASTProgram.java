@@ -7,6 +7,7 @@ public class ASTProgram extends AbstractASTNode {
     private List<ASTNode> statements;
 
     public ASTProgram() {
+        type = ASTNodeTypeEnum.PROGRAM;
         statements = new ArrayList<>();
     }
     @Override

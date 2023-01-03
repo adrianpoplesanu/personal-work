@@ -1,7 +1,6 @@
 package parser;
 
-import ast.ASTNode;
-import ast.ASTProgram;
+import ast.*;
 import lexer.Lexer;
 import token.Token;
 import token.TokenTypeEnum;
@@ -48,11 +47,11 @@ public class Parser {
     }
 
     private boolean currentTokenIs(TokenTypeEnum tte) {
-        return false;
+        return currentToken.getType() == tte;
     }
 
     private boolean peekTokenIs(TokenTypeEnum tte) {
-        return false;
+        return peekToken.getType() == tte;
     }
 
     private boolean expectPeekToken(TokenTypeEnum tte) {
@@ -61,6 +60,20 @@ public class Parser {
             return true;
         }
         return false;
+    }
+
+    private PrecedenceTypeEnum currentPrecedence() {
+        if (PrecedenceConverter.hasPrecedenceBind(currentToken.getType())) {
+            return PrecedenceConverter.convertTokenTypeToPrecedence(currentToken.getType());
+        }
+        return PrecedenceTypeEnum.LOWEST;
+    }
+
+    private PrecedenceTypeEnum peekPrecedence() {
+        if (PrecedenceConverter.hasPrecedenceBind(peekToken.getType())) {
+            return PrecedenceConverter.convertTokenTypeToPrecedence(peekToken.getType());
+        }
+        return PrecedenceTypeEnum.LOWEST;
     }
 
     public void parseProgram(ASTNode node) {
@@ -78,22 +91,53 @@ public class Parser {
     }
 
     private ASTNode parseExpressionStatement() {
-        return null;
+        ASTExpressionStatement stmt = new ASTExpressionStatement(currentToken);
+        stmt.setExpression(parseExpression(PrecedenceTypeEnum.LOWEST));
+        return stmt;
     }
 
     private ASTNode parseIntegerExpression() {
-        return null;
-    }
-
-    private ASTNode parseInfixExpression(ASTNode left) {
-        return null;
+        ASTInteger stmt = new ASTInteger(currentToken);
+        stmt.setValue(Integer.valueOf(currentToken.getTokenLiteral()));
+        return stmt;
     }
 
     private ASTNode parseGroupedExpression() {
-        return null;
+        nextToken();
+        ASTNode expr = parseExpression(PrecedenceTypeEnum.LOWEST);
+        if (!expectPeekToken(TokenTypeEnum.RPAREN)) {
+            return null;
+        }
+        return expr;
+    }
+
+    private ASTNode parseInfixExpression(ASTNode left) {
+        ASTInfixExpression expr = new ASTInfixExpression(currentToken);
+        expr.setOperator(currentToken.getTokenLiteral());
+        expr.setLeft(left);
+        PrecedenceTypeEnum currentPrecedence = currentPrecedence();
+        nextToken();
+        expr.setRight(parseExpression(currentPrecedence));
+        return expr;
     }
 
     private ASTNode parseExpression(PrecedenceTypeEnum precedence) {
-        return null;
+        if (!prefixParseFns.containsKey(currentToken.getType())) {
+            return null;
+        }
+
+        Supplier<ASTNode> prefix = prefixParseFns.get(currentToken.getType());
+        ASTNode leftExpr = prefix.get();
+
+        while(!peekTokenIs(TokenTypeEnum.SEMICOLON) && (precedence.ordinal() < peekPrecedence().ordinal())) {
+            if (!infixParseFns.containsKey(peekToken.getType())) {
+                return leftExpr;
+            }
+            Function<ASTNode, ASTNode> infix = infixParseFns.get(peekToken.getType());
+            nextToken();
+            leftExpr = infix.apply(leftExpr);
+        }
+
+        return leftExpr;
     }
 }

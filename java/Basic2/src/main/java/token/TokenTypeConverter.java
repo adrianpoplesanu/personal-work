@@ -12,6 +12,7 @@ public class TokenTypeConverter {
             put(TokenTypeEnum.MULTIPLY, "MULTIPLY");
             put(TokenTypeEnum.DIVIDE, "DIVIDE");
             put(TokenTypeEnum.INT, "INT");
+            put(TokenTypeEnum.SEMICOLON, "SEMICOLON");
         }
     };
 
