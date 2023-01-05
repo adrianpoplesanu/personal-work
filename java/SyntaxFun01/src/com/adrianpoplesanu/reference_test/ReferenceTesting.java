@@ -16,5 +16,13 @@ public class ReferenceTesting {
         System.out.println(numbers);
         listUtils.reassignList(numbers);
         System.out.println(numbers);
+
+        StringUtils stringUtils = new StringUtils();
+        String name = "aex";
+        System.out.println(name);
+        stringUtils.changeString(name);
+        System.out.println(name);
+        stringUtils.reassignString(name);
+        System.out.println(name);
     }
 }
