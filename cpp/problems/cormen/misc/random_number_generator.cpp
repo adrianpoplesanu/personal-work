@@ -10,7 +10,7 @@ int random(int min, int max) {
 }
 
 int main(int argc, char* argv[]) {
-    int n = 100;
+    int n = 1000;
     for (int i = 0; i < n; i++) {
         std::cout << random(0, 9);
         if (i != n - 1) {
