@@ -1,16 +1,14 @@
 <?php
+// create a new cURL resource
+$ch = curl_init();
 
-$ch = curl_init("http://localhost:8080");
-$fp = fopen("example_homepage.txt", "w");
+// set URL and other appropriate options
+curl_setopt($ch, CURLOPT_URL, "http://localhost:8080");
+curl_setopt($ch, CURLOPT_HEADER, false);
 
-curl_setopt($ch, CURLOPT_FILE, $fp);
-curl_setopt($ch, CURLOPT_HEADER, 0);
-
+// grab URL and pass it to the browser
 curl_exec($ch);
-if(curl_error($ch)) {
-    fwrite($fp, curl_error($ch));
-}
-curl_close($ch);
-fclose($fp);
 
+// close cURL resource, and free up system resources
+curl_close($ch);
 ?>
