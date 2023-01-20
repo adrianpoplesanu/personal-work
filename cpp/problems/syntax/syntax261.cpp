@@ -3,28 +3,33 @@
 #include <map>
 
 enum TokenType {
-    ILLEGAL,
-    IDENT,
-    SUM,
-    MINUS,
-    MULTIPLY,
-    DIVIDE,
-    SEMICOLON,
-    ASSIGN,
-    LPAREN,
-    RPAREN,
-    LBRACE,
-    RBRACE,
-    LBRACKET,
-    RBRACKET
+    TT_ILLEGAL,
+    TT_IDENT,
+    TT_SUM,
+    TT_MINUS,
+    TT_MULTIPLY,
+    TT_DIVIDE,
+    TT_SEMICOLON,
+    TT_ASSIGN,
+    TT_LPAREN,
+    TT_RPAREN,
+    TT_LBRACE,
+    TT_RBRACE,
+    TT_LBRACKET,
+    TT_RBRACKET,
+    TT_NULLOBJECT
 };
 
 enum ASTNodeType {
-    PROGRAM,
-    EXPRESSION_STATEMENT,
-    INTEGER,
-    IDENTIFIER,
-    INFIX_EXPRESSION
+    AST_PROGRAM,
+    AST_EXPRESSION_STATEMENT,
+    AST_INTEGER,
+    AST_IDENTIFIER,
+    AST_INFIX_EXPRESSION,
+    AST_BLOCK_STATEMENT,
+    AST_IF_EXPRESSION,
+    AST_WHILE_EXPRESSION,
+    AST_FOR_EXPRESSION
 };
 
 class Token {
@@ -44,12 +49,46 @@ public:
     std::vector<ASTNode> statements;
 };
 
+class ASTExpressionStatement : public ASTNode {
+public:
+    ASTNode expression;
+};
+
 class Lexer {
 public:
     std::string source;
     int position;
     int readPosition;
     char currentChar;
+
+    void load(std::string s) {
+        source = s;
+        position = 0;
+        readPosition = 0;
+        currentChar = 0;
+    }
+
+    void readChar() {
+        if (readPosition >= source.size()) {
+            currentChar = 0;
+        } else {
+            currentChar = source.at(readPosition);
+        }
+        position = readPosition;
+        readPosition++;
+    }
+
+    void skipWhitespaces() {
+        while (currentChar == ' ' || currentChar == '\t' || currentChar == '\n' || currentChar == '\r') {
+            readChar();
+        }
+    }
+
+    Token nextToken() {
+        //...
+        Token token;
+        return token;
+    }
 };
 
 class Parser {
@@ -61,8 +100,23 @@ public:
     std::map<TokenType, infixCallback> infixParseFns;
 
     Parser() {
-
+        prefixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parsePrefixExpression));
     }
+
+    ASTNode parsePrefixExpression() {
+        ASTNode result;
+        return result;
+    }
+};
+
+enum ObjectType {
+    OT_INTEGER,
+    OT_NULLOBJECT,
+    OT_LIST,
+    OT_HASH,
+    OT_FUNCTION,
+    OT_CLASS,
+    OT_CLASS_INSTANCE
 };
 
 class Object {
@@ -70,6 +124,18 @@ class Object {
 };
 
 class Environment {
+
+};
+
+class IntegerObject : public Object {
+
+};
+
+class ClassObject : public Object {
+
+};
+
+class ClassInstance : public Object {
 
 };
 
@@ -81,7 +147,7 @@ class Repl {
 public:
     void loop() {
         while (1) {
-            std::cout << "ad > ";
+            std::cout << "ad> ";
             std::string line;
             std::getline(std::cin, line);
         }
