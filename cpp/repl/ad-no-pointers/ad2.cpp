@@ -47,6 +47,10 @@ public:
 class ASTProgram : public ASTNode {
 public:
     std::vector<ASTNode> statements;
+
+    void reset() {
+
+    }
 };
 
 class ASTExpressionStatement : public ASTNode {
@@ -85,8 +89,8 @@ public:
     }
 
     Token nextToken() {
-        //...
         Token token;
+        token.type = TT_ILLEGAL;
         return token;
     }
 };
@@ -99,6 +103,8 @@ public:
     std::map<TokenType, prefixCallback> prefixParseFns;
     std::map<TokenType, infixCallback> infixParseFns;
 
+    std::string source;
+
     Parser() {
         prefixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parsePrefixExpression));
     }
@@ -106,6 +112,14 @@ public:
     ASTNode parsePrefixExpression() {
         ASTNode result;
         return result;
+    }
+
+    void load(std::string s) {
+        source = s;
+    }
+
+    void parseProgram(ASTNode &program) {
+        //((ASTProgram) program).reset(); // din cauza asta sunt pointere
     }
 };
 
