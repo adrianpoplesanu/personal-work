@@ -23,8 +23,17 @@ public class ZipTest01 {
         a.subscribe();
     }
 
+    private static void testMonoZip03() {
+        Mono<String> name = Mono.just("Bebe Dex");
+        Mono<Integer> age = Mono.just(12);
+        Mono<Boolean> scump = Mono.just(true);
+        Mono<String> composite = Mono.zip(name, age, scump).flatMap(data -> Mono.just(data.getT1() + data.getT2() + data.getT3()));
+        System.out.println(composite.block());
+    }
+
     public static void main(String[] args) {
         testMonoZip01();
         testMonoZip02();
+        testMonoZip03();
     }
 }
