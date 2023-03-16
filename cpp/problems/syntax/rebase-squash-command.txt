@@ -1,0 +1,16 @@
+git rebase master
+
+for squashing:
+
+git rebase -i HEAD~5
+
+mark the commits as squash rather than pick
+
+for merging a branch in another branch:
+
+
+git checkout -b branch1
+git checkout -b branch2
+
+git checkout branch1
+git merge branch2
