@@ -1,6 +1,8 @@
 package com.adrianpoplesanu.threading;
 
-public class ThreadingTest {
+public class ThreadingTest2 {
+
+    private int sharedValue = 0;
 
     public void execute() {
         System.out.println("initializaing threads");
@@ -13,7 +15,7 @@ public class ThreadingTest {
     }
 
     public static void main(String[] args) {
-        ThreadingTest threadingTest = new ThreadingTest();
+        ThreadingTest2 threadingTest = new ThreadingTest2();
         threadingTest.execute();
     }
 
@@ -31,13 +33,18 @@ public class ThreadingTest {
             System.out.println("starting " + id);
             while (i < 100) {
                 try {
+                    if (id == 0) {
+                        sharedValue = 5;
+                    } else {
+                        sharedValue++;
+                    }
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
                 i++;
             }
-            System.out.println("finishing " + id);
+            System.out.println("finishing " + id + " sharedValue=" + sharedValue);
         }
     }
 }
