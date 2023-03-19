@@ -31,6 +31,7 @@ public class Server {
         else {
             out.println("unrecognised greeting");
             System.out.println("unrecognised greeting");
+            System.out.println(greeting);
         }
     }
 
