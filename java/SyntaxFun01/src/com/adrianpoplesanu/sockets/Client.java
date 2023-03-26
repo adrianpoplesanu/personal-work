@@ -31,7 +31,7 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
         Client client = new Client();
-        client.startConnection("127.0.0.1", 5001);
+        client.startConnection("127.0.0.1", 5002);
         String response = client.sendMessage("buna dimineata!");
         client.stopConnection();
         System.out.println(response);
