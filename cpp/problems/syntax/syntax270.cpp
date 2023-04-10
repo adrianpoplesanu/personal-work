@@ -26,7 +26,8 @@ int main(int argc, char *argv[]) {
         std::cout<<"someone connected!\n";
 
         ticks = time(NULL);
-        snprintf(sendBuff, sizeof(sendBuff), "Adrian's MAC time: %.24s\r\n", ctime(&ticks));
+        //snprintf(sendBuff, sizeof(sendBuff), "Adrian's MAC time: %.24s\r\n", ctime(&ticks));
+        snprintf(sendBuff, sizeof(sendBuff), "buna dimineata!\r\n");
         write(connfd, sendBuff, strlen(sendBuff));
 
         close(connfd);
