@@ -12,6 +12,7 @@ public:
     Ad_Type type;
     Ad_Int *next;
     Ad_Int *prev;
+    bool marked;
 
     Ad_Int(int v) {
         type = INTEGER;
@@ -31,11 +32,29 @@ public:
 class GarbageCollector {
 public:
     Ad_Int *head, *tail;
-    void addObject() {
 
+    GarbageCollector() {
+        head = tail = NULL;
+    }
+
+    void addObject(Ad_Int *obj) {
+        if (tail == NULL) {
+            head = obj;
+            tail = obj;
+            head->prev = NULL;
+            head->next = NULL;
+        } else {
+            obj->prev = tail;
+            obj->next = NULL;
+            tail->next = obj;
+        }
     }
     void markObjects() {
-
+        Ad_Int* current = head;
+        while (current != NULL) {
+            current->marked = false;
+            current = current->next;
+        }
     }
     void sweepObject() {
 
