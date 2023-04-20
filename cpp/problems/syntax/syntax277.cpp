@@ -1,6 +1,7 @@
 #include <iostream>
 #include <thread>
 #include <map>
+#include <vector>
 
 enum Ad_Type {
     INTEGER
@@ -27,14 +28,27 @@ public:
     Environment() {
         //...
     }
+
+    Ad_Int* get(std::string key) {
+        return store[key];
+    }
+
+    void set(std::string key, Ad_Int* obj) {
+        store[key] = obj;
+    }
 };
 
 class GarbageCollector {
 public:
     Ad_Int *head, *tail;
+    std::vector<Environment*> gc_environments;
 
     GarbageCollector() {
         head = tail = NULL;
+    }
+
+    void addEnvironment(Environment* env) {
+        gc_environments.push_back(env);
     }
 
     void addObject(Ad_Int *obj) {
@@ -57,7 +71,18 @@ public:
         }
     }
     void sweepObject() {
-
+        Ad_Int* current = head;
+        while (current != NULL) {
+            if (!current->marked) {
+                Ad_Int* target = current;
+                current->prev->next = current->next;
+                current->next->prev = current->prev;
+                current = current->next;
+                delete target;
+            } else {
+                current = current->next;
+            }
+        }
     }
 };
 
