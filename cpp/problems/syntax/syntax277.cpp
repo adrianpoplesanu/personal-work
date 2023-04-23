@@ -101,8 +101,10 @@ void worker(Environment *env, GarbageCollector *gc, int delay) {
 int main(int argc, char *argv[]) {
 
     Environment *env = new Environment();
-    env->set("contor", new Ad_Int(55));
     GarbageCollector *gc = new GarbageCollector();
+    Ad_Int *var = new Ad_Int(55);
+    gc->addObject(var);
+    env->set("contor", var);
 
     std::thread th1(worker, env, gc, 10);
     std::thread th2(worker, env, gc, 20);
