@@ -90,6 +90,7 @@ void worker(Environment *env, GarbageCollector *gc, int delay) {
     std::cout << "running a thread\n";
     std::cout << "sleeping for " << delay << "miliseconds\n";
     std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+    std::cout << env->get("contor")->value << "\n";
     //Ad_Type type = env->store["aaa"]->type; // linia asta ridica genul de eroare pe care il gasesc si in ad
     gc->markObjects();
     gc->sweepObject();
@@ -100,6 +101,7 @@ void worker(Environment *env, GarbageCollector *gc, int delay) {
 int main(int argc, char *argv[]) {
 
     Environment *env = new Environment();
+    env->set("contor", new Ad_Int(55));
     GarbageCollector *gc = new GarbageCollector();
 
     std::thread th1(worker, env, gc, 10);
