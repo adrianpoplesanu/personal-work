@@ -69,6 +69,9 @@ public:
             current->marked = false;
             current = current->next;
         }
+        for (int i = 0; i < gc_environments.size(); i++) {
+            //... mark all object in gc_environments[i];
+        }
     }
     void sweepObject() {
         Ad_Int* current = head;
@@ -104,6 +107,7 @@ int main(int argc, char *argv[]) {
     GarbageCollector *gc = new GarbageCollector();
     Ad_Int *var = new Ad_Int(55);
     gc->addObject(var);
+    gc->addEnvironment(env);
     env->set("contor", var);
 
     std::thread th1(worker, env, gc, 10);
