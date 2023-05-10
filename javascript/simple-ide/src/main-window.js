@@ -112,7 +112,8 @@ function display_folder_structure() {
     walk_folder(folder_structure[0], 0);
 }
 
-/*$(document).ready(function () {
+$(document).ready(function () {
+    console.log("jquery loaded");
     test_logic();
     display_folder_structure();
-});*/
+});
