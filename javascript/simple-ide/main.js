@@ -5,13 +5,20 @@ const { app, BrowserWindow } = require('electron')
 const path = require('path')
 const { ipcMain } = require('electron');
 
+let isWin = (process.platform === "win32") || (process.platform === "win64");
+let isMacOs = process.platform === "darwin";
+let isLinux = process.platform === "linux";
+
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      // https://stackoverflow.com/questions/19059580/client-on-node-js-uncaught-referenceerror-require-is-not-defined
+      nodeIntegration: true,
+      contextIsolation: false
     }
   })
 
@@ -44,3 +51,14 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+ipcMain.on('synchronous-message', (event, arg) => {
+  if (arg == 'getPlatform') {
+    if (isWin) event.returnValue = 'win';
+    if (isMacOs) event.returnValue = "macos";
+    if (isLinux) event.returnValue = "linux";
+  } else {
+    console.log(arg) // prints "ping"
+    event.returnValue = 'pongus'
+  }
+});

@@ -4,16 +4,13 @@
   "description": "a simple ide",
   "main": "main.js",
   "devDependencies": {
-    "electron": "^12.2.3"
+    "@electron-forge/cli": "^6.1.1",
+    "electron": "^24.2.0"
   },
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "adrianus",
-  "license": "ISC",
-  "devDependencies": {
-    "@electron-forge/cli": "^6.1.1",
-    "electron": "^24.2.0"
-  }
+  "license": "ISC"
 }
