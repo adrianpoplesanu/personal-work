@@ -11,12 +11,28 @@
     <script type="text/javascript" src="./lib/jquery-3.6.0.min.js"></script>
     <script>window.$ = window.jQuery = require('./lib/jquery-3.6.0.min.js');</script>
     <script type="module" defer src="src/main-window.js"></script>
+    <style>
+        div.tarea {
+            border: 1px inset #ccc;
+            background-color: white;
+            font: small courier, monospace black;
+            width: 500px;
+            height: 300px; /* or whatever measurements you want */
+            overflow: auto; /* in most browsers, this will results in a scrollbar when there's more content than can fit in the dimensions defined above */
+        }
+    </style>
   </head>
   <body>
-    <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>,
-    Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.
+      <div> left
+      </div>
+      <div textarea> right
+      </div>
+      <div class="tarea">
+          This looks like a textarea.
+      </div>
+      <div contentEditable="true">
+          edit this text
+      </div>
 
     <!-- You can also require other files to run in this process -->
     <script src="./renderer.js"></script>
