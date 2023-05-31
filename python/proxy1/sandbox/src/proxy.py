@@ -28,24 +28,24 @@ def start():    #Main Program
         sock.bind(('', listening_port))
         sock.listen(max_connection)
         print("[*] Server started successfully [ %d ]" %(listening_port))
-    except Exception:
+    except Exception as ex:
         print("[*] Unable to Initialize Socket")
-        print(Exception)
+        print(ex)
         sys.exit(2)
 
     while True:
         try:
             conn, addr = sock.accept() #Accept connection from client browser
             data = conn.recv(buffer_size) #Recieve client data
-            start_new_thread(conn_string, (conn,data, addr)) #Starting a thread
+            start_new_thread(conn_string, (conn, data, addr)) #Starting a thread
         except KeyboardInterrupt:
             sock.close()
             print("\n[*] Graceful Shutdown")
             sys.exit(1)
 
 def conn_string(conn, data, addr):
+    print ('conn_string')
     try:
-        print ('cacat')
         #print(data)
         first_line = data.split(b'\n')[0]
 
@@ -53,9 +53,8 @@ def conn_string(conn, data, addr):
 
         http_pos = url.find(b'://') #Finding the position of ://
         if(http_pos==-1):
-            temp=url
+            temp = url
         else:
-
             temp = url[(http_pos+3):]
         
         port_pos = temp.find(b':')
@@ -71,16 +70,25 @@ def conn_string(conn, data, addr):
         else:
             port = int((temp[(port_pos+1):])[:webserver_pos-port_pos-1])
             webserver = temp[:port_pos]
-        #print(data)
-        webserver = "localhost"
-        port = 8080
-        #print (webserver)
-        #print (port)
+
+        print (str(first_line))
+
+        if b'/dex' in first_line:
+            print ('mapping /dex to port 8080')
+            webserver = "localhost"
+            port = 8080
+        else:
+            # some default here
+            print ('[*] no mapping found for: ' + str(first_line))
+            raise Exception
         proxy_server(webserver, port, conn, addr, data)
-    except Exception:
-        pass
+    except Exception as ex:
+        print (ex)
+        print ('closing connection')
+        conn.close()
 
 def proxy_server(webserver, port, conn, addr, data):
+    print ('proxy_server()')
     try:
         #print(data)
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -98,11 +106,14 @@ def proxy_server(webserver, port, conn, addr, data):
                 dar = "%s KB" % (dar)
                 print("[*] Request Done: %s => %s <=" % (str(addr[0]), str(dar)))
 
+                if len(reply) < 8192:
+                    break
+
             else:
                 break
 
         sock.close()
-
+        print ('closing connection')
         conn.close()
     except socket.error:
         sock.close()
