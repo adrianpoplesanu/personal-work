@@ -71,7 +71,8 @@ body {
 
       textarea.addEventListener('keyup', event => {
         console.log(event.target)
-        const numberOfLines = event.target.value.split('\n').length
+        //const numberOfLines = event.target.value.split('\n').length
+        const numberOfLines = textarea.clientHeight / 21;
         console.log(event.target.value)
 
         lineNumbers.innerHTML = Array(numberOfLines)
