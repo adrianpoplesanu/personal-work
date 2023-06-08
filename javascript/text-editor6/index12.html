@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .highlight {
+      background-color: yellow;
+    }
+  </style>
+</head>
+<body>
+  <h2>Text Editor with Keyword Highlighting</h2>
+  <div id="editor" contenteditable="true"></div>
+  <br>
+  <button onclick="highlightKeywords()">Highlight Keywords</button>
+
+  <script>
+    function highlightKeywords() {
+      var editor = document.getElementById("editor");
+      var keywords = ["example", "text", "highlight"]; // Add your desired keywords here
+
+      var content = editor.textContent;
+
+      for (var i = 0; i < keywords.length; i++) {
+        var keyword = keywords[i];
+        var regex = new RegExp("\\b" + escapeRegExp(keyword) + "\\b", "gi");
+        content = content.replace(regex, "<span class='highlight'>$&</span>");
+      }
+
+      editor.innerHTML = content;
+    }
+
+    // Function to escape special characters in a regular expression pattern
+    function escapeRegExp(string) {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+  </script>
+</body>
+</html>
+
