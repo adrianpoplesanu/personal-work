@@ -18,4 +18,18 @@ class HomeController {
         val text = this::class.java.classLoader.getResource("test.csv").readText()
         return text
     }
+
+    @GetMapping("test3")
+    @ResponseBody
+    fun test3() : String {
+        val text = this::class.java.classLoader.getResourceAsStream("test.csv").bufferedReader().readText()
+        return text
+    }
+
+    @GetMapping("test4")
+    @ResponseBody
+    fun test4() : String {
+        val text = this.javaClass.classLoader.getResourceAsStream("test.csv").bufferedReader().readText()
+        return text
+    }
 }
