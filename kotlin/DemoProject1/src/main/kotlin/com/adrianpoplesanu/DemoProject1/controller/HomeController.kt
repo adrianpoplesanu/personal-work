@@ -11,4 +11,11 @@ class HomeController {
     fun index() : String {
         return "aaa"
     }
+
+    @GetMapping("test2")
+    @ResponseBody
+    fun test2() : String {
+        val text = this::class.java.classLoader.getResource("test.csv").readText()
+        return text
+    }
 }
