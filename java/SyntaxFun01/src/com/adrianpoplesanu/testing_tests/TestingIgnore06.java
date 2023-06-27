@@ -12,7 +12,7 @@ public abstract class TestingIgnore06 {
     }
 
     @Test
-    public void testSomethingAAA() {
-        System.out.println("abstract testSomethingAA " + getVersion());
+    public void testSomethingAaa() {
+        System.out.println("abstract testSomethingAaa " + getVersion());
     }
 }
