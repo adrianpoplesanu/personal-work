@@ -10,4 +10,9 @@ public abstract class TestingIgnore06 {
     public void testSomething() {
         System.out.println("abstract testSomething " + getVersion());
     }
+
+    @Test
+    public void testSomethingAAA() {
+        System.out.println("abstract testSomethingAA " + getVersion());
+    }
 }
