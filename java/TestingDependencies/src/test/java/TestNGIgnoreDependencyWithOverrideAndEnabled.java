@@ -12,4 +12,10 @@ public class TestNGIgnoreDependencyWithOverrideAndEnabled extends TestNGDependen
     public void testSomething() {
 
     }
+
+    @Override
+    @Test(enabled = false) // un-comment this for cool error
+    public void testWithParams(String text) {
+
+    }
 }

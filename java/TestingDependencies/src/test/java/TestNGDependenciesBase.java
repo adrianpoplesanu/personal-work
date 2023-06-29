@@ -5,4 +5,9 @@ public class TestNGDependenciesBase {
     public void testSomething() {
         System.out.println("testSomething()");
     }
+
+    @Test
+    public void testWithParams(String text) {
+
+    }
 }
