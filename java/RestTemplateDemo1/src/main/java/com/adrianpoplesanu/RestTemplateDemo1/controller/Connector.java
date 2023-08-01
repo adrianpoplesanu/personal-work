@@ -24,7 +24,7 @@ public class Connector {
     }
 
     public <S, T> ResponseEntity<T> exchange(HttpMethod method, S requestBody, Class<T> responseType, String path, Map<String, Object> uriVariables, HttpHeaders headers) {
-        String url = "http://localhost:8080/data-mapping";
+        String url = path;
         uriVariables = Collections.emptyMap();
 
         URI uri = this.restTemplate.getUriTemplateHandler().expand(url, uriVariables);
