@@ -10,7 +10,13 @@ public class TestingArrayLists1 {
         try {
             names.remove(0);
         } catch (UnsupportedOperationException exception) {
-            System.out.println("asta demonstre`a ca Arrays.asList e fixed size si un AbstractList");
+            System.out.println("asta demonstreaza ca Arrays.asList e fixed size si un AbstractList");
+        }
+
+        try {
+            names.add("si micutz");
+        } catch (UnsupportedOperationException exception) {
+            System.out.println("asta demonstreaza inca o data ca Arrays.asList e fixed size si un AbstractList");
         }
     }
 }
