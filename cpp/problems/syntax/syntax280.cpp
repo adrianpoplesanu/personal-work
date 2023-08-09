@@ -4,6 +4,9 @@
 
 class ThreadPool {
 public:
+    void start();
+    void stop();
+private:
     std::vector<std::thread> pool;
 };
 
