@@ -6,6 +6,6 @@ import java.util.List;
 
 public class ListTesting {
     public static void main(String[] args) {
-        //List<String> names = List.of("bebe", "dex"); // List.of nu exista
+        //List<String> names = List.of("bebe", "dex"); // List.of nu exista in java8
     }
 }
