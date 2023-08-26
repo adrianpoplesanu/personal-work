@@ -19,6 +19,10 @@ class Palindrome3 {
     fun readWordsFromJson2(fileName : String) : String {
         return this::class.java.getResource(fileName)?.readText(Charsets.UTF_8) ?: "not found"
     }
+
+    fun readWordsFromJson3(fileName : String) : List<String> {
+        return this::class.java.getResourceAsStream(fileName)?.bufferedReader()?.readLines() ?: listOf("not_found")
+    }
 }
 
 fun main(args : Array<String>) {
@@ -29,6 +33,8 @@ fun main(args : Array<String>) {
     val words2 = palindrome3.readWordsFromJson2("/words.json")
     println(words2)
 
+    val words3 = palindrome3.readWordsFromJson3("/words.json")
+    println(words3)
     //val palindromes = palindrome3.filterPalindromes(words)
     //println(palindromes)
 }
