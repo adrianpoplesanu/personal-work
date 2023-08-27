@@ -1,6 +1,7 @@
 package ch01
 
 import kotlinx.coroutines.*
+import kotlin.system.measureTimeMillis
 
 class Palindrome4 {
 
@@ -38,9 +39,12 @@ class Palindrome4 {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) = runBlocking {
-            var palindrome4 = Palindrome4()
-            val palindromes = palindrome4.getAllPalindromes(1)
-            println(palindromes)
+            val time = measureTimeMillis {
+                var palindrome4 = Palindrome4()
+                val palindromes = palindrome4.getAllPalindromes(1)
+                println(palindromes)
+            }
+            println ("took $time miliseconds")
         }
     }
 }
