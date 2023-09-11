@@ -1,12 +1,17 @@
 #include <iostream>
 #include <vector>
+#include <queue>
 #include <thread>
 #include <chrono>
+
+typedef void *callback(int);
 
 std::vector<std::string> threads_status;
 std::thread *threads;
 std::vector<std::thread*> pool;
 std::thread *schedulerThread;
+std::queue<callback*> pendingTasks;
+std::queue<int> pendingArgs;
 bool poolRunning = false;
 bool poolActive = true;
 
@@ -67,6 +72,8 @@ int main(int argc, char *argv[]) {
                 std::cout << "thread " << i << " scheduled\n";
                 threads_status[i] = "RUNNING";
                 //std::thread th1(worker, i);
+                //callback *c = new callback(i); // asta nu merge, nu cred ca pot asigna o noua functie in heap
+                // alternativa ar fi un queue cu argumentele workerului
                 std::thread *th1 = new std::thread(worker, i);
                 pool[i] = th1;
             }
