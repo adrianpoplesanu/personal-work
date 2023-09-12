@@ -38,13 +38,16 @@ void schedulerWorker() {
                 threads_status[i] = "IDLE";
             }
         }
+        if (pendingArgs.size() > 0) {
+            //... schedule task in an empty thread, if one exists
+        }
     }
     std::cout << "schedulerWorker shut down\n";
 }
 
-void worker(int k) {
+void worker(int k, int n) {
     std::cout << "running worker thread " << k << "\n";
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < n; i++) {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
     std::cout << "stopping worker thread " << k << "\n";
@@ -74,8 +77,10 @@ int main(int argc, char *argv[]) {
                 //std::thread th1(worker, i);
                 //callback *c = new callback(i); // asta nu merge, nu cred ca pot asigna o noua functie in heap
                 // alternativa ar fi un queue cu argumentele workerului
-                std::thread *th1 = new std::thread(worker, i);
+                std::thread *th1 = new std::thread(worker, i, 100);
                 pool[i] = th1;
+            } else {
+                pendingArgs.push(100);
             }
         }
         if (line == "exit") {
