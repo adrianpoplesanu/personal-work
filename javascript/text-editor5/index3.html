@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
+    <!-- ^((?!example).)*$ -->
+    <!-- ^(?!.*<span>example<\/span>).*<span>(.*)<\/span>.*$ -->
 <style>
 body {
     background-color: #282a3a;
@@ -100,6 +101,36 @@ body {
           console.log(document.querySelector('#editor').innerText);
       }
 
+      function cleanIncompleteKeywords(content) {
+          var keywords = ["example", "text"]; // Add your desired keywords here
+          //for (var i = 0; i < keywords.length; i++) {
+          //    var keyword = keywords[i];
+          //    //var regex = new RegExp(keyword, "gi");
+          //    var regex = new RegExp("^(?!.*<span>" + keyword + "<\/span>).*<span>(.*)<\/span>.*$", "gi");
+          //    console.log(regex);
+          //}
+          //console.log(content);
+          for (var i = 0; i < content.length; i++) {
+              if (content.substring(i).startsWith("<span class=\"highlight\">")) {
+                  //console.log("cacat");
+                  var end = content.substring(i).indexOf("</span>");
+                  //console.log(content.substring(i + 24, i + end));
+                  var innerSpan = content.substring(i + 24, i + end);
+                  var foundKeyword = false;
+                  for (var j = 0; j < keywords.length; j++) {
+                      if (innerSpan === keywords[j]) {
+                          foundKeyword = true;
+                      }
+                  }
+                  if (!foundKeyword) {
+                      console.log(innerSpan);
+                  }
+                  //console.log(i + 24);
+                  //console.log(end);
+              }
+          }
+      }
+
       function highlightKeywords() {
           var editor = document.getElementById("editor");
           var keywords = ["example", "text"]; // Add your desired keywords here
@@ -119,6 +150,7 @@ body {
                 content = content.replace(regex, replacement);
               }*/
           }
+          cleanIncompleteKeywords(content);
 
           editor.innerHTML = content;
       }
