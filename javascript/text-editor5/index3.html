@@ -66,7 +66,7 @@ body {
         <span></span>
       </div>
     <div id="editor" contenteditable="true">
-    aaa
+      <div>aaa</div>
     </div>
 </div>
 <button onclick="highlightKeywords()">Highlight Keywords</button>
@@ -75,15 +75,82 @@ body {
       const textarea = document.querySelector('#editor')
       const lineNumbers = document.querySelector('.line-numbers')
 
+      var coordinates = {x: 0, y: 0};
+
+  function getCaretCoordinates() {
+    let x = 0,
+      y = 0;
+    const isSupported = typeof window.getSelection !== "undefined";
+    if (isSupported) {
+      const selection = window.getSelection();
+      if (selection.rangeCount !== 0) {
+        const range = selection.getRangeAt(0).cloneRange();
+        range.collapse(true);
+        const rect = range.getClientRects()[0];
+        if (rect) {
+          x = rect.left;
+          y = rect.top;
+        }
+      }
+    }
+    return { x, y };
+  }
+
+  function setCaret() {
+      var el = document.getElementById("editor")
+      var range = document.createRange()
+      var sel = window.getSelection()
+
+      //range.setStart(el.childNodes[coordinates.y], coordinates.x - 1)
+      range.setStart(el.childNodes[coordinates.y], 0)
+      range.collapse(true)
+
+      sel.removeAllRanges()
+      sel.addRange(range)
+  }
+
+  function setCaret2() {
+    let sel = window.getSelection();
+    let offset = sel.focusOffset;
+    let focus = sel.focusNode;
+
+    //focus.textContent += "\""; //setting div's innerText directly creates new
+    //nodes, which invalidate our selections, so we modify the focusNode directly
+
+    let range = document.createRange();
+    range.selectNode(focus);
+    console.log(offset);
+    console.log(coordinates.x);
+    console.log(focus);
+    console.log(focus.length);
+    range.setStart(focus, offset);
+
+    range.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+
       textarea.addEventListener('keyup', event => {
-        console.log(event.target)
+        event.stopPropagation();
+        event.preventDefault();
+        //console.log(getCaretCoordinates())
+        //console.log(event);
+        //console.log(event.target)
         //const numberOfLines = event.target.value.split('\n').length
         const numberOfLines = textarea.clientHeight / 21;
-        console.log(event.target.value)
+        //console.log(event.target.value)
 
         lineNumbers.innerHTML = Array(numberOfLines)
           .fill('<span></span>')
           .join('')
+
+        //highlightKeywords();
+        var coord = getCaretCoordinates();
+        console.log(coord);
+        if (coord.x != 0 && coord.y != 0) {
+            coordinates.x = Math.floor((coord.x - 55.796875) / 7.8046875) + 1;
+            coordinates.y = Math.floor((coord.y - 31) / 21);
+        }
       })
 
       textarea.addEventListener('keydown', event => {
@@ -124,11 +191,14 @@ body {
                   }
                   if (!foundKeyword) {
                       console.log(innerSpan);
+                      content = content.replace("<span class=\"highlight\">" + innerSpan + "</span>", innerSpan);
+                      console.log(content);
                   }
                   //console.log(i + 24);
                   //console.log(end);
               }
           }
+          return content;
       }
 
       function highlightKeywords() {
@@ -150,9 +220,11 @@ body {
                 content = content.replace(regex, replacement);
               }*/
           }
-          cleanIncompleteKeywords(content);
+          content = cleanIncompleteKeywords(content);
 
           editor.innerHTML = content;
+          //setCaret();
+          setCaret2();
       }
     </script>
 
