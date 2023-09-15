@@ -21,5 +21,12 @@ GameLoop.prototype.test = function() {
     console.log("in game loop");
 }
 
+GameLoop.prototype.update = function () {
+    while (true) {
+        //console.log("GameLoop update");
+    }
+}
+
 var gameLoop = new GameLoop();
-gameLoop.test()
+gameLoop.test();
+//gameLoop.update();
