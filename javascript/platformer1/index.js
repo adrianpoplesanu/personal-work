@@ -11,4 +11,15 @@ function clear() {
     context.fill();
 }
 
-clear(); 
+clear();
+
+function GameLoop() {
+
+}
+
+GameLoop.prototype.test = function() {
+    console.log("in game loop");
+}
+
+var gameLoop = new GameLoop();
+gameLoop.test()
