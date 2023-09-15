@@ -3,6 +3,7 @@
 #include <queue>
 #include <thread>
 #include <chrono>
+#include <sstream>
 
 typedef void *callback(int);
 
@@ -48,7 +49,7 @@ void schedulerWorker() {
 void worker(int k, int n) {
     std::cout << "running worker thread " << k << "\n";
     for (int i = 0; i < n; i++) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
     std::cout << "stopping worker thread " << k << "\n";
     threads_status[k] = "CALL_JOIN";
@@ -65,8 +66,11 @@ int main(int argc, char *argv[]) {
         std::cout << ">> ";
         std::string line;
         std::getline(std::cin, line);
-        if (line == "start") {
+        if (line.rfind("start", 0) == 0) {
             // add thread to the queue
+            std::stringstream ss(line);
+            std::string command, number;
+            ss >> command >> number;
             int i = 0;
             while (i < NUM_THREADS && threads_status[i] != "IDLE") {
                 i++;
@@ -77,7 +81,7 @@ int main(int argc, char *argv[]) {
                 //std::thread th1(worker, i);
                 //callback *c = new callback(i); // asta nu merge, nu cred ca pot asigna o noua functie in heap
                 // alternativa ar fi un queue cu argumentele workerului
-                std::thread *th1 = new std::thread(worker, i, 100);
+                std::thread *th1 = new std::thread(worker, i, stoi(number));
                 pool[i] = th1;
             } else {
                 pendingArgs.push(100);
