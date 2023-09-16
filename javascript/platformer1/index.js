@@ -33,3 +33,10 @@ class GameLoop {
 
 var gameLoop = new GameLoop();
 gameLoop.test();
+
+function animate() {
+    window.requestAnimationFrame(animate);
+    //console.log("go");
+}
+
+animate();
