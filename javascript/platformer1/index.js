@@ -13,20 +13,23 @@ function clear() {
 
 clear();
 
-function GameLoop() {
-
+class Sprite {
+    constructor(name) {
+        console.log(name);
+    }
 }
 
-GameLoop.prototype.test = function() {
-    console.log("in game loop");
-}
+var sprite = new Sprite("bebe dex");
 
-GameLoop.prototype.update = function () {
-    while (true) {
-        //console.log("GameLoop update");
+class GameLoop {
+    test() {
+        console.log("in game loop");
+    }
+
+    update() {
+        console.log("gameloop.update");
     }
 }
 
 var gameLoop = new GameLoop();
 gameLoop.test();
-//gameLoop.update();
