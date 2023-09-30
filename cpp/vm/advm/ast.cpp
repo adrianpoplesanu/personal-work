@@ -109,5 +109,14 @@ void free_memory_ASTNode(ASTNode* node) {
         case AT_DEF_STATEMENT:
             delete (ASTDefStatement*) node;
         break;
+        case AT_WHILE_STATEMENT:
+            delete (ASTWhileStatement*) node;
+        break;
+        case AT_FOR_STATEMENT:
+            delete (ASTForStatement*) node;
+        break;
+        case AT_IF_STATEMENT:
+            delete (ASTIfStatement*) node;
+        break;
     }
 }

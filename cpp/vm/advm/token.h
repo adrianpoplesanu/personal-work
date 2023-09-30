@@ -27,7 +27,11 @@ enum TokenType {
     TT_TRUE,
     TT_FALSE,
     TT_WHILE,
-    TT_FOR
+    TT_FOR,
+    TT_BREAK,
+    TT_CONTINUE,
+    TT_SINGLECOMMENT,
+    TT_MULTICOMMENT
 };
 
 std::map<TokenType, std::string> tokenTypeConverter = {

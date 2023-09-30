@@ -37,12 +37,48 @@ void Parser::nextToken() {
 }
 
 ASTNode* Parser::parseStatement() {
-    return NULL;
+    if (currentToken.type == TT_LET)
+        return parseLetStatement();
+    if (currentToken.type == TT_RETURN)
+        return parseReturnStatement();
+    if (currentToken.type == TT_BREAK)
+        return parseBreakStatement();
+    if (currentToken.type == TT_CONTINUE)
+        return parseContinueStatement();
+    if (currentToken.type == TT_MULTICOMMENT)
+        return parseComment();
+    if (currentToken.type == TT_SINGLECOMMENT)
+        return parseSingleLineComment();
+    return parseExpressionStatement();
 }
 
 ASTNode* Parser::parseIdent() {
     ASTIdentifier *ident = new ASTIdentifier(currentToken, currentToken.stringLiteral);
     return ident;
+}
+
+ASTNode* Parser::parseLetStatement() {
+    return NULL;
+}
+
+ASTNode* Parser::parseReturnStatement() {
+    return NULL;
+}
+
+ASTNode* Parser::parseBreakStatement() {
+    return NULL;
+}
+
+ASTNode* Parser::parseContinueStatement() {
+    return NULL;
+}
+
+ASTNode* Parser::parseComment() {
+    return NULL;
+}
+
+ASTNode* Parser::parseSingleLineComment() {
+    return NULL;
 }
 
 ASTNode* Parser::parsePrefixExpression() {
@@ -51,6 +87,10 @@ ASTNode* Parser::parsePrefixExpression() {
 }
 
 ASTNode* Parser::parseInfixExpression(ASTNode* left) {
+    return NULL;
+}
+
+ASTNode* Parser::parseExpressionStatement() {
     return NULL;
 }
 

@@ -8,6 +8,8 @@
 #include "compiler.cpp"
 #include "evaluator.h"
 #include "evaluator.cpp"
+#include "gc.h"
+#include "gc.cpp"
 #include "lexer.h"
 #include "lexer.cpp"
 #include "objects.h"

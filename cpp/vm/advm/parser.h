@@ -40,6 +40,10 @@ public:
     ASTNode* parseExpressionStatement();
     ASTNode* parseLetStatement();
     ASTNode* parseReturnStatement();
+    ASTNode* parseBreakStatement();
+    ASTNode* parseContinueStatement();
+    ASTNode* parseComment();
+    ASTNode* parseSingleLineComment();
     ASTNode* parseExpression(PrecedenceType);
     ASTNode* parsePrefixExpression();
     ASTNode* parseInfixExpression(ASTNode*);
