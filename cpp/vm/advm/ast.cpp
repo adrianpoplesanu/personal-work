@@ -9,7 +9,7 @@ std::string ASTNode::inspect() {
 }
 
 ASTProgram::ASTProgram() {
-    //...
+    type = AT_PROGRAM;
 }
 
 ASTProgram::~ASTProgram() {
@@ -76,6 +76,11 @@ ASTInfixExpression::ASTInfixExpression(Token t, ASTNode* l, ASTNode* r, std::str
     left = l;
     right = r;
     operand = op;
+}
+
+ASTInfixExpression::~ASTInfixExpression() {
+    free_memory_ASTNode(left);
+    free_memory_ASTNode(right);
 }
 
 std::string ASTInfixExpression::toString() {

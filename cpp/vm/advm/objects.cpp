@@ -8,16 +8,21 @@ std::string AdObject::toString() {
     return "unimplemented in subclass";
 }
 
+AdObjectInteger::AdObjectInteger() {
+    type = OT_INT;
+}
+
+AdObjectInteger::AdObjectInteger(int v) {
+    type = OT_INT;
+    value = v;
+}
+
 std::string AdObjectInteger::inspect() {
     return "todo";
 }
 
 std::string AdObjectInteger::toString() {
     return "todo";
-}
-
-AdObjectInteger::AdObjectInteger() {
-    type = OT_INT;
 }
 
 void AD_INCREF(AdObject* obj) {

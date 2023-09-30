@@ -10,5 +10,14 @@ void Repl::loop() {
         parser.load(line);
         program.reset();
         parser.buildProgramStatement(program);
+
+        compiler.reset();
+        compiler.compile(&program); // TODO: program should be a pointer
+        Bytecode bytecode = compiler.getBytecode();
+        vm.load(bytecode);
+        AdObject* result = vm.last_popped_stack_element();
+        if (result != NULL) {
+            std::cout << result->inspect() << "\n";
+        }
     }
 }

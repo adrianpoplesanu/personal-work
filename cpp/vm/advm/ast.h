@@ -62,6 +62,7 @@ public:
     ASTInfixExpression();
     ASTInfixExpression(Token);
     ASTInfixExpression(Token, ASTNode*, ASTNode*, std::string);
+    ~ASTInfixExpression();
     virtual std::string inspect();
     virtual std::string toString();
 };

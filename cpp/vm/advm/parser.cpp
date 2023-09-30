@@ -15,7 +15,7 @@ PrecedenceType Parser::currentPrecedence() {
 }
 
 PrecedenceType Parser::peekPrecedence() {
-    return precedenceMap[currentToken.type];
+    return precedenceMap[peekToken.type];
 }
 
 bool Parser::currentTokenIs(TokenType type) {
@@ -34,7 +34,7 @@ void Parser::load(std::string source) {
 
 void Parser::buildProgramStatement(ASTProgram& program) {
     while(currentToken.type != TT_EOF) {
-        std::cout << currentToken.toString() << "\n";
+        //std::cout << currentToken.toString() << "\n";
         ASTNode* stmt = parseStatement();
         program.statements.push_back(stmt);
         nextToken();
@@ -105,7 +105,14 @@ ASTNode* Parser::parsePrefixExpression() {
 }
 
 ASTNode* Parser::parseInfixExpression(ASTNode* left) {
-    return NULL;
+    ASTInfixExpression* expr = new ASTInfixExpression();
+    expr->token = currentToken;
+    expr->operand = currentToken.stringLiteral;
+    expr->left = left;
+    PrecedenceType preced = currentPrecedence();
+    nextToken();
+    expr->right = parseExpression(preced);
+    return expr;
 }
 
 ASTNode* Parser::parseExpressionStatement() {

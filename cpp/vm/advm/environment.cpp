@@ -1,5 +1,9 @@
 #include "environment.h"
 
+Environment::Environment() {
+    
+}
+
 Environment* newEnvironment() {
     Environment* env = new Environment();
     return env;

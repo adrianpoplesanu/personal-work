@@ -25,6 +25,9 @@ class AdObject {
 public:
     ObjectType type;
     int ref_count;
+    bool marked;
+    AdObject* next;
+    AdObject* prev;
 
     virtual std::string inspect();
     virtual std::string toString();
@@ -35,6 +38,7 @@ public:
     int value;
 
     AdObjectInteger();
+    AdObjectInteger(int);
     virtual std::string inspect();
     virtual std::string toString();
 };
