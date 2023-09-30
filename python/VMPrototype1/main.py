@@ -1,16 +1,35 @@
-# This is a sample Python script.
+import sys
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+from compiler import Compiler
+from parser import Parser
+from ast import ASTProgram
+from repl import Repl
+from vm import VM
 
 
-# Press the green button in the gutter to run the script.
+def main(args):
+    filename = ''
+
+    if len(args) == 1:
+        filename = args[0]
+
+    parser = Parser()
+    program = ASTProgram()
+    evaluator = None
+    compiler = Compiler()
+    vm = VM()
+    repl = Repl(parser=parser, program=program, evaluator=evaluator, compiler=compiler, vm=vm)
+    if filename:
+        try:
+            data = open(filename, "r")
+        except FileNotFoundError as err:
+            print("empty or missing ad source file")
+            sys.exit(0)
+        source = data.read()
+        repl.execute_file(source=source)
+    else:
+        repl.loop()
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    main(sys.argv[1:])
