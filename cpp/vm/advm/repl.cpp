@@ -8,6 +8,7 @@ void Repl::loop() {
         getline(std::cin, line);
         if (line == "exit()") break;
         parser.load(line);
+        program.reset();
         parser.buildProgramStatement(program);
     }
 }

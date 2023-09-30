@@ -32,9 +32,10 @@ public:
 
 class ASTProgram : public ASTNode {
 public:
-    std::vector<ASTNode> statements;
+    std::vector<ASTNode*> statements;
 
     ASTProgram();
+    ~ASTProgram();
     virtual std::string inspect();
     virtual std::string toString();
     void reset();
@@ -47,6 +48,7 @@ public:
     ASTExpressionStatement();
     ASTExpressionStatement(Token);
     ASTExpressionStatement(Token, ASTNode*);
+    ~ASTExpressionStatement();
     virtual std::string inspect();
     virtual std::string toString();
 };

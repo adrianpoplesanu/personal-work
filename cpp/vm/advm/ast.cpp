@@ -12,12 +12,54 @@ ASTProgram::ASTProgram() {
     //...
 }
 
+ASTProgram::~ASTProgram() {
+    for (std::vector<ASTNode*>::iterator it = statements.begin() ; it != statements.end(); ++it) {
+        ASTNode *node = *it;
+        free_memory_ASTNode(node);
+    }
+}
+
+void ASTProgram::reset() {
+    for (std::vector<ASTNode*>::iterator it = statements.begin() ; it != statements.end(); ++it) {
+        ASTNode *node = *it;
+        free_memory_ASTNode(node);
+    }
+    statements.clear();
+}
+
 std::string ASTProgram::toString() {
     return "AstProgram";
 }
 
 std::string ASTProgram::inspect() {
     return "AstProgram";
+}
+
+ASTExpressionStatement::ASTExpressionStatement() {
+    type = AT_EXPRESSION_STATEMENT;
+}
+
+ASTExpressionStatement::ASTExpressionStatement(Token t) {
+    type = AT_EXPRESSION_STATEMENT;
+    token = t;
+}
+
+ASTExpressionStatement::ASTExpressionStatement(Token t, ASTNode* e) {
+    type = AT_EXPRESSION_STATEMENT;
+    token = t;
+    expression = e;
+}
+
+ASTExpressionStatement::~ASTExpressionStatement() {
+    free_memory_ASTNode(expression);
+}
+
+std::string ASTExpressionStatement::toString() {
+    return "ASTExpressionStatement";
+}
+
+std::string ASTExpressionStatement::inspect() {
+    return "ASTExpressionStatement";
 }
 
 ASTInfixExpression::ASTInfixExpression() {
@@ -61,6 +103,30 @@ std::string ASTIdentifier::toString() {
 
 std::string ASTIdentifier::inspect() {
     return "ASTIdentifier";
+}
+
+ASTInteger::ASTInteger() {
+    type = AT_INTEGER;
+}
+
+ASTInteger::ASTInteger(Token t) {
+    type = AT_INTEGER;
+    token = t;
+}
+
+ASTInteger::ASTInteger(Token t, int v) {
+    type = AT_INTEGER;
+    token = t;
+    value = v;
+}
+
+
+std::string ASTInteger::toString() {
+    return "ASTInteger";
+}
+
+std::string ASTInteger::inspect() {
+    return "ASTInteger";
 }
 
 void Ad_INCREF(ASTNode* node) {

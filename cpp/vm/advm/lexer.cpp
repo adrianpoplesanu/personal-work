@@ -104,6 +104,10 @@ Token Lexer::nextToken() {
             token.stringLiteral = '}';
             token.type = TT_RBRACE;
             break;
+        case ';':
+            token.stringLiteral = ';';
+            token.type = TT_SEMICOLON;
+            break;
         default:
             if (isLetter()) {
                 readNextChar = false;

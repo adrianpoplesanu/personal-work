@@ -31,7 +31,8 @@ enum TokenType {
     TT_BREAK,
     TT_CONTINUE,
     TT_SINGLECOMMENT,
-    TT_MULTICOMMENT
+    TT_MULTICOMMENT,
+    TT_SEMICOLON
 };
 
 std::map<TokenType, std::string> tokenTypeConverter = {
@@ -57,7 +58,8 @@ std::map<TokenType, std::string> tokenTypeConverter = {
     {TT_TRUE, "TRUE"},
     {TT_FALSE, "FALSE"},
     {TT_WHILE, "WHILE"},
-    {TT_FOR, "FOR"}
+    {TT_FOR, "FOR"},
+    {TT_SEMICOLON, "SEMICOLON"}
 };
 
 std::map<std::string, TokenType> keywords = {

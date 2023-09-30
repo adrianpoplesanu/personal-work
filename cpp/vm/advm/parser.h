@@ -36,6 +36,8 @@ public:
     void nextToken();
     PrecedenceType currentPrecedence();
     PrecedenceType peekPrecedence();
+    bool currentTokenIs(TokenType);
+    bool peekTokenIs(TokenType);
     ASTNode* parseStatement();
     ASTNode* parseExpressionStatement();
     ASTNode* parseLetStatement();
@@ -48,6 +50,7 @@ public:
     ASTNode* parsePrefixExpression();
     ASTNode* parseInfixExpression(ASTNode*);
     ASTNode* parseIdent();
+    ASTNode* parseIntegerLiteral();
 };
 
 #endif

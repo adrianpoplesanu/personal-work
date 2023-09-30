@@ -2,6 +2,7 @@
 
 Parser::Parser() {
     prefixParseFns.insert(std::make_pair(TT_IDENT, &Parser::parseIdent));
+    prefixParseFns.insert(std::make_pair(TT_INT, &Parser::parseIntegerLiteral));
     prefixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parsePrefixExpression));
     infixParseFns.insert(std::make_pair(TT_PLUS, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parseInfixExpression));
@@ -17,6 +18,14 @@ PrecedenceType Parser::peekPrecedence() {
     return precedenceMap[currentToken.type];
 }
 
+bool Parser::currentTokenIs(TokenType type) {
+    return false;
+}
+
+bool Parser::peekTokenIs(TokenType type) {
+    return false;
+}
+
 void Parser::load(std::string source) {
     lexer.load(source);
     nextToken();
@@ -27,6 +36,7 @@ void Parser::buildProgramStatement(ASTProgram& program) {
     while(currentToken.type != TT_EOF) {
         std::cout << currentToken.toString() << "\n";
         ASTNode* stmt = parseStatement();
+        program.statements.push_back(stmt);
         nextToken();
     }
 }
@@ -81,6 +91,14 @@ ASTNode* Parser::parseSingleLineComment() {
     return NULL;
 }
 
+ASTNode* Parser::parseIntegerLiteral() {
+    ASTInteger* integer_node = new ASTInteger();
+    int val = stoi(currentToken.stringLiteral);
+    integer_node->token = currentToken;
+    integer_node->value = val;
+    return integer_node;
+}
+
 ASTNode* Parser::parsePrefixExpression() {
     ASTPrefixExpression *expr = new ASTPrefixExpression();
     return NULL;
@@ -91,10 +109,29 @@ ASTNode* Parser::parseInfixExpression(ASTNode* left) {
 }
 
 ASTNode* Parser::parseExpressionStatement() {
-    return NULL;
+    ASTExpressionStatement* stmt = new ASTExpressionStatement(currentToken);
+    stmt->expression = parseExpression(PT_LOWEST);
+    if (peekTokenIs(TT_SEMICOLON)) {
+        nextToken();
+    }
+    return stmt;
 }
 
 ASTNode* Parser::parseExpression(PrecedenceType precedence) {
-    //...
-    return NULL;
+    if (prefixParseFns.find(currentToken.type) == prefixParseFns.end()) {
+        return NULL;
+    }
+    PrefixCallback prefix = prefixParseFns[currentToken.type];
+
+    ASTNode* leftExp = (this->*prefix)();
+
+    while(!peekTokenIs(TT_SEMICOLON) && (precedence < peekPrecedence())) {
+        if (infixParseFns.find(peekToken.type) == infixParseFns.end()) {
+            return leftExp;
+        }
+        InfixCallback infix = infixParseFns[peekToken.type];
+        nextToken();
+        leftExp = (this->*infix)(leftExp);
+    }
+    return leftExp;
 }
