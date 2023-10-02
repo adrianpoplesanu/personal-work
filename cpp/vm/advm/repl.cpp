@@ -1,6 +1,16 @@
 #include "repl.h"
 #include <iostream>
 
+Repl::Repl() {
+    gc = new GarbageCollector();
+    compiler.gc = gc;
+}
+
+Repl::~Repl() {
+    gc->forceFreeObjects();
+    delete gc;
+}
+
 void Repl::loop() {
     while(1) {
         std::string line;
@@ -14,7 +24,10 @@ void Repl::loop() {
         compiler.reset();
         compiler.compile(&program); // TODO: program should be a pointer
         Bytecode bytecode = compiler.getBytecode();
+        compiler.code.instructions = bytecode.instructions;
+        std::cout << compiler.code.print(); // asta pare ca functioneaza cum trebuie
         vm.load(bytecode);
+        vm.run();
         AdObject* result = vm.last_popped_stack_element();
         if (result != NULL) {
             std::cout << result->inspect() << "\n";

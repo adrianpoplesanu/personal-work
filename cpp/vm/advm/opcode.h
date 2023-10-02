@@ -7,7 +7,7 @@ enum OpCodeByte {
 };
 
 class OpCode {
-protected:
+public:
     OpCodeByte byteCode;
 };
 

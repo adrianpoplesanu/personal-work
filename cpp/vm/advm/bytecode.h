@@ -5,6 +5,7 @@
 #include "objects.h"
 
 class Bytecode {
+public:
     Instructions instructions;
     std::vector<AdObject*> constants;
 };

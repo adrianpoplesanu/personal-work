@@ -1,7 +1,15 @@
 #include "vm.h"
 
-void VM::load(Bytecode bytecode) {
+VM::VM() {
+    sp = 0;
+}
 
+void VM::load(Bytecode b) {
+    instructions = b.instructions;
+}
+
+void VM::run() {
+    // ...
 }
 
 AdObject* VM::last_popped_stack_element() {

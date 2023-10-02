@@ -5,7 +5,14 @@ GarbageCollector::GarbageCollector() {
 }
 
 void GarbageCollector::addObject(AdObject *obj) {
-    // TODO: implement this
+    if (head == NULL && tail == NULL) {
+        head = tail = obj;
+    } else {
+        obj->next = NULL;
+        obj->prev = tail;
+        tail->next = obj;
+        tail = obj;
+    }
 }
 
 void GarbageCollector::markObjects() {
@@ -25,5 +32,10 @@ void GarbageCollector::sweepObjects() {
 }
 
 void GarbageCollector::forceFreeObjects() {
-    // TODO: implement this
+    AdObject *current = head;
+    while (current != NULL) {
+        AdObject *target = current;
+        current = current->next;
+        free_memory_AdObject(target);
+    }
 }

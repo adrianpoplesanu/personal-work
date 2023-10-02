@@ -4,6 +4,7 @@
 #include "parser.h"
 #include "compiler.h"
 #include "vm.h"
+#include "gc.h"
 
 class Repl {
     public:
@@ -11,7 +12,10 @@ class Repl {
     ASTProgram program;
     Compiler compiler;
     VM vm;
+    GarbageCollector *gc;
 
+    Repl();
+    ~Repl();
     void loop();
 };
 

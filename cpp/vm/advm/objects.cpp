@@ -38,5 +38,15 @@ void AD_DECREF(AdObject* obj) {
 }
 
 void free_memory_AdObject(AdObject* obj) {
-    //...
+    if (obj == NULL) return;
+    switch(obj->type) {
+        case OT_INT: {
+            delete (AdObjectInteger*) obj;
+            break;
+        }
+        default: {
+            std::cout << "ERROR: object type not handled\n";
+            break;
+        }
+    }
 }

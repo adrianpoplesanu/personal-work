@@ -2,8 +2,8 @@
 
 #include "ast.h"
 #include "ast.cpp"
-#include "builtin.h"
-#include "builtin.cpp"
+#include "builtins.h"
+#include "builtins.cpp"
 #include "bytecode.h"
 #include "bytecode.cpp"
 #include "code.h"

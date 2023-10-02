@@ -1,5 +1,4 @@
 #include "compiler.h"
-#include <list>
 
 Compiler::Compiler() {
     // ...
@@ -34,7 +33,7 @@ void Compiler::compile(ASTNode* node) {
             compile(infixExpression->right);
             if (infixExpression->operand == "+") {
                 OpAdd opAdd = OpAdd();
-                std::list<int> args;
+                std::vector<int> args;
                 emit(opAdd, 0, args);
             }
             break;
@@ -45,8 +44,9 @@ void Compiler::compile(ASTNode* node) {
         case AT_INTEGER: {
             ASTInteger *integerExpr = (ASTInteger*) node;
             AdObjectInteger *integerObj = new AdObjectInteger(integerExpr->value);
+            gc->addObject(integerObj);
             OpConstant opConstant = OpConstant();
-            std::list<int> args;
+            std::vector<int> args;
             args.push_back(addConstant(integerObj));
             emit(opConstant, 1, args);
             break;
@@ -78,14 +78,20 @@ void Compiler::compile(ASTNode* node) {
     }
 }
 
-int Compiler::emit(OpCode opcode, int n, std::list<int> &args) {
-    unsigned char *ins = code.make(opcode, n, args);
-    int pos = addInstruction(ins);
+int Compiler::emit(OpCode opcode, int n, std::vector<int> &args) {
+    int size;
+    unsigned char *ins = code.make(opcode, n, args, size);
+    int pos = addInstruction(size, ins);
     return pos;
 }
 
-int Compiler::addInstruction(unsigned char *ins) {
-    return 0;
+int Compiler::addInstruction(int size, unsigned char *ins) {
+    int posNewInstruction = size;
+    for (int i = 0; i < size; i++) {
+        instructions.add(ins[i]);
+    }
+    delete[] ins; // aici a mers delete-ul asta, dar ma intreb daca asta e momentul oportun sa sterg pointerii astia
+    return posNewInstruction;
 }
 
 int Compiler::addConstant(AdObject* obj) {
@@ -95,5 +101,7 @@ int Compiler::addConstant(AdObject* obj) {
 
 Bytecode Compiler::getBytecode() {
     Bytecode bytecode;
+    bytecode.instructions = instructions;
+    bytecode.constants = constants;
     return bytecode;
 }

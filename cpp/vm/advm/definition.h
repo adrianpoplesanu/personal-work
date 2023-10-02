@@ -6,9 +6,10 @@
 class Definition {
 public:
     std::string name;
+    int size;
     int *operandWidths;
 
-    Definition(std::string, int*);
+    Definition(std::string, int, int*);
     ~Definition();
 };
 
