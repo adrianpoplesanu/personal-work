@@ -10,4 +10,7 @@ class Repl:
         pass
 
     def loop(self):
-        pass
+        while True:
+            line = input(">> ")
+            if line == "exit()":
+                break
