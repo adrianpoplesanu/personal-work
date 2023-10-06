@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class TestingFeatures {
+public class TestingSequerncedCollections {
     public static void main(String[] args) {
         System.out.println("running java21...");
 
@@ -8,6 +8,8 @@ public class TestingFeatures {
         List rNames = names.reversed();
         System.out.println(names);
         System.out.println(rNames);
+
+        //names.removeFirst(); // List.of is immutable
 
         System.out.println(names == rNames.reversed());
     }
