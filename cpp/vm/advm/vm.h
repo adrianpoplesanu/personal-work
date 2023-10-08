@@ -9,12 +9,15 @@ public:
     int stackSize = 2048;
     int sp; // stack pointer
     Instructions instructions;
-    AdObject stack[2048];
+    AdObject *stack[2048];
 
     VM();
     void load(Bytecode);
+    AdObject* stackTop();
     void run();
     AdObject* last_popped_stack_element();
+    void push(AdObject*);
+    AdObject* pop();
 };
 
 #endif
