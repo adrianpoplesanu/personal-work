@@ -6,10 +6,18 @@ VM::VM() {
 
 void VM::load(Bytecode b) {
     instructions = b.instructions;
+    constants = b.constants;
+    for (int i = 0; i < 2048; i++) {
+        if (i < sp) { // TODO: this works but looks bad
+            delete stack[i];
+        }
+        stack[i] = NULL;
+    }
 }
 
 AdObject* VM::stackTop() {
-    return NULL;
+    if (sp == 0) return NULL;
+    return stack[sp - 1];
 }
 
 void VM::run() {

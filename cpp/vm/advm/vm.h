@@ -3,12 +3,14 @@
 
 #include "objects.h"
 #include "bytecode.h"
+#include <vector>
 
 class VM {
 public:
     int stackSize = 2048;
     int sp; // stack pointer
     Instructions instructions;
+    std::vector<AdObject*> constants; // TODO: this will leak memory
     AdObject *stack[2048];
 
     VM();
