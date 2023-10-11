@@ -37,5 +37,7 @@ void VM::push(AdObject* obj) {
 }
 
 AdObject* VM::pop() {
-    return NULL;
+    AdObject* result = stack[sp - 1];
+    sp--;
+    return result;
 }
