@@ -29,7 +29,11 @@ AdObject* VM::last_popped_stack_element() {
 }
 
 void VM::push(AdObject* obj) {
-
+    if (sp >= stackSize) {
+        std::cout << "ERROR: stack overflow";
+    } else {
+        stack[sp++] = obj;
+    }
 }
 
 AdObject* VM::pop() {
