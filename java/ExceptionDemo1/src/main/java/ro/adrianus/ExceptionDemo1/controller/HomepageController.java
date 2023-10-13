@@ -32,6 +32,6 @@ public class HomepageController {
                                 HttpServletResponse response,
                                 Exception e) {
         // ...
-        throw new RuntimeException("alta exceptie a fost ridicata");
+        //throw new RuntimeException("alta exceptie a fost ridicata");
     }
 }
