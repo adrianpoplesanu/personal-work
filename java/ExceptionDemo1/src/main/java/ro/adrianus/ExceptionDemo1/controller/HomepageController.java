@@ -28,10 +28,16 @@ public class HomepageController {
     // daca o lasi goala primesti un 200 dar nu se incarca nimic pe pagina
     // daca o lasi cum e acum atunci le primesti pe amandoua in consola
     @ExceptionHandler
-    public void handleException(HttpServletRequest request,
+    @ResponseBody
+    public String handleException(HttpServletRequest request,
                                 HttpServletResponse response,
                                 Exception e) {
         // ...
         //throw new RuntimeException("alta exceptie a fost ridicata");
+        if (e.getMessage().equals("ala bala portocala")) {
+            //throw new StackOverflowError("aoleu");
+            return "aoleu";
+        }
+        return "undefined error";
     }
 }
