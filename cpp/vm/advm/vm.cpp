@@ -21,7 +21,25 @@ AdObject* VM::stackTop() {
 }
 
 void VM::run() {
-    // ...
+    for (int ip = 0; ip < instructions.bytes.size(); ip++) {
+        unsigned char opcode = instructions.bytes[ip];
+        switch (opcode) {
+            case 0: {
+                // 0 e OpConstant
+                //std::cout << "aaa\n";
+                break;
+            }
+            case 1: {
+                // 1 e OpAdd
+                //std::cout << "bbb\n";
+                break;
+            }
+            default: {
+                //std::cout << "ccc\n";
+                break;
+            }
+        }
+    }
 }
 
 AdObject* VM::last_popped_stack_element() {

@@ -3,10 +3,13 @@
 
 #include "objects.h"
 #include "bytecode.h"
+#include "code.h"
 #include <vector>
 
 class VM {
 public:
+    Code code;
+
     int stackSize = 2048;
     int sp; // stack pointer
     Instructions instructions;
