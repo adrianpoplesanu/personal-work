@@ -18,7 +18,9 @@ AdObjectInteger::AdObjectInteger(int v) {
 }
 
 std::string AdObjectInteger::inspect() {
-    return "todo";
+    std::string out = "";
+    out = std::to_string(value);
+    return out;
 }
 
 std::string AdObjectInteger::toString() {

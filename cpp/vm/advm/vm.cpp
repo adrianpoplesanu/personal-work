@@ -27,11 +27,24 @@ void VM::run() {
             case 0: {
                 // 0 e OpConstant
                 //std::cout << "aaa\n";
+                int constIndex = readUint16(instructions, ip + 1);
+                ip += 2;
+                push(constants.at(constIndex));
                 break;
             }
             case 1: {
                 // 1 e OpAdd
                 //std::cout << "bbb\n";
+                AdObject *right = pop();
+                AdObject *left = pop();
+
+                int leftValue = ((AdObjectInteger*) left)->value;
+                //std::cout << leftValue << "\n";
+                int rightValue = ((AdObjectInteger*) right)->value;
+                //std::cout << rightValue << "\n";
+
+                int result = leftValue + rightValue;
+                push(new AdObjectInteger(result));
                 break;
             }
             default: {
@@ -43,7 +56,10 @@ void VM::run() {
 }
 
 AdObject* VM::last_popped_stack_element() {
-    return NULL;
+    if (sp == 0) {
+        return NULL;
+    }
+    return stack[sp - 1];
 }
 
 void VM::push(AdObject* obj) {
