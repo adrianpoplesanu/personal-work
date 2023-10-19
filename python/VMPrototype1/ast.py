@@ -4,3 +4,7 @@ class ASTNode:
 
 class ASTProgram(ASTNode):
     pass
+
+
+class AstExpressionStatement(ASTNode):
+    pass
