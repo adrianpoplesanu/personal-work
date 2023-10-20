@@ -3,7 +3,11 @@ class ASTNode:
 
 
 class ASTProgram(ASTNode):
-    pass
+    def __init__(self):
+        self.statements = []
+
+    def reset(self):
+        self.statements = []
 
 
 class AstExpressionStatement(ASTNode):

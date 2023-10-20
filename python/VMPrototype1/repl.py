@@ -1,6 +1,6 @@
 class Repl:
     def __init__(self, parser=None, program=None, evaluator=None, compiler=None, vm=None):
-        self.parse = parser
+        self.parser = parser
         self.program = program
         self.evaluator = evaluator
         self.compiler = compiler
@@ -14,3 +14,6 @@ class Repl:
             line = input(">> ")
             if line == "exit()":
                 break
+            self.parser.load(line)
+            self.program.reset()
+            self.parser.build_program_statement(self.program)
