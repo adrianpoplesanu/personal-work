@@ -17,3 +17,13 @@ class Repl:
             self.parser.load(line)
             self.program.reset()
             self.parser.build_program_statement(self.program)
+
+            self.compiler.reset()
+            self.compiler.compile(self.program)
+            bytecode = self.compiler.bytecode
+
+            self.vm.load(bytecode)
+            self.vm.run()
+            result = self.vm.last_popped_stack_element()
+            if result:
+                print(result.inspect())
