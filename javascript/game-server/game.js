@@ -23,20 +23,19 @@ GameLoop.prototype.update = function () {
     this.clear();
 }
 
-var gameLoop = new GameLoop();
-
 function Game() {
     this.gameObjects = [];
+    this.gameLoop = new GameLoop();
 }
 
 Game.prototype.start = function () {
     console.log("starting game...");
-    setInterval(this.update, 1000/framesPerSecond);
+    setInterval(game.update, 1000/framesPerSecond);
 }
 
 Game.prototype.update = function () {
-    gameLoop.update();
-    for (gameObject in this.gameObjects) {
+    game.gameLoop.update();
+    for (gameObject in game.gameObjects) {
         gameObject.update();
     }
 }
