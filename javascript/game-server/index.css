@@ -1,0 +1,51 @@
+/*.center {
+  border: 5px solid;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px;
+}*/
+
+.center {
+  padding: 70px 0;
+  text-align: center;
+  background-color: black;
+}
+
+body {
+  background-color: black;
+}
+
+.title-text {
+  background: -webkit-linear-gradient(0deg, #212529 0%, #131415 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#button-div {
+  width: 200px;
+  height: 100px;
+  background: #212529;
+  transition: background-color 2s ease-out 100ms
+}
+
+#button-div:hover {
+  background-color: #000000;
+}
+
+.fade-in-element { animation: fadeIn 2s; }
+
+@keyframes fadeIn {
+  0% { opacity: 0.2; }
+  100% { opacity: 0.2; }
+}
+
+.fade-in-element:hover { animation: fadeOut 6s; }
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0.2; }
+}
+
+

@@ -30,6 +30,9 @@ function Game() {
 
 Game.prototype.start = function () {
     console.log("starting game...");
+    for (gameObject in game.gameObjects) {
+        gameObject.start();
+    }
     setInterval(game.update, 1000/framesPerSecond);
 }
 
