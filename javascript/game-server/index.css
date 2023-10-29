@@ -41,11 +41,10 @@ body {
   100% { opacity: 0.2; }
 }
 
-.fade-in-element:hover { animation: fadeOut 6s; }
+.fade-in-element:hover { animation: fadeOut 8s; }
 
 @keyframes fadeOut {
-  0% { opacity: 1; }
+  0% { opacity: 0.2; }
+  50% { opacity: 1; }
   100% { opacity: 0.2; }
 }
-
-
