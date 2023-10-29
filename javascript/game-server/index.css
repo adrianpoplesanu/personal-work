@@ -15,12 +15,16 @@
 
 body {
   background-color: black;
+  /*animation: flicker 8s;
+  animation-iteration-count: infinite;*/
 }
 
 .title-text {
   background: -webkit-linear-gradient(0deg, #212529 0%, #131415 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  animation: flicker 8s;
+  animation-iteration-count: infinite;
 }
 
 #button-div {
@@ -47,4 +51,11 @@ body {
   0% { opacity: 0.2; }
   50% { opacity: 1; }
   100% { opacity: 0.2; }
+}
+
+@keyframes flicker {
+  0% { opacity: 1 }
+  20% { opacity: 0.6 }
+  30% { opacity: 0.8 }
+  100% { opacity 1 }
 }
