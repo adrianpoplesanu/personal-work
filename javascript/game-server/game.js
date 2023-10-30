@@ -5,6 +5,8 @@ var height = canvas.height;
 var width = canvas.width;
 
 var framesPerSecond = 30;
+var lumination = 0;
+var luminationStep = 0.00;
 
 function clearScreen() {
     context.fillStyle = 'black';
@@ -41,6 +43,14 @@ Game.prototype.update = function () {
     for (gameObject in game.gameObjects) {
         gameObject.update();
     }
+
+    //context.fillStyle = 'orange';
+    lumination += luminationStep;
+    //if (lumination > 0.99) luminationStep = -0.01;
+    //if (lumination < 0.01) luminationStep = 0.01;
+
+    context.fillStyle = "rgba(255, 140, 0, " + lumination + ")";
+    context.fillRect(10, 10, 20, 20);
 }
 
 var game = new Game();
