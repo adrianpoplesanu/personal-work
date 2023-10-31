@@ -20,7 +20,15 @@ body {
 }
 
 .title-text {
-  background: -webkit-linear-gradient(0deg, #212529 0%, #131415 100%);
+  background: -webkit-linear-gradient(0deg, #515559 0%, #131415 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: flicker 8s;
+  animation-iteration-count: infinite;
+}
+
+.button-text {
+  background: -webkit-linear-gradient(0deg, #515559 0%, #212529 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: flicker 8s;
@@ -41,16 +49,16 @@ body {
 .fade-in-element { animation: fadeIn 2s; }
 
 @keyframes fadeIn {
-  0% { opacity: 0.2; }
-  100% { opacity: 0.2; }
+  0% { opacity: 0.4; }
+  100% { opacity: 0.4; }
 }
 
-.fade-in-element:hover { animation: fadeOut 8s; }
+.fade-in-element:hover { animation: fadeOut 4s; }
 
 @keyframes fadeOut {
-  0% { opacity: 0.2; }
+  0% { opacity: 0.4; }
   50% { opacity: 1; }
-  100% { opacity: 0.2; }
+  100% { opacity: 0.4; }
 }
 
 @keyframes flicker {
