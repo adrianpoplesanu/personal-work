@@ -47,6 +47,18 @@ void VM::run() {
                 push(new AdObjectInteger(result));
                 break;
             }
+            case 2: {
+                // 2 e OpMinus
+                AdObject *right = pop();
+                AdObject *left = pop();
+
+                int leftValue = ((AdObjectInteger*) left)->value;
+                int rightValue = ((AdObjectInteger*) right)->value;
+
+                int result = leftValue - rightValue;
+                push(new AdObjectInteger(result));
+                break;
+            }
             default: {
                 //std::cout << "ccc\n";
                 break;

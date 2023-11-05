@@ -36,6 +36,11 @@ void Compiler::compile(ASTNode* node) {
                 std::vector<int> args;
                 emit(opAdd, 0, args);
             }
+            if (infixExpression->operand == "-") {
+                OpMinus opMinus = OpMinus();
+                std::vector<int> args;
+                emit(opMinus, 0, args);
+            }
             break;
         }
         case AT_PREFIX_EXPRESSION: {
