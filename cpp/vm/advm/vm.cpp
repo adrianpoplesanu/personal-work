@@ -26,7 +26,6 @@ void VM::run() {
         switch (opcode) {
             case 0: {
                 // 0 e OpConstant
-                //std::cout << "aaa\n";
                 int constIndex = readUint16(instructions, ip + 1);
                 ip += 2;
                 push(constants.at(constIndex));
@@ -34,14 +33,11 @@ void VM::run() {
             }
             case 1: {
                 // 1 e OpAdd
-                //std::cout << "bbb\n";
                 AdObject *right = pop();
                 AdObject *left = pop();
 
                 int leftValue = ((AdObjectInteger*) left)->value;
-                //std::cout << leftValue << "\n";
                 int rightValue = ((AdObjectInteger*) right)->value;
-                //std::cout << rightValue << "\n";
 
                 int result = leftValue + rightValue;
                 push(new AdObjectInteger(result));
@@ -59,8 +55,19 @@ void VM::run() {
                 push(new AdObjectInteger(result));
                 break;
             }
+            case 3: {
+                // 3 e OpMultiply
+                AdObject *right = pop();
+                AdObject *left = pop();
+
+                int leftValue = ((AdObjectInteger*) left)->value;
+                int rightValue = ((AdObjectInteger*) right)->value;
+
+                int result = leftValue * rightValue;
+                push(new AdObjectInteger(result));
+                break;
+            }
             default: {
-                //std::cout << "ccc\n";
                 break;
             }
         }

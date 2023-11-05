@@ -4,7 +4,8 @@
 enum OpCodeByte {
     OP_CONSTANT,
     OP_ADD,
-    OP_MINUS
+    OP_MINUS,
+    OP_MULTIPLY
 };
 
 class OpCode {
@@ -30,6 +31,13 @@ class OpMinus : public OpCode {
 public:
     OpMinus() {
         byteCode = OP_MINUS;
+    }
+};
+
+class OpMultiply : public OpCode {
+public:
+    OpMultiply() {
+        byteCode = OP_MULTIPLY;
     }
 };
 

@@ -41,6 +41,11 @@ void Compiler::compile(ASTNode* node) {
                 std::vector<int> args;
                 emit(opMinus, 0, args);
             }
+            if (infixExpression->operand == "*") {
+                OpMultiply opMultiply = OpMultiply();
+                std::vector<int> args;
+                emit(opMultiply, 0, args);
+            }
             break;
         }
         case AT_PREFIX_EXPRESSION: {
