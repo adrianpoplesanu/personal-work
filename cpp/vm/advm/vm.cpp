@@ -67,6 +67,18 @@ void VM::run() {
                 push(new AdObjectInteger(result));
                 break;
             }
+            case 4: {
+                // 4 e OpDivide
+                AdObject *right = pop();
+                AdObject *left = pop();
+
+                int leftValue = ((AdObjectInteger*) left)->value;
+                int rightValue = ((AdObjectInteger*) right)->value;
+
+                int result = leftValue / rightValue;
+                push(new AdObjectInteger(result));
+                break;
+            }
             default: {
                 break;
             }

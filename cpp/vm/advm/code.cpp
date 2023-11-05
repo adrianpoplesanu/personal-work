@@ -6,6 +6,7 @@ Code::Code() {
     definitionsMap.insert(std::make_pair(OP_ADD, new Definition("OpAdd", 0, new int)));
     definitionsMap.insert(std::make_pair(OP_MINUS, new Definition("OpMinus", 0, new int)));
     definitionsMap.insert(std::make_pair(OP_MULTIPLY, new Definition("OpMultiply", 0, new int)));
+    definitionsMap.insert(std::make_pair(OP_DIVIDE, new Definition("OpDivide", 0, new int)));
 }
 
 Code::~Code() {

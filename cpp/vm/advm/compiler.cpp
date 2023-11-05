@@ -46,6 +46,11 @@ void Compiler::compile(ASTNode* node) {
                 std::vector<int> args;
                 emit(opMultiply, 0, args);
             }
+            if (infixExpression->operand == "/") {
+                OpDivide opDivide = OpDivide();
+                std::vector<int> args;
+                emit(opDivide, 0, args);
+            }
             break;
         }
         case AT_PREFIX_EXPRESSION: {
