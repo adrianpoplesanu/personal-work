@@ -8,6 +8,23 @@ var framesPerSecond = 30;
 var lumination = 0;
 var luminationStep = 0.00;
 
+
+var board;
+
+function generateRandomBoard(x, y) {
+    board = new Array(x);
+    for (var i = 0; i < x; i++) {
+        board[i] = new Array(y);
+        for (var j = 0; j < y; j++) {
+            board[i][j] = {
+                type: 0,
+                alpha: 1
+            }
+        }
+    }
+    return board;
+}
+
 function clearScreen() {
     context.fillStyle = 'black';
     context.fillRect(0, 0, width, height);
@@ -44,10 +61,10 @@ Game.prototype.update = function () {
         gameObject.update();
     }
 
-    //context.fillStyle = 'orange';
+    context.fillStyle = 'orange';
     lumination += luminationStep;
-    //if (lumination > 0.99) luminationStep = -0.01;
-    //if (lumination < 0.01) luminationStep = 0.01;
+    if (lumination > 0.99) luminationStep = -0.01;
+    if (lumination < 0.01) luminationStep = 0.01;
 
     context.fillStyle = "rgba(255, 140, 0, " + lumination + ")";
     context.fillRect(10, 10, 20, 20);
