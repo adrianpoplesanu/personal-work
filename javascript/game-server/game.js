@@ -8,8 +8,9 @@ var framesPerSecond = 30;
 var lumination = 0;
 var luminationStep = 0.00;
 
-
 var board;
+var boardWidth = 60;
+var boardHeight = 30;
 
 function generateRandomTile() {
     return Math.floor(Math.random() * 3);
@@ -29,11 +30,11 @@ function drawSquare(element) {
     context.fillRect(element.x * 10, element.y * 10, 10, 10);
 }
 
-function generateRandomBoard(x, y) {
-    board = new Array(x);
-    for (var i = 0; i < x; i++) {
-        board[i] = new Array(y);
-        for (var j = 0; j < y; j++) {
+function generateRandomBoard(boardWidth, boardHeight) {
+    board = new Array(boardHeight);
+    for (var i = 0; i < boardHeight; i++) {
+        board[i] = new Array(boardWidth);
+        for (var j = 0; j < boardWidth; j++) {
             board[i][j] = {
                 type: generateRandomTile(),
                 alpha: generateRandomAlpha(),
@@ -46,8 +47,8 @@ function generateRandomBoard(x, y) {
 }
 
 function drawBoard() {
-    for (var i = 0; i < 10; i++) {
-        for (var j = 0; j < 10; j++) {
+    for (var i = 0; i < boardHeight; i++) {
+        for (var j = 0; j < boardWidth; j++) {
             drawSquare(board[i][j]);
         }
     }
@@ -80,7 +81,7 @@ Game.prototype.start = function () {
     for (gameObject in game.gameObjects) {
         gameObject.start();
     }
-    generateRandomBoard(10, 10);
+    generateRandomBoard(boardWidth, boardHeight);
     setInterval(game.update, 1000/framesPerSecond);
 }
 
