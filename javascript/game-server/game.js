@@ -16,7 +16,17 @@ function generateRandomTile() {
 }
 
 function generateRandomAlpha() {
-    return Math.floor(Math.random() * 256);
+    return Math.random();
+}
+
+function drawSquare(element) {
+    //...
+    var red = 255;
+    var green = 140;
+    var blue = 0;
+    var lumination = element.alpha;
+    context.fillStyle = "rgba(" + red + ", " + green + ", " + blue + ", " + lumination + ")";
+    context.fillRect(element.x * 10, element.y * 10, 10, 10);
 }
 
 function generateRandomBoard(x, y) {
@@ -26,11 +36,21 @@ function generateRandomBoard(x, y) {
         for (var j = 0; j < y; j++) {
             board[i][j] = {
                 type: generateRandomTile(),
-                alpha: generateRandomAlpha()
+                alpha: generateRandomAlpha(),
+                y: i,
+                x: j
             }
         }
     }
     return board;
+}
+
+function drawBoard() {
+    for (var i = 0; i < 10; i++) {
+        for (var j = 0; j < 10; j++) {
+            drawSquare(board[i][j]);
+        }
+    }
 }
 
 function clearScreen() {
@@ -70,13 +90,14 @@ Game.prototype.update = function () {
         gameObject.update();
     }
 
-    context.fillStyle = 'orange';
+    /*context.fillStyle = 'orange';
     lumination += luminationStep;
     if (lumination > 0.99) luminationStep = -0.01;
     if (lumination < 0.01) luminationStep = 0.01;
 
     context.fillStyle = "rgba(255, 140, 0, " + lumination + ")";
-    context.fillRect(10, 10, 20, 20);
+    context.fillRect(10, 10, 20, 20);*/
+    drawBoard();
 }
 
 var game = new Game();
