@@ -11,14 +11,22 @@ var luminationStep = 0.00;
 
 var board;
 
+function generateRandomTile() {
+    return Math.floor(Math.random() * 3);
+}
+
+function generateRandomAlpha() {
+    return Math.floor(Math.random() * 256);
+}
+
 function generateRandomBoard(x, y) {
     board = new Array(x);
     for (var i = 0; i < x; i++) {
         board[i] = new Array(y);
         for (var j = 0; j < y; j++) {
             board[i][j] = {
-                type: 0,
-                alpha: 1
+                type: generateRandomTile(),
+                alpha: generateRandomAlpha()
             }
         }
     }
@@ -52,6 +60,7 @@ Game.prototype.start = function () {
     for (gameObject in game.gameObjects) {
         gameObject.start();
     }
+    generateRandomBoard(10, 10);
     setInterval(game.update, 1000/framesPerSecond);
 }
 
