@@ -2,6 +2,8 @@ package syntax_fun
 
 class QualifierSplitter {
 
+    private val ccc = "ccc"
+
     fun buildQualifiers(raw: String): Map<String, String> {
         val qualifiers = mutableMapOf<String, String>()
         try {
@@ -15,6 +17,11 @@ class QualifierSplitter {
         return qualifiers
     }
 
+    fun printCCC() {
+        val qualifierMap = buildQualifiers("aaa=bbb;ccc=ddd")
+        println (qualifierMap[ccc] ?: "null")
+    }
+
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
@@ -23,6 +30,7 @@ class QualifierSplitter {
             for (q in qualifierMap) {
                 println ("${q.key}@${q.value}")
             }
+            qualifierSplitter.printCCC()
         }
     }
 }
