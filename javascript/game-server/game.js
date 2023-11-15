@@ -12,6 +12,39 @@ var board;
 var boardWidth = 10;
 var boardHeight = 3;
 
+var upArrow = 38;
+var downArrow = 40;
+var leftArrow = 37;
+var rightArrow = 39;
+var spaceKey = 32;
+var escapeKey = 27;
+var movementKey;
+
+var keystate = {};
+
+window.addEventListener("keydown", function(e) {
+    // space and arrow keys
+    if (e.keyCode == escapeKey) {
+        e.preventDefault();
+        window.location.reload();
+    }
+    if([spaceKey, leftArrow, upArrow, rightArrow, downArrow].indexOf(e.keyCode) > -1) {
+        e.preventDefault();
+    }
+}, false);
+
+document.addEventListener("keydown", function (event) {
+    keystate[event.keyCode] = true;
+});
+
+document.addEventListener("keyup", function (event) {
+    if (event.keyCode === movementKey) {
+        //console.log(movementKey);
+        movementKey = false;
+    }
+    delete keystate[event.keyCode];
+});
+
 function generateRandomTile() {
     return Math.floor(Math.random() * 3);
 }
