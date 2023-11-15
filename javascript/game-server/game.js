@@ -9,8 +9,8 @@ var lumination = 0;
 var luminationStep = 0.00;
 
 var board;
-var boardWidth = 60;
-var boardHeight = 30;
+var boardWidth = 10;
+var boardHeight = 3;
 
 function generateRandomTile() {
     return Math.floor(Math.random() * 3);
