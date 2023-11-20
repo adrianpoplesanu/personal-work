@@ -79,6 +79,16 @@ function generateRandomBoard(boardWidth, boardHeight) {
     return board;
 }
 
+function generateBoard() {
+    board = [
+        [27, 27, 27, 27, 27],
+        [27,  0,  0,  0, 27],
+        [27,  0,  0,  0, 27],
+        [27,  0,  0,  0, 27],
+        [27, 27, 27, 27, 27]
+    ]
+}
+
 function drawBoard() {
     for (var i = 0; i < boardHeight; i++) {
         for (var j = 0; j < boardWidth; j++) {
