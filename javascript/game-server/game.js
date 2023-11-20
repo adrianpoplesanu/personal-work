@@ -9,8 +9,8 @@ var lumination = 0;
 var luminationStep = 0.00;
 
 var board;
-var boardWidth = 10;
-var boardHeight = 3;
+var boardWidth = 30;
+var boardHeight = 30;
 
 var upArrow = 38;
 var downArrow = 40;
@@ -21,6 +21,8 @@ var escapeKey = 27;
 var movementKey;
 
 var keystate = {};
+
+var playerX, playerY, opponentX, opponentY;
 
 window.addEventListener("keydown", function(e) {
     // space and arrow keys
@@ -49,6 +51,13 @@ function generateRandomTile() {
     return Math.floor(Math.random() * 3);
 }
 
+function generateTile(x, y) {
+    if (x == 0 || y == 0 || y == boardWidth - 1 || x == boardHeight - 1) {
+        return 27;
+    }
+    return 0;
+}
+
 function generateRandomAlpha() {
     return Math.random();
 }
@@ -59,6 +68,16 @@ function drawSquare(element) {
     var green = 140;
     var blue = 0;
     var lumination = element.alpha;
+    if (element.type == 27) {
+        red = 77;
+        green = 77;
+        blue = 77;
+    }
+    if (element.type == 0) {
+        red = 0;
+        green = 0;
+        blue = 0;
+    }
     context.fillStyle = "rgba(" + red + ", " + green + ", " + blue + ", " + lumination + ")";
     context.fillRect(element.x * 10, element.y * 10, 10, 10);
 }
@@ -79,14 +98,20 @@ function generateRandomBoard(boardWidth, boardHeight) {
     return board;
 }
 
-function generateBoard() {
-    board = [
-        [27, 27, 27, 27, 27],
-        [27,  0,  0,  0, 27],
-        [27,  0,  0,  0, 27],
-        [27,  0,  0,  0, 27],
-        [27, 27, 27, 27, 27]
-    ]
+function generateBoard(boardWidth, boardHeight) {
+    board = new Array(boardHeight);
+    for (var i = 0; i < boardHeight; i++) {
+        board[i] = new Array(boardWidth);
+        for (var j = 0; j < boardWidth; j++) {
+            board[i][j] = {
+                type: generateTile(i, j),
+                alpha: 1,
+                y: i,
+                x: j
+            }
+        }
+    }
+    return board;
 }
 
 function drawBoard() {
@@ -124,7 +149,8 @@ Game.prototype.start = function () {
     for (gameObject in game.gameObjects) {
         gameObject.start();
     }
-    generateRandomBoard(boardWidth, boardHeight);
+    //generateRandomBoard(boardWidth, boardHeight);
+    generateBoard(boardWidth, boardHeight);
     setInterval(game.update, 1000/framesPerSecond);
 }
 
