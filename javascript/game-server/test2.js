@@ -32,6 +32,7 @@ window.addEventListener("keydown", function(e) {
     }
     if([spaceKey, leftArrow, upArrow, rightArrow, downArrow].indexOf(e.keyCode) > -1) {
         e.preventDefault();
+        //keystate[event.keyCode] = true;
     }
 }, false);
 
@@ -41,7 +42,6 @@ document.addEventListener("keydown", function (event) {
 
 document.addEventListener("keyup", function (event) {
     if (event.keyCode === movementKey) {
-        //console.log(movementKey);
         movementKey = false;
     }
     delete keystate[event.keyCode];
@@ -63,31 +63,40 @@ function handleInput() {
 }
 
 function canMove(deltaX, deltaY) {
-    if (board[playerX + deltaX][playerY + deltaY].type == 0) return true;
+    if (player.state > 0) return false;
+    if (board[player.x + deltaX][player.y + deltaY].type == 0) return true;
     return false;
 }
 
 function moveDown() {
     if (canMove(0, 1)) {
-        playerY++;
+        //playerY++;
+        player.deltaY = 1;
+        player.state = 10;
     }
 }
 
 function moveUp() {
     if (canMove(0, -1)) {
-        playerY--;
+        //playerY--;
+        player.deltaY = -1;
+        player.state = 10;
     }
 }
 
 function moveLeft() {
     if (canMove(-1, 0)) {
-        playerX--;
+        //playerX--;
+        player.deltaX = -1;
+        player.state = 10;
     }
 }
 
 function moveRight() {
     if (canMove(1, 0)) {
-        playerX++;
+        //playerX++;
+        player.deltaX = 1;
+        player.state = 10;
     }
 }
 
@@ -167,9 +176,21 @@ function drawBoard() {
     }
 }
 
+function movePlayer() {
+    if (player.state > 0) {
+        player.state--;
+    }
+    if (player.state == 0) {
+        player.x += player.deltaX;
+        player.y += player.deltaY;
+        player.deltaX = 0;
+        player.deltaY = 0;
+    }
+}
+
 function drawPlayer() {
     context.fillStyle = "rgba(255, 255, 255, 1)";
-    context.fillRect(playerX * 10, playerY * 10, 10, 10);
+    context.fillRect(player.x * 10 + (10 - player.state) * player.deltaX, player.y * 10 + (10 - player.state) * player.deltaY, 10, 10);
 }
 
 function Player() {
@@ -226,6 +247,7 @@ Game.prototype.update = function () {
     context.fillRect(10, 10, 20, 20);*/
     handleInput();
     drawBoard();
+    movePlayer();
     drawPlayer();
 }
 
