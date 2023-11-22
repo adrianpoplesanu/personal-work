@@ -229,7 +229,8 @@ Game.prototype.start = function () {
     }
     //generateRandomBoard(boardWidth, boardHeight);
     generateBoard(boardWidth, boardHeight);
-    setInterval(game.update, 1000/framesPerSecond);
+    //setInterval(game.update, 1000/framesPerSecond);
+    game.update();
 }
 
 Game.prototype.update = function () {
@@ -249,6 +250,7 @@ Game.prototype.update = function () {
     drawBoard();
     movePlayer();
     drawPlayer();
+    window.requestAnimationFrame(game.update);
 }
 
 var game = new Game();
