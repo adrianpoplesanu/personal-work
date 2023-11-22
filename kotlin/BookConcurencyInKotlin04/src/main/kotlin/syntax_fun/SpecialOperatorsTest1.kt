@@ -20,6 +20,8 @@ class SpecialOperatorsTest1 {
             result = specialOperatorsTest1.generate(4)
             result?.let {
                 println(it)
+            } ?: run {
+                println ("nothing")
             }
         }
     }
