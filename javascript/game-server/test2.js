@@ -72,7 +72,7 @@ function moveDown() {
     if (canMove(0, 1)) {
         //playerY++;
         player.deltaY = 1;
-        player.state = 10;
+        player.state = 16;
     }
 }
 
@@ -80,7 +80,7 @@ function moveUp() {
     if (canMove(0, -1)) {
         //playerY--;
         player.deltaY = -1;
-        player.state = 10;
+        player.state = 16;
     }
 }
 
@@ -88,7 +88,7 @@ function moveLeft() {
     if (canMove(-1, 0)) {
         //playerX--;
         player.deltaX = -1;
-        player.state = 10;
+        player.state = 16;
     }
 }
 
@@ -96,7 +96,7 @@ function moveRight() {
     if (canMove(1, 0)) {
         //playerX++;
         player.deltaX = 1;
-        player.state = 10;
+        player.state = 16;
     }
 }
 
@@ -108,7 +108,7 @@ function clearScreen() {
 function testImageRendering(x, y, alpha) {
     const img = document.getElementById("tile1");
     context.globalAlpha = alpha;
-    context.drawImage(img, x, y, 10, 10);
+    context.drawImage(img, x, y, 16, 16);
     context.globalAlpha = 1;
 }
 
@@ -165,7 +165,7 @@ function drawSquare(element) {
         blue = 0;
     }
     context.fillStyle = "rgba(" + red + ", " + green + ", " + blue + ", " + lumination + ")";
-    context.fillRect(element.x * 10, element.y * 10, 10, 10);
+    context.fillRect(element.x * 16, element.y * 16, 16, 16);
 }
 
 function drawBoard() {
@@ -190,7 +190,7 @@ function movePlayer() {
 
 function drawPlayer() {
     context.fillStyle = "rgba(255, 255, 255, 1)";
-    context.fillRect(player.x * 10 + (10 - player.state) * player.deltaX, player.y * 10 + (10 - player.state) * player.deltaY, 10, 10);
+    context.fillRect(player.x * 16 + (16 - player.state) * player.deltaX, player.y * 16 + (16 - player.state) * player.deltaY, 16, 16);
 }
 
 function Player() {
