@@ -11,4 +11,10 @@ class ASTProgram(ASTNode):
 
 
 class AstExpressionStatement(ASTNode):
-    pass
+    def __init__(self, expression: ASTNode):
+        self.expression = expression
+
+
+class AstInteger(ASTNode):
+    def __init__(self, value: int):
+        self.value = value
