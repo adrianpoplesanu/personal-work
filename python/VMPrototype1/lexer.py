@@ -27,7 +27,8 @@ class Lexer:
 
     def next_token(self) -> Token:
         self.skip_whitespaces()
-        return None
+        token = Token(TokenType.ILLEGAL, "")
+        return token
 
     def skip_whitespaces(self):
         while self.ch == ' ' or self.ch == '\t' or self.ch == '\r' or self.ch == '\n':
