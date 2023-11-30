@@ -111,6 +111,15 @@ function testImageRendering(x, y, alpha) {
     context.globalAlpha = 1;
 }
 
+function renderTile(x, y) {
+    const img = document.getElementById("small-tile1");
+    for (var i = 0; i < 4; i++) {
+        for (var j = 0; j < 4; j++) {
+            context.drawImage(img, x + i * 4, y + j * 4, 4, 4);
+        }
+    }
+}
+
 function generateTile(x, y) {
     if (x == 0 || y == 0 || y == boardWidth - 1 || x == boardHeight - 1) {
         return 27;
@@ -146,17 +155,27 @@ function drawSquare(element) {
     var blue = 0;
     var lumination = element.alpha;
     if (element.type == 27) {
-        red = 77;
+        /*red = 77;
         green = 77;
-        blue = 77;
+        blue = 77;*/
+        red = 5;
+        green = 5;
+        blue = 5;
+
+        context.fillStyle = "rgba(" + red + ", " + green + ", " + blue + ", " + lumination + ")";
+        context.fillRect(element.x * tileSize, element.y * tileSize, tileSize, tileSize);
     }
-    if (element.type == 0) {
+    /*if (element.type == 0) {
         red = 0;
         green = 0;
         blue = 0;
+
+        context.fillStyle = "rgba(" + red + ", " + green + ", " + blue + ", " + lumination + ")";
+        context.fillRect(element.x * tileSize, element.y * tileSize, tileSize, tileSize);
+    }*/
+    if (element.type == 0) {
+        renderTile(element.x * tileSize, element.y * tileSize);
     }
-    context.fillStyle = "rgba(" + red + ", " + green + ", " + blue + ", " + lumination + ")";
-    context.fillRect(element.x * tileSize, element.y * tileSize, tileSize, tileSize);
 }
 
 function drawBoard() {
