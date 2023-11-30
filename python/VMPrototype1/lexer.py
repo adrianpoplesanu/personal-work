@@ -1,5 +1,11 @@
-from token import Token
+from token import Token, keywords_map
 from token_type import TokenType
+
+
+def lookup_ident(ident: str) -> TokenType:
+    if ident in keywords_map:
+        return keywords_map[ident]
+    return TokenType.ILLEGAL
 
 
 class Lexer:
@@ -43,3 +49,21 @@ class Lexer:
         if self.ch == 0:
             return False
         return '0' <= self.ch <= '9'
+
+    def read_ident(self):
+        pass
+
+    def read_numbers(self):
+        pass
+
+    def read_double_quotes_string(self):
+        pass
+
+    def read_single_quotes_string(self):
+        pass
+
+    def peek_char(self):
+        pass
+
+    def is_float_dot(self):
+        pass

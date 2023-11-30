@@ -2,11 +2,22 @@ from token_type import TokenType
 
 token_type_map = {
     TokenType.ILLEGAL: "ILLEGAL",
-    TokenType.AND: "AND"
+    TokenType.INT: "INT",
+    TokenType.IDENT: "IDENT",
+    TokenType.PLUS: "PLUS",
+    TokenType.MINUS: "MINUS",
+    TokenType.ASTERISK: "ASTERISK",
+    TokenType.SLASH: "SLASH",
+    TokenType.AND: "AND",
+    TokenType.OR: "OR",
+    TokenType.TRUE: "TRUE",
+    TokenType.FALSE: "FALSE"
 }
 
 keywords_map = {
-    "and": TokenType.AND
+    "and": TokenType.AND,
+    "true": TokenType.TRUE,
+    "false": TokenType.FALSE
 }
 
 
