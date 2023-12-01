@@ -12,6 +12,7 @@ var maxState = 16;
 var tileSize = 16;
 
 var board;
+var luminationBoard;
 var boardWidth = 30;
 var boardHeight = 30;
 
@@ -62,6 +63,9 @@ function handleInput() {
     }
     if (keystate[rightArrow]) {
         moveRight();
+    }
+    if (keystate[spaceKey]) {
+        startLumination();
     }
 }
 
@@ -115,7 +119,10 @@ function renderTile(x, y) {
     const img = document.getElementById("small-tile1");
     for (var i = 0; i < 4; i++) {
         for (var j = 0; j < 4; j++) {
+            var alpha = 0.2;
+            context.globalAlpha = alpha;
             context.drawImage(img, x + i * 4, y + j * 4, 4, 4);
+            context.globalAlpha = 1;
         }
     }
 }
@@ -141,6 +148,16 @@ function generateBoard(boardWidth, boardHeight) {
         }
     }
     return board;
+}
+
+function generateLuminationBoard(boardWidth, boardHeight) {
+    luminationBoard = new Array(boardHeight);
+    for (var i = 0; i < boardHeight; i++) {
+        luminationBoard[i] = new Array(boardWidth);
+        for (var j = 0; j < boardWidth; j++) {
+            luminationBoard[i][j] = 0;
+        }
+    }
 }
 
 function clearScreen() {
@@ -208,6 +225,10 @@ function drawPlayer() {
     );
 }
 
+function startLumination() {
+    console.log("start lumination");
+}
+
 function Player() {
     this.state = 0;
     this.x = 1;
@@ -241,6 +262,7 @@ Game.prototype.start = function () {
         gameObject.start();
     }
     generateBoard(boardWidth, boardHeight);
+    generateLuminationBoard(boardWidth, boardHeight);
     game.update();
 }
 
