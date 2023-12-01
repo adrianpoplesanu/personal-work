@@ -124,19 +124,7 @@ function renderTile(x, y, tileSize) {
     for (var i = 0; i < 4; i++) {
         for (var j = 0; j < 4; j++) {
             var alpha = 0.2;
-            /*if (luminationBoard[i][j] == 0) context.globalAlpha = 0.2;
-            if (luminationBoard[i][j] == 1) context.globalAlpha = 0.25;
-            if (luminationBoard[i][j] == 2) context.globalAlpha = 0.3;
-            if (luminationBoard[i][j] == 3) context.globalAlpha = 0.4;
-            if (luminationBoard[i][j] == 4) context.globalAlpha = 0.45;
-            if (luminationBoard[i][j] == 5) context.globalAlpha = 0.5;
-            if (luminationBoard[i][j] == 6) context.globalAlpha = 0.55;
-            if (luminationBoard[i][j] == 7) context.globalAlpha = 0.6;
-            if (luminationBoard[i][j] == 8) context.globalAlpha = 0.5;
-            if (luminationBoard[i][j] == 9) context.globalAlpha = 0.4;
-            if (luminationBoard[i][j] == 10) context.globalAlpha = 0.3;*/
             context.globalAlpha = 0.2 + 0.8 * (luminationBoard[x][y] / maxLuminationStep);
-            //context.globalAlpha = alpha;
             context.drawImage(img, x * tileSize + i * 4, y * tileSize + j * 4, 4, 4);
             context.globalAlpha = 1;
         }
