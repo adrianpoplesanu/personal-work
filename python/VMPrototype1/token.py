@@ -11,13 +11,17 @@ token_type_map = {
     TokenType.AND: "AND",
     TokenType.OR: "OR",
     TokenType.TRUE: "TRUE",
-    TokenType.FALSE: "FALSE"
+    TokenType.FALSE: "FALSE",
+    TokenType.IF: "IF",
+    TokenType.WHILE: "WHILE"
 }
 
 keywords_map = {
     "and": TokenType.AND,
     "true": TokenType.TRUE,
-    "false": TokenType.FALSE
+    "false": TokenType.FALSE,
+    "if": TokenType.IF,
+    "while": TokenType.WHILE
 }
 
 

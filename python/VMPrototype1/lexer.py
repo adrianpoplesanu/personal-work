@@ -32,8 +32,19 @@ class Lexer:
         self.read_position += 1
 
     def next_token(self) -> Token:
-        self.skip_whitespaces()
         token = Token(TokenType.ILLEGAL, "")
+        self.skip_whitespaces()
+        skip_read_char = False
+        if self.ch == '+':
+            token.token_type = TokenType.PLUS
+            token.literal = '+'
+        elif self.ch == '-':
+            token.token_type = TokenType.MINUS
+            token.literal = '-'
+        else:
+            pass
+        if not skip_read_char:
+            self.read_char()
         return token
 
     def skip_whitespaces(self):
