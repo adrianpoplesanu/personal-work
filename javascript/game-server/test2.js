@@ -13,6 +13,9 @@ var tileSize = 16;
 
 var board;
 var luminationBoard;
+var luminationInProgress = false;
+var maxLuminationStep = 32;
+var luminationSwitchThreshold = 8;
 var boardWidth = 30;
 var boardHeight = 30;
 
@@ -115,13 +118,25 @@ function testImageRendering(x, y, alpha) {
     context.globalAlpha = 1;
 }
 
-function renderTile(x, y) {
+function renderTile(x, y, tileSize) {
     const img = document.getElementById("small-tile1");
     for (var i = 0; i < 4; i++) {
         for (var j = 0; j < 4; j++) {
             var alpha = 0.2;
-            context.globalAlpha = alpha;
-            context.drawImage(img, x + i * 4, y + j * 4, 4, 4);
+            /*if (luminationBoard[i][j] == 0) context.globalAlpha = 0.2;
+            if (luminationBoard[i][j] == 1) context.globalAlpha = 0.25;
+            if (luminationBoard[i][j] == 2) context.globalAlpha = 0.3;
+            if (luminationBoard[i][j] == 3) context.globalAlpha = 0.4;
+            if (luminationBoard[i][j] == 4) context.globalAlpha = 0.45;
+            if (luminationBoard[i][j] == 5) context.globalAlpha = 0.5;
+            if (luminationBoard[i][j] == 6) context.globalAlpha = 0.55;
+            if (luminationBoard[i][j] == 7) context.globalAlpha = 0.6;
+            if (luminationBoard[i][j] == 8) context.globalAlpha = 0.5;
+            if (luminationBoard[i][j] == 9) context.globalAlpha = 0.4;
+            if (luminationBoard[i][j] == 10) context.globalAlpha = 0.3;*/
+            context.globalAlpha = 0.2 + 0.8 * (luminationBoard[x][y] / maxLuminationStep);
+            //context.globalAlpha = alpha;
+            context.drawImage(img, x * tileSize + i * 4, y * tileSize + j * 4, 4, 4);
             context.globalAlpha = 1;
         }
     }
@@ -191,7 +206,7 @@ function drawSquare(element) {
         context.fillRect(element.x * tileSize, element.y * tileSize, tileSize, tileSize);
     }*/
     if (element.type == 0) {
-        renderTile(element.x * tileSize, element.y * tileSize);
+        renderTile(element.x, element.y, tileSize);
     }
 }
 
@@ -204,6 +219,9 @@ function drawBoard() {
 }
 
 function movePlayer() {
+    if (luminationInProgress) {
+        return;
+    }
     if (player.state > 0) {
         player.state--;
     }
@@ -225,8 +243,36 @@ function drawPlayer() {
     );
 }
 
+function updateLumination() {
+    var i, j, all_dark = true;
+    for (i = 0; i < boardHeight; i++) {
+        for (j = 0; j < boardWidth; j++) {
+            if (luminationBoard[i][j] > 0) {
+                all_dark = false;
+                if (luminationBoard[i][j] > maxLuminationStep) {
+                    luminationBoard[i][j] = 0;
+                } else {
+                    luminationBoard[i][j]++;
+                    if (luminationBoard[i][j] == luminationSwitchThreshold) {
+                        if ((i - 1 >= 0) && (luminationBoard[i - 1][j] == 0)) luminationBoard[i - 1][j] = 1;
+                        if ((i + 1 < boardHeight) &&(luminationBoard[i + 1][j] == 0)) luminationBoard[i + 1][j] = 1;
+                        if ((j - 1 >= 0) && (luminationBoard[i][j - 1] == 0)) luminationBoard[i][j - 1] = 1;
+                        if ((j + 1 < boardWidth) && (luminationBoard[i][j + 1] == 0)) luminationBoard[i][j + 1] = 1;
+                    }
+                }
+            }
+        }
+    }
+    if (all_dark) {
+        luminationInProgress = false;
+    }
+}
+
 function startLumination() {
-    console.log("start lumination");
+    if (!luminationInProgress) {
+        luminationInProgress = true;
+        luminationBoard[player.x][player.y] = 1;
+    }
 }
 
 function Player() {
@@ -276,6 +322,7 @@ Game.prototype.update = function () {
     drawBoard();
     movePlayer();
     drawPlayer();
+    updateLumination();
     window.requestAnimationFrame(game.update);
 }
 
