@@ -35,14 +35,36 @@ class Lexer:
         token = Token(TokenType.ILLEGAL, "")
         self.skip_whitespaces()
         skip_read_char = False
-        if self.ch == '+':
+        if self.ch == 0:
+            token.token_type = TokenType.EOF
+            token.literal = ''
+        elif self.ch == '+':
             token.token_type = TokenType.PLUS
             token.literal = '+'
         elif self.ch == '-':
             token.token_type = TokenType.MINUS
             token.literal = '-'
+        elif self.ch == '*':
+            token.token_type = TokenType.ASTERISK
+            token.literal = '*'
+        elif self.ch == '/':
+            token.token_type = TokenType.SLASH
+            token.literal = '/'
         else:
-            pass
+            if self.is_letter():
+                token.literal = self.read_ident()
+                token.token_type = lookup_ident(token.literal)
+                skip_read_char = True
+            elif self.is_digit():
+                token.literal = self.read_number()
+                if '.' in token.literal:
+                    token.token_type = TokenType.FLOAT
+                else:
+                    token.token_type = TokenType.INT
+                skip_read_char = True
+            else:
+                token.token_type = TokenType.ILLEGAL
+                token.literal = ''
         if not skip_read_char:
             self.read_char()
         return token
@@ -61,11 +83,21 @@ class Lexer:
             return False
         return '0' <= self.ch <= '9'
 
-    def read_ident(self):
-        pass
+    def read_ident(self) -> str:
+        start = self.position
+        while self.is_letter() or self.is_digit():
+            self.read_char()
+        return self.source[start:self.position]
 
-    def read_numbers(self):
-        pass
+    def read_number(self) -> str:
+        start = self.position
+        while self.is_digit():
+            self.read_char()
+        if self.is_float_dot():
+            self.read_char()
+            while self.is_digit():
+                self.read_char()
+        return self.source[start:self.position]
 
     def read_double_quotes_string(self):
         pass
@@ -74,7 +106,9 @@ class Lexer:
         pass
 
     def peek_char(self):
-        pass
+        if self.read_position >= len(self.source):
+            return 0
+        return self.source[self.read_position]
 
-    def is_float_dot(self):
-        pass
+    def is_float_dot(self) -> bool:
+        return self.ch == '.'
