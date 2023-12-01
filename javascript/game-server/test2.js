@@ -14,6 +14,7 @@ var tileSize = 16;
 var board;
 var luminationBoard;
 var luminationInProgress = false;
+var triggedLumination = false;
 var maxLuminationStep = 32;
 var luminationSwitchThreshold = 8;
 var boardWidth = 30;
@@ -68,7 +69,7 @@ function handleInput() {
         moveRight();
     }
     if (keystate[spaceKey]) {
-        startLumination();
+        triggerLumination();
     }
 }
 
@@ -230,6 +231,9 @@ function movePlayer() {
         player.y += player.deltaY;
         player.deltaX = 0;
         player.deltaY = 0;
+        if (triggedLumination) {
+            startLumination();
+        }
     }
 }
 
@@ -268,10 +272,20 @@ function updateLumination() {
     }
 }
 
+function triggerLumination() {
+    if (!triggedLumination && !luminationInProgress) {
+        triggedLumination = true;
+    }
+}
+
 function startLumination() {
     if (!luminationInProgress) {
         luminationInProgress = true;
+        triggedLumination = false;
         luminationBoard[player.x][player.y] = 1;
+        player.deltaX = 0;
+        player.deltaY = 0;
+        player.state = 1;
     }
 }
 
