@@ -17,6 +17,8 @@ var luminationInProgress = false;
 var triggedLumination = false;
 var maxLuminationStep = 32;
 var luminationSwitchThreshold = 8;
+var luminationX;
+var luminationY;
 var boardWidth = 30;
 var boardHeight = 30;
 
@@ -233,6 +235,21 @@ function drawPlayer() {
         tileSize,
         tileSize
     );
+    context.fillStyle = "rgba(0, 0, 0, 1)";
+    context.fillRect(
+        player.x * tileSize + (maxState / moveFactor - player.state) * player.deltaX * moveFactor + 2,
+        player.y * tileSize + (maxState / moveFactor - player.state) * player.deltaY * moveFactor + 2,
+        tileSize - 4,
+        tileSize - 4
+    );
+
+}
+
+function canLuminate(i, j) {
+    return luminationX - 5 < i &&
+            i < luminationX + 5 &&
+            luminationY - 5 < j &&
+            j < luminationY + 5;
 }
 
 function updateLumination() {
@@ -246,10 +263,18 @@ function updateLumination() {
                 } else {
                     luminationBoard[i][j]++;
                     if (luminationBoard[i][j] == luminationSwitchThreshold) {
-                        if ((i - 1 >= 0) && (luminationBoard[i - 1][j] == 0)) luminationBoard[i - 1][j] = 1;
-                        if ((i + 1 < boardHeight) &&(luminationBoard[i + 1][j] == 0)) luminationBoard[i + 1][j] = 1;
-                        if ((j - 1 >= 0) && (luminationBoard[i][j - 1] == 0)) luminationBoard[i][j - 1] = 1;
-                        if ((j + 1 < boardWidth) && (luminationBoard[i][j + 1] == 0)) luminationBoard[i][j + 1] = 1;
+                        if ((i - 1 >= 0) && (luminationBoard[i - 1][j] == 0) && canLuminate(i, j)) {
+                            luminationBoard[i - 1][j] = 1;
+                        }
+                        if ((i + 1 < boardHeight) &&(luminationBoard[i + 1][j] == 0) && canLuminate(i, j)) {
+                            luminationBoard[i + 1][j] = 1;
+                        }
+                        if ((j - 1 >= 0) && (luminationBoard[i][j - 1] == 0) && canLuminate(i, j)) {
+                            luminationBoard[i][j - 1] = 1;
+                        }
+                        if ((j + 1 < boardWidth) && (luminationBoard[i][j + 1] == 0) && canLuminate(i, j)) {
+                            luminationBoard[i][j + 1] = 1;
+                        }
                     }
                 }
             }
@@ -271,6 +296,9 @@ function startLumination() {
         luminationInProgress = true;
         triggedLumination = false;
         luminationBoard[player.x][player.y] = 1;
+        //luminationBoard[player.x][player.y] = Math.floor(Math.random() * 10);
+        luminationX = player.x;
+        luminationY = player.y;
         player.deltaX = 0;
         player.deltaY = 0;
         player.state = 1;
