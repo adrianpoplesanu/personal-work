@@ -122,15 +122,31 @@ function testImageRendering(x, y, alpha) {
 }
 
 function renderTile(x, y, tileSize) {
-    const img = document.getElementById("small-tile1");
-    for (var i = 0; i < 4; i++) {
-        for (var j = 0; j < 4; j++) {
-            var alpha = 0.2;
-            context.globalAlpha = 0.2 + 0.8 * (luminationBoard[x][y] / maxLuminationStep);
-            context.drawImage(img, x * tileSize + i * 4, y * tileSize + j * 4, 4, 4);
+    //const img = document.getElementById("small-tile1");
+    const img = document.getElementById("tile2");
+    //for (var i = 0; i < 4; i++) {
+    //    for (var j = 0; j < 4; j++) {
+    //        var alpha = 0.2;
+            //context.globalAlpha = 0.2 + 0.8 * (luminationBoard[x][y] / maxLuminationStep);
+
+            if (luminationBoard[x][y] != 0) {
+                var distance = Math.floor(Math.sqrt(Math.abs(luminationX - x) ^ 2 + Math.abs(luminationY - y) ^ 2));
+                //console.log(distance);
+                context.globalAlpha = 0.2 + 0.8 * (luminationBoard[x][y] / maxLuminationStep) - distance / 10;
+            } else {
+                context.globalAlpha = 0;
+            }
+            if (context.globalAlpha < 0) {
+                context.globalAlpha = 0;
+            }
+            if (context.globalAlpha > 1) {
+                console.log("err");
+            }
+            //context.drawImage(img, x * tileSize + i * 4, y * tileSize + j * 4, 4, 4);
+            context.drawImage(img, x * tileSize, y * tileSize, 16, 16);
             context.globalAlpha = 1;
-        }
-    }
+    //    }
+    //}
 }
 
 function generateTile(x, y) {
@@ -181,7 +197,7 @@ function drawSquare(element) {
         /*red = 77;
         green = 77;
         blue = 77;*/
-        red = 5;
+        red = 50;
         green = 5;
         blue = 5;
 
@@ -246,10 +262,10 @@ function drawPlayer() {
 }
 
 function canLuminate(i, j) {
-    return luminationX - 5 < i &&
-            i < luminationX + 5 &&
-            luminationY - 5 < j &&
-            j < luminationY + 5;
+    return luminationX - 3 < i &&
+            i < luminationX + 3 &&
+            luminationY - 3 < j &&
+            j < luminationY + 3;
 }
 
 function updateLumination() {
