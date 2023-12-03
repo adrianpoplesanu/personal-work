@@ -1,4 +1,4 @@
-package com.adrianpoplesanu.lamdas;
+package com.adrianpoplesanu.lambdas;
 
 public class PrintableTester {
     public static void main(String[] args) {
