@@ -8,11 +8,13 @@ public class TestingLambda2 {
                     System.out.println(b.toString().toUpperCase());
                     System.out.println(c.toString().toUpperCase());
                     System.out.println(d.toString().toUpperCase());
+                    return "ydunfmc";
                 }
         );
     }
 
     public static void execute(Operations2 operations2) {
-        operations2.process("aaa", "bbb", "ccc", "ddd");
+        String result = operations2.process("aaa", "bbb", "ccc", "ddd");
+        System.out.println(result);
     }
 }
