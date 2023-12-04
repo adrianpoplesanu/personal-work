@@ -28,7 +28,7 @@ var leftArrow = 37;
 var rightArrow = 39;
 var spaceKey = 32;
 var escapeKey = 27;
-var commandKey = 91;
+var controlKey = 17;
 var movementKey;
 
 var myOrientation = 0; // 0 - up, 1 - left, 2 - down, 3 - right
@@ -43,9 +43,11 @@ window.addEventListener("keydown", function(e) {
         e.preventDefault();
         window.location.reload();
     }
-    if([spaceKey, leftArrow, upArrow, rightArrow, downArrow, commandKey].indexOf(e.keyCode) > -1) {
+    if([spaceKey, leftArrow, upArrow, rightArrow, downArrow, controlKey].indexOf(e.keyCode) > -1) {
         e.preventDefault();
         keystate[event.keyCode] = true;
+    } else {
+        console.log(event.keyCode);
     }
 }, false);
 
@@ -76,7 +78,7 @@ function handleInput() {
     if (keystate[spaceKey]) {
         triggerLumination();
     }
-    if (keystate[commandKey]) {
+    if (keystate[controlKey]) {
         triggerShoot();
     }
 }
@@ -128,6 +130,13 @@ function testImageRendering(x, y, alpha) {
     const img = document.getElementById("tile1");
     context.globalAlpha = alpha;
     context.drawImage(img, x, y, tileSize, tileSize);
+    context.globalAlpha = 1;
+}
+
+function renderMargin(x, y, tileSize) {
+    const img = document.getElementById("margin-tile");
+    context.globalAlpha = 0.12;
+    context.drawImage(img, x * tileSize, y * tileSize, 16, 16);
     context.globalAlpha = 1;
 }
 
@@ -208,12 +217,13 @@ function drawSquare(element) {
         /*red = 77;
         green = 77;
         blue = 77;*/
-        red = 50;
+        /*red = 50;
         green = 5;
         blue = 5;
 
         context.fillStyle = "rgba(" + red + ", " + green + ", " + blue + ", " + lumination + ")";
-        context.fillRect(element.x * tileSize, element.y * tileSize, tileSize, tileSize);
+        context.fillRect(element.x * tileSize, element.y * tileSize, tileSize, tileSize);*/
+        renderMargin(element.x, element.y, tileSize);
     }
     /*if (element.type == 0) {
         red = 0;
@@ -334,6 +344,7 @@ function triggerLumination() {
     if (!triggedLumination && !luminationInProgress) {
         triggedLumination = true;
     }
+    //console.log("lumination");
 }
 
 function triggerShoot() {
