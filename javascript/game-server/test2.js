@@ -28,7 +28,10 @@ var leftArrow = 37;
 var rightArrow = 39;
 var spaceKey = 32;
 var escapeKey = 27;
+var commandKey = 91;
 var movementKey;
+
+var myOrientation = 0; // 0 - up, 1 - left, 2 - down, 3 - right
 
 var keystate = {};
 
@@ -40,7 +43,7 @@ window.addEventListener("keydown", function(e) {
         e.preventDefault();
         window.location.reload();
     }
-    if([spaceKey, leftArrow, upArrow, rightArrow, downArrow].indexOf(e.keyCode) > -1) {
+    if([spaceKey, leftArrow, upArrow, rightArrow, downArrow, commandKey].indexOf(e.keyCode) > -1) {
         e.preventDefault();
         keystate[event.keyCode] = true;
     }
@@ -73,6 +76,9 @@ function handleInput() {
     if (keystate[spaceKey]) {
         triggerLumination();
     }
+    if (keystate[commandKey]) {
+        triggerShoot();
+    }
 }
 
 function canMove(deltaX, deltaY) {
@@ -84,6 +90,7 @@ function canMove(deltaX, deltaY) {
 function moveDown() {
     if (canMove(0, 1)) {
         player.deltaY = 1;
+        myOrientation = 2;
         player.state = maxState / moveFactor;
     }
 }
@@ -91,6 +98,7 @@ function moveDown() {
 function moveUp() {
     if (canMove(0, -1)) {
         player.deltaY = -1;
+        myOrientation = 0;
         player.state = maxState / moveFactor;
     }
 }
@@ -98,6 +106,7 @@ function moveUp() {
 function moveLeft() {
     if (canMove(-1, 0)) {
         player.deltaX = -1;
+        myOrientation = 1;
         player.state = maxState / moveFactor;
     }
 }
@@ -105,6 +114,7 @@ function moveLeft() {
 function moveRight() {
     if (canMove(1, 0)) {
         player.deltaX = 1;
+        myOrientation = 3;
         player.state = maxState / moveFactor;
     }
 }
@@ -127,18 +137,19 @@ function renderTile(x, y, tileSize) {
     //for (var i = 0; i < 4; i++) {
     //    for (var j = 0; j < 4; j++) {
     //        var alpha = 0.2;
-            //context.globalAlpha = 0.2 + 0.8 * (luminationBoard[x][y] / maxLuminationStep);
+            context.globalAlpha = 0.2 + 0.8 * (luminationBoard[x][y] / maxLuminationStep);
 
-            if (luminationBoard[x][y] != 0) {
+            /*if (luminationBoard[x][y] != 0) {
                 var distance = Math.floor(Math.sqrt(Math.abs(luminationX - x) ^ 2 + Math.abs(luminationY - y) ^ 2));
                 //console.log(distance);
                 context.globalAlpha = 0.2 + 0.8 * (luminationBoard[x][y] / maxLuminationStep) - distance / 10;
             } else {
                 context.globalAlpha = 0;
-            }
+            }*/
             if (context.globalAlpha < 0) {
                 context.globalAlpha = 0;
             }
+            context.globalAlpha /= 2.4;
             if (context.globalAlpha > 1) {
                 console.log("err");
             }
@@ -258,14 +269,32 @@ function drawPlayer() {
         tileSize - 4,
         tileSize - 4
     );
-
+    if (myOrientation == 0) {
+        var oldStrokeStyle = context.strokeStyle;
+        context.strokeStyle = "rgba(255, 140, 0, 1)";
+        var oldWidth = context.lineWidth;
+        context.lineWidth = 4;
+        context.beginPath();
+        context.moveTo(
+            player.x * tileSize + (maxState / moveFactor - player.state) * player.deltaX * moveFactor + 8,
+            player.y * tileSize + (maxState / moveFactor - player.state) * player.deltaY * moveFactor + 8
+        );
+        context.lineTo(
+            player.x * tileSize + (maxState / moveFactor - player.state) * player.deltaX * moveFactor + 8,
+            player.y * tileSize + (maxState / moveFactor - player.state) * player.deltaY * moveFactor + 0
+        );
+        context.stroke();
+        context.strokeStyle = oldStrokeStyle;
+        context.lineWidth = oldWidth;
+    }
 }
 
 function canLuminate(i, j) {
-    return luminationX - 3 < i &&
-            i < luminationX + 3 &&
-            luminationY - 3 < j &&
-            j < luminationY + 3;
+    //return true;
+    return luminationX - 8 < i &&
+            i < luminationX + 8 &&
+            luminationY - 8 < j &&
+            j < luminationY + 8;
 }
 
 function updateLumination() {
@@ -305,6 +334,10 @@ function triggerLumination() {
     if (!triggedLumination && !luminationInProgress) {
         triggedLumination = true;
     }
+}
+
+function triggerShoot() {
+    console.log("shoot");
 }
 
 function startLumination() {
