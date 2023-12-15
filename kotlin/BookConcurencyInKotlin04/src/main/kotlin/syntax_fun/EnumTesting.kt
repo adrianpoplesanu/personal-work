@@ -18,7 +18,7 @@ class EnumTesting {
             println(animalType)
             try {
                 animalType = AnimalType.valueOf("CACA_MACA")
-            } catch (e: java.lang.Exception) {
+            } catch (e: Exception) {
                 animalType = AnimalType.UNKNOWN
             }
             println(animalType)
