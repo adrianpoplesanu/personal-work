@@ -1,6 +1,6 @@
 from typing import Optional
 
-from ast import ASTProgram, ASTNode, ASTExpressionStatement, ASTInteger
+from ast import ASTProgram, ASTNode, ASTExpressionStatement, ASTInteger, ASTInfixExpression, ASTPrefixExpression
 from lexer import Lexer
 from precedence_type import PrecedenceType, precedences
 from token_type import TokenType
@@ -79,10 +79,17 @@ class Parser:
         return stmt
 
     def parse_prefix_expression(self):
-        pass
+        expr = ASTPrefixExpression(token=self.current_token, operator=self.current_token.literal)
+        self.next_token()
+        expr.right = self.parse_expression(PrecedenceType.PREFIX)
+        return expr
 
     def parse_infix_expression(self, left):
-        pass
+        expr = ASTInfixExpression(token=self.current_token, operator=self.current_token.literal, left=left)
+        precedence = self.current_precedence()
+        self.next_token()
+        expr.right = self.parse_expression(precedence)
+        return expr
 
     def parse_expression(self, precedence):
         if self.current_token.token_type not in self.prefix_parse_fns:

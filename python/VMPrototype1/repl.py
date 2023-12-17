@@ -17,6 +17,7 @@ class Repl:
             self.parser.load(line)
             self.program.reset()
             self.parser.build_program_statements(self.program)
+            print(str(self.program))
 
             self.compiler.reset()
             self.compiler.compile(self.program)

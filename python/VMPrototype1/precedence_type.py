@@ -5,11 +5,12 @@ class PrecedenceType:
     LOWEST = 0
     SUM = 6
     PRODUCT = 7
+    PREFIX = 9
 
 
 precedences = {
     TokenType.PLUS: PrecedenceType.SUM,
     TokenType.MINUS: PrecedenceType.SUM,
     TokenType.SLASH: PrecedenceType.PRODUCT,
-    TokenType.ASTERISK: PrecedenceType.PRODUCT,
+    TokenType.ASTERISK: PrecedenceType.PRODUCT
 }
