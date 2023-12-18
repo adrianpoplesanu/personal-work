@@ -13,18 +13,20 @@ class Parser:
         self.current_token = None
         self.peek_token = None
         self.statement_parse_fns = {}
-        self.prefix_parse_fns = {}
-        self.infix_parse_fns = {}
 
-        self.prefix_parse_fns[TokenType.IDENT] = self.parse_identifier
-        self.prefix_parse_fns[TokenType.INT] = self.parse_integer_literal
-        self.prefix_parse_fns[TokenType.BANG] = self.parse_prefix_expression
-        self.prefix_parse_fns[TokenType.MINUS] = self.parse_prefix_expression
+        self.prefix_parse_fns = {
+            TokenType.IDENT: self.parse_identifier,
+            TokenType.INT: self.parse_integer_literal,
+            TokenType.BANG: self.parse_prefix_expression,
+            TokenType.MINUS: self.parse_prefix_expression
+        }
 
-        self.infix_parse_fns[TokenType.PLUS] = self.parse_infix_expression
-        self.infix_parse_fns[TokenType.MINUS] = self.parse_infix_expression
-        self.infix_parse_fns[TokenType.ASTERISK] = self.parse_infix_expression
-        self.infix_parse_fns[TokenType.SLASH] = self.parse_infix_expression
+        self.infix_parse_fns = {
+            TokenType.PLUS: self.parse_infix_expression,
+            TokenType.MINUS: self.parse_infix_expression,
+            TokenType.ASTERISK: self.parse_infix_expression,
+            TokenType.SLASH: self.parse_infix_expression
+        }
 
     def load(self, source):
         self.source = source
@@ -34,7 +36,7 @@ class Parser:
 
     def build_program_statements(self, program: ASTProgram):
         while self.current_token.token_type != TokenType.EOF:
-            stmt = self.parse_expressions_statement()
+            stmt = self.parse_statement()
             if stmt:
                 program.statements.append(stmt)
             self.next_token()
