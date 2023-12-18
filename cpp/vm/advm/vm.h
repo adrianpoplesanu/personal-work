@@ -4,6 +4,7 @@
 #include "objects.h"
 #include "bytecode.h"
 #include "code.h"
+#include "gc.h"
 #include <vector>
 
 class VM {
@@ -19,7 +20,7 @@ public:
     VM();
     void load(Bytecode);
     AdObject* stackTop();
-    void run();
+    void run(GarbageCollector*);
     AdObject* last_popped_stack_element();
     void push(AdObject*);
     AdObject* pop();

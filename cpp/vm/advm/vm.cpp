@@ -8,7 +8,17 @@ void VM::load(Bytecode b) {
     instructions = b.instructions;
     constants = b.constants;
     for (int i = 0; i < 2048; i++) {
-        if (i < sp) { // TODO: this works but looks bad
+        if (i < sp) { // TODO: this works but looks bad, i need something more elegant here
+            AdObject* prev = stack[i]->prev;
+            AdObject* next = stack[i]->next;
+
+            if (prev) {
+                prev->next = next;
+            }
+            if (next) {
+                next->prev = prev;
+            }
+
             delete stack[i];
         }
         stack[i] = NULL;
@@ -20,7 +30,7 @@ AdObject* VM::stackTop() {
     return stack[sp - 1];
 }
 
-void VM::run() {
+void VM::run(GarbageCollector *gc) {
     for (int ip = 0; ip < instructions.bytes.size(); ip++) {
         unsigned char opcode = instructions.bytes[ip];
         switch (opcode) {
@@ -40,7 +50,9 @@ void VM::run() {
                 int rightValue = ((AdObjectInteger*) right)->value;
 
                 int result = leftValue + rightValue;
-                push(new AdObjectInteger(result));
+                AdObject* obj = new AdObjectInteger(result);
+                gc->addObject(obj);
+                push(obj);
                 break;
             }
             case 2: {

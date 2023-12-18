@@ -27,7 +27,7 @@ void Repl::loop() {
         compiler.code.instructions = bytecode.instructions;
         std::cout << compiler.code.print(); // asta pare ca functioneaza cum trebuie
         vm.load(bytecode);
-        vm.run();
+        vm.run(gc);
         AdObject* result = vm.last_popped_stack_element();
         if (result != NULL) {
             std::cout << result->inspect() << "\n";
