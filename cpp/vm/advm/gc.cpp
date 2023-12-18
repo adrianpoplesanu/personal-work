@@ -19,12 +19,26 @@ void GarbageCollector::markObjects() {
     // TODO: implement this
 }
 
-void GarbageCollector::markObject(AdObject*) {
-    // TODO: implement this
+void GarbageCollector::markObject(AdObject* obj) {
+    if (obj->marked) return;
+    switch(obj->type) {
+        case OT_INT: {
+            break;
+        }
+        default: {
+            std::cout << "MEMORY ERROR!!! garbage collection inconsistency!\n";
+            break;
+        }
+    }
+    obj->marked = true;
 }
 
 void GarbageCollector::unmarkAllObjects() {
-    // TODO: implement this
+    AdObject *iter = head;
+    while (iter != NULL) {
+        iter->marked = false;
+        iter = iter->next;
+    }
 }
 
 void GarbageCollector::sweepObjects() {
