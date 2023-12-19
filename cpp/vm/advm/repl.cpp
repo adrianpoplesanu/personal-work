@@ -4,6 +4,7 @@
 Repl::Repl() {
     gc = new GarbageCollector();
     compiler.gc = gc;
+    vm.setGarbageCollector(gc);
 }
 
 Repl::~Repl() {

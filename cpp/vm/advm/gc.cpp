@@ -45,11 +45,39 @@ void GarbageCollector::sweepObjects() {
     // TODO: implement this
 }
 
+void GarbageCollector::forceFreeObject(AdObject* obj) {
+    AdObject* prev = obj->prev;
+    AdObject* next = obj->next;
+
+    if (prev) {
+        prev->next = next;
+    }
+    if (next) {
+        next->prev = prev;
+    }
+
+    delete obj;
+}
+
 void GarbageCollector::forceFreeObjects() {
     AdObject *current = head;
     while (current != NULL) {
         AdObject *target = current;
         current = current->next;
         free_memory_AdObject(target);
+    }
+}
+
+void free_Ad_Object_memory(AdObject *obj) {
+    if (obj == NULL) return;
+    switch(obj->type) {
+        case OT_INT: {
+            delete (AdObjectInteger*) obj;
+            break;
+        }
+        default: {
+            std::cout << "MEMORY ERROR!!! freeing unknown AdObject type";
+            break;
+        }
     }
 }

@@ -3,6 +3,8 @@
 
 #include "objects.h"
 
+void free_Ad_Object_memory(AdObject*);
+
 class GarbageCollector {
     AdObject *head;
     AdObject *tail;
@@ -15,6 +17,7 @@ public:
     void markObject(AdObject*);
     void unmarkAllObjects();
     void sweepObjects();
+    void forceFreeObject(AdObject*);
     void forceFreeObjects();
 };
 

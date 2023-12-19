@@ -9,7 +9,7 @@ void VM::load(Bytecode b) {
     constants = b.constants;
     for (int i = 0; i < 2048; i++) {
         if (i < sp) { // TODO: this works but looks bad, i need something more elegant here
-            AdObject* prev = stack[i]->prev;
+            /*AdObject* prev = stack[i]->prev;
             AdObject* next = stack[i]->next;
 
             if (prev) {
@@ -19,10 +19,15 @@ void VM::load(Bytecode b) {
                 next->prev = prev;
             }
 
-            delete stack[i];
+            delete stack[i];*/
+            gc->forceFreeObject(stack[i]);
         }
         stack[i] = NULL;
     }
+}
+
+void VM::setGarbageCollector(GarbageCollector *gc) {
+    this->gc = gc;
 }
 
 AdObject* VM::stackTop() {

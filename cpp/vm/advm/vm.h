@@ -16,9 +16,11 @@ public:
     Instructions instructions;
     std::vector<AdObject*> constants; // TODO: this will leak memory
     AdObject *stack[2048];
+    GarbageCollector *gc;
 
     VM();
     void load(Bytecode);
+    void setGarbageCollector(GarbageCollector*);
     AdObject* stackTop();
     void run(GarbageCollector*);
     AdObject* last_popped_stack_element();
