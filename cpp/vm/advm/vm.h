@@ -22,7 +22,7 @@ public:
     void load(Bytecode);
     void setGarbageCollector(GarbageCollector*);
     AdObject* stackTop();
-    void run(GarbageCollector*);
+    void run();
     AdObject* last_popped_stack_element();
     void push(AdObject*);
     AdObject* pop();
