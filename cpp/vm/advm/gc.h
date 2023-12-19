@@ -3,8 +3,6 @@
 
 #include "objects.h"
 
-void free_Ad_Object_memory(AdObject*);
-
 class GarbageCollector {
     AdObject *head;
     AdObject *tail;

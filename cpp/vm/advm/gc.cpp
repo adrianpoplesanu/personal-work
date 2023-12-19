@@ -67,17 +67,3 @@ void GarbageCollector::forceFreeObjects() {
         free_memory_AdObject(target);
     }
 }
-
-void free_Ad_Object_memory(AdObject *obj) {
-    if (obj == NULL) return;
-    switch(obj->type) {
-        case OT_INT: {
-            delete (AdObjectInteger*) obj;
-            break;
-        }
-        default: {
-            std::cout << "MEMORY ERROR!!! freeing unknown AdObject type";
-            break;
-        }
-    }
-}
