@@ -1,0 +1,20 @@
+<canvas id="c" height=800 width=600></canvas>
+<script id="vertex-shader-2d" type="notjs">
+
+  attribute vec4 a_position;
+
+  void main() {
+    gl_Position = a_position;
+  }
+
+</script>
+<script  id="fragment-shader-2d" type="notjs">
+
+  precision mediump float;
+
+  void main() {
+    gl_FragColor = vec4(1, 0, 0.5, 1); // return redish-purple
+  }
+
+</script>
+<script src="index.js"></script>
