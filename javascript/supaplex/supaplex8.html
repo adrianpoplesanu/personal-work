@@ -120,6 +120,7 @@
 	window.addEventListener("keydown", function(e) {
 		// space and arrow keys
 		if (e.keyCode == 27) {
+                        e.preventDefault();
 			window.location.reload();
 		}
 		if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
