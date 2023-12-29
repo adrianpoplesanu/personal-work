@@ -23,7 +23,7 @@ class ASTNode:
         print('token_literal unimplemented in subclass')
 
     def __str__(self):
-        print('__str__ not implmented in subclass')
+        print('__str__ unimplemented in subclass')
 
 
 class ASTProgram(ASTNode):

@@ -1,9 +1,15 @@
+from bytecode import Bytecode
+from instructions import Instructions
+
+
 class Compiler:
     def __init__(self):
-        pass
+        self.instructions = None
+        self.bytecode = None
 
     def reset(self):
-        pass
+        self.instructions = Instructions()
+        self.bytecode = Bytecode()
 
     def compile(self, program):
         pass
