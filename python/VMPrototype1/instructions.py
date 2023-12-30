@@ -2,6 +2,7 @@ class Instructions:
     size = 0
 
     def __init__(self):
+        # List<Byte>
         self.bytes = []
 
     def add(self, _byte):

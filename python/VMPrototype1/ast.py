@@ -19,6 +19,8 @@ statement_type_map = {
 
 
 class ASTNode:
+    statement_type = None
+
     def token_literal(self):
         print('token_literal unimplemented in subclass')
 
