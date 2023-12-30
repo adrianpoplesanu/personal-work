@@ -1,0 +1,26 @@
+<html>
+<head>
+    <title>WebGL prototyping...</title>
+</head>
+<body>
+    <canvas id="canvas" height="600" width="800"></canvas>
+
+    <script id="vertex-shader-2d" type="notjs">
+    attribute vec4 a_position;
+
+    void main() {
+      gl_Position = a_position;
+    }
+    </script>
+
+    <script  id="fragment-shader-2d" type="notjs">
+    precision mediump float;
+
+    void main() {
+      gl_FragColor = vec4(0.5, 0, 0.5, 1);
+    }
+    </script>
+
+    <script src="index.js"></script>
+</body>
+</html>
