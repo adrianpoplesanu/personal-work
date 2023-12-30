@@ -107,7 +107,7 @@ ASTNode* Parser::parsePrefixExpression() {
 ASTNode* Parser::parseInfixExpression(ASTNode* left) {
     ASTInfixExpression* expr = new ASTInfixExpression();
     expr->token = currentToken;
-    expr->operand = currentToken.stringLiteral;
+    expr->_operator = currentToken.stringLiteral;
     expr->left = left;
     PrecedenceType preced = currentPrecedence();
     nextToken();

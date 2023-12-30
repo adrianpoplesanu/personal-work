@@ -31,22 +31,22 @@ void Compiler::compile(ASTNode* node) {
             ASTInfixExpression *infixExpression = (ASTInfixExpression*) node;
             compile(infixExpression->left);
             compile(infixExpression->right);
-            if (infixExpression->operand == "+") {
+            if (infixExpression->_operator == "+") {
                 OpAdd opAdd = OpAdd();
                 std::vector<int> args;
                 emit(opAdd, 0, args);
             }
-            if (infixExpression->operand == "-") {
+            if (infixExpression->_operator == "-") {
                 OpMinus opMinus = OpMinus();
                 std::vector<int> args;
                 emit(opMinus, 0, args);
             }
-            if (infixExpression->operand == "*") {
+            if (infixExpression->_operator == "*") {
                 OpMultiply opMultiply = OpMultiply();
                 std::vector<int> args;
                 emit(opMultiply, 0, args);
             }
-            if (infixExpression->operand == "/") {
+            if (infixExpression->_operator == "/") {
                 OpDivide opDivide = OpDivide();
                 std::vector<int> args;
                 emit(opDivide, 0, args);

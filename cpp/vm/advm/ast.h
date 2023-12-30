@@ -57,7 +57,7 @@ class ASTInfixExpression : public ASTNode {
 public:
     ASTNode* left;
     ASTNode* right;
-    std::string operand;
+    std::string _operator;
 
     ASTInfixExpression();
     ASTInfixExpression(Token);

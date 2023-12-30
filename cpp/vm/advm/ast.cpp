@@ -75,7 +75,7 @@ ASTInfixExpression::ASTInfixExpression(Token t, ASTNode* l, ASTNode* r, std::str
     token = t;
     left = l;
     right = r;
-    operand = op;
+    _operator = op;
 }
 
 ASTInfixExpression::~ASTInfixExpression() {
