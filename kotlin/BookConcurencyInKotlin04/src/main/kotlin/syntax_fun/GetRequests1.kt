@@ -10,8 +10,8 @@ class GetRequests1 {
 
     suspend fun retrieve(path: String): String {
         val client = HttpClient()
-        client.get(path)
-        return "aaa"
+        val response: HttpResponse = client.get(path)
+        return response.bodyAsText()
     }
 
     fun run(){
@@ -27,10 +27,10 @@ class GetRequests1 {
         fun main(args: Array<String>) = runBlocking {
             println("buna dimineata")
             val getRequests1 = GetRequests1()
-            getRequests1.run()
-            //val action = async { getRequests1.retrieve("www.adrianus.ro") }
-            //val content = action.await()
-            //println (content)
+            //getRequests1.run() // 1st approach... working
+            val action = async { getRequests1.retrieve("http://www.adrianus.ro") }
+            val content = action.await()
+            println (content)
         }
     }
 }
