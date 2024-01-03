@@ -21,7 +21,9 @@ class Repl:
 
             self.compiler.reset()
             self.compiler.compile(self.program)
-            bytecode = self.compiler.bytecode
+            bytecode = self.compiler.get_bytecode()
+            self.compiler.code.instructions = bytecode.instructions
+            print(self.compiler.code.to_string(), end='')
 
             self.vm.load(bytecode)
             self.vm.run()
