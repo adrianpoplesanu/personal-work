@@ -7,7 +7,7 @@ class OpCodeByte:
 
 
 class OpCode:
-    pass
+    byte_code = None
 
 
 class OpConstant(OpCode):

@@ -54,12 +54,11 @@ class Compiler:
             print("severe error: node type unknown " + statement_type_map[node.statement_type])
 
     def emit(self, opcode, n, args) -> int:
-        size = 0
-        size, instruction = self.code.make(opcode, n, args, size)
+        size, instruction = self.code.make(opcode, n, args)
         pos = self.add_instruction(size, instruction)
         return pos
 
-    def bytecode(self) -> Bytecode:
+    def get_bytecode(self) -> Bytecode:
         bytecode = Bytecode()
         bytecode.instructions = self.instructions
         bytecode.constants = self.constants

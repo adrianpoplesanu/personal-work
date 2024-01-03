@@ -1,9 +1,11 @@
 from definition import Definition
-from opcode_ad import OpCodeByte
+from instructions import Instructions
+from opcode_ad import OpCodeByte, OpCode
 
 
 class Code:
     def __init__(self):
+        self.instructions = Instructions()
         self.definitions_map = {
             OpCodeByte.OP_CONSTANT: Definition("OpConstant", 1, [2]),
             OpCodeByte.OP_ADD: Definition("OpAdd", 0, []),
@@ -12,9 +14,72 @@ class Code:
             OpCodeByte.OP_DIVIDE: Definition("OpDivide", 0, []),
         }
 
-    def make(self, opcode, n, args, size):
-        definition = self.lookup(opcode)
-        return size, []
+    def make(self, opcode: OpCode, n, args):
+        definition = self.lookup(opcode.byte_code)
+        instruction_len = 1
+        for i in range(definition.size):
+            instruction_len += definition.operand_widths[i]
+        instruction = [None] * instruction_len
+        instruction[0] = opcode.byte_code
 
-    def lookup(self, op) -> Definition:
-        return self.definitions_map[op]
+        offset = 1
+        i = 0
+        for j in range(n):
+            width = definition.operand_widths[i]
+            i += 1
+            if width == 2:
+                argument = args[j]
+                # instruction[offset] = self.int_to_bytes(argument)[2]
+                # instruction[offset + 1] = self.int_to_bytes(argument)[3]
+                operand_bytes = argument.to_bytes(2, 'big')
+                instruction[offset] = operand_bytes[0]
+                instruction[offset + 1] = operand_bytes[1]
+            else:
+                print("severe error")
+            offset += width
+
+        return instruction_len, instruction
+
+    def lookup(self, _byte) -> Definition:
+        return self.definitions_map[_byte]
+
+    def int_to_bytes(self, param_int):
+        print(param_int)
+        return [0, 0, 0, 0]
+
+    def to_string(self):
+        out = ''
+        i = 0
+        while i < self.instructions.size:
+            definition = self.lookup(self.instructions.bytes[i])
+            operands = []
+            read = self.read_operands(definition, self.instructions, i + 1, operands)
+            out += self.format_int(i) + " " + self.format_instruction(definition, operands) + '\n'
+            i += 1 + read
+        return out
+
+    def read_operands(self, definition: Definition, instructions, start, operands) -> int:
+        offset = 0
+
+        i = 0
+        for w in range(definition.size):
+            if definition.operand_widths[w] == 2:
+                operands.append(self.read_uint16(instructions, start + offset))
+            offset += definition.operand_widths[w]
+        return offset
+
+    def read_uint16(self, instructions: Instructions, offset: int) -> int:
+        return int.from_bytes([instructions.bytes[offset], instructions.bytes[offset + 1]], byteorder='big')
+
+    def format_int(self, n: int) -> str:
+        return "{0:04}".format(n)
+
+    def format_instruction(self, definition: Definition, operands) -> str:
+        operand_count = len(definition.operand_widths) + 1
+        if operand_count == 1:
+            return definition.name
+        elif operand_count == 2:
+            return "{0} {1}".format(definition.name, operands[0])
+        else:
+            print("unknowm instruction format")
+
