@@ -58,7 +58,9 @@ void VM::run() {
                 int rightValue = ((AdObjectInteger*) right)->value;
 
                 int result = leftValue - rightValue;
-                push(new AdObjectInteger(result));
+                AdObject* obj = new AdObjectInteger(result);
+                gc->addObject(obj);
+                push(obj);
                 break;
             }
             case 3: {
@@ -70,7 +72,9 @@ void VM::run() {
                 int rightValue = ((AdObjectInteger*) right)->value;
 
                 int result = leftValue * rightValue;
-                push(new AdObjectInteger(result));
+                AdObject* obj = new AdObjectInteger(result);
+                gc->addObject(obj);
+                push(obj);
                 break;
             }
             case 4: {
@@ -82,7 +86,9 @@ void VM::run() {
                 int rightValue = ((AdObjectInteger*) right)->value;
 
                 int result = leftValue / rightValue;
-                push(new AdObjectInteger(result));
+                AdObject* obj = new AdObjectInteger(result);
+                gc->addObject(obj);
+                push(obj);
                 break;
             }
             default: {
