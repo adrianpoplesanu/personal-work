@@ -55,7 +55,7 @@ class Compiler:
 
     def emit(self, opcode, n, args) -> int:
         size = 0
-        size, instruction = self.code.make(size)
+        size, instruction = self.code.make(opcode, n, args, size)
         pos = self.add_instruction(size, instruction)
         return pos
 
