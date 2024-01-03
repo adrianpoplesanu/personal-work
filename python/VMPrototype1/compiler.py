@@ -11,6 +11,7 @@ class Compiler:
         self.instructions = None
         self.bytecode = None
         self.code = Code()
+        self.constants = []
 
     def reset(self):
         self.instructions = Instructions()
@@ -54,15 +55,22 @@ class Compiler:
 
     def emit(self, opcode, n, args) -> int:
         size = 0
-        instruction, size = self.code.make(size)
-        pos = self.add_instruction(instruction)
+        size, instruction = self.code.make(size)
+        pos = self.add_instruction(size, instruction)
         return pos
 
-    def bytecode(self):
-        pass
+    def bytecode(self) -> Bytecode:
+        bytecode = Bytecode()
+        bytecode.instructions = self.instructions
+        bytecode.constants = self.constants
+        return bytecode
 
-    def add_instruction(self, instruction) -> int:
-        return 0
+    def add_instruction(self, size: int, instruction) -> int:
+        pos_new_instruction = size
+        for i in range(size):
+            self.instructions.add(instruction[i])
+        return pos_new_instruction
 
-    def add_constant(self, obj: AdObject):
-        pass
+    def add_constant(self, obj: AdObject) -> int:
+        self.constants.append(obj)
+        return len(self.constants) - 1

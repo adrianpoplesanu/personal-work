@@ -3,4 +3,4 @@ class Code:
         pass
 
     def make(self, size):
-        return 0, size
+        return size, []
