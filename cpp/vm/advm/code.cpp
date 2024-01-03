@@ -50,7 +50,7 @@ Definition* Code::lookup(unsigned char op) {
     return definitionsMap[op];
 }
 
-std::string Code::print() {
+std::string Code::toString() {
     std::string out = "";
     int i = 0;
     while (i < instructions.size) {

@@ -26,7 +26,7 @@ void Repl::loop() {
         compiler.compile(&program); // TODO: program should be a pointer
         Bytecode bytecode = compiler.getBytecode();
         compiler.code.instructions = bytecode.instructions;
-        std::cout << compiler.code.print(); // asta pare ca functioneaza cum trebuie
+        std::cout << compiler.code.toString(); // asta pare ca functioneaza cum trebuie
         vm.load(bytecode);
         vm.run();
         AdObject* result = vm.last_popped_stack_element();

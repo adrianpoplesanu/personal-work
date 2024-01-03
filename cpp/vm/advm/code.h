@@ -18,7 +18,7 @@ public:
     ~Code();
     unsigned char* make(OpCode opCode, int n, std::vector<int>&, int&);
     Definition* lookup(unsigned char);
-    std::string print();
+    std::string toString();
 };
 
 std::vector<unsigned char> intToBytes(int);
