@@ -96,6 +96,7 @@ public:
     ASTInteger();
     ASTInteger(Token);
     ASTInteger(Token, int);
+    ~ASTInteger();
     virtual std::string inspect();
     virtual std::string toString();
 

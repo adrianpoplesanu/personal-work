@@ -10,17 +10,18 @@ std::string ASTNode::inspect() {
 
 ASTProgram::ASTProgram() {
     type = AT_PROGRAM;
+    ref_count = 0;
 }
 
 ASTProgram::~ASTProgram() {
-    for (std::vector<ASTNode*>::iterator it = statements.begin() ; it != statements.end(); ++it) {
+    for(std::vector<ASTNode*>::iterator it = statements.begin() ; it != statements.end(); ++it) {
         ASTNode *node = *it;
         free_memory_ASTNode(node);
     }
 }
 
 void ASTProgram::reset() {
-    for (std::vector<ASTNode*>::iterator it = statements.begin() ; it != statements.end(); ++it) {
+    for(std::vector<ASTNode*>::iterator it = statements.begin() ; it != statements.end(); ++it) {
         ASTNode *node = *it;
         free_memory_ASTNode(node);
     }
@@ -37,15 +38,18 @@ std::string ASTProgram::inspect() {
 
 ASTExpressionStatement::ASTExpressionStatement() {
     type = AT_EXPRESSION_STATEMENT;
+    ref_count = 0;
 }
 
 ASTExpressionStatement::ASTExpressionStatement(Token t) {
     type = AT_EXPRESSION_STATEMENT;
+    ref_count = 0;
     token = t;
 }
 
 ASTExpressionStatement::ASTExpressionStatement(Token t, ASTNode* e) {
     type = AT_EXPRESSION_STATEMENT;
+    ref_count = 0;
     token = t;
     expression = e;
 }
@@ -64,14 +68,18 @@ std::string ASTExpressionStatement::inspect() {
 
 ASTInfixExpression::ASTInfixExpression() {
     type = AT_INFIX_EXPRESSION;
+    ref_count = 0;
 }
 
 ASTInfixExpression::ASTInfixExpression(Token t) {
     type = AT_INFIX_EXPRESSION;
+    ref_count = 0;
     token = t;
 }
 
 ASTInfixExpression::ASTInfixExpression(Token t, ASTNode* l, ASTNode* r, std::string op) {
+    type = AT_INFIX_EXPRESSION;
+    ref_count = 0;
     token = t;
     left = l;
     right = r;
@@ -112,19 +120,25 @@ std::string ASTIdentifier::inspect() {
 
 ASTInteger::ASTInteger() {
     type = AT_INTEGER;
+    ref_count = 0;
 }
 
 ASTInteger::ASTInteger(Token t) {
     type = AT_INTEGER;
+    ref_count = 0;
     token = t;
 }
 
 ASTInteger::ASTInteger(Token t, int v) {
     type = AT_INTEGER;
+    ref_count = 0;
     token = t;
     value = v;
 }
 
+ASTInteger::~ASTInteger() {
+    //...
+}
 
 std::string ASTInteger::toString() {
     return "ASTInteger";
@@ -150,44 +164,61 @@ void free_memory_ASTNode(ASTNode* node) {
     if (node == NULL) return;
     if (node->ref_count > 0) return;
     switch(node->type)  {
-        case AT_PROGRAM:
+        case AT_PROGRAM: {
             delete (ASTProgram*) node;
-        break;
-        case AT_EXPRESSION_STATEMENT:
+            break;
+        }
+        case AT_EXPRESSION_STATEMENT: {
             delete (ASTExpressionStatement*) node;
-        break;
-        case AT_IDENTIFIER:
+            break;
+        }
+        case AT_IDENTIFIER: {
             delete (ASTIdentifier*) node;
-        break;
-        case AT_INTEGER:
+            break;
+        }
+        case AT_INTEGER: {
             delete (ASTInteger*) node;
-        break;
-        case AT_INFIX_EXPRESSION:
+            break;
+        }
+        case AT_INFIX_EXPRESSION: {
             delete (ASTInfixExpression*) node;
-        break;
-        case AT_PREFIX_EXPRESSION:
+            break;
+        }
+        case AT_PREFIX_EXPRESSION: {
             delete (ASTPrefixExpression*) node;
-        break;
-        case AT_LET_STATEMENT:
+            break;
+        }
+        case AT_LET_STATEMENT: {
             delete (ASTLetStatement*) node;
-        break;
-        case AT_RETURN_STATEMENT:
+            break;
+        }
+        case AT_RETURN_STATEMENT: {
             delete (ASTReturnStatement*) node;
-        break;
-        case AT_FUNCTION_STATEMENT:
+            break;
+        }
+        case AT_FUNCTION_STATEMENT: {
             delete (ASTFunctionStatement*) node;
-        break;
-        case AT_DEF_STATEMENT:
+            break;
+        }
+        case AT_DEF_STATEMENT: {
             delete (ASTDefStatement*) node;
-        break;
-        case AT_WHILE_STATEMENT:
+            break;
+        }
+        case AT_WHILE_STATEMENT: {
             delete (ASTWhileStatement*) node;
-        break;
-        case AT_FOR_STATEMENT:
+            break;
+        }
+        case AT_FOR_STATEMENT: {
             delete (ASTForStatement*) node;
-        break;
-        case AT_IF_STATEMENT:
+            break;
+        }
+        case AT_IF_STATEMENT: {
             delete (ASTIfStatement*) node;
-        break;
+            break;
+        }
+        default: {
+            std::cout << "SEVERE MEMORY ERROR!!!\n";
+            break;
+        }
     }
 }
