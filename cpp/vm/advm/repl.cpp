@@ -2,10 +2,10 @@
 #include <iostream>
 
 Repl::Repl() {
+    program = new ASTProgram();
     gc = new GarbageCollector();
     compiler.gc = gc;
-    program = new ASTProgram();
-    vm.setGarbageCollector(gc);
+    vm.gc = gc;
 }
 
 Repl::~Repl() {
@@ -26,9 +26,11 @@ void Repl::loop() {
 
         compiler.reset();
         compiler.compile(program);
+
         Bytecode bytecode = compiler.getBytecode();
         compiler.code.instructions = bytecode.instructions;
         std::cout << compiler.code.toString(); // asta pare ca functioneaza cum trebuie
+
         vm.load(bytecode);
         vm.run();
 
@@ -40,7 +42,5 @@ void Repl::loop() {
         if (result != NULL) {
             std::cout << result->inspect() << "\n";
         }
-
-        program->reset();
     }
 }
