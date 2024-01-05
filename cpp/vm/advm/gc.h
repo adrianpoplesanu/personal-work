@@ -11,11 +11,11 @@ public:
     GarbageCollector();
 
     void addObject(AdObject*);
-    void markObjects();
+    void markObjects(AdObject *stack[2048], int sp);
     void markObject(AdObject*);
     void unmarkAllObjects();
     void sweepObjects();
-    void forceFreeObject(AdObject*);
+    void sweepObject(AdObject*);
     void forceFreeObjects();
 };
 

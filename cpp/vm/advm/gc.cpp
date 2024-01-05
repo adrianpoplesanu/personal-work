@@ -15,12 +15,15 @@ void GarbageCollector::addObject(AdObject *obj) {
     }
 }
 
-void GarbageCollector::markObjects() {
-    // TODO: implement this
+void GarbageCollector::markObjects(AdObject *stack[2048], int sp) {
     // idea: mark all objects left on the stack
+    for (int i = 0; i < sp; i++) {
+        markObject(stack[i]);
+    }
 }
 
 void GarbageCollector::markObject(AdObject* obj) {
+    if (obj == NULL) return;
     if (obj->marked) return;
     switch(obj->type) {
         case OT_INT: {
@@ -44,29 +47,42 @@ void GarbageCollector::unmarkAllObjects() {
 }
 
 void GarbageCollector::sweepObjects() {
-    // TODO: implement this
     // idea: delete all objects that are not marked
+    AdObject *iter = head;
+    while (iter != NULL) {
+        AdObject *target = NULL;
+        if (!iter->marked) {
+            target = iter;
+        }
+        iter = iter->next;
+        if (target != NULL) {
+            sweepObject(target);
+        }
+    }
 }
 
-void GarbageCollector::forceFreeObject(AdObject* obj) {
-    AdObject* prev = obj->prev;
-    AdObject* next = obj->next;
+void GarbageCollector::sweepObject(AdObject* target) {
+    if (target == head && target == tail) {
+        head = NULL;
+        tail = NULL;
+    } else if (target == head) {
+        head = target->next;
+        head->prev = NULL;
+    } else if (target == tail) {
+        tail = target->prev;
+        tail->next = NULL;
+    } else {
+        AdObject* prev = target->prev;
+        AdObject* next = target->next;
 
-    if (prev) {
         prev->next = next;
-    }
-    if (next) {
         next->prev = prev;
     }
 
-    free_memory_AdObject(obj);
+    free_memory_AdObject(target);
 }
 
 void GarbageCollector::forceFreeObjects() {
-    AdObject *current = head;
-    while (current != NULL) {
-        AdObject *target = current;
-        current = current->next;
-        free_memory_AdObject(target);
-    }
+    unmarkAllObjects();
+    sweepObjects();
 }
