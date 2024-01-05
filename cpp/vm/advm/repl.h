@@ -9,7 +9,7 @@
 class Repl {
     public:
     Parser parser;
-    ASTProgram program;
+    ASTProgram *program;
     Compiler compiler;
     VM vm;
     GarbageCollector *gc;

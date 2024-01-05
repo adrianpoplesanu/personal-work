@@ -31,7 +31,7 @@ public:
 
     Parser();
     void load(std::string);
-    void buildProgramStatement(ASTProgram&);
+    void buildProgramStatement(ASTProgram*);
 
     void nextToken();
     PrecedenceType currentPrecedence();

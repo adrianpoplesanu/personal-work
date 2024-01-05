@@ -8,9 +8,6 @@ void VM::load(Bytecode b) {
     instructions = b.instructions;
     constants = b.constants;
     for (int i = 0; i < 2048; i++) {
-        if (i < sp) { // TODO: this works but looks bad, i need something more elegant here
-            gc->forceFreeObject(stack[i]);
-        }
         stack[i] = NULL;
     }
 }

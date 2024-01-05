@@ -4,12 +4,14 @@
 Repl::Repl() {
     gc = new GarbageCollector();
     compiler.gc = gc;
+    program = new ASTProgram();
     vm.setGarbageCollector(gc);
 }
 
 Repl::~Repl() {
     gc->forceFreeObjects();
     delete gc;
+    delete program;
 }
 
 void Repl::loop() {
@@ -19,19 +21,26 @@ void Repl::loop() {
         getline(std::cin, line);
         if (line == "exit()") break;
         parser.load(line);
-        program.reset();
+        program->reset();
         parser.buildProgramStatement(program);
 
         compiler.reset();
-        compiler.compile(&program); // TODO: program should be a pointer
+        compiler.compile(program);
         Bytecode bytecode = compiler.getBytecode();
         compiler.code.instructions = bytecode.instructions;
         std::cout << compiler.code.toString(); // asta pare ca functioneaza cum trebuie
         vm.load(bytecode);
         vm.run();
+
+        gc->unmarkAllObjects();
+        gc->markObjects(vm.stack, vm.sp);
+        gc->sweepObjects();
+
         AdObject* result = vm.last_popped_stack_element();
         if (result != NULL) {
             std::cout << result->inspect() << "\n";
         }
+
+        program->reset();
     }
 }
