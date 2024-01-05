@@ -17,12 +17,14 @@ void GarbageCollector::addObject(AdObject *obj) {
 
 void GarbageCollector::markObjects() {
     // TODO: implement this
+    // idea: mark all objects left on the stack
 }
 
 void GarbageCollector::markObject(AdObject* obj) {
     if (obj->marked) return;
     switch(obj->type) {
         case OT_INT: {
+            obj->marked = true;
             break;
         }
         default: {
@@ -43,6 +45,7 @@ void GarbageCollector::unmarkAllObjects() {
 
 void GarbageCollector::sweepObjects() {
     // TODO: implement this
+    // idea: delete all objects that are not marked
 }
 
 void GarbageCollector::forceFreeObject(AdObject* obj) {
@@ -56,7 +59,7 @@ void GarbageCollector::forceFreeObject(AdObject* obj) {
         next->prev = prev;
     }
 
-    delete obj;
+    free_memory_AdObject(obj);
 }
 
 void GarbageCollector::forceFreeObjects() {
