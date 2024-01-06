@@ -17,6 +17,7 @@ class Repl {
     Repl();
     ~Repl();
     void loop();
+    void executeFile(std::ifstream &);
 };
 
 #endif

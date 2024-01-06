@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 
 #include "ast.h"
 #include "ast.cpp"
@@ -42,6 +43,13 @@ int main(int argc, char* argv[]) {
         return 0;
     }
     Repl repl;
-    repl.loop();
+    if (argc == 1) {
+        repl.loop();
+    } else {
+        for (int i = 1; i < argc; i++) {
+			std::ifstream target(argv[i]);
+			repl.executeFile(target);
+		}
+    }
     return 0;
 }
