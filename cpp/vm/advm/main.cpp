@@ -28,6 +28,8 @@
 #include "parser.cpp"
 #include "repl.h"
 #include "repl.cpp"
+#include "test.h"
+#include "test.cpp"
 #include "token.h"
 #include "token.cpp"
 #include "vm.h"
@@ -35,6 +37,10 @@
 
 int main(int argc, char* argv[]) {
     std::cout << "testing a simple VM\n";
+    if (RUN_TESTS) {
+        run_tests();
+        return 0;
+    }
     Repl repl;
     repl.loop();
     return 0;
