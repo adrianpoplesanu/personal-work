@@ -1,5 +1,8 @@
+from typing import Optional
+
 from bytecode import Bytecode
-from objects import AdObject
+from code_ad import read_uint16
+from objects import AdObject, AdObjectInteger
 
 
 class VM:
@@ -11,19 +14,40 @@ class VM:
 
     def load(self, bytecode: Bytecode):
         self.instructions = bytecode.instructions
-        self.constants = self.constants
+        self.constants = bytecode.constants
 
     def run(self):
-        pass
+        ip = 0
+        while ip < len(self.instructions.bytes):
+            opcode = self.instructions.bytes[ip]
+            if opcode == 0:
+                const_index = read_uint16(self.instructions, ip + 1)
+                ip += 2
+                self.push(self.constants[const_index])
+            elif opcode == 1:
+                right = self.pop()
+                left = self.pop()
 
-    def last_popped_stack_element(self):
-        pass
+                right_value = right.value
+                left_value = left.value
+                result = right_value + left_value
+                obj = AdObjectInteger(result)
+                self.push(obj)
+            else:
+                print('severe error')
+            ip += 1
+
+    def last_popped_stack_element(self) -> Optional[AdObject]:
+        if self.sp == 0:
+            return None
+        return self.stack[self.sp - 1]
 
     def push(self, obj: AdObject):
         self.sp += 1
         self.stack.append(obj)
 
     def pop(self) -> AdObject:
-        result = self.stack[self.sp - 1]
+        #result = self.stack[self.sp - 1]
+        result = self.stack.pop()
         self.sp -= 1
         return result
