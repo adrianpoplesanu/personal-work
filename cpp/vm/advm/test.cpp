@@ -4,7 +4,7 @@
 #include "compiler.h"
 #include "opcode.h"
 
-void run_code_make_test1() {
+void test_code_make_test1() {
     Code code;
     std::vector<int> args;
     args.push_back(65534);
@@ -13,9 +13,10 @@ void run_code_make_test1() {
     unsigned char* instructions;
     instructions = code.make(opConstant, 1, args, size);
     std::cout << (int)instructions[0] << " " << (int)instructions[1] << " " << (int)instructions[2] << "\n";
+    delete[] instructions; // asta e intotdeauna necesar
 }
 
-void run_code_make_test2() {
+void test_code_make_test2() {
     Code code;
     std::vector<int> args;
     args.push_back(0);
@@ -24,10 +25,33 @@ void run_code_make_test2() {
     unsigned char* instructions;
     instructions = code.make(opConstant, 1, args, size);
     std::cout << (int)instructions[0] << " " << (int)instructions[1] << " " << (int)instructions[2] << "\n";
+    delete[] instructions; // asta e intotdeauna necesar
+}
+
+void test_compiler_compilet1() {
+    Parser parser;
+    Compiler compiler;
+    ASTProgram *program = new ASTProgram();
+    GarbageCollector *gc = new GarbageCollector();
+    compiler.gc = gc;
+
+    parser.load("1+2");
+    program->reset();
+    parser.buildProgramStatement(program);
+
+    compiler.reset();
+    compiler.compile(program);
+
+    Bytecode bytecode = compiler.getBytecode();
+
+    gc->forceFreeObjects();
+    delete gc;
+    delete program;
 }
 
 void run_tests() {
     std::cout << "running tests...\n";
-    run_code_make_test1();
-    run_code_make_test2();
+    test_code_make_test1();
+    test_code_make_test2();
+    test_compiler_compilet1();
 }
