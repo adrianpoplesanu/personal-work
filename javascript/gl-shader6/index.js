@@ -42,8 +42,15 @@ function init() {
     var vertexShaderSource = document.querySelector("#vertex-shader-2d").text;
     var fragmentShaderSource = document.querySelector("#fragment-shader-2d").text;
 
+    var drawImageVertexShaderSource = document.querySelector("#drawImage-vertex-shader").text;
+    var drawImageFragmentShaderSource = document.querySelector("#drawImage-fragment-shader").text;
+
     var vertexShader = createShader(webgl, webgl.VERTEX_SHADER, vertexShaderSource);
     var fragmentShader = createShader(webgl, webgl.FRAGMENT_SHADER, fragmentShaderSource);
+
+    var drawImageVertexShader = createShader(webgl, webgl.VERTEX_SHADER, drawImageVertexShaderSource);
+    var drawImageFragmentShader = createShader(webgl, webgl.FRAGMENT_SHADER, drawImageFragmentShaderSource);
+    console.log("draw image shaders loaded!");
 
     program = createProgram(webgl, vertexShader, fragmentShader);
 
