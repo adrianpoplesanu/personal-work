@@ -1,5 +1,6 @@
 #include "repl.h"
 #include <iostream>
+#include <fstream>
 
 Repl::Repl() {
     program = new ASTProgram();
