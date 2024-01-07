@@ -43,6 +43,11 @@ void test_compiler_compilet1() {
     compiler.compile(program);
 
     Bytecode bytecode = compiler.getBytecode();
+    std::cout << bytecode.constants.at(0)->inspect() << " " << bytecode.constants.at(1)->inspect() << "\n";
+    for (int i = 0; i < bytecode.instructions.size; i++) {
+        std::cout << std::setw(4) << std::setfill('0') << (int)bytecode.instructions.bytes.at(i) << " ";
+    }
+    std::cout << "\n";
 
     gc->forceFreeObjects();
     delete gc;
