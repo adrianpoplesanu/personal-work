@@ -47,7 +47,7 @@ class VM:
         self.stack.append(obj)
 
     def pop(self) -> AdObject:
-        #result = self.stack[self.sp - 1]
+        # result = self.stack[self.sp - 1]
         result = self.stack.pop()
         self.sp -= 1
         return result
