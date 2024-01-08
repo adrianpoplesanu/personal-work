@@ -10,9 +10,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import kotlinx.coroutines.newSingleThreadContext
 import ro.adrianus.rssreader.ui.theme.RssReader1Theme
 
 class MainActivity : ComponentActivity() {
+    val dispatcher = newSingleThreadContext("ServiceCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
