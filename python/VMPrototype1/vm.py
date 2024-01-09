@@ -3,6 +3,7 @@ from typing import Optional
 from bytecode import Bytecode
 from code_ad import read_uint16
 from objects import AdObject, AdObjectInteger
+from opcode_ad import OpCodeByte
 
 
 class VM:
@@ -20,11 +21,11 @@ class VM:
         ip = 0
         while ip < len(self.instructions.bytes):
             opcode = self.instructions.bytes[ip]
-            if opcode == 0:
+            if opcode == OpCodeByte.OP_CONSTANT:
                 const_index = read_uint16(self.instructions, ip + 1)
                 ip += 2
                 self.push(self.constants[const_index])
-            elif opcode == 1:
+            elif opcode == OpCodeByte.OP_ADD:
                 right = self.pop()
                 left = self.pop()
 
