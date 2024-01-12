@@ -43,6 +43,15 @@ class VM:
                 result = right_value * left_value
                 obj = AdObjectInteger(result)
                 self.push(obj)
+            elif opcode == OpCodeByte.OP_DIVIDE:
+                right = self.pop()
+                left = self.pop()
+
+                right_value = right.value
+                left_value = left.value
+                result = left_value / right_value
+                obj = AdObjectInteger(int(result))
+                self.push(obj)
             else:
                 print('severe error')
             ip += 1
