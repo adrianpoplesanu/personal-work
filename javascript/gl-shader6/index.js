@@ -33,34 +33,38 @@ function createProgram(webgl, vertexShader, fragmentShader) {
 }
 
 function loadImageAndCreateTextureInfo(url) {
-    var tex = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, tex);
+    var tex = webgl.createTexture();
+    webgl.bindTexture(webgl.TEXTURE_2D, tex);
     // Fill the texture with a 1x1 blue pixel.
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+    webgl.texImage2D(webgl.TEXTURE_2D, 0, webgl.RGBA, 1, 1, 0, webgl.RGBA, webgl.UNSIGNED_BYTE,
                   new Uint8Array([0, 0, 255, 255]));
 
     // let's assume all images are not a power of 2
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    webgl.texParameteri(webgl.TEXTURE_2D, webgl.TEXTURE_WRAP_S, webgl.CLAMP_TO_EDGE);
+    webgl.texParameteri(webgl.TEXTURE_2D, webgl.TEXTURE_WRAP_T, webgl.CLAMP_TO_EDGE);
+    webgl.texParameteri(webgl.TEXTURE_2D, webgl.TEXTURE_MIN_FILTER, webgl.LINEAR);
 
     var textureInfo = {
-      width: 1,   // we don't know the size until it loads
-      height: 1,
-      texture: tex,
+        width: 1,   // we don't know the size until it loads
+        height: 1,
+        texture: tex,
     };
     var img = new Image();
     img.addEventListener('load', function() {
-      textureInfo.width = img.width;
-      textureInfo.height = img.height;
+        textureInfo.width = img.width;
+        textureInfo.height = img.height;
 
-      gl.bindTexture(gl.TEXTURE_2D, textureInfo.texture);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+        webgl.bindTexture(webgl.TEXTURE_2D, textureInfo.texture);
+        webgl.texImage2D(webgl.TEXTURE_2D, 0, webgl.RGBA, webgl.RGBA, webgl.UNSIGNED_BYTE, img);
     });
     img.src = url;
 
     return textureInfo;
 }
+
+var textureInfos = [
+    loadImageAndCreateTextureInfo('png/tile.png'),
+];
 
 function clear() {
     // clear the canvas
