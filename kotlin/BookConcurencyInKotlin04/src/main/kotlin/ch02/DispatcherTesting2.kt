@@ -6,7 +6,7 @@ import kotlinx.coroutines.runBlocking
 
 class DispatcherTesting2 {
     companion object {
-        fun printCurrentThread() {
+        private fun printCurrentThread() {
             println("Running in thread[${Thread.currentThread().name}]")
         }
 
