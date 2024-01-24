@@ -14,9 +14,13 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
 import ro.adrianus.rssreader.ui.theme.RssReader1Theme
+import java.net.URL
+import javax.xml.parsers.DocumentBuilder
+import javax.xml.parsers.DocumentBuilderFactory
 
 class MainActivity : ComponentActivity() {
     private val dispatcher = newSingleThreadContext("ServiceCall")
+    private val factory = DocumentBuilderFactory.newInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -29,7 +33,19 @@ class MainActivity : ComponentActivity() {
         }
         GlobalScope.launch(dispatcher) {
             // TODO call coroutine here
+            fetchAdrianusHomepage()
         }
+    }
+
+    private fun fetchRssHeadlines(): List<String> {
+        val builder = factory.newDocumentBuilder()
+        val xml = builder.parse("https://www.npr.org/rss/rss.php?id=1001")
+        return emptyList()
+    }
+
+    private fun fetchAdrianusHomepage() {
+        val data = URL("https://adrianus.ro").readText()
+        println(data)
     }
 }
 
