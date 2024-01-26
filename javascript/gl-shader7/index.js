@@ -49,14 +49,25 @@ function loadImageAndCreateTextureInfo(url) {
         height: 1,
         texture: tex,
     };
+    /*var img1 = document.querySelector("#img1");
+
+    textureInfo.width = img1.width;
+    textureInfo.height = img1.height;
+
+    webgl.bindTexture(webgl.TEXTURE_2D, textureInfo.texture);
+    webgl.texImage2D(webgl.TEXTURE_2D, 0, webgl.RGBA, webgl.RGBA, webgl.UNSIGNED_BYTE, img1);*/
+
     var img = new Image();
+    //img.crossOrigin = "anonymous";
     img.addEventListener('load', function() {
+        console.log("crazyness!");
         textureInfo.width = img.width;
         textureInfo.height = img.height;
 
         webgl.bindTexture(webgl.TEXTURE_2D, textureInfo.texture);
         webgl.texImage2D(webgl.TEXTURE_2D, 0, webgl.RGBA, webgl.RGBA, webgl.UNSIGNED_BYTE, img);
     });
+    //img.crossOrigin = "anonymous";
     img.src = url;
 
     return textureInfo;
