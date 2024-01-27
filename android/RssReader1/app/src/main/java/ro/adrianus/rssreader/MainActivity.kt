@@ -31,12 +31,10 @@ class MainActivity : ComponentActivity() {
             }
         }*/
         setContentView(R.layout.activity_main)
-        GlobalScope.launch(dispatcher) {
+        // TODO first version
+        /*GlobalScope.launch(dispatcher) {
             val headlines = fetchRssHeadlines()
-            //println(headlines)
             val newsCount = findViewById<TextView>(R.id.newsCount)
-            //newsCount.text = "Found ${headlines.size} News"
-            // ^^^ this throws: CalledFromWrongThreadException: Only the original thread that created a view hierarchy can touch its views
             //launch(UI) {
             //    newsCount.text = "Found ${headlines.size} News"
             //}
@@ -44,6 +42,27 @@ class MainActivity : ComponentActivity() {
             runOnUiThread {
                 newsCount.text = "Found ${headlines.size} News"
             }
+        }*/
+        // TODO second version
+        /*GlobalScope.launch(dispatcher) {
+            loadNews()
+        }*/
+        // TODO third version
+        asyncLoadNews()
+    }
+
+    private fun asyncLoadNews() = GlobalScope.launch(dispatcher) {
+        val headlines = fetchRssHeadlines()
+        val newsCount = findViewById<TextView>(R.id.newsCount)
+        runOnUiThread {
+            newsCount.text = "Found ${headlines.size} News"
+        }
+    }
+    private fun loadNews() {
+        val headlines = fetchRssHeadlines()
+        val newsCount = findViewById<TextView>(R.id.newsCount)
+        runOnUiThread {
+            newsCount.text = "Found ${headlines.size} News"
         }
     }
 
