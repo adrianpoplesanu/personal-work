@@ -24,14 +24,16 @@ class MainActivity : ComponentActivity() {
     private val factory = DocumentBuilderFactory.newInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
+        // this is the original generated code, however the example contains an activity_main xml file
+        /*setContent {
             RssReader1Theme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     Greeting("Bebe Dex")
                 }
             }
-        }
+        }*/
+        setContentView(R.layout.activity_main)
         GlobalScope.launch(dispatcher) {
             val headlines = fetchRssHeadlines()
             println(headlines)
