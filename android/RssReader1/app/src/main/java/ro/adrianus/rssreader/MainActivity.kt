@@ -1,11 +1,8 @@
 package ro.adrianus.rssreader
 
 import android.os.Bundle
+import android.widget.TextView
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -36,8 +33,24 @@ class MainActivity : ComponentActivity() {
         setContentView(R.layout.activity_main)
         GlobalScope.launch(dispatcher) {
             val headlines = fetchRssHeadlines()
-            println(headlines)
+            //println(headlines)
+            val newsCount = findViewById<TextView>(R.id.newsCount)
+            //newsCount.text = "Found ${headlines.size} News"
+            // ^^^ this throws: CalledFromWrongThreadException: Only the original thread that created a view hierarchy can touch its views
+            //launch(UI) {
+            //    newsCount.text = "Found ${headlines.size} News"
+            //}
+            // ^^^ this does not work in the new modern AndroidStudio world
+            runOnUiThread {
+                newsCount.text = "Found ${headlines.size} News"
+            }
         }
+    }
+
+    override fun onResume() {
+        // this is bad, this is blocking the UI thread
+        super.onResume()
+        //Thread.sleep(5000)
     }
 
     private fun fetchRssHeadlines(): List<String> {
