@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
@@ -18,6 +19,7 @@ import javax.xml.parsers.DocumentBuilderFactory
 
 class MainActivity : ComponentActivity() {
     private val dispatcher = newSingleThreadContext("ServiceCall")
+    private val defDsp = newSingleThreadContext("ServiceCall2")
     private val factory = DocumentBuilderFactory.newInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +50,7 @@ class MainActivity : ComponentActivity() {
             loadNews()
         }*/
         // TODO third version
-        asyncLoadNews()
+        asyncLoadNews2()
     }
 
     private fun asyncLoadNews() = GlobalScope.launch(dispatcher) {
@@ -58,6 +60,15 @@ class MainActivity : ComponentActivity() {
             newsCount.text = "Found ${headlines.size} News"
         }
     }
+
+    private fun asyncLoadNews2(dispatcher: CoroutineDispatcher = defDsp) =
+        GlobalScope.launch(dispatcher) {
+            val headlines = fetchRssHeadlines()
+            val newsCount = findViewById<TextView>(R.id.newsCount)
+            runOnUiThread {
+                newsCount.text = "Found ${headlines.size} News"
+            }
+        }
     private fun loadNews() {
         val headlines = fetchRssHeadlines()
         val newsCount = findViewById<TextView>(R.id.newsCount)
