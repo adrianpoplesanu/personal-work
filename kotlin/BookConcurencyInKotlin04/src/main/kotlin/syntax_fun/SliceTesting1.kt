@@ -5,6 +5,14 @@ class SliceTesting1 {
         @JvmStatic
         fun main(args: Array<String>) {
             val names = listOf("adina", "anca", "andreea", "alexandra", "alina", "antonia")
+
+            println(
+                names
+                    .slice(2 until names.size)
+                    .filterNotNull()
+                    .map { "${it.uppercase()}" }
+            )
+
             println(
                 names
                     .slice(2 until names.size)
