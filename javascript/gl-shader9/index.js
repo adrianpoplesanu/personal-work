@@ -131,11 +131,11 @@ var numToDraw = 1;
 var speed = 60;
 for (var ii = 0; ii < numToDraw; ++ii) {
     var drawInfo = {
-        x: Math.random() * webgl.canvas.width,
-        y: Math.random() * webgl.canvas.height,
-        dx: Math.random() > 0.5 ? -1 : 1,
-        dy: Math.random() > 0.5 ? -1 : 1,
-        textureInfo: textureInfos[Math.random() * textureInfos.length | 0],
+        x: 100,
+        y: 100,
+        dx: 1,
+        dy: 1,
+        textureInfo: textureInfos[0],
     };
     drawInfos.push(drawInfo);
 }
