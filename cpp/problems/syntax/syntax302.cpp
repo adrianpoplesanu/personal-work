@@ -12,6 +12,10 @@ public:
         elements = new T[capacity];
     }
 
+    ~AdList() {
+        delete elements;
+    }
+
     void add(T e) {
         if (size >= capacity) {
             capacity *= 2;
