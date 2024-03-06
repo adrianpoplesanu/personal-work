@@ -45,6 +45,10 @@
 
     void main() {
       gl_FragColor = texture2D(u_texture, v_texcoord);
+      // cu asta reduc red, green, blue iar rezultatul este scaderea brightness-ului imaginii
+      gl_FragColor.r -= 0.7;
+      gl_FragColor.g -= 0.7;
+      gl_FragColor.b -= 0.7;
     }
     </script>
 
