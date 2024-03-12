@@ -1,0 +1,1 @@
+ruleaza dmg-ul si copieaza continutul in /Library/Frameworks/
