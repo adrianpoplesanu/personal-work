@@ -62,7 +62,8 @@ int main(int argc, char* argv[]){
         while(SDL_PollEvent(&event)){
             // Handle each specific event
             if(event.type == SDL_QUIT){
-                gameIsRunning= false;
+                std::cout << "quitting game\n";
+                gameIsRunning = false;
             }
             if(event.type == SDL_MOUSEMOTION){
                 std::cout << "mouse has been moved\n";
@@ -103,17 +104,6 @@ int main(int argc, char* argv[]){
     SDL_Delay(3000);
     // We add a delay in order to see that our window
     // has successfully popped up.
-    SDL_Delay(3000);
-    // We add a delay in order to see that our window
-    // has successfully popped up.
-    SDL_Delay(3000);
-    // We add a delay in order to see that our window
-    // has successfully popped up.
-    SDL_Delay(3000);
-    // We add a delay in order to see that our window
-    // has successfully popped up.
-    SDL_Delay(3000);
-    // our program.
     SDL_Quit();
     return 0;
 }
