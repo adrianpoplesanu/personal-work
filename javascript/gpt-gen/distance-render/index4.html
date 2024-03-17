@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blue Triangle with Brightness Fade</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000;
+        }
+        canvas {
+            width: 80%;
+            height: 80%;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        // Get the WebGL context
+        const canvas = document.getElementById('canvas');
+        const gl = canvas.getContext('webgl');
+        if (!gl) {
+            console.error('Unable to initialize WebGL. Your browser may not support it.');
+        }
+
+        // Vertex shader source code
+        const vertexShaderSource = `
+            attribute vec2 a_position;
+            varying vec2 v_texCoord;
+
+            void main() {
+                gl_Position = vec4(a_position, 0.0, 1.0);
+                v_texCoord = a_position * 0.5 + 0.5;
+            }
+        `;
+
+        // Fragment shader source code
+        const fragmentShaderSource = `
+            precision mediump float;
+            varying vec2 v_texCoord;
+
+            void main() {
+                // Calculate distance from the center of the canvas
+                float maxDistance = 0.5; // assuming canvas dimensions are [-1, 1]
+                vec2 center = vec2(0.25, 0.25); // center of the canvas
+                float distanceFromCenter = distance(v_texCoord, center);
+
+                // Calculate brightness based on distance from the center
+                float brightness = 1.0 - (distanceFromCenter / maxDistance);
+
+                // Output the final color with adjusted brightness
+                gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0) * brightness; // Blue color
+            }
+        `;
+
+        // Create and compile vertex shader
+        const vertexShader = gl.createShader(gl.VERTEX_SHADER);
+        gl.shaderSource(vertexShader, vertexShaderSource);
+        gl.compileShader(vertexShader);
+
+        // Create and compile fragment shader
+        const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+        gl.shaderSource(fragmentShader, fragmentShaderSource);
+        gl.compileShader(fragmentShader);
+
+        // Create shader program
+        const shaderProgram = gl.createProgram();
+        gl.attachShader(shaderProgram, vertexShader);
+        gl.attachShader(shaderProgram, fragmentShader);
+        gl.linkProgram(shaderProgram);
+        gl.useProgram(shaderProgram);
+
+        // Set up vertex attributes
+        const positionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        const positions = [
+            0, 0.5,
+            -0.5, -0.5,
+            0.5, -0.5
+        ];
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+        const positionAttributeLocation = gl.getAttribLocation(shaderProgram, 'a_position');
+        gl.enableVertexAttribArray(positionAttributeLocation);
+        gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0);
+
+        // Rendering loop
+        function render() {
+            // Clear the canvas
+            gl.clear(gl.COLOR_BUFFER_BIT);
+
+            // Draw the triangle
+            gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+            // Request next frame
+            requestAnimationFrame(render);
+        }
+
+        // Start rendering
+        render();
+    </script>
+</body>
+</html>
+
