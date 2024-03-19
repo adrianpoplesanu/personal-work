@@ -45,11 +45,19 @@
 
     uniform vec4 u_offset;
 
+    vec4 adjustBrightness(vec4 color, float value) {
+      color.r += value;
+      color.g += value;
+      color.b += value;
+      return color;
+    }
+
     void main() {
-      gl_FragColor = texture2D(u_texture, v_texcoord);
+      vec4 color = texture2D(u_texture, v_texcoord);
+      gl_FragColor = adjustBrightness(color, -0.5); // 0.5 trebuie calculat per punct
       // cu asta reduc red, green, blue iar rezultatul este scaderea brightness-ului imaginii
       //tes_aaa = u_offset
-      vec4 test_aaa;
+      //vec4 test_aaa;
       //test_aaa = u_offset;
       //gl_FragColor.r -= 0.7;
       //gl_FragColor.g -= 0.7;
