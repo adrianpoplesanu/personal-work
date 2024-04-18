@@ -2,6 +2,7 @@ from wad_data import WADData
 from settings import *
 import pygame as pg
 import sys
+from map_renderer import MapRenderer
 
 
 class DoomEngine():
@@ -15,6 +16,7 @@ class DoomEngine():
 
     def on_init(self):
         self.wad_data = WADData(self, map_name="E1M1")
+        self.map_renderer = MapRenderer(self)
 
     def update(self):
         self.dt = self.clock.tick()
@@ -23,6 +25,7 @@ class DoomEngine():
 
     def draw(self):
         self.screen.fill('black')
+        self.map_renderer.draw()
 
     def check_events(self):
         for e in pg.event.get():
@@ -36,6 +39,7 @@ class DoomEngine():
             self.draw()
         pg.quit()
         sys.exit()
+
 
 if __name__ == '__main__':
     doom = DoomEngine()
