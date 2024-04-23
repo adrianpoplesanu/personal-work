@@ -14,7 +14,7 @@ public:
     int stackSize = 2048;
     int sp; // stack pointer
     Instructions instructions;
-    std::vector<AdObject*> constants; // TODO: this will leak memory
+    std::vector<AdObject*> constants;
     AdObject *stack[2048];
     GarbageCollector *gc;
 
