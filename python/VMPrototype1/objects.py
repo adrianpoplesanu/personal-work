@@ -1,5 +1,6 @@
 class AdObjectType:
     INT = 0
+    BOOL = 1
 
 
 class AdObject:
@@ -13,3 +14,14 @@ class AdObjectInteger(AdObject):
 
     def inspect(self) -> str:
         return str(self.value)
+
+
+class AdBoolean(AdObject):
+    def __init__(self, value: int):
+        self._type = AdObjectType.BOOL
+        self.value = value
+
+    def inspect(self) -> str:
+        if self.value:
+            return 'true'
+        return 'false'
