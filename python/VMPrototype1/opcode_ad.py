@@ -4,6 +4,8 @@ class OpCodeByte:
     OP_MINUS = 2
     OP_MULTIPLY = 3
     OP_DIVIDE = 4
+    OP_TRUE = 5
+    OP_FALSE = 6
 
 
 class OpCode:
