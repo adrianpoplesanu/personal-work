@@ -7,6 +7,7 @@ class StatementType:
     INTEGER_LITERAL = 'INTEGER_LITERAL'
     INFIX_EXPRESSION = 'INFIX_EXPRESSION'
     PREFIX_EXPRESSION = 'PREFIX_EXPRESSION'
+    BOOLEAN = 'BOOLEAN'
 
 
 statement_type_map = {
@@ -14,7 +15,8 @@ statement_type_map = {
     StatementType.EXPRESSION_STATEMENT: 'EXPRESSION_STATEMENT',
     StatementType.INTEGER_LITERAL: 'INTEGER_LITERAL',
     StatementType.INFIX_EXPRESSION: 'INFIX_EXPRESSION',
-    StatementType.PREFIX_EXPRESSION: 'PREFIX_EXPRESSION'
+    StatementType.PREFIX_EXPRESSION: 'PREFIX_EXPRESSION',
+    StatementType.BOOLEAN: 'BOOLEAN'
 }
 
 
@@ -104,3 +106,17 @@ class ASTPrefixExpression(ASTNode):
 
     def __str__(self):
         return "ASTPrefixExpression <{0}> [{1}]".format(self.operator, self.right)
+
+
+class ASTBoolean(ASTNode):
+    statement_type = StatementType.BOOLEAN
+
+    def __init__(self, token: Token, value: bool = None):
+        self.token = token
+        self.value = value
+
+    def token_literal(self):
+        return self.token.literal
+
+    def __str__(self):
+        return 'ASTBoolean[' + str(self.value) + ']'
