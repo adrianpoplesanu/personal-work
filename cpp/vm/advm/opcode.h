@@ -7,6 +7,7 @@ enum OpCodeByte {
     OP_MINUS,
     OP_MULTIPLY,
     OP_DIVIDE,
+    OP_POP,
     OP_TRUE,
     OP_FALSE
 };
@@ -48,6 +49,27 @@ class OpDivide : public OpCode {
 public:
     OpDivide() {
         byteCode = OP_DIVIDE;
+    }
+};
+
+class OpPop : public OpCode {
+public:
+    OpPop() {
+        byteCode = OP_POP;
+    }
+};
+
+class OpTrue : public OpCode {
+public:
+    OpTrue() {
+        byteCode = OP_TRUE;
+    }
+};
+
+class OpFalse : public OpCode {
+public:
+    OpFalse() {
+        byteCode = OP_FALSE;
     }
 };
 
