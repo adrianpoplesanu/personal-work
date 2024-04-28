@@ -1,6 +1,7 @@
 from typing import Optional
 
-from ast import ASTProgram, ASTNode, ASTExpressionStatement, ASTInteger, ASTInfixExpression, ASTPrefixExpression
+from ast import ASTProgram, ASTNode, ASTExpressionStatement, ASTInteger, ASTInfixExpression, ASTPrefixExpression, \
+    ASTBoolean
 from lexer import Lexer
 from precedence_type import PrecedenceType, precedences
 from token_type import TokenType
@@ -17,6 +18,8 @@ class Parser:
         self.prefix_parse_fns = {
             TokenType.IDENT: self.parse_identifier,
             TokenType.INT: self.parse_integer_literal,
+            TokenType.TRUE: self.parse_boolean,
+            TokenType.FALSE: self.parse_boolean,
             TokenType.BANG: self.parse_prefix_expression,
             TokenType.MINUS: self.parse_prefix_expression
         }
@@ -71,6 +74,10 @@ class Parser:
 
     def parse_integer_literal(self):
         stmt = ASTInteger(token=self.current_token, value=int(self.current_token.literal))
+        return stmt
+
+    def parse_boolean(self):
+        stmt = ASTBoolean(token=self.current_token, value=bool(self.current_token.token_type == TokenType.TRUE))
         return stmt
 
     def parse_expressions_statement(self) -> Optional[ASTNode]:

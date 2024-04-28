@@ -2,7 +2,7 @@ from typing import Optional
 
 from bytecode import Bytecode
 from code_ad import read_uint16
-from objects import AdObject, AdObjectInteger
+from objects import AdObject, AdObjectInteger, AdBoolean
 from opcode_ad import OpCodeByte
 
 
@@ -10,7 +10,7 @@ class VM:
     def __init__(self, instructions=None, constants=None):
         self.instructions = instructions
         self.constants = constants
-        self.stack = []
+        self.stack = [None] * 1024
         self.sp = 0
 
     def load(self, bytecode: Bytecode):
@@ -61,6 +61,14 @@ class VM:
                 result = left_value / right_value
                 obj = AdObjectInteger(int(result))
                 self.push(obj)
+            elif opcode == OpCodeByte.OP_TRUE:
+                obj = AdBoolean(True)
+                self.push(obj)
+            elif opcode == OpCodeByte.OP_FALSE:
+                obj = AdBoolean(False)
+                self.push(obj)
+            elif opcode == OpCodeByte.OP_POP:
+                self.pop()
             else:
                 print('severe error')
             ip += 1
@@ -70,12 +78,19 @@ class VM:
             return None
         return self.stack[self.sp - 1]
 
+    def last_popped_stack_elem(self) -> Optional[AdObject]:
+        return self.stack[self.sp]
+
+    def print_stack(self):
+        print([elem.inspect() for elem in self.stack if elem])
+
     def push(self, obj: AdObject):
+        self.stack[self.sp] = obj
         self.sp += 1
-        self.stack.append(obj)
+        #self.stack.append(obj)
 
     def pop(self) -> AdObject:
-        # result = self.stack[self.sp - 1]
-        result = self.stack.pop()
+        result = self.stack[self.sp - 1]
+        # result = self.stack.pop()
         self.sp -= 1
         return result

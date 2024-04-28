@@ -3,7 +3,7 @@ from bytecode import Bytecode
 from code_ad import Code
 from instructions import Instructions
 from objects import AdObjectInteger, AdObject
-from opcode_ad import OpAdd, OpMinus, OpMultiply, OpDivide, OpConstant
+from opcode_ad import OpAdd, OpMinus, OpMultiply, OpDivide, OpConstant, OpTrue, OpFalse, OpPop
 
 
 class Compiler:
@@ -25,6 +25,8 @@ class Compiler:
                 self.compile(stmt)
         elif node.statement_type == StatementType.EXPRESSION_STATEMENT:
             self.compile(node.expression)
+            opcode = OpPop()
+            self.emit(opcode, 0, [])
         elif node.statement_type == StatementType.INFIX_EXPRESSION:
             self.compile(node.left)
             self.compile(node.right)
@@ -50,6 +52,13 @@ class Compiler:
             args = []
             args.append(self.add_constant(integer_obj))
             self.emit(opcode, 1, args)
+        elif node.statement_type == StatementType.BOOLEAN:
+            if node.value:
+                opcode = OpTrue()
+                self.emit(opcode, 0, [])
+            else:
+                opcode = OpFalse()
+                self.emit(opcode, 0, [])
         else:
             print("severe error: node type unknown " + statement_type_map[node.statement_type])
 

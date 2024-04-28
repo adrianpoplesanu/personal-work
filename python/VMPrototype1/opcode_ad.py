@@ -42,4 +42,4 @@ class OpTrue(OpCode):
 
 
 class OpFalse(OpCode):
-    bytecode = OpCodeByte.OP_FALSE
+    byte_code = OpCodeByte.OP_FALSE

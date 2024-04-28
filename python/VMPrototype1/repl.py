@@ -20,7 +20,7 @@ class Repl:
 
         self.vm.load(bytecode)
         self.vm.run()
-        result = self.vm.last_popped_stack_element()
+        result = self.vm.last_popped_stack_elem()
         if result:
             print(result.inspect())
 
@@ -29,6 +29,9 @@ class Repl:
             line = input(">> ")
             if line == "exit()":
                 break
+            if line == "stack()":
+                self.vm.print_stack()
+                continue
             self.parser.load(line)
             self.program.reset()
             self.parser.build_program_statements(self.program)
@@ -42,6 +45,6 @@ class Repl:
 
             self.vm.load(bytecode)
             self.vm.run()
-            result = self.vm.last_popped_stack_element()
+            result = self.vm.last_popped_stack_elem()
             if result:
                 print(result.inspect())
