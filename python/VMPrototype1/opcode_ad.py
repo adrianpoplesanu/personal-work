@@ -4,8 +4,9 @@ class OpCodeByte:
     OP_MINUS = 2
     OP_MULTIPLY = 3
     OP_DIVIDE = 4
-    OP_TRUE = 5
-    OP_FALSE = 6
+    OP_POP = 5
+    OP_TRUE = 6
+    OP_FALSE = 7
 
 
 class OpCode:
@@ -30,3 +31,15 @@ class OpMultiply(OpCode):
 
 class OpDivide(OpCode):
     byte_code = OpCodeByte.OP_DIVIDE
+
+
+class OpPop(OpCode):
+    byte_code = OpCodeByte.OP_POP
+
+
+class OpTrue(OpCode):
+    byte_code = OpCodeByte.OP_TRUE
+
+
+class OpFalse(OpCode):
+    bytecode = OpCodeByte.OP_FALSE
