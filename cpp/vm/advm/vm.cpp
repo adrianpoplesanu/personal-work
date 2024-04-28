@@ -88,6 +88,18 @@ void VM::run() {
                 push(obj);
                 break;
             }
+            case 5: {
+                // 5 e OpPop
+                break;
+            }
+            case 6: {
+                // 6 e OpTrue
+                break;
+            }
+            case 7: {
+                // 7 e OpFalse
+                break;
+            }
             default: {
                 break;
             }
@@ -100,6 +112,19 @@ AdObject* VM::last_popped_stack_element() {
         return NULL;
     }
     return stack[sp - 1];
+}
+
+void VM::printStack() {
+    int i = 0;
+    std::cout << "[";
+    while (stack[i] != NULL) {
+        std::cout << stack[i]->inspect();
+        if (stack[i + 1] != NULL) {
+            std::cout << ", ";
+        }
+        i++;
+    }
+    std::cout << "]";
 }
 
 void VM::push(AdObject* obj) {

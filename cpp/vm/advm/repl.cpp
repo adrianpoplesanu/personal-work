@@ -22,6 +22,10 @@ void Repl::loop() {
         std::cout << ">> ";
         getline(std::cin, line);
         if (line == "exit()") break;
+        if (line == "stack()") {
+            vm.printStack();
+            continue;
+        }
         parser.load(line);
         program->reset();
         parser.buildProgramStatement(program);
