@@ -40,14 +40,15 @@ void Repl::loop() {
         vm.load(bytecode);
         vm.run();
 
+        AdObject* result = vm.last_popped_stack_elem();
+        if (result != NULL) {
+            std::cout << result->inspect() << "\n";
+        }
+
         gc->unmarkAllObjects();
         gc->markObjects(vm.stack, vm.sp);
         gc->sweepObjects();
 
-        AdObject* result = vm.last_popped_stack_element();
-        if (result != NULL) {
-            std::cout << result->inspect() << "\n";
-        }
     }
 }
 
