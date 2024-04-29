@@ -25,6 +25,9 @@ void Compiler::compile(ASTNode* node) {
         case AT_EXPRESSION_STATEMENT: {
             ASTExpressionStatement *expressionStatement = (ASTExpressionStatement*) node;
             compile(expressionStatement->expression);
+            OpPop opPop = OpPop();
+            std::vector<int> args;
+            emit(opPop, 0, args);
             break;
         }
         case AT_INFIX_EXPRESSION: {
