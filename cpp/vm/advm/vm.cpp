@@ -25,14 +25,14 @@ void VM::run() {
     for (int ip = 0; ip < instructions.bytes.size(); ip++) {
         unsigned char opcode = instructions.bytes[ip];
         switch (opcode) {
-            case 0: {
+            case OP_CONSTANT: {
                 // 0 e OpConstant
                 int constIndex = readUint16(instructions, ip + 1);
                 ip += 2;
                 push(constants.at(constIndex));
                 break;
             }
-            case 1: {
+            case OP_ADD: {
                 // 1 e OpAdd
                 AdObject *right = pop();
                 AdObject *left = pop();
@@ -46,7 +46,7 @@ void VM::run() {
                 push(obj);
                 break;
             }
-            case 2: {
+            case OP_MINUS: {
                 // 2 e OpMinus
                 AdObject *right = pop();
                 AdObject *left = pop();
@@ -60,7 +60,7 @@ void VM::run() {
                 push(obj);
                 break;
             }
-            case 3: {
+            case OP_MULTIPLY: {
                 // 3 e OpMultiply
                 AdObject *right = pop();
                 AdObject *left = pop();
@@ -74,7 +74,7 @@ void VM::run() {
                 push(obj);
                 break;
             }
-            case 4: {
+            case OP_DIVIDE: {
                 // 4 e OpDivide
                 AdObject *right = pop();
                 AdObject *left = pop();
@@ -88,15 +88,16 @@ void VM::run() {
                 push(obj);
                 break;
             }
-            case 5: {
+            case OP_POP: {
                 // 5 e OpPop
+                pop();
                 break;
             }
-            case 6: {
+            case OP_TRUE: {
                 // 6 e OpTrue
                 break;
             }
-            case 7: {
+            case OP_FALSE: {
                 // 7 e OpFalse
                 break;
             }
@@ -114,17 +115,21 @@ AdObject* VM::last_popped_stack_element() {
     return stack[sp - 1];
 }
 
+AdObject* VM::last_popped_stack_elem() {
+    return stack[sp];
+}
+
 void VM::printStack() {
     int i = 0;
     std::cout << "[";
-    while (stack[i] != NULL) {
+    while (i < sp) {
         std::cout << stack[i]->inspect();
-        if (stack[i + 1] != NULL) {
+        i++;
+        if (i < sp) {
             std::cout << ", ";
         }
-        i++;
     }
-    std::cout << "]";
+    std::cout << "]\n";
 }
 
 void VM::push(AdObject* obj) {

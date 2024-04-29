@@ -24,6 +24,7 @@ public:
     AdObject* stackTop();
     void run();
     AdObject* last_popped_stack_element();
+    AdObject* last_popped_stack_elem();
     void printStack();
     void push(AdObject *);
     AdObject* pop();
