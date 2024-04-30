@@ -51,6 +51,7 @@ public:
     ASTNode* parseInfixExpression(ASTNode*);
     ASTNode* parseIdent();
     ASTNode* parseIntegerLiteral();
+    ASTNode *parseBooleanExpression();
 };
 
 #endif

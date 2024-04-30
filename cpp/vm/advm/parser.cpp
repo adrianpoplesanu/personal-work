@@ -4,6 +4,8 @@ Parser::Parser() {
     prefixParseFns.insert(std::make_pair(TT_IDENT, &Parser::parseIdent));
     prefixParseFns.insert(std::make_pair(TT_INT, &Parser::parseIntegerLiteral));
     prefixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parsePrefixExpression));
+    prefixParseFns.insert(std::make_pair(TT_TRUE, &Parser::parseBooleanExpression));
+    prefixParseFns.insert(std::make_pair(TT_FALSE, &Parser::parseBooleanExpression));
     infixParseFns.insert(std::make_pair(TT_PLUS, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_MULTIPLY, &Parser::parseInfixExpression));
@@ -97,6 +99,22 @@ ASTNode* Parser::parseIntegerLiteral() {
     integer_node->token = currentToken;
     integer_node->value = val;
     return integer_node;
+}
+
+ASTNode* Parser::parseBooleanExpression() {
+    if (currentToken.type == TT_TRUE) {
+        ASTBoolean* boolean_node = new ASTBoolean();
+        boolean_node->token = currentToken;
+        boolean_node->value = true;
+        return boolean_node;
+    }
+    if (currentToken.type == TT_FALSE) {
+        ASTBoolean* boolean_node = new ASTBoolean();
+        boolean_node->token = currentToken;
+        boolean_node->value = false;
+        return boolean_node;
+    }
+    return NULL;
 }
 
 ASTNode* Parser::parsePrefixExpression() {
