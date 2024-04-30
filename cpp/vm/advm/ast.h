@@ -9,6 +9,7 @@ enum ASTType {
     AT_EXPRESSION_STATEMENT,
     AT_IDENTIFIER,
     AT_INTEGER,
+    AT_BOOLEAN,
     AT_INFIX_EXPRESSION,
     AT_PREFIX_EXPRESSION,
     AT_LET_STATEMENT,
@@ -99,7 +100,18 @@ public:
     ~ASTInteger();
     virtual std::string inspect();
     virtual std::string toString();
+};
 
+class ASTBoolean : public ASTNode {
+public:
+    bool value;
+
+    ASTBoolean();
+    ASTBoolean(Token);
+    ASTBoolean(Token, bool);
+    ~ASTBoolean();
+    virtual std::string inspect();
+    virtual std::string toString();
 };
 
 class ASTIdentifier : public ASTNode {

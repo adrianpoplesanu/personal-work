@@ -148,6 +148,36 @@ std::string ASTInteger::inspect() {
     return "ASTInteger";
 }
 
+ASTBoolean::ASTBoolean() {
+    type = AT_BOOLEAN;
+    ref_count = 0;
+}
+
+ASTBoolean::ASTBoolean(Token t) {
+    type = AT_BOOLEAN;
+    ref_count = 0;
+    token = t;
+}
+
+ASTBoolean::ASTBoolean(Token t, bool v) {
+    type = AT_BOOLEAN;
+    ref_count = 0;
+    token = t;
+    value = v;
+}
+
+ASTBoolean::~ASTBoolean() {
+    //...
+}
+
+std::string ASTBoolean::toString() {
+    return "ASTBoolean";
+}
+
+std::string ASTBoolean::inspect() {
+    return "ASTBoolean";
+}
+
 void Ad_INCREF(ASTNode* node) {
     if (node) {
         node->ref_count++;
@@ -178,6 +208,10 @@ void free_memory_ASTNode(ASTNode* node) {
         }
         case AT_INTEGER: {
             delete (ASTInteger*) node;
+            break;
+        }
+        case AT_BOOLEAN: {
+            delete (ASTBoolean*) node;
             break;
         }
         case AT_INFIX_EXPRESSION: {
