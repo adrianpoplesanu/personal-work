@@ -95,10 +95,16 @@ void VM::run() {
             }
             case OP_TRUE: {
                 // 6 e OpTrue
+                AdObject* obj = new AdObjectBoolean(true);
+                gc->addObject(obj);
+                push(obj);
                 break;
             }
             case OP_FALSE: {
                 // 7 e OpFalse
+                AdObject* obj = new AdObjectBoolean(false);
+                gc->addObject(obj);
+                push(obj);
                 break;
             }
             default: {

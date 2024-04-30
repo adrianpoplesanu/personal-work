@@ -69,6 +69,18 @@ void Compiler::compile(ASTNode* node) {
             emit(opConstant, 1, args);
             break;
         }
+        case AT_BOOLEAN: {
+            ASTBoolean *booleanExpr = (ASTBoolean*) node;
+            if (booleanExpr->value) {
+                OpTrue opTrue = OpTrue();
+                std::vector<int> args;
+                emit(opTrue, 0, args);
+            } else {
+                OpFalse opFalse = OpFalse();
+                std::vector<int> args;
+                emit(opFalse, 0, args);
+            }
+        }
         case AT_IDENTIFIER: {
             break;
         }
