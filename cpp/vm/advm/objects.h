@@ -43,6 +43,16 @@ public:
     virtual std::string toString();
 };
 
+class AdObjectBoolean : public AdObject {
+public:
+    bool value;
+
+    AdObjectBoolean();
+    AdObjectBoolean(bool);
+    virtual std::string inspect();
+    virtual std::string toString();
+};
+
 class AdObjectString : public AdObject {
 public:
     std::string value;

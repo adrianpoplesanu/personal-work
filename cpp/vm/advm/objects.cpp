@@ -27,6 +27,26 @@ std::string AdObjectInteger::toString() {
     return "todo";
 }
 
+AdObjectBoolean::AdObjectBoolean() {
+    type = OT_BOOL;
+}
+
+AdObjectBoolean::AdObjectBoolean(bool v) {
+    type = OT_BOOL;
+    value = v;
+}
+
+std::string AdObjectBoolean::inspect() {
+    if (value) {
+        return "true";
+    }
+    return "false";
+}
+
+std::string AdObjectBoolean::toString() {
+    return "todo";
+}
+
 void AD_INCREF(AdObject* obj) {
     if (obj != NULL) {
         obj->ref_count++;
@@ -44,6 +64,10 @@ void free_memory_AdObject(AdObject* obj) {
     switch(obj->type) {
         case OT_INT: {
             delete (AdObjectInteger*) obj;
+            break;
+        }
+        case OT_BOOL: {
+            delete (AdObjectBoolean*) obj;
             break;
         }
         default: {
