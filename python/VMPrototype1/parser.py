@@ -21,7 +21,8 @@ class Parser:
             TokenType.TRUE: self.parse_boolean,
             TokenType.FALSE: self.parse_boolean,
             TokenType.BANG: self.parse_prefix_expression,
-            TokenType.MINUS: self.parse_prefix_expression
+            TokenType.MINUS: self.parse_prefix_expression,
+            TokenType.LPAREN: self.parse_grouped_expression
         }
 
         self.infix_parse_fns = {
@@ -53,6 +54,14 @@ class Parser:
 
     def peek_token_is(self, token_type: TokenType):
         return self.peek_token.token_type == token_type
+
+    def expect_peek(self, token_type: TokenType) -> bool:
+        if self.peek_token_is(token_type):
+            self.next_token()
+            return True
+        else:
+            self.errors.append('ERROR: i was expecting a different token here: ' + token_type)
+            return False
 
     def peek_precedence(self):
         if self.peek_token.token_type in precedences:
@@ -91,6 +100,13 @@ class Parser:
         expr = ASTPrefixExpression(token=self.current_token, operator=self.current_token.literal)
         self.next_token()
         expr.right = self.parse_expression(PrecedenceType.PREFIX)
+        return expr
+
+    def parse_grouped_expression(self):
+        self.next_token()
+        expr = self.parse_expression(PrecedenceType.LOWEST)
+        if not self.expect_peek(TokenType.RPAREN):
+            return None
         return expr
 
     def parse_infix_expression(self, left):
