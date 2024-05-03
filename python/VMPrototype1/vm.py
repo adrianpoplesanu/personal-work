@@ -81,8 +81,18 @@ class VM:
     def last_popped_stack_elem(self) -> Optional[AdObject]:
         return self.stack[self.sp]
 
-    def print_stack(self):
+    def print_stack_old(self):
         print([elem.inspect() for elem in self.stack if elem])
+
+    def print_stack(self):
+        i = 0
+        print('[')
+        while i < self.sp:
+            print(self.stack[i].inspect())
+            i += 1
+            if i < self.sp:
+                print(', ')
+        print(']')
 
     def push(self, obj: AdObject):
         self.stack[self.sp] = obj
