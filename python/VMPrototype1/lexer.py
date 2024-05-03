@@ -50,6 +50,12 @@ class Lexer:
         elif self.ch == '/':
             token.token_type = TokenType.SLASH
             token.literal = '/'
+        elif self.ch == '(':
+            token.token_type = TokenType.LPAREN
+            token.literal = '('
+        elif self.ch == ')':
+            token.token_type = TokenType.RPAREN
+            token.literal = ')'
         else:
             if self.is_letter():
                 token.literal = self.read_ident()
