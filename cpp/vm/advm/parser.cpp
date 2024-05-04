@@ -6,6 +6,7 @@ Parser::Parser() {
     prefixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parsePrefixExpression));
     prefixParseFns.insert(std::make_pair(TT_TRUE, &Parser::parseBooleanExpression));
     prefixParseFns.insert(std::make_pair(TT_FALSE, &Parser::parseBooleanExpression));
+    prefixParseFns.insert(std::make_pair(TT_LPAREN, &Parser::parseGroupedExpression));
     infixParseFns.insert(std::make_pair(TT_PLUS, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_MULTIPLY, &Parser::parseInfixExpression));
@@ -21,10 +22,19 @@ PrecedenceType Parser::peekPrecedence() {
 }
 
 bool Parser::currentTokenIs(TokenType type) {
-    return false;
+    return currentToken.type == type;
 }
 
 bool Parser::peekTokenIs(TokenType type) {
+    return peekToken.type == type;
+}
+
+bool Parser::expectToken(TokenType type) {
+    if (peekTokenIs(type)) {
+        nextToken();
+        return true;
+    }
+    std::cout << "expect token error: " << tokenTypeConverter[type] << " not found\n";
     return false;
 }
 
@@ -115,6 +125,15 @@ ASTNode* Parser::parseBooleanExpression() {
         return boolean_node;
     }
     return NULL;
+}
+
+ASTNode* Parser::parseGroupedExpression() {
+    nextToken();
+    ASTNode *expr = parseExpression(PT_LOWEST);
+    if (!expectToken(TT_RPAREN)) {
+        return NULL;
+    }
+    return expr;
 }
 
 ASTNode* Parser::parsePrefixExpression() {
