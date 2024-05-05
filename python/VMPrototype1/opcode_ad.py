@@ -7,6 +7,9 @@ class OpCodeByte:
     OP_POP = 5
     OP_TRUE = 6
     OP_FALSE = 7
+    OP_EQUAL = 8
+    OP_NOTEQUAL = 9
+    OP_GREATERTHAN = 10
 
 
 class OpCode:
@@ -43,3 +46,15 @@ class OpTrue(OpCode):
 
 class OpFalse(OpCode):
     byte_code = OpCodeByte.OP_FALSE
+
+
+class OpEqual(OpCode):
+    byte_code = OpCodeByte.OP_EQUAL
+
+
+class OpNotEqual(OpCode):
+    byte_code = OpCodeByte.OP_NOTEQUAL
+
+
+class OpGreaterThan(OpCode):
+    byte_code = OpCodeByte.OP_GREATERTHAN
