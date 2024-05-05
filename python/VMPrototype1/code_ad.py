@@ -49,6 +49,9 @@ class Code:
             OpCodeByte.OP_POP: Definition("OpPop", 0, []),
             OpCodeByte.OP_TRUE: Definition("OpTrue", 0, []),
             OpCodeByte.OP_FALSE: Definition("OpFalse", 0, []),
+            OpCodeByte.OP_EQUAL: Definition("OpEqual", 0, []),
+            OpCodeByte.OP_NOTEQUAL: Definition("OpNotEqual", 0, []),
+            OpCodeByte.OP_GREATERTHAN: Definition("OpGreatrThan", 0, [])
         }
 
     def make(self, opcode: OpCode, n, args):
