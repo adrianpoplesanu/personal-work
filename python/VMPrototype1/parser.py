@@ -29,7 +29,11 @@ class Parser:
             TokenType.PLUS: self.parse_infix_expression,
             TokenType.MINUS: self.parse_infix_expression,
             TokenType.ASTERISK: self.parse_infix_expression,
-            TokenType.SLASH: self.parse_infix_expression
+            TokenType.SLASH: self.parse_infix_expression,
+            TokenType.EQ: self.parse_infix_expression,
+            TokenType.NOT_EQ: self.parse_infix_expression,
+            TokenType.GT: self.parse_infix_expression,
+            TokenType.LT: self.parse_infix_expression
         }
 
     def load(self, source):
