@@ -59,34 +59,34 @@ class Lexer:
         elif self.ch == '<':
             if self.peek_char() == '=':
                 self.read_char()
-                token.type = TokenType.LTE
+                token.token_type = TokenType.LTE
                 token.literal = '<='
             else:
-                token.type = TokenType.LT
+                token.token_type = TokenType.LT
                 token.literal = '<'
         elif self.ch == '>':
             if self.peek_char() == '=':
                 self.read_char()
-                token.type = TokenType.GTE
+                token.token_type = TokenType.GTE
                 token.literal = '>='
             else:
-                token.type = TokenType.GT
+                token.token_type = TokenType.GT
                 token.literal = '>'
         elif self.ch == '=':
             if self.peek_char() == '=':
                 self.read_char()
-                token.type = TokenType.EQ
+                token.token_type = TokenType.EQ
                 token.literal = '=='
             else:
-                token.type = TokenType.ASSIGN
+                token.token_type = TokenType.ASSIGN
                 token.literal = '='
         elif self.ch == '!':
             if self.peek_char() == '=':
                 self.read_char()
-                token.type = TokenType.NOT_EQ
+                token.token_type = TokenType.NOT_EQ
                 token.literal = '!='
             else:
-                token.type = TokenType.BANG
+                token.token_type = TokenType.BANG
                 token.literal = '!'
         else:
             if self.is_letter():
