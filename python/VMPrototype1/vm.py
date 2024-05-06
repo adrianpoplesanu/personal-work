@@ -2,7 +2,7 @@ from typing import Optional
 
 from bytecode import Bytecode
 from code_ad import read_uint16
-from objects import AdObject, AdObjectInteger, AdBoolean
+from objects import AdObject, AdObjectInteger, AdBoolean, AdObjectType
 from opcode_ad import OpCodeByte
 
 
@@ -69,8 +69,14 @@ class VM:
                 self.push(obj)
             elif opcode == OpCodeByte.OP_POP:
                 self.pop()
+            elif opcode == OpCodeByte.OP_EQUAL:
+                self.execute_comparison(opcode)
+            elif opcode == OpCodeByte.OP_NOTEQUAL:
+                self.execute_comparison(opcode)
+            elif opcode == OpCodeByte.OP_GREATERTHAN:
+                self.execute_comparison(opcode)
             else:
-                print('severe error')
+                print('severe error: vm.run() error')
             ip += 1
 
     def last_popped_stack_element(self) -> Optional[AdObject]:
@@ -104,3 +110,24 @@ class VM:
         # result = self.stack.pop()
         self.sp -= 1
         return result
+
+    def execute_comparison(self, opcode):
+        right = self.pop()
+        left = self.pop()
+
+        if left._type == AdObjectType.INT and right._type == AdObjectType.INT:
+            return self.execute_integer_comparison(opcode, left, right)
+
+        if opcode == OpCodeByte.OP_EQUAL:
+            pass
+        elif opcode == OpCodeByte.OP_NOTEQUAL:
+            pass
+        else:
+            print('error: unknown operator')
+
+    def execute_integer_comparison(self, opcode, left, right):
+        if opcode == OpCodeByte.OP_EQUAL:
+            if left.value == right.value:
+                self.push(AdBoolean(True))
+            else:
+                self.push(AdBoolean(False))

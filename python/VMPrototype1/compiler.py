@@ -3,7 +3,8 @@ from bytecode import Bytecode
 from code_ad import Code
 from instructions import Instructions
 from objects import AdObjectInteger, AdObject
-from opcode_ad import OpAdd, OpMinus, OpMultiply, OpDivide, OpConstant, OpTrue, OpFalse, OpPop
+from opcode_ad import OpAdd, OpMinus, OpMultiply, OpDivide, OpConstant, OpTrue, OpFalse, OpPop, op_equal, op_not_equal, \
+    op_greater_than, op_add, op_minus, op_multiply, op_divide
 
 
 class Compiler:
@@ -19,7 +20,7 @@ class Compiler:
 
     def compile(self, node: ASTNode):
         if node is None:
-            print("severe error")
+            print("severe error: node is null")
         elif node.statement_type == StatementType.PROGRAM:
             for stmt in node.statements:
                 self.compile(stmt)
@@ -28,24 +29,28 @@ class Compiler:
             opcode = OpPop()
             self.emit(opcode, 0, [])
         elif node.statement_type == StatementType.INFIX_EXPRESSION:
+            if node.operator == '<':
+                self.compile(node.right)
+                self.compile(node.left)
+                self.emit(op_greater_than)
+                return None
+
             self.compile(node.left)
             self.compile(node.right)
             if node.operator == '+':
-                opcode = OpAdd()
-                args = []
-                self.emit(opcode, 0, args)
+                self.emit(op_add)
             elif node.operator == '-':
-                opcode = OpMinus()
-                args = []
-                self.emit(opcode, 0, args)
+                self.emit(op_minus)
             elif node.operator == '*':
-                opcode = OpMultiply()
-                args = []
-                self.emit(opcode, 0, args)
+                self.emit(op_multiply)
             elif node.operator == '/':
-                opcode = OpDivide()
-                args = []
-                self.emit(opcode, 0, args)
+                self.emit(op_divide)
+            elif node.operator == '==':
+                self.emit(op_equal)
+            elif node.operator == '!=':
+                self.emit(op_not_equal)
+            elif node.operator == '>':
+                self.emit(op_greater_than)
         elif node.statement_type == StatementType.INTEGER_LITERAL:
             integer_obj = AdObjectInteger(node.value)
             opcode = OpConstant()
@@ -62,7 +67,9 @@ class Compiler:
         else:
             print("severe error: node type unknown " + statement_type_map[node.statement_type])
 
-    def emit(self, opcode, n, args) -> int:
+    def emit(self, opcode, n=0, args=None) -> int:
+        if not args:
+            args = []
         size, instruction = self.code.make(opcode, n, args)
         pos = self.add_instruction(size, instruction)
         return pos
