@@ -61,9 +61,21 @@ class Lexer:
         elif self.ch == '>':
             pass
         elif self.ch == '=':
-            pass
+            if self.peek_char() == '=':
+                self.read_char()
+                token.type = TokenType.EQ
+                token.literal = '=='
+            else:
+                token.type = TokenType.ASSIGN
+                token.literal = '='
         elif self.ch == '!':
-            pass
+            if self.peek_char() == '=':
+                self.read_char()
+                token.type = TokenType.NOT_EQ
+                token.literal = '!='
+            else:
+                token.type = TokenType.BANG
+                token.literal = '!'
         else:
             if self.is_letter():
                 token.literal = self.read_ident()
