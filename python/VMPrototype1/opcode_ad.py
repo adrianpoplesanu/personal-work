@@ -58,3 +58,16 @@ class OpNotEqual(OpCode):
 
 class OpGreaterThan(OpCode):
     byte_code = OpCodeByte.OP_GREATERTHAN
+
+
+op_constant = OpConstant()
+op_add = OpAdd()
+op_minus = OpMinus()
+op_multiply = OpMultiply()
+op_divide = OpDivide()
+op_pop = OpPop()
+op_true = OpTrue()
+op_false = OpFalse()
+op_equal = OpEqual()
+op_not_equal = OpNotEqual()
+op_greater_than = OpGreaterThan()
