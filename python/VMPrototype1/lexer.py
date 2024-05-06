@@ -57,9 +57,21 @@ class Lexer:
             token.token_type = TokenType.RPAREN
             token.literal = ')'
         elif self.ch == '<':
-            pass
+            if self.peek_char() == '=':
+                self.read_char()
+                token.type = TokenType.LTE
+                token.literal = '<='
+            else:
+                token.type = TokenType.LT
+                token.literal = '<'
         elif self.ch == '>':
-            pass
+            if self.peek_char() == '=':
+                self.read_char()
+                token.type = TokenType.GTE
+                token.literal = '>='
+            else:
+                token.type = TokenType.GT
+                token.literal = '>'
         elif self.ch == '=':
             if self.peek_char() == '=':
                 self.read_char()
