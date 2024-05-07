@@ -119,9 +119,11 @@ class VM:
             return self.execute_integer_comparison(opcode, left, right)
 
         if opcode == OpCodeByte.OP_EQUAL:
-            pass
+            # TODO: this might not be left == right
+            self.push(AdBoolean(left == right))
         elif opcode == OpCodeByte.OP_NOTEQUAL:
-            pass
+            # TODO: this might not be left != right
+            self.push(AdBoolean(left != right))
         else:
             print('error: unknown operator')
 
@@ -131,3 +133,5 @@ class VM:
                 self.push(AdBoolean(True))
             else:
                 self.push(AdBoolean(False))
+        if opcode == OpCodeByte.OP_GREATERTHAN:
+            self.push(AdBoolean(left.value > right.value))
