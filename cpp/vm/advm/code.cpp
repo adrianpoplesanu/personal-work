@@ -1,4 +1,5 @@
 #include "code.h"
+#include <cstring>
 #include <sstream>
 
 Code::Code() {
@@ -27,7 +28,7 @@ unsigned char* Code::make(OpCode opCode, int n, std::vector<int> &args, int &siz
         instructionLen += definition->operandWidths[i];
     }
 
-    unsigned char *instruction = new unsigned char(instructionLen);
+    unsigned char *instruction = new unsigned char[instructionLen];
     instruction[0] = opCode.byteCode;
     //std::cout << (int) instruction[0];
 

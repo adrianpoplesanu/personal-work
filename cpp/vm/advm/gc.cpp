@@ -1,7 +1,8 @@
 #include "gc.h"
 
 GarbageCollector::GarbageCollector() {
-    head = tail = NULL;
+    head = NULL;
+    tail = NULL;
 }
 
 void GarbageCollector::addObject(AdObject *obj) {

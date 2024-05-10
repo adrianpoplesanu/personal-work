@@ -7,5 +7,9 @@ Definition::Definition(std::string n, int s, int *ow) {
 }
 
 Definition::~Definition() {
-    delete[] operandWidths;
+    if (size > 0) {
+        delete[] operandWidths;
+    } else {
+        delete operandWidths;
+    }
 }

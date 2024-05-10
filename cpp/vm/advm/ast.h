@@ -127,28 +127,28 @@ public:
 class ASTWhileStatement : public ASTNode {
 public:
 
-    ASTWhileStatement();
-    ASTWhileStatement(Token);
-    virtual std::string inspect();
-    virtual std::string toString();
+    //ASTWhileStatement();
+    //ASTWhileStatement(Token);
+    //virtual std::string inspect();
+    //virtual std::string toString();
 };
 
 class ASTForStatement : public ASTNode {
 public:
 
-    ASTForStatement();
-    ASTForStatement(Token);
-    virtual std::string inspect();
-    virtual std::string toString();
+    //ASTForStatement();
+    //ASTForStatement(Token);
+    //virtual std::string inspect();
+    //virtual std::string toString();
 };
 
 class ASTIfStatement : public ASTNode {
 public:
 
-    ASTIfStatement();
-    ASTIfStatement(Token);
-    virtual std::string inspect();
-    virtual std::string toString();
+    //ASTIfStatement();
+    //ASTIfStatement(Token);
+    //virtual std::string inspect();
+    //virtual std::string toString();
 };
 
 void Ad_INCREF(ASTNode*);

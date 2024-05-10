@@ -62,7 +62,7 @@ public:
     virtual std::string toString();
 };
 
-class AdobjectFunction : public AdObject {
+class AdObjectFunction : public AdObject {
 
 };
 
