@@ -27,11 +27,15 @@ void Compiler::compile(ASTNode* node) {
             compile(expressionStatement->expression);
             OpPop opPop = OpPop();
             std::vector<int> args;
-            emit(opPop, 0, args);
+            //emit(opPop, 0, args); // this is the issue with the errors
             break;
         }
         case AT_INFIX_EXPRESSION: {
             ASTInfixExpression *infixExpression = (ASTInfixExpression*) node;
+            if (infixExpression->left == NULL || infixExpression->right == NULL) {
+                std::cout << "error: null operand in infix expression\n";
+                return;
+            }
             compile(infixExpression->left);
             compile(infixExpression->right);
             if (infixExpression->_operator == "+") {
