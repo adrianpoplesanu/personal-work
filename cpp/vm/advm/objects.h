@@ -26,8 +26,8 @@ public:
     ObjectType type;
     int ref_count;
     bool marked;
-    AdObject* next;
-    AdObject* prev;
+    AdObject* next = NULL;
+    AdObject* prev = NULL;
 
     virtual std::string inspect();
     virtual std::string toString();
