@@ -23,6 +23,15 @@ void GarbageCollector::markObjects(AdObject *stack[2048], int sp) {
     }
 }
 
+void GarbageCollector::markObjects(std::vector<AdObject *> constants) {
+    // idea: mark all objects left on constants
+    int i = 0;
+    while (i < constants.size()) {
+        markObject(constants.at(i));
+        i++;
+    }
+}
+
 void GarbageCollector::markObject(AdObject* obj) {
     if (obj == NULL) return;
     if (obj->marked) return;
