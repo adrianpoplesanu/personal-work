@@ -24,6 +24,10 @@ void Lexer::readChar() {
     readPosition++;
 }
 
+char Lexer::peekChar() {
+    return source.at(readPosition);
+}
+
 void Lexer::skipWhitespaces() {
     while (currentChar == ' ' || currentChar == '\t' || currentChar == '\r' || currentChar == '\n') readChar();
 }
@@ -107,6 +111,26 @@ Token Lexer::nextToken() {
         case ';':
             token.stringLiteral = ';';
             token.type = TT_SEMICOLON;
+            break;
+        case '>':
+            token.stringLiteral = '>';
+            token.type = TT_GT;
+            break;
+        case '<':
+            token.stringLiteral = '<';
+            token.type = TT_LT;
+            break;
+        case '=':
+            if (peekChar() == '=') {
+                readChar();
+                token.stringLiteral = "==";
+                token.type = TT_EQUALS;
+            } else {
+                token.stringLiteral = '=';
+                token.type = TT_ASSIGN;
+            }
+            break;
+        case '!':
             break;
         default:
             if (isLetter()) {
