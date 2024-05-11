@@ -3,6 +3,7 @@
 #include "gc.h"
 #include "compiler.h"
 #include "opcode.h"
+#include "parser.h"
 
 void test_code_make_test1() {
     Code code;
