@@ -32,7 +32,11 @@ enum TokenType {
     TT_CONTINUE,
     TT_SINGLECOMMENT,
     TT_MULTICOMMENT,
-    TT_SEMICOLON
+    TT_SEMICOLON,
+    TT_GT,
+    TT_LT,
+    TT_EQUALS,
+    TT_NOT_EQUALS
 };
 
 std::map<TokenType, std::string> tokenTypeConverter = {
@@ -59,7 +63,11 @@ std::map<TokenType, std::string> tokenTypeConverter = {
     {TT_FALSE, "FALSE"},
     {TT_WHILE, "WHILE"},
     {TT_FOR, "FOR"},
-    {TT_SEMICOLON, "SEMICOLON"}
+    {TT_SEMICOLON, "SEMICOLON"},
+    {TT_GT, "GREATERTHAN"},
+    {TT_LT, "LOWERTHAN"},
+    {TT_EQUALS, "EQUALS"},
+    {TT_NOT_EQUALS, "NOTEQUALS"}
 };
 
 std::map<std::string, TokenType> keywords = {
