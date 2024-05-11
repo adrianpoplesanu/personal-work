@@ -47,6 +47,7 @@ void Repl::loop() {
 
         gc->unmarkAllObjects();
         gc->markObjects(vm.stack, vm.sp);
+        gc->markObjects(vm.constants);
         gc->sweepObjects();
 
     }
@@ -80,6 +81,7 @@ void Repl::executeFile(std::ifstream &target) {
 
         gc->unmarkAllObjects();
         gc->markObjects(vm.stack, vm.sp);
+        gc->markObjects(vm.constants);
         gc->sweepObjects();
     }
 }
