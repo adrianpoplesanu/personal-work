@@ -40,7 +40,8 @@ void Repl::loop() {
         vm.load(bytecode);
         vm.run();
 
-        AdObject* result = vm.last_popped_stack_elem();
+        //AdObject* result = vm.last_popped_stack_elem();
+        AdObject* result = vm.last_popped_stack_element();
         if (result != NULL) {
             std::cout << result->inspect() << "\n";
         }
@@ -74,7 +75,8 @@ void Repl::executeFile(std::ifstream &target) {
         vm.load(bytecode);
         vm.run();
 
-        AdObject* result = vm.last_popped_stack_elem();
+        //AdObject* result = vm.last_popped_stack_elem();
+        AdObject* result = vm.last_popped_stack_element();
         if (result != NULL) {
             std::cout << result->inspect() << "\n";
         }
