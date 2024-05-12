@@ -27,7 +27,7 @@ void Compiler::compile(ASTNode* node) {
             compile(expressionStatement->expression);
             OpPop opPop = OpPop();
             std::vector<int> args;
-            //emit(opPop, 0, args); // this is the issue with the errors
+            emit(opPop, 0, args); // emmiting a pop when there's a parsing error is wrong
             break;
         }
         case AT_INFIX_EXPRESSION: {

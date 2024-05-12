@@ -147,6 +147,10 @@ void VM::push(AdObject* obj) {
 }
 
 AdObject* VM::pop() {
+    if (sp - 1 < 0) {
+        std::cout << "error: stack underflow\n";
+        return NULL;
+    }
     AdObject* result = stack[sp - 1];
     sp--;
     return result;
