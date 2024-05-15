@@ -6,15 +6,22 @@
 
 enum PrecedenceType {
     PT_LOWEST,
+    PT_EQUALS,
+    PT_LESSGREATER,
     PT_SUM,
-    PT_PRODUCT
+    PT_PRODUCT,
+    PT_PREFIX
 };
 
 std::map<TokenType, PrecedenceType> precedenceMap = {
     {TT_PLUS, PT_SUM},
     {TT_MINUS, PT_SUM},
     {TT_MULTIPLY, PT_PRODUCT},
-    {TT_DIVIDE, PT_PRODUCT}
+    {TT_DIVIDE, PT_PRODUCT},
+    {TT_EQUALS, PT_EQUALS},
+    {TT_NOT_EQUALS, PT_EQUALS},
+    {TT_GT, PT_LESSGREATER},
+    {TT_LT, PT_LESSGREATER}
 };
 
 class Parser {
