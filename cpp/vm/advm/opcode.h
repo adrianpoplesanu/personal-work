@@ -9,7 +9,10 @@ enum OpCodeByte {
     OP_DIVIDE,
     OP_POP,
     OP_TRUE,
-    OP_FALSE
+    OP_FALSE,
+    OP_EQUALS,
+    OP_NOTEQUALS,
+    OP_GREATERTHAN
 };
 
 class OpCode {
@@ -70,6 +73,27 @@ class OpFalse : public OpCode {
 public:
     OpFalse() {
         byteCode = OP_FALSE;
+    }
+};
+
+class OpEquals : public OpCode {
+public:
+    OpEquals() {
+        byteCode = OP_EQUALS;
+    }
+};
+
+class OpNotEquals : public OpCode {
+public:
+    OpNotEquals() {
+        byteCode = OP_NOTEQUALS;
+    }
+};
+
+class OpGreaterThan : public OpCode {
+public:
+    OpGreaterThan() {
+        byteCode = OP_GREATERTHAN;
     }
 };
 
