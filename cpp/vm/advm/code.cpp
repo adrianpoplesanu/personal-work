@@ -11,6 +11,7 @@ Code::Code() {
     definitionsMap.insert(std::make_pair(OP_POP, new Definition("OpPop", 0, new int)));
     definitionsMap.insert(std::make_pair(OP_TRUE, new Definition("OpTrue", 0, new int)));
     definitionsMap.insert(std::make_pair(OP_FALSE, new Definition("OpFalse", 0, new int)));
+    definitionsMap.insert(std::make_pair(OP_GREATERTHAN, new Definition("OpGreaterThan", 0, new int)));
 }
 
 Code::~Code() {
@@ -51,6 +52,9 @@ unsigned char* Code::make(OpCode opCode, int n, std::vector<int> &args, int &siz
 }
 
 Definition* Code::lookup(unsigned char op) {
+    if (definitionsMap.find(op) == definitionsMap.end()) {
+        std::cout << "definition lookup error for op=" << op << "\n";
+    }
     return definitionsMap[op];
 }
 

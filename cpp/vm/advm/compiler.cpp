@@ -36,6 +36,16 @@ void Compiler::compile(ASTNode* node) {
                 std::cout << "error: null operand in infix expression\n";
                 return;
             }
+
+        if (infixExpression->_operator == ">") {
+            compile(infixExpression->left);
+            compile(infixExpression->right);
+            OpGreaterThan opGreaterThan = OpGreaterThan();
+            std::vector<int> args;
+            emit(opGreaterThan, 0, args);
+            return;
+        }
+
             compile(infixExpression->left);
             compile(infixExpression->right);
             if (infixExpression->_operator == "+") {

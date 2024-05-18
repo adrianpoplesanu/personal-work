@@ -11,6 +11,7 @@ Parser::Parser() {
     infixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_MULTIPLY, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_DIVIDE, &Parser::parseInfixExpression));
+    infixParseFns.insert(std::make_pair(TT_GT, &Parser::parseInfixExpression));
 }
 
 PrecedenceType Parser::currentPrecedence() {
