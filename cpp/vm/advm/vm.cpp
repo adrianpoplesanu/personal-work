@@ -119,6 +119,19 @@ void VM::run() {
                 push(obj);
                 break;
             }
+            case OP_EQUALS: {
+                AdObject *right = pop();
+                AdObject *left = pop();
+
+                int leftValue = ((AdObjectInteger*) left)->value;
+                int rightValue = ((AdObjectInteger*) right)->value;
+
+                AdObject* obj = new AdObjectBoolean(leftValue == rightValue);
+                gc->addObject(obj);
+                push(obj);
+
+                break;
+            }
             default: {
                 break;
             }

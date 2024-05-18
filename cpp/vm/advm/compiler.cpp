@@ -46,6 +46,15 @@ void Compiler::compile(ASTNode* node) {
             return;
         }
 
+        if (infixExpression->_operator == "==") {
+            compile(infixExpression->left);
+            compile(infixExpression->right);
+            OpEquals opEquals = OpEquals();
+            std::vector<int> args;
+            emit(opEquals, 0, args);
+            return;
+        }
+
             compile(infixExpression->left);
             compile(infixExpression->right);
             if (infixExpression->_operator == "+") {

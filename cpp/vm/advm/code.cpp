@@ -12,6 +12,7 @@ Code::Code() {
     definitionsMap.insert(std::make_pair(OP_TRUE, new Definition("OpTrue", 0, new int)));
     definitionsMap.insert(std::make_pair(OP_FALSE, new Definition("OpFalse", 0, new int)));
     definitionsMap.insert(std::make_pair(OP_GREATERTHAN, new Definition("OpGreaterThan", 0, new int)));
+    definitionsMap.insert(std::make_pair(OP_EQUALS, new Definition("OpEquals", 0, new int)));
 }
 
 Code::~Code() {
