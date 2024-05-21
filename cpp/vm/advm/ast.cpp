@@ -118,6 +118,22 @@ std::string ASTIdentifier::inspect() {
     return "ASTIdentifier";
 }
 
+ASTWhileStatement::ASTWhileStatement() {
+
+}
+
+ASTWhileStatement::ASTWhileStatement(Token t) {
+
+}
+
+std::string ASTWhileStatement::inspect() {
+    return "todo: implement this";
+}
+
+std::string ASTWhileStatement::toString() {
+    return "todo: implement this";
+}
+
 ASTInteger::ASTInteger() {
     type = AT_INTEGER;
     ref_count = 0;

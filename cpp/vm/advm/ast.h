@@ -127,10 +127,10 @@ public:
 class ASTWhileStatement : public ASTNode {
 public:
 
-    //ASTWhileStatement();
-    //ASTWhileStatement(Token);
-    //virtual std::string inspect();
-    //virtual std::string toString();
+    ASTWhileStatement();
+    ASTWhileStatement(Token);
+    virtual std::string inspect();
+    virtual std::string toString();
 };
 
 class ASTForStatement : public ASTNode {
