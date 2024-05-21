@@ -6,6 +6,10 @@ from objects import AdObject, AdObjectInteger, AdBoolean, AdObjectType
 from opcode_ad import OpCodeByte
 
 
+#NULLOBJECT = Ad_Null_Object()
+TRUE = AdBoolean(value=True)
+FALSE = AdBoolean(value=False)
+
 class VM:
     def __init__(self, instructions=None, constants=None):
         self.instructions = instructions
@@ -62,10 +66,10 @@ class VM:
                 obj = AdObjectInteger(int(result))
                 self.push(obj)
             elif opcode == OpCodeByte.OP_TRUE:
-                obj = AdBoolean(True)
+                obj = self.native_bool_to_boolean_object(True)
                 self.push(obj)
             elif opcode == OpCodeByte.OP_FALSE:
-                obj = AdBoolean(False)
+                obj = self.native_bool_to_boolean_object(False)
                 self.push(obj)
             elif opcode == OpCodeByte.OP_POP:
                 self.pop()
@@ -119,19 +123,19 @@ class VM:
             return self.execute_integer_comparison(opcode, left, right)
 
         if opcode == OpCodeByte.OP_EQUAL:
-            # TODO: this might not be left == right
-            self.push(AdBoolean(left == right))
+            self.push(self.native_bool_to_boolean_object(left == right))
         elif opcode == OpCodeByte.OP_NOTEQUAL:
-            # TODO: this might not be left != right
-            self.push(AdBoolean(left != right))
+            self.push(self.native_bool_to_boolean_object(left != right))
         else:
             print('error: unknown operator')
 
     def execute_integer_comparison(self, opcode, left, right):
         if opcode == OpCodeByte.OP_EQUAL:
-            if left.value == right.value:
-                self.push(AdBoolean(True))
-            else:
-                self.push(AdBoolean(False))
+            self.push(self.native_bool_to_boolean_object(left.value == right.value))
         if opcode == OpCodeByte.OP_GREATERTHAN:
-            self.push(AdBoolean(left.value > right.value))
+            self.push(self.native_bool_to_boolean_object(left.value > right.value))
+
+    def native_bool_to_boolean_object(self, value):
+        if value:
+            return TRUE
+        return FALSE
