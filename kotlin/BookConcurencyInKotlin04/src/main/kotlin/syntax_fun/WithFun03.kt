@@ -1,7 +1,6 @@
 package syntax_fun
 
 import kotlinx.coroutines.runBlocking
-import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.coroutineContext
 
 class BeverlyHillsController {
