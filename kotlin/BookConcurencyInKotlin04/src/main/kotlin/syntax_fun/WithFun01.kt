@@ -18,6 +18,16 @@ inline fun <T> withTimestampAndWait(block: () -> T): T {
     }
 }
 
+inline fun <T> withTimestampAndContext(context: kotlin.coroutines.CoroutineContext, block: () -> T): T {
+    val startTime = System.nanoTime()
+    return try {
+        block()
+    } finally {
+        val endTime = System.nanoTime()
+        println("Execution took ${endTime - startTime} ns")
+    }
+}
+
 class Controller01 {
     fun index(): String = withTimestampAndWait {
         val result = (1..1000).sum()
