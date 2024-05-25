@@ -79,6 +79,8 @@ class VM:
                 self.execute_comparison(opcode)
             elif opcode == OpCodeByte.OP_GREATERTHAN:
                 self.execute_comparison(opcode)
+            elif opcode == OpCodeByte.OP_GREATERTHAN_EQUAL:
+                self.execute_comparison(opcode)
             else:
                 print('severe error: vm.run() error')
             ip += 1
@@ -132,8 +134,12 @@ class VM:
     def execute_integer_comparison(self, opcode, left, right):
         if opcode == OpCodeByte.OP_EQUAL:
             self.push(self.native_bool_to_boolean_object(left.value == right.value))
+        if opcode == OpCodeByte.OP_NOTEQUAL:
+            self.push(self.native_bool_to_boolean_object(left.value != right.value))
         if opcode == OpCodeByte.OP_GREATERTHAN:
             self.push(self.native_bool_to_boolean_object(left.value > right.value))
+        if opcode == OpCodeByte.OP_GREATERTHAN_EQUAL:
+            self.push(self.native_bool_to_boolean_object(left.value >= right.value))
 
     def native_bool_to_boolean_object(self, value):
         if value:

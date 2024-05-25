@@ -33,7 +33,9 @@ class Parser:
             TokenType.EQ: self.parse_infix_expression,
             TokenType.NOT_EQ: self.parse_infix_expression,
             TokenType.GT: self.parse_infix_expression,
-            TokenType.LT: self.parse_infix_expression
+            TokenType.LT: self.parse_infix_expression,
+            TokenType.GTE: self.parse_infix_expression,
+            TokenType.LTE: self.parse_infix_expression
         }
 
     def load(self, source):

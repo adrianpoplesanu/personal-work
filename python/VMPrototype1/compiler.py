@@ -4,7 +4,7 @@ from code_ad import Code
 from instructions import Instructions
 from objects import AdObjectInteger, AdObject
 from opcode_ad import OpAdd, OpMinus, OpMultiply, OpDivide, OpConstant, OpTrue, OpFalse, OpPop, op_equal, op_not_equal, \
-    op_greater_than, op_add, op_minus, op_multiply, op_divide
+    op_greater_than, op_greater_than_equal, op_add, op_minus, op_multiply, op_divide
 
 
 class Compiler:
@@ -34,6 +34,11 @@ class Compiler:
                 self.compile(node.left)
                 self.emit(op_greater_than)
                 return None
+            if node.operator == '<=':
+                self.compile(node.right)
+                self.compile(node.left)
+                self.emit(op_greater_than_equal)
+                return None
 
             self.compile(node.left)
             self.compile(node.right)
@@ -51,6 +56,8 @@ class Compiler:
                 self.emit(op_not_equal)
             elif node.operator == '>':
                 self.emit(op_greater_than)
+            elif node.operator == '>=':
+                self.emit(op_greater_than_equal)
         elif node.statement_type == StatementType.INTEGER_LITERAL:
             integer_obj = AdObjectInteger(node.value)
             opcode = OpConstant()

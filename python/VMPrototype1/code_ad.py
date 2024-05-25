@@ -51,7 +51,8 @@ class Code:
             OpCodeByte.OP_FALSE: Definition("OpFalse", 0, []),
             OpCodeByte.OP_EQUAL: Definition("OpEqual", 0, []),
             OpCodeByte.OP_NOTEQUAL: Definition("OpNotEqual", 0, []),
-            OpCodeByte.OP_GREATERTHAN: Definition("OpGreatrThan", 0, [])
+            OpCodeByte.OP_GREATERTHAN: Definition("OpGreaterThan", 0, []),
+            OpCodeByte.OP_GREATERTHAN_EQUAL: Definition("OpGreaterThanEqual", 0, [])
         }
 
     def make(self, opcode: OpCode, n, args):
