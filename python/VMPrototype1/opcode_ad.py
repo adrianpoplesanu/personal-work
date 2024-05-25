@@ -10,6 +10,7 @@ class OpCodeByte:
     OP_EQUAL = 8
     OP_NOTEQUAL = 9
     OP_GREATERTHAN = 10
+    OP_GREATERTHAN_EQUAL = 11
 
 
 class OpCode:
@@ -60,6 +61,10 @@ class OpGreaterThan(OpCode):
     byte_code = OpCodeByte.OP_GREATERTHAN
 
 
+class OpGreaterThanEqual(OpCode):
+    byte_code = OpCodeByte.OP_GREATERTHAN_EQUAL
+
+
 op_constant = OpConstant()
 op_add = OpAdd()
 op_minus = OpMinus()
@@ -71,3 +76,4 @@ op_false = OpFalse()
 op_equal = OpEqual()
 op_not_equal = OpNotEqual()
 op_greater_than = OpGreaterThan()
+op_greater_than_equal = OpGreaterThanEqual()
