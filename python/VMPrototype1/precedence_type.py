@@ -18,5 +18,7 @@ precedences = {
     TokenType.EQ: PrecedenceType.EQUALS,
     TokenType.NOT_EQ: PrecedenceType.EQUALS,
     TokenType.GT: PrecedenceType.LESSGREATER,
-    TokenType.LT: PrecedenceType.LESSGREATER
+    TokenType.LT: PrecedenceType.LESSGREATER,
+    TokenType.GTE: PrecedenceType.LESSGREATER,
+    TokenType.LTE: PrecedenceType.LESSGREATER
 }
