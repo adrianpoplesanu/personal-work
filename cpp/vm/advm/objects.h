@@ -46,9 +46,11 @@ public:
 class AdObjectBoolean : public AdObject {
 public:
     bool value;
+    bool permanent = false;
 
     AdObjectBoolean();
     AdObjectBoolean(bool);
+    AdObjectBoolean(bool, bool);
     virtual std::string inspect();
     virtual std::string toString();
 };

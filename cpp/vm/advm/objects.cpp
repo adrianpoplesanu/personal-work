@@ -36,6 +36,12 @@ AdObjectBoolean::AdObjectBoolean(bool v) {
     value = v;
 }
 
+AdObjectBoolean::AdObjectBoolean(bool v, bool p) {
+    type = OT_BOOL;
+    value = v;
+    permanent = p;
+}
+
 std::string AdObjectBoolean::inspect() {
     if (value) {
         return "true";
@@ -67,7 +73,9 @@ void free_memory_AdObject(AdObject* obj) {
             break;
         }
         case OT_BOOL: {
-            delete (AdObjectBoolean*) obj;
+            if (!((AdObjectBoolean*) obj)->permanent) {
+                delete (AdObjectBoolean*) obj;
+            }
             break;
         }
         default: {
