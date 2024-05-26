@@ -121,7 +121,7 @@ class VM:
         right = self.pop()
         left = self.pop()
 
-        if left._type == AdObjectType.INT and right._type == AdObjectType.INT:
+        if left.object_type == AdObjectType.INT and right.object_type == AdObjectType.INT:
             return self.execute_integer_comparison(opcode, left, right)
 
         if opcode == OpCodeByte.OP_EQUAL:

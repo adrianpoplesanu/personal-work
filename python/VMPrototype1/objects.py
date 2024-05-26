@@ -4,12 +4,13 @@ class AdObjectType:
 
 
 class AdObject:
-    pass
+    object_type = None
+    value = None
 
 
 class AdObjectInteger(AdObject):
     def __init__(self, value: int):
-        self._type = AdObjectType.INT
+        self.object_type = AdObjectType.INT
         self.value = value
 
     def inspect(self) -> str:
@@ -18,7 +19,7 @@ class AdObjectInteger(AdObject):
 
 class AdBoolean(AdObject):
     def __init__(self, value: int):
-        self._type = AdObjectType.BOOL
+        self.object_type = AdObjectType.BOOL
         self.value = value
 
     def inspect(self) -> str:
