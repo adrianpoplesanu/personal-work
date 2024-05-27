@@ -43,7 +43,7 @@ class Code:
         self.definitions_map = {
             OpCodeByte.OP_CONSTANT: Definition("OpConstant", 1, [2]),
             OpCodeByte.OP_ADD: Definition("OpAdd", 0, []),
-            OpCodeByte.OP_MINUS: Definition("OpMinus", 0, []),
+            OpCodeByte.OP_SUB: Definition("OpSub", 0, []),
             OpCodeByte.OP_MULTIPLY: Definition("OpMultiply", 0, []),
             OpCodeByte.OP_DIVIDE: Definition("OpDivide", 0, []),
             OpCodeByte.OP_POP: Definition("OpPop", 0, []),
@@ -52,7 +52,9 @@ class Code:
             OpCodeByte.OP_EQUAL: Definition("OpEqual", 0, []),
             OpCodeByte.OP_NOTEQUAL: Definition("OpNotEqual", 0, []),
             OpCodeByte.OP_GREATERTHAN: Definition("OpGreaterThan", 0, []),
-            OpCodeByte.OP_GREATERTHAN_EQUAL: Definition("OpGreaterThanEqual", 0, [])
+            OpCodeByte.OP_GREATERTHAN_EQUAL: Definition("OpGreaterThanEqual", 0, []),
+            OpCodeByte.OP_MINUS: Definition("OpMinus", 0, []),
+            OpCodeByte.OP_BANG: Definition("OpBang", 0, [])
         }
 
     def make(self, opcode: OpCode, n, args):
