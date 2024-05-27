@@ -56,6 +56,9 @@ class Lexer:
         elif self.ch == ')':
             token.token_type = TokenType.RPAREN
             token.literal = ')'
+        elif self.ch == '!':
+            token.token_type = TokenType.BANG
+            token.literal = "!"
         elif self.ch == '<':
             if self.peek_char() == '=':
                 self.read_char()
