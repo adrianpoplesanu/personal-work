@@ -1,7 +1,7 @@
 class OpCodeByte:
     OP_CONSTANT = 0
     OP_ADD = 1
-    OP_MINUS = 2
+    OP_SUB = 2
     OP_MULTIPLY = 3
     OP_DIVIDE = 4
     OP_POP = 5
@@ -11,6 +11,8 @@ class OpCodeByte:
     OP_NOTEQUAL = 9
     OP_GREATERTHAN = 10
     OP_GREATERTHAN_EQUAL = 11
+    OP_BANG = 12
+    OP_MINUS = 13
 
 
 class OpCode:
@@ -25,8 +27,8 @@ class OpAdd(OpCode):
     byte_code = OpCodeByte.OP_ADD
 
 
-class OpMinus(OpCode):
-    byte_code = OpCodeByte.OP_MINUS
+class OpSub(OpCode):
+    byte_code = OpCodeByte.OP_SUB
 
 
 class OpMultiply(OpCode):
@@ -65,9 +67,17 @@ class OpGreaterThanEqual(OpCode):
     byte_code = OpCodeByte.OP_GREATERTHAN_EQUAL
 
 
+class OpBang(OpCode):
+    byte_code = OpCodeByte.OP_BANG
+
+
+class OpMinus(OpCode):
+    byte_code = OpCodeByte.OP_MINUS
+
+
 op_constant = OpConstant()
 op_add = OpAdd()
-op_minus = OpMinus()
+op_sub = OpSub()
 op_multiply = OpMultiply()
 op_divide = OpDivide()
 op_pop = OpPop()
@@ -77,3 +87,5 @@ op_equal = OpEqual()
 op_not_equal = OpNotEqual()
 op_greater_than = OpGreaterThan()
 op_greater_than_equal = OpGreaterThanEqual()
+op_bang = OpBang()
+op_minus = OpMinus()
