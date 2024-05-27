@@ -38,7 +38,7 @@ class VM:
                 result = right_value + left_value
                 obj = AdObjectInteger(result)
                 self.push(obj)
-            elif opcode == OpCodeByte.OP_MINUS:
+            elif opcode == OpCodeByte.OP_SUB:
                 right = self.pop()
                 left = self.pop()
 
@@ -81,6 +81,10 @@ class VM:
                 self.execute_comparison(opcode)
             elif opcode == OpCodeByte.OP_GREATERTHAN_EQUAL:
                 self.execute_comparison(opcode)
+            elif opcode == OpCodeByte.OP_BANG:
+                self.execute_bang_operator()
+            elif opcode == OpCodeByte.OP_MINUS:
+                self.execute_minus_operator()
             else:
                 print('severe error: vm.run() error')
             ip += 1
@@ -98,12 +102,12 @@ class VM:
 
     def print_stack(self):
         i = 0
-        print('[')
+        print('[', end='')
         while i < self.sp:
             print(self.stack[i].inspect())
             i += 1
             if i < self.sp:
-                print(', ')
+                print(', ', end='')
         print(']')
 
     def push(self, obj: AdObject):
@@ -140,6 +144,25 @@ class VM:
             self.push(self.native_bool_to_boolean_object(left.value > right.value))
         if opcode == OpCodeByte.OP_GREATERTHAN_EQUAL:
             self.push(self.native_bool_to_boolean_object(left.value >= right.value))
+
+    def execute_bang_operator(self):
+        operand = self.pop()
+
+        if operand == TRUE:
+            self.push(FALSE)
+        elif operand == FALSE:
+            self.push(TRUE)
+        else:
+            self.push(FALSE)
+
+    def execute_minus_operator(self):
+        operand = self.pop()
+
+        if operand.object_type != AdObjectType.INT:
+            print("unsupported type negation")
+
+        value = operand.value
+        self.push(AdObjectInteger(-value))
 
     def native_bool_to_boolean_object(self, value):
         if value:
