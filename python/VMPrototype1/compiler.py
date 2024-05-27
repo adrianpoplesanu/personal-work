@@ -3,8 +3,8 @@ from bytecode import Bytecode
 from code_ad import Code
 from instructions import Instructions
 from objects import AdObjectInteger, AdObject
-from opcode_ad import OpAdd, OpMinus, OpMultiply, OpDivide, OpConstant, OpTrue, OpFalse, OpPop, op_equal, op_not_equal, \
-    op_greater_than, op_greater_than_equal, op_add, op_minus, op_multiply, op_divide
+from opcode_ad import OpAdd, OpSub, OpMultiply, OpDivide, OpConstant, OpTrue, OpFalse, OpPop, op_equal, op_not_equal, \
+    op_greater_than, op_greater_than_equal, op_add, op_sub, op_multiply, op_divide, op_pop, op_bang, op_minus
 
 
 class Compiler:
@@ -26,8 +26,15 @@ class Compiler:
                 self.compile(stmt)
         elif node.statement_type == StatementType.EXPRESSION_STATEMENT:
             self.compile(node.expression)
-            opcode = OpPop()
-            self.emit(opcode, 0, [])
+            self.emit(op_pop, 0, [])
+        elif node.statement_type == StatementType.PREFIX_EXPRESSION:
+            self.compile(node.right)
+            if node.operator == "!":
+                self.emit(op_bang)
+            elif node.operator == "-":
+                self.emit(op_minus)
+            else:
+                print("SEVERE ERROR: prefix experssion")
         elif node.statement_type == StatementType.INFIX_EXPRESSION:
             if node.operator == '<':
                 self.compile(node.right)
@@ -45,7 +52,7 @@ class Compiler:
             if node.operator == '+':
                 self.emit(op_add)
             elif node.operator == '-':
-                self.emit(op_minus)
+                self.emit(op_sub)
             elif node.operator == '*':
                 self.emit(op_multiply)
             elif node.operator == '/':
