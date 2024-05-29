@@ -113,12 +113,24 @@ Token Lexer::nextToken() {
             token.type = TT_SEMICOLON;
             break;
         case '>':
-            token.stringLiteral = '>';
-            token.type = TT_GT;
+            if (peekChar() == '=') {
+                readChar();
+                token.stringLiteral = ">=";
+                token.type = TT_GTE;
+            } else {
+                token.stringLiteral = '>';
+                token.type = TT_GT;
+            }
             break;
         case '<':
-            token.stringLiteral = '<';
-            token.type = TT_LT;
+            if (peekChar() == '=') {
+                readChar();
+                token.stringLiteral = "<=";
+                token.type = TT_LTE;
+            } else {
+                token.stringLiteral = '<';
+                token.type = TT_LT;
+            }
             break;
         case '=':
             if (peekChar() == '=') {
