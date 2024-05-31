@@ -6,10 +6,12 @@
 
 class Renderer {
 public:
-    SDL_Window* window = nullptr;
+    SDL_Window* window;
 
+    Renderer();
     void init();
     void destroy();
+    void draw();
 };
 
 #endif
