@@ -7,6 +7,8 @@
 
 #include <SDL.h>
 #include <glad/glad.h>
+#include "game.cpp"
+#include "renderer.cpp"
 
 int main(int argc, char* argv[]){
 
