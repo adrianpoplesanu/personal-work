@@ -35,6 +35,8 @@ enum TokenType {
     TT_SEMICOLON,
     TT_GT,
     TT_LT,
+    TT_GTE,
+    TT_LTE,
     TT_EQUALS,
     TT_NOT_EQUALS
 };
@@ -66,6 +68,8 @@ std::map<TokenType, std::string> tokenTypeConverter = {
     {TT_SEMICOLON, "SEMICOLON"},
     {TT_GT, "GREATERTHAN"},
     {TT_LT, "LOWERTHAN"},
+    {TT_GTE, "GREATERTHANEQUAL"},
+    {TT_LTE, "LOWERTHANEQUAL"},
     {TT_EQUALS, "EQUALS"},
     {TT_NOT_EQUALS, "NOTEQUALS"}
 };
