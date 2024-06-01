@@ -1,5 +1,8 @@
 #include "vm.h"
 
+AdObjectBoolean TRUE(true, true);
+AdObjectBoolean FALSE(false, true);
+
 VM::VM() {
     sp = 0;
 }
@@ -95,16 +98,12 @@ void VM::run() {
             }
             case OP_TRUE: {
                 // 6 e OpTrue
-                AdObject* obj = new AdObjectBoolean(true);
-                gc->addObject(obj);
-                push(obj);
+                push(nativeBooleanToBooleanObject(true));
                 break;
             }
             case OP_FALSE: {
                 // 7 e OpFalse
-                AdObject* obj = new AdObjectBoolean(false);
-                gc->addObject(obj);
-                push(obj);
+                push(nativeBooleanToBooleanObject(false));
                 break;
             }
             case OP_GREATERTHAN: {
@@ -114,9 +113,17 @@ void VM::run() {
                 int leftValue = ((AdObjectInteger*) left)->value;
                 int rightValue = ((AdObjectInteger*) right)->value;
 
-                AdObject* obj = new AdObjectBoolean(leftValue > rightValue);
-                gc->addObject(obj);
-                push(obj);
+                push(nativeBooleanToBooleanObject(leftValue > rightValue));
+                break;
+            }
+            case OP_GREATERTHANEQUAL: {
+                AdObject *right = pop();
+                AdObject *left = pop();
+
+                int leftValue = ((AdObjectInteger*) left)->value;
+                int rightValue = ((AdObjectInteger*) right)->value;
+
+                push(nativeBooleanToBooleanObject(leftValue >= rightValue));
                 break;
             }
             case OP_EQUALS: {
@@ -126,10 +133,7 @@ void VM::run() {
                 int leftValue = ((AdObjectInteger*) left)->value;
                 int rightValue = ((AdObjectInteger*) right)->value;
 
-                AdObject* obj = new AdObjectBoolean(leftValue == rightValue);
-                gc->addObject(obj);
-                push(obj);
-
+                push(nativeBooleanToBooleanObject(leftValue == rightValue));
                 break;
             }
             default: {
@@ -179,4 +183,11 @@ AdObject* VM::pop() {
     AdObject* result = stack[sp - 1];
     sp--;
     return result;
+}
+
+AdObject* VM::nativeBooleanToBooleanObject(bool value) {
+    if (value) {
+        return &TRUE;
+    }
+    return &FALSE;
 }

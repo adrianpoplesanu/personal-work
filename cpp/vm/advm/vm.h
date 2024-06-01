@@ -28,6 +28,7 @@ public:
     void printStack();
     void push(AdObject *);
     AdObject* pop();
+    AdObject* nativeBooleanToBooleanObject(bool);
 };
 
 #endif
