@@ -21,7 +21,9 @@ std::map<TokenType, PrecedenceType> precedenceMap = {
     {TT_EQUALS, PT_EQUALS},
     {TT_NOT_EQUALS, PT_EQUALS},
     {TT_GT, PT_LESSGREATER},
-    {TT_LT, PT_LESSGREATER}
+    {TT_LT, PT_LESSGREATER},
+    {TT_GTE, PT_LESSGREATER},
+    {TT_LTE, PT_LESSGREATER}
 };
 
 class Parser {
