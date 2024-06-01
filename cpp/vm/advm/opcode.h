@@ -12,7 +12,8 @@ enum OpCodeByte {
     OP_FALSE,
     OP_EQUALS,
     OP_NOTEQUALS,
-    OP_GREATERTHAN
+    OP_GREATERTHAN,
+    OP_GREATERTHANEQUAL
 };
 
 class OpCode {
@@ -94,6 +95,13 @@ class OpGreaterThan : public OpCode {
 public:
     OpGreaterThan() {
         byteCode = OP_GREATERTHAN;
+    }
+};
+
+class OpGreaterThanEquals : public OpCode {
+public:
+    OpGreaterThanEquals() {
+        byteCode = OP_GREATERTHANEQUAL;
     }
 };
 
