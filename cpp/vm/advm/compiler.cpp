@@ -37,12 +37,21 @@ void Compiler::compile(ASTNode* node) {
                 return;
             }
 
-        if (infixExpression->_operator == ">") {
-            compile(infixExpression->left);
+        if (infixExpression->_operator == "<") {
             compile(infixExpression->right);
+            compile(infixExpression->left);
             OpGreaterThan opGreaterThan = OpGreaterThan();
             std::vector<int> args;
             emit(opGreaterThan, 0, args);
+            return;
+        }
+
+        if (infixExpression->_operator == "<=") {
+            compile(infixExpression->right);
+            compile(infixExpression->left);
+            OpGreaterThanEquals opGreaterThanEquals = OpGreaterThanEquals();
+            std::vector<int> args;
+            emit(opGreaterThanEquals, 0, args);
             return;
         }
 
@@ -76,6 +85,16 @@ void Compiler::compile(ASTNode* node) {
                 OpDivide opDivide = OpDivide();
                 std::vector<int> args;
                 emit(opDivide, 0, args);
+            }
+            if (infixExpression->_operator == ">") {
+                OpGreaterThan opGreaterThan = OpGreaterThan();
+                std::vector<int> args;
+                emit(opGreaterThan, 0, args);
+            }
+            if (infixExpression->_operator == ">=") {
+                OpGreaterThanEquals opGreaterThanEquals = OpGreaterThanEquals();
+                std::vector<int> args;
+                emit(opGreaterThanEquals, 0, args);
             }
             break;
         }
