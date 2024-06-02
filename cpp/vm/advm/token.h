@@ -38,7 +38,8 @@ enum TokenType {
     TT_GTE,
     TT_LTE,
     TT_EQUALS,
-    TT_NOT_EQUALS
+    TT_NOT_EQUALS,
+    TT_BANG
 };
 
 std::map<TokenType, std::string> tokenTypeConverter = {

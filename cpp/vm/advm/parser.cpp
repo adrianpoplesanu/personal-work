@@ -4,6 +4,7 @@ Parser::Parser() {
     prefixParseFns.insert(std::make_pair(TT_IDENT, &Parser::parseIdent));
     prefixParseFns.insert(std::make_pair(TT_INT, &Parser::parseIntegerLiteral));
     prefixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parsePrefixExpression));
+    prefixParseFns.insert(std::make_pair(TT_BANG, &Parser::parsePrefixExpression));
     prefixParseFns.insert(std::make_pair(TT_TRUE, &Parser::parseBooleanExpression));
     prefixParseFns.insert(std::make_pair(TT_FALSE, &Parser::parseBooleanExpression));
     prefixParseFns.insert(std::make_pair(TT_LPAREN, &Parser::parseGroupedExpression));
@@ -142,8 +143,10 @@ ASTNode* Parser::parseGroupedExpression() {
 }
 
 ASTNode* Parser::parsePrefixExpression() {
-    ASTPrefixExpression *expr = new ASTPrefixExpression();
-    return NULL;
+    ASTPrefixExpression *expr = new ASTPrefixExpression(currentToken, currentToken.stringLiteral);
+    nextToken();
+    expr->right = parseExpression(PT_PREFIX);
+    return expr;
 }
 
 ASTNode* Parser::parseInfixExpression(ASTNode* left) {

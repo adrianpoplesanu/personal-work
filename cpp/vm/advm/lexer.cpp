@@ -143,6 +143,8 @@ Token Lexer::nextToken() {
             }
             break;
         case '!':
+            token.stringLiteral = "!";
+            token.type = TT_BANG;
             break;
         default:
             if (isLetter()) {
