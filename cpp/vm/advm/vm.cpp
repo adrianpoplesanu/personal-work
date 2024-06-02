@@ -49,7 +49,7 @@ void VM::run() {
                 push(obj);
                 break;
             }
-            case OP_MINUS: {
+            case OP_SUB: {
                 // 2 e OpMinus
                 AdObject *right = pop();
                 AdObject *left = pop();
@@ -134,6 +134,29 @@ void VM::run() {
                 int rightValue = ((AdObjectInteger*) right)->value;
 
                 push(nativeBooleanToBooleanObject(leftValue == rightValue));
+                break;
+            }
+            case OP_BANG: {
+                AdObject *obj = pop();
+                AdObjectBoolean* operand = (AdObjectBoolean*) obj;
+                if (operand->value == TRUE.value) {
+                    push(nativeBooleanToBooleanObject(false));
+                } else if (operand->value == FALSE.value) {
+                    push(nativeBooleanToBooleanObject(true));
+                } else {
+                    push(nativeBooleanToBooleanObject(false));
+                }
+                break;
+            }
+            case OP_MINUS: {
+                AdObject *operand = pop();
+                if (operand->type != OT_INT) {
+                    std::cout << "unsupported type negation\n";
+                }
+                int value = ((AdObjectInteger*) operand)->value;
+                AdObject *obj = new AdObjectInteger(-value);
+                gc->addObject(obj);
+                push(obj);
                 break;
             }
             default: {

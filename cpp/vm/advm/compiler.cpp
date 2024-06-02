@@ -37,32 +37,32 @@ void Compiler::compile(ASTNode* node) {
                 return;
             }
 
-        if (infixExpression->_operator == "<") {
-            compile(infixExpression->right);
-            compile(infixExpression->left);
-            OpGreaterThan opGreaterThan = OpGreaterThan();
-            std::vector<int> args;
-            emit(opGreaterThan, 0, args);
-            return;
-        }
+            if (infixExpression->_operator == "<") {
+                compile(infixExpression->right);
+                compile(infixExpression->left);
+                OpGreaterThan opGreaterThan = OpGreaterThan();
+                std::vector<int> args;
+                emit(opGreaterThan, 0, args);
+                return;
+            }
 
-        if (infixExpression->_operator == "<=") {
-            compile(infixExpression->right);
-            compile(infixExpression->left);
-            OpGreaterThanEquals opGreaterThanEquals = OpGreaterThanEquals();
-            std::vector<int> args;
-            emit(opGreaterThanEquals, 0, args);
-            return;
-        }
+            if (infixExpression->_operator == "<=") {
+                compile(infixExpression->right);
+                compile(infixExpression->left);
+                OpGreaterThanEquals opGreaterThanEquals = OpGreaterThanEquals();
+                std::vector<int> args;
+                emit(opGreaterThanEquals, 0, args);
+                return;
+            }
 
-        if (infixExpression->_operator == "==") {
-            compile(infixExpression->left);
-            compile(infixExpression->right);
-            OpEquals opEquals = OpEquals();
-            std::vector<int> args;
-            emit(opEquals, 0, args);
-            return;
-        }
+            if (infixExpression->_operator == "==") {
+                compile(infixExpression->left);
+                compile(infixExpression->right);
+                OpEquals opEquals = OpEquals();
+                std::vector<int> args;
+                emit(opEquals, 0, args);
+                return;
+            }
 
             compile(infixExpression->left);
             compile(infixExpression->right);
@@ -72,9 +72,9 @@ void Compiler::compile(ASTNode* node) {
                 emit(opAdd, 0, args);
             }
             if (infixExpression->_operator == "-") {
-                OpMinus opMinus = OpMinus();
+                OpSub opSub = OpSub();
                 std::vector<int> args;
-                emit(opMinus, 0, args);
+                emit(opSub, 0, args);
             }
             if (infixExpression->_operator == "*") {
                 OpMultiply opMultiply = OpMultiply();
@@ -99,6 +99,18 @@ void Compiler::compile(ASTNode* node) {
             break;
         }
         case AT_PREFIX_EXPRESSION: {
+            ASTPrefixExpression *stmt = (ASTPrefixExpression*) node;
+            compile(stmt->right);
+            if (stmt->_operator == "!") {
+                OpBang opBang;
+                std::vector<int> args;
+                emit(opBang, 0, args);
+            }
+            if (stmt->_operator == "-") {
+                OpMinus opMinus;
+                std::vector<int> args;
+                emit(opMinus, 0, args);
+            }
             break;
         }
         case AT_INTEGER: {
