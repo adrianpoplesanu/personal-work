@@ -71,7 +71,10 @@ public:
 class ASTPrefixExpression : public ASTNode {
 public:
     ASTNode* right;
-    std::string operand;
+    std::string _operator;
+
+    ASTPrefixExpression(Token, std::string);
+    ~ASTPrefixExpression();
 };
 
 class ASTLetStatement : public ASTNode {

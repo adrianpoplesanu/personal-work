@@ -164,6 +164,17 @@ std::string ASTInteger::inspect() {
     return "ASTInteger";
 }
 
+ASTPrefixExpression::ASTPrefixExpression(Token t, std::string o) {
+    type = AT_PREFIX_EXPRESSION;
+    ref_count = 0;
+    token = t;
+    _operator = o;
+}
+
+ASTPrefixExpression::~ASTPrefixExpression() {
+    //...
+}
+
 ASTBoolean::ASTBoolean() {
     type = AT_BOOLEAN;
     ref_count = 0;
