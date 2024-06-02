@@ -5,7 +5,7 @@
 Code::Code() {
     definitionsMap.insert(std::make_pair(OP_CONSTANT, new Definition("OpConstant", 1, new int[1] {2})));
     definitionsMap.insert(std::make_pair(OP_ADD, new Definition("OpAdd", 0, new int)));
-    definitionsMap.insert(std::make_pair(OP_MINUS, new Definition("OpMinus", 0, new int)));
+    definitionsMap.insert(std::make_pair(OP_SUB, new Definition("OpSub", 0, new int)));
     definitionsMap.insert(std::make_pair(OP_MULTIPLY, new Definition("OpMultiply", 0, new int)));
     definitionsMap.insert(std::make_pair(OP_DIVIDE, new Definition("OpDivide", 0, new int)));
     definitionsMap.insert(std::make_pair(OP_POP, new Definition("OpPop", 0, new int)));
@@ -14,6 +14,8 @@ Code::Code() {
     definitionsMap.insert(std::make_pair(OP_GREATERTHAN, new Definition("OpGreaterThan", 0, new int)));
     definitionsMap.insert(std::make_pair(OP_EQUALS, new Definition("OpEquals", 0, new int)));
     definitionsMap.insert(std::make_pair(OP_GREATERTHANEQUAL, new Definition("OpGreaterThanEqual", 0, new int)));
+    definitionsMap.insert(std::make_pair(OP_MINUS, new Definition("OpMinus", 0, new int)));
+    definitionsMap.insert(std::make_pair(OP_BANG, new Definition("OpBang", 0, new int)));
 }
 
 Code::~Code() {

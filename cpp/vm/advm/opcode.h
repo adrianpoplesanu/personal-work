@@ -4,7 +4,7 @@
 enum OpCodeByte {
     OP_CONSTANT,
     OP_ADD,
-    OP_MINUS,
+    OP_SUB,
     OP_MULTIPLY,
     OP_DIVIDE,
     OP_POP,
@@ -13,7 +13,9 @@ enum OpCodeByte {
     OP_EQUALS,
     OP_NOTEQUALS,
     OP_GREATERTHAN,
-    OP_GREATERTHANEQUAL
+    OP_GREATERTHANEQUAL,
+    OP_MINUS,
+    OP_BANG
 };
 
 class OpCode {
@@ -35,10 +37,10 @@ public:
     }
 };
 
-class OpMinus : public OpCode {
+class OpSub : public OpCode {
 public:
-    OpMinus() {
-        byteCode = OP_MINUS;
+    OpSub() {
+        byteCode = OP_SUB;
     }
 };
 
@@ -102,6 +104,20 @@ class OpGreaterThanEquals : public OpCode {
 public:
     OpGreaterThanEquals() {
         byteCode = OP_GREATERTHANEQUAL;
+    }
+};
+
+class OpMinus : public OpCode {
+public:
+    OpMinus() {
+        byteCode = OP_MINUS;
+    }
+};
+
+class OpBang : public OpCode {
+public:
+    OpBang() {
+        byteCode = OP_BANG;
     }
 };
 
