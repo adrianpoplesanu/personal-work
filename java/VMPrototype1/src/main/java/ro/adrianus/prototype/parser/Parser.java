@@ -20,9 +20,9 @@ public class Parser {
 
     public Parser() {
         lexer = new Lexer();
-        prefixParseFns.put(TokenTypeEnum.MINUS, this::parsePrefixExpression);
+        prefixParseFns.put(TokenTypeEnum.SUB, this::parsePrefixExpression);
         infixParseFns.put(TokenTypeEnum.PLUS, this::parseInfixExpression);
-        infixParseFns.put(TokenTypeEnum.MINUS, this::parseInfixExpression);
+        infixParseFns.put(TokenTypeEnum.SUB, this::parseInfixExpression);
         infixParseFns.put(TokenTypeEnum.MULTIPLY, this::parseInfixExpression);
         infixParseFns.put(TokenTypeEnum.DIVIDE, this::parseInfixExpression);
     }
