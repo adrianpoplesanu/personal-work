@@ -54,7 +54,9 @@ class Code:
             OpCodeByte.OP_GREATERTHAN: Definition("OpGreaterThan", 0, []),
             OpCodeByte.OP_GREATERTHAN_EQUAL: Definition("OpGreaterThanEqual", 0, []),
             OpCodeByte.OP_MINUS: Definition("OpMinus", 0, []),
-            OpCodeByte.OP_BANG: Definition("OpBang", 0, [])
+            OpCodeByte.OP_BANG: Definition("OpBang", 0, []),
+            OpCodeByte.OP_JUMP_NOT_TRUTHY: Definition("OpJumpNotTruthy", 1, [2]),
+            OpCodeByte.OP_JUMP: Definition("OpJump", 1, [2])
         }
 
     def make(self, opcode: OpCode, n, args):

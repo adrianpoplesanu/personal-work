@@ -13,6 +13,8 @@ class OpCodeByte:
     OP_GREATERTHAN_EQUAL = 11
     OP_BANG = 12
     OP_MINUS = 13
+    OP_JUMP_NOT_TRUTHY = 14
+    OP_JUMP = 15
 
 
 class OpCode:
@@ -75,6 +77,14 @@ class OpMinus(OpCode):
     byte_code = OpCodeByte.OP_MINUS
 
 
+class OpJumpNotTruthy(OpCode):
+    byte_code = OpCodeByte.OP_JUMP_NOT_TRUTHY
+
+
+class OpJump(OpCode):
+    byte_code = OpCodeByte.OP_JUMP
+
+
 op_constant = OpConstant()
 op_add = OpAdd()
 op_sub = OpSub()
@@ -89,3 +99,5 @@ op_greater_than = OpGreaterThan()
 op_greater_than_equal = OpGreaterThanEqual()
 op_bang = OpBang()
 op_minus = OpMinus()
+op_jump_not_truthy = OpJumpNotTruthy()
+op_jump = OpJump()
