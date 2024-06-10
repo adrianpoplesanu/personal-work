@@ -1,7 +1,7 @@
 from typing import Optional
 
 from ast import ASTProgram, ASTNode, ASTExpressionStatement, ASTInteger, ASTInfixExpression, ASTPrefixExpression, \
-    ASTBoolean
+    ASTBoolean, ASTIfExpression, ASTBlockStatement
 from lexer import Lexer
 from precedence_type import PrecedenceType, precedences
 from token_type import TokenType
@@ -13,7 +13,9 @@ class Parser:
         self.lexer = Lexer()
         self.current_token = None
         self.peek_token = None
-        self.statement_parse_fns = {}
+        self.statement_parse_fns = {
+            TokenType.IF: self.parse_if_statement
+        }
 
         self.prefix_parse_fns = {
             TokenType.IDENT: self.parse_identifier,
@@ -55,7 +57,7 @@ class Parser:
         self.current_token = self.peek_token
         self.peek_token = self.lexer.next_token()
 
-    def current_token_id(self, token_type : TokenType):
+    def current_token_is(self, token_type : TokenType):
         return self.current_token.token_type == token_type
 
     def peek_token_is(self, token_type: TokenType):
@@ -66,7 +68,8 @@ class Parser:
             self.next_token()
             return True
         else:
-            self.errors.append('ERROR: i was expecting a different token here: ' + token_type)
+            #self.errors.append('ERROR: i was expecting a different token here: ' + token_type)
+            print(('ERROR: i was expecting a different token here: ' + str(token_type)))
             return False
 
     def peek_precedence(self):
@@ -82,7 +85,7 @@ class Parser:
     def parse_statement(self) -> Optional[ASTNode]:
         if self.current_token.token_type in self.statement_parse_fns:
             return self.statement_parse_fns[self.current_token.token_type]()
-        return self.parse_expressions_statement()
+        return self.parse_expression_statement()
 
     def parse_identifier(self):
         pass
@@ -95,7 +98,7 @@ class Parser:
         stmt = ASTBoolean(token=self.current_token, value=bool(self.current_token.token_type == TokenType.TRUE))
         return stmt
 
-    def parse_expressions_statement(self) -> Optional[ASTNode]:
+    def parse_expression_statement(self) -> Optional[ASTNode]:
         stmt = ASTExpressionStatement(token=self.current_token)
         stmt.expression = self.parse_expression(PrecedenceType.LOWEST)
         if self.peek_token_is(TokenType.SEMICOLON):
@@ -114,6 +117,43 @@ class Parser:
         if not self.expect_peek(TokenType.RPAREN):
             return None
         return expr
+
+    def parse_if_statement(self):
+        expr = ASTIfExpression(token=self.current_token)
+        if not self.expect_peek(TokenType.LPAREN):
+            return None
+        self.next_token()
+        expr.condition = self.parse_expression(PrecedenceType.LOWEST)
+        if not self.expect_peek(TokenType.RPAREN):
+            return None
+        if not self.expect_peek(TokenType.LBRACE):
+            expr.consequence = self.parse_single_block_statement()
+        else:
+            expr.consequence = self.parse_block_statement()
+        if self.peek_token_is(TokenType.ELSE):
+            self.next_token()
+            if not self.expect_peek(TokenType.LBRACE):
+                expr.alternative = self.parse_single_block_statement()
+            else:
+                expr.alternative = self.parse_block_statement()
+        return expr
+
+    def parse_block_statement(self):
+        block = ASTBlockStatement(token=self.current_token)
+        self.next_token()
+        while (not self.current_token_is(TokenType.RBRACE)) and (not self.current_token_is(TokenType.EOF)):
+            stmt = self.parse_statement()
+            if stmt:
+                block.statements.append(stmt)
+            self.next_token()
+        return block
+
+    def parse_single_block_statement(self):
+        block = ASTBlockStatement(token=self.current_token)
+        self.next_token()
+        stmt = self.parse_statement()
+        block.statements.append(stmt)
+        return block
 
     def parse_infix_expression(self, left):
         expr = ASTInfixExpression(token=self.current_token, operator=self.current_token.literal, left=left)

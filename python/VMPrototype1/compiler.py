@@ -78,6 +78,8 @@ class Compiler:
             else:
                 opcode = OpFalse()
                 self.emit(opcode, 0, [])
+        elif node.statement_type == StatementType.IF_EXPRESSION:
+            print("TODO: handle if expression")
         else:
             print("severe error: node type unknown " + statement_type_map[node.statement_type])
 

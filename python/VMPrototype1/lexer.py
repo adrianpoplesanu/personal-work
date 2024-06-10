@@ -47,6 +47,9 @@ class Lexer:
         elif self.ch == '*':
             token.token_type = TokenType.ASTERISK
             token.literal = '*'
+        elif self.ch == ';':
+            token.type = TokenType.SEMICOLON
+            token.literal = ';'
         elif self.ch == '/':
             token.token_type = TokenType.SLASH
             token.literal = '/'
@@ -59,6 +62,12 @@ class Lexer:
         elif self.ch == '!':
             token.token_type = TokenType.BANG
             token.literal = "!"
+        elif self.ch == '{':
+            token.token_type = TokenType.LBRACE
+            token.literal = "{"
+        elif self.ch == '}':
+            token.token_type = TokenType.RBRACE
+            token.literal = "}"
         elif self.ch == '<':
             if self.peek_char() == '=':
                 self.read_char()

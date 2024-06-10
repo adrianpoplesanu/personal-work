@@ -8,6 +8,8 @@ class StatementType:
     INFIX_EXPRESSION = 'INFIX_EXPRESSION'
     PREFIX_EXPRESSION = 'PREFIX_EXPRESSION'
     BOOLEAN = 'BOOLEAN'
+    IF_EXPRESSION = 'IF_EXPRESSION'
+    BLOCK_STATEMENT = 'BLOCK_STATEMENT'
 
 
 statement_type_map = {
@@ -16,7 +18,9 @@ statement_type_map = {
     StatementType.INTEGER_LITERAL: 'INTEGER_LITERAL',
     StatementType.INFIX_EXPRESSION: 'INFIX_EXPRESSION',
     StatementType.PREFIX_EXPRESSION: 'PREFIX_EXPRESSION',
-    StatementType.BOOLEAN: 'BOOLEAN'
+    StatementType.BOOLEAN: 'BOOLEAN',
+    StatementType.IF_EXPRESSION: 'IF_EXPRESSION',
+    StatementType.BLOCK_STATEMENT: 'BLOCK_STATEMENT'
 }
 
 
@@ -120,3 +124,49 @@ class ASTBoolean(ASTNode):
 
     def __str__(self):
         return 'ASTBoolean[' + str(self.value) + ']'
+
+
+class ASTIfExpression(ASTNode):
+    statement_type = StatementType.IF_EXPRESSION
+
+    def __init__(self, token=None, condition=None, consequence=None, alternative=None):
+        """
+        @param token: the node's token
+        @param condition: expression???
+        @param consequence: ASTBlockStatement
+        @param alternative: ASTBlockStatement
+        """
+        self.token = token
+        self.condition = condition
+        self.consequence = consequence
+        self.alternative = alternative
+
+    def token_literal(self):
+        return self.token.literal
+
+    def __str__(self):
+        return 'ASTIfExpression'
+
+
+class ASTBlockStatement(ASTNode):
+    statement_type = StatementType.BLOCK_STATEMENT
+
+    def __init__(self, token=None, statements=None):
+        """
+        @param token: the node's token
+        @param statements: list
+        """
+        self.token = token
+        if statements:
+            self.statements = statements
+        else:
+            self.statements = []
+
+    def token_literal(self):
+        return self.token.literal
+
+    def __str__(self):
+        out = ""
+        for statement in self.statements:
+            out += str(statement)
+        return out
