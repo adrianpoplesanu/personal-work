@@ -1,0 +1,28 @@
+{
+    "age": 30,
+    "args": [
+        1,
+        2,
+        3,
+        "aaa",
+        "bbb"
+    ],
+    "base": {
+        "age": 30,
+        "city": "New York",
+        "name": "John"
+    },
+    "city": "New York",
+    "name": "John",
+    "records": [
+        {
+            "aaa": 12,
+            "bbb": "test",
+            "ccc": [
+                2,
+                3,
+                4
+            ]
+        }
+    ]
+}

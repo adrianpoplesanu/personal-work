@@ -1,0 +1,1 @@
+{ "name":"John", "age":30, "city":"New York", "base": { "name":"John", "age":30, "city":"New York" }, "args": ["bbb", "aaa", 2, 1, 3], "records": [{"aaa": 12, "bbb": "test", "ccc":[4,3,2]}]}
