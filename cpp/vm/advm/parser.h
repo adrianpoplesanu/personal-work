@@ -47,7 +47,7 @@ public:
     PrecedenceType peekPrecedence();
     bool currentTokenIs(TokenType);
     bool peekTokenIs(TokenType);
-    bool expectToken(TokenType type);
+    bool expectPeek(TokenType type);
     ASTNode *parseStatement();
     ASTNode* parseExpressionStatement();
     ASTNode* parseLetStatement();
@@ -61,8 +61,11 @@ public:
     ASTNode* parseInfixExpression(ASTNode*);
     ASTNode* parseIdent();
     ASTNode* parseIntegerLiteral();
-    ASTNode *parseBooleanExpression();
-    ASTNode *parseGroupedExpression();
+    ASTNode* parseBooleanExpression();
+    ASTNode* parseGroupedExpression();
+    ASTNode* parseIfStatement();
+    ASTNode* parseSingleBlockStatement();
+    ASTNode* parseBlockStatement();
 };
 
 #endif

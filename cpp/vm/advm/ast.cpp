@@ -172,7 +172,7 @@ ASTPrefixExpression::ASTPrefixExpression(Token t, std::string o) {
 }
 
 ASTPrefixExpression::~ASTPrefixExpression() {
-    //...
+    free_memory_ASTNode(right);
 }
 
 ASTBoolean::ASTBoolean() {
@@ -195,6 +195,38 @@ ASTBoolean::ASTBoolean(Token t, bool v) {
 
 ASTBoolean::~ASTBoolean() {
     //...
+}
+
+ASTIfStatement::ASTIfStatement() {
+    //...
+}
+
+ASTIfStatement::ASTIfStatement(Token t) {
+
+}
+
+std::string ASTIfStatement::inspect() {
+    return "todo: implement this";
+}
+
+std::string ASTIfStatement::toString() {
+    return "todo: implement this";
+}
+
+ASTBlockStatement::ASTBlockStatement() {
+
+}
+
+ASTBlockStatement::ASTBlockStatement(Token t) {
+
+}
+
+std::string ASTBlockStatement::inspect() {
+    return "todo: implement this";
+}
+
+std::string ASTBlockStatement::toString() {
+    return "todo: implement this";
 }
 
 std::string ASTBoolean::toString() {

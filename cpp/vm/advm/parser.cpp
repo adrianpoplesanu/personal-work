@@ -8,6 +8,7 @@ Parser::Parser() {
     prefixParseFns.insert(std::make_pair(TT_TRUE, &Parser::parseBooleanExpression));
     prefixParseFns.insert(std::make_pair(TT_FALSE, &Parser::parseBooleanExpression));
     prefixParseFns.insert(std::make_pair(TT_LPAREN, &Parser::parseGroupedExpression));
+    prefixParseFns.insert(std::make_pair(TT_IF, &Parser::parseIfStatement));
     infixParseFns.insert(std::make_pair(TT_PLUS, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_MULTIPLY, &Parser::parseInfixExpression));
@@ -35,7 +36,7 @@ bool Parser::peekTokenIs(TokenType type) {
     return peekToken.type == type;
 }
 
-bool Parser::expectToken(TokenType type) {
+bool Parser::expectPeek(TokenType type) {
     if (peekTokenIs(type)) {
         nextToken();
         return true;
@@ -136,10 +137,64 @@ ASTNode* Parser::parseBooleanExpression() {
 ASTNode* Parser::parseGroupedExpression() {
     nextToken();
     ASTNode *expr = parseExpression(PT_LOWEST);
-    if (!expectToken(TT_RPAREN)) {
+    if (!expectPeek(TT_RPAREN)) {
         return NULL;
     }
     return expr;
+}
+
+ASTNode* Parser::parseIfStatement() {
+    ASTIfStatement* expr = new ASTIfStatement(currentToken);
+    if (!expectPeek(TT_LPAREN)) {
+        free_memory_ASTNode(expr);
+        return NULL;
+    }
+    nextToken();
+    expr->condition = parseExpression(PT_LOWEST);
+    if (!expectPeek(TT_RPAREN)) {
+        free_memory_ASTNode(expr);
+        return NULL;
+    }
+    if (!expectPeek(TT_LBRACE)) {
+        expr->consequence = parseSingleBlockStatement();
+    } else {
+        expr->consequence = parseBlockStatement();
+    }
+
+    if (peekTokenIs(TT_ELSE)) {
+        nextToken();
+        if (!expectPeek(TT_LBRACE)) {
+            expr->alternative = parseSingleBlockStatement();
+        } else {
+            expr->alternative = parseBlockStatement();
+        }
+    }
+    return expr;
+}
+
+ASTNode* Parser::parseSingleBlockStatement() {
+    ASTBlockStatement* block = new ASTBlockStatement(currentToken);
+    nextToken();
+    ASTNode* stmt = (ASTNode*)parseStatement();
+    if (stmt) {
+        block->statements.push_back(stmt);
+    }
+    return block;
+
+}
+
+ASTNode* Parser::parseBlockStatement() {
+    ASTBlockStatement* block = new ASTBlockStatement(currentToken);
+    nextToken();
+    while(!currentTokenIs(TT_RBRACE) && !currentTokenIs(TT_EOF)) {
+        ASTNode* stmt = (ASTNode*)parseStatement();
+        if (stmt) {
+            block->statements.push_back(stmt);
+        }
+        nextToken();
+    }
+    return block;
+
 }
 
 ASTNode* Parser::parsePrefixExpression() {

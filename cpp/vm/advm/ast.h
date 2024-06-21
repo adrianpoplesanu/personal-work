@@ -147,11 +147,24 @@ public:
 
 class ASTIfStatement : public ASTNode {
 public:
+    ASTNode *condition;
+    ASTNode *consequence;
+    ASTNode *alternative;
 
-    //ASTIfStatement();
-    //ASTIfStatement(Token);
-    //virtual std::string inspect();
-    //virtual std::string toString();
+    ASTIfStatement();
+    ASTIfStatement(Token);
+    virtual std::string inspect();
+    virtual std::string toString();
+};
+
+class ASTBlockStatement : public ASTNode {
+public:
+    std::vector<ASTNode*> statements;
+
+    ASTBlockStatement();
+    ASTBlockStatement(Token);
+    virtual std::string inspect();
+    virtual std::string toString();
 };
 
 void Ad_INCREF(ASTNode*);
