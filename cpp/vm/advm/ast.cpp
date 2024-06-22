@@ -198,11 +198,12 @@ ASTBoolean::~ASTBoolean() {
 }
 
 ASTIfStatement::ASTIfStatement() {
-    //...
+    type = AT_IF_STATEMENT;
 }
 
 ASTIfStatement::ASTIfStatement(Token t) {
-
+    type = AT_IF_STATEMENT;
+    token = t;
 }
 
 std::string ASTIfStatement::inspect() {
@@ -214,11 +215,12 @@ std::string ASTIfStatement::toString() {
 }
 
 ASTBlockStatement::ASTBlockStatement() {
-
+    type = AT_BLOCK_STATEMENT;
 }
 
 ASTBlockStatement::ASTBlockStatement(Token t) {
-
+    type = AT_BLOCK_STATEMENT;
+    token = t;
 }
 
 std::string ASTBlockStatement::inspect() {

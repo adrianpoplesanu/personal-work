@@ -159,6 +159,10 @@ void Compiler::compile(ASTNode* node) {
         case AT_IF_STATEMENT: {
             break;
         }
+        default: {
+            std::cout << "ERROR: unhndled ast type compiled\n";
+            break;
+        }
     }
 }
 
