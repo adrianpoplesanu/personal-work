@@ -11,7 +11,7 @@ void Compiler::reset() {
 
 void Compiler::compile(ASTNode* node) {
     if (node == NULL) {
-        std::cout << "oops! severe error\n";
+        std::cout << "severe error: node is null\n";
         return;
     }
     switch(node->type) {
@@ -157,6 +157,7 @@ void Compiler::compile(ASTNode* node) {
             break;
         }
         case AT_IF_STATEMENT: {
+            std::cout << "TODO: handle if expression\n";
             break;
         }
         default: {

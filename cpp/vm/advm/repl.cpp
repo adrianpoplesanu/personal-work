@@ -64,6 +64,7 @@ void Repl::executeFile(std::ifstream &target) {
         parser.load(text);
         program->reset();
         parser.buildProgramStatement(program);
+        std::cout << program->toString();
 
         compiler.reset();
         compiler.compile(program);

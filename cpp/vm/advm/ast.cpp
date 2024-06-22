@@ -29,11 +29,16 @@ void ASTProgram::reset() {
 }
 
 std::string ASTProgram::toString() {
-    return "AstProgram";
+    std::string out = "";
+    out += "AstProgram\n";
+    for (ASTNode* it : statements) {
+        out += it->toString();
+    }
+    return out;
 }
 
 std::string ASTProgram::inspect() {
-    return "AstProgram";
+    return "AstProgram\n";
 }
 
 ASTExpressionStatement::ASTExpressionStatement() {
@@ -59,7 +64,10 @@ ASTExpressionStatement::~ASTExpressionStatement() {
 }
 
 std::string ASTExpressionStatement::toString() {
-    return "ASTExpressionStatement";
+    if (expression == NULL) {
+        return "ASTExpressionStatement[None]\n";
+    }
+    return "ASTExpressionStatement[" + expression->toString() + "]\n";
 }
 
 std::string ASTExpressionStatement::inspect() {
@@ -157,7 +165,7 @@ ASTInteger::~ASTInteger() {
 }
 
 std::string ASTInteger::toString() {
-    return "ASTInteger";
+    return "ASTInteger[" + std::to_string(value) + "]";
 }
 
 std::string ASTInteger::inspect() {
@@ -211,7 +219,7 @@ std::string ASTIfStatement::inspect() {
 }
 
 std::string ASTIfStatement::toString() {
-    return "todo: implement this";
+    return "ASTIfExpression\n";
 }
 
 ASTBlockStatement::ASTBlockStatement() {

@@ -1,6 +1,8 @@
 #include "parser.h"
 
 Parser::Parser() {
+    statementParseFns.insert(std::make_pair(TT_IF, &Parser::parseIfStatement));
+
     prefixParseFns.insert(std::make_pair(TT_IDENT, &Parser::parseIdent));
     prefixParseFns.insert(std::make_pair(TT_INT, &Parser::parseIntegerLiteral));
     prefixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parsePrefixExpression));
@@ -8,7 +10,7 @@ Parser::Parser() {
     prefixParseFns.insert(std::make_pair(TT_TRUE, &Parser::parseBooleanExpression));
     prefixParseFns.insert(std::make_pair(TT_FALSE, &Parser::parseBooleanExpression));
     prefixParseFns.insert(std::make_pair(TT_LPAREN, &Parser::parseGroupedExpression));
-    prefixParseFns.insert(std::make_pair(TT_IF, &Parser::parseIfStatement));
+
     infixParseFns.insert(std::make_pair(TT_PLUS, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_MULTIPLY, &Parser::parseInfixExpression));
@@ -78,6 +80,8 @@ ASTNode* Parser::parseStatement() {
         return parseComment();
     if (currentToken.type == TT_SINGLECOMMENT)
         return parseSingleLineComment();
+    if (currentToken.type == TT_IF)
+        return parseIfStatement();
     return parseExpressionStatement();
 }
 

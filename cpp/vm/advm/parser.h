@@ -35,6 +35,7 @@ public:
     typedef ASTNode* (Parser::*PrefixCallback)();
     typedef ASTNode* (Parser::*InfixCallback)(ASTNode*);
 
+    std::map<TokenType, PrefixCallback> statementParseFns;
     std::map<TokenType, PrefixCallback> prefixParseFns;
     std::map<TokenType, InfixCallback> infixParseFns;
 
