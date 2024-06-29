@@ -48,7 +48,7 @@ class Lexer:
             token.token_type = TokenType.ASTERISK
             token.literal = '*'
         elif self.ch == ';':
-            token.type = TokenType.SEMICOLON
+            token.token_type = TokenType.SEMICOLON
             token.literal = ';'
         elif self.ch == '/':
             token.token_type = TokenType.SLASH

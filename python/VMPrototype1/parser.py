@@ -48,6 +48,7 @@ class Parser:
 
     def build_program_statements(self, program: ASTProgram):
         while self.current_token.token_type != TokenType.EOF:
+            # print(self.current_token)
             stmt = self.parse_statement()
             if stmt:
                 program.statements.append(stmt)
