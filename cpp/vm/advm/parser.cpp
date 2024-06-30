@@ -55,7 +55,7 @@ void Parser::load(std::string source) {
 
 void Parser::buildProgramStatement(ASTProgram *program) {
     while(currentToken.type != TT_EOF) {
-        //std::cout << currentToken.toString() << "\n";
+        // std::cout << currentToken.toString() << "\n";
         ASTNode* stmt = parseStatement();
         program->statements.push_back(stmt);
         nextToken();
