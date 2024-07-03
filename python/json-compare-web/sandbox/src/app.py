@@ -12,8 +12,9 @@ templates = Jinja2Templates(directory="templates")
 envs = ['env1', 'env2']
 hosts = {'env1': ['aaa.com', 'bbb.com'], 'env2': ['ccc.com', 'ddd.com']}
 
-@app.get("/compare")
-async def compare():
+@app.post("/compare")
+async def compare(request: Request):
+    print(request)
     return {"message": "Hello World"}
 
 @app.get("/", response_class=HTMLResponse)
