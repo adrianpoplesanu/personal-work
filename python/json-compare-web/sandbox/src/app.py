@@ -14,7 +14,9 @@ hosts = {'env1': ['aaa.com', 'bbb.com'], 'env2': ['ccc.com', 'ddd.com']}
 
 @app.post("/compare")
 async def compare(request: Request):
-    print(request)
+    body = await request.json()
+    print(body)
+    print(type(body))
     return {"message": "Hello World"}
 
 @app.get("/", response_class=HTMLResponse)
