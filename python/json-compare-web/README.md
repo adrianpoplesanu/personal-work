@@ -1,5 +1,11 @@
-```python3 -m virtualenv sandbox```
+```
+python3 -m virtualenv sandbox
+```
 
-```pip install -r requirements.txt``
+```
+pip install -r requirements.txt
+``
 
-```fastapi dev app.py````
+```
+fastapi dev app.py
+````
