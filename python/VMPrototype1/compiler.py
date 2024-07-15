@@ -4,7 +4,8 @@ from code_ad import Code
 from instructions import Instructions
 from objects import AdObjectInteger, AdObject
 from opcode_ad import OpAdd, OpSub, OpMultiply, OpDivide, OpConstant, OpTrue, OpFalse, OpPop, op_equal, op_not_equal, \
-    op_greater_than, op_greater_than_equal, op_add, op_sub, op_multiply, op_divide, op_pop, op_bang, op_minus
+    op_greater_than, op_greater_than_equal, op_add, op_sub, op_multiply, op_divide, op_pop, op_bang, op_minus, \
+    op_jump_not_truthy
 
 
 class Compiler:
@@ -79,7 +80,16 @@ class Compiler:
                 opcode = OpFalse()
                 self.emit(opcode, 0, [])
         elif node.statement_type == StatementType.IF_EXPRESSION:
-            print("TODO: handle if expression")
+            self.compile(node.condition)
+            # bogus 9999 value
+            args = []
+            args.append(9999)
+            self.emit(op_jump_not_truthy, 1, args)
+
+            self.compile(node.consequence)
+        elif node.statement_type == StatementType.BLOCK_STATEMENT:
+            for stmt in node.statements:
+                self.compile(stmt)
         else:
             print("severe error: node type unknown " + statement_type_map[node.statement_type])
 
