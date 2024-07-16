@@ -1,6 +1,7 @@
 from ast import ASTNode, StatementType, statement_type_map
 from bytecode import Bytecode
 from code_ad import Code
+from emitted_instruction import EmittedInstruction
 from instructions import Instructions
 from objects import AdObjectInteger, AdObject
 from opcode_ad import OpAdd, OpSub, OpMultiply, OpDivide, OpConstant, OpTrue, OpFalse, OpPop, op_equal, op_not_equal, \
@@ -14,6 +15,8 @@ class Compiler:
         self.bytecode = None
         self.code = Code()
         self.constants = []
+        self.last_instruction = None
+        self.previous_instruction = None
 
     def reset(self):
         self.instructions = Instructions()
@@ -98,6 +101,7 @@ class Compiler:
             args = []
         size, instruction = self.code.make(opcode, n, args)
         pos = self.add_instruction(size, instruction)
+        self.set_last_instruction(opcode, pos)
         return pos
 
     def get_bytecode(self) -> Bytecode:
@@ -115,3 +119,10 @@ class Compiler:
     def add_constant(self, obj: AdObject) -> int:
         self.constants.append(obj)
         return len(self.constants) - 1
+
+    def set_last_instruction(self, op, pos):
+        previous = self.last_instruction
+        last = EmittedInstruction(op, pos)
+
+        self.previous_instruction = previous
+        self.last_instruction = last

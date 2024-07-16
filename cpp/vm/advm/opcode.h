@@ -15,7 +15,9 @@ enum OpCodeByte {
     OP_GREATERTHAN,
     OP_GREATERTHANEQUAL,
     OP_MINUS,
-    OP_BANG
+    OP_BANG,
+    OP_JUMP_NOT_TRUTHY,
+    OP_JUMP
 };
 
 class OpCode {
@@ -118,6 +120,20 @@ class OpBang : public OpCode {
 public:
     OpBang() {
         byteCode = OP_BANG;
+    }
+};
+
+class OpJumpNotTruthy : public OpCode {
+public:
+    OpJumpNotTruthy() {
+        byteCode = OP_JUMP_NOT_TRUTHY;
+    }
+};
+
+class OpJump : public OpCode {
+public:
+    OpJump() {
+        byteCode = OP_JUMP;
     }
 };
 
