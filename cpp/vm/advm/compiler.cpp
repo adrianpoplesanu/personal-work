@@ -157,7 +157,22 @@ void Compiler::compile(ASTNode* node) {
             break;
         }
         case AT_IF_STATEMENT: {
-            std::cout << "TODO: handle if expression\n";
+            ASTIfStatement *stmt = (ASTIfStatement*) node;
+            compile(stmt->condition);
+            OpJumpNotTruthy opJumpNotTruthy = OpJumpNotTruthy();
+            std::vector<int> args;
+            // bogus 9999 value
+            args.push_back(9999);
+            emit(opJumpNotTruthy, 1, args);
+
+            compile(stmt->consequence);
+            break;
+        }
+        case AT_BLOCK_STATEMENT: {
+            ASTBlockStatement *stmt = (ASTBlockStatement*) node;
+            for (auto& it : stmt->statements) {
+                compile(it);
+            }
             break;
         }
         default: {
