@@ -6,6 +6,7 @@
 #include "code.h"
 #include "opcode.h"
 #include "gc.h"
+#include "emitted_instruction.h"
 
 class Compiler {
 public:
@@ -14,6 +15,8 @@ public:
     Code code;
     std::vector<AdObject*> constants;
     GarbageCollector *gc;
+    EmittedInstruction previousInstruction = EmittedInstruction();
+    EmittedInstruction lastInstruction = EmittedInstruction();
 
     Compiler();
     void reset();
@@ -21,6 +24,9 @@ public:
     int emit(OpCode, int, std::vector<int>&);
     int addInstruction(int, unsigned char *);
     int addConstant(AdObject*);
+    void setLastInstruction(OpCode, int);
+    bool isLastInstructionPop();
+    void removeLastPop();
     Bytecode getBytecode();
 };
 

@@ -209,3 +209,16 @@ Bytecode Compiler::getBytecode() {
     bytecode.constants = constants;
     return bytecode;
 }
+
+void Compiler::setLastInstruction(OpCode opcode, int pos) {
+    //...
+}
+
+bool Compiler::isLastInstructionPop() {
+    //...
+    return false;
+}
+
+void Compiler::removeLastPop() {
+    //...
+}

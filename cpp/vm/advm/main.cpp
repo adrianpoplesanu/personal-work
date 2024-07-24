@@ -35,6 +35,8 @@
 #include "token.cpp"
 #include "vm.h"
 #include "vm.cpp"
+#include "emitted_instruction.h"
+#include "emitted_instruction.cpp"
 
 int main(int argc, char* argv[]) {
     if (RUN_TESTS) {
