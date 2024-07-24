@@ -8,3 +8,7 @@ class Instructions:
     def add(self, _byte):
         self.bytes.append(_byte)
         self.size += 1
+
+    def remove_last(self):
+        self.bytes.pop()
+        self.size -= 1

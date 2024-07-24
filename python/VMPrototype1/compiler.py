@@ -90,6 +90,9 @@ class Compiler:
             self.emit(op_jump_not_truthy, 1, args)
 
             self.compile(node.consequence)
+
+            if self.last_instruction_is_pop():
+                self.remove_last_pop()
         elif node.statement_type == StatementType.BLOCK_STATEMENT:
             for stmt in node.statements:
                 self.compile(stmt)
@@ -120,9 +123,16 @@ class Compiler:
         self.constants.append(obj)
         return len(self.constants) - 1
 
-    def set_last_instruction(self, op, pos):
+    def set_last_instruction(self, op, pos) -> None:
         previous = self.last_instruction
         last = EmittedInstruction(op, pos)
 
         self.previous_instruction = previous
         self.last_instruction = last
+
+    def last_instruction_is_pop(self) -> bool:
+        return self.last_instruction.opcode == op_pop
+
+    def remove_last_pop(self) -> None:
+        self.instructions.remove_last()
+        self.last_instruction = self.previous_instruction
