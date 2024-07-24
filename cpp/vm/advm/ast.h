@@ -154,6 +154,7 @@ public:
 
     ASTIfStatement();
     ASTIfStatement(Token);
+    ~ASTIfStatement();
     virtual std::string inspect();
     virtual std::string toString();
 };
@@ -164,6 +165,7 @@ public:
 
     ASTBlockStatement();
     ASTBlockStatement(Token);
+    ~ASTBlockStatement();
     virtual std::string inspect();
     virtual std::string toString();
 };

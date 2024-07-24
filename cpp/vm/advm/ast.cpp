@@ -214,6 +214,12 @@ ASTIfStatement::ASTIfStatement(Token t) {
     token = t;
 }
 
+ASTIfStatement::~ASTIfStatement() {
+    free_memory_ASTNode(condition);
+    free_memory_ASTNode(consequence);
+    free_memory_ASTNode(alternative);
+}
+
 std::string ASTIfStatement::inspect() {
     return "todo: implement this";
 }
@@ -229,6 +235,12 @@ ASTBlockStatement::ASTBlockStatement() {
 ASTBlockStatement::ASTBlockStatement(Token t) {
     type = AT_BLOCK_STATEMENT;
     token = t;
+}
+
+ASTBlockStatement::~ASTBlockStatement() {
+    for (auto& it : statements) {
+        free_memory_ASTNode(it);
+    }
 }
 
 std::string ASTBlockStatement::inspect() {
@@ -317,6 +329,10 @@ void free_memory_ASTNode(ASTNode* node) {
         }
         case AT_IF_STATEMENT: {
             delete (ASTIfStatement*) node;
+            break;
+        }
+        case AT_BLOCK_STATEMENT: {
+            delete (ASTBlockStatement*) node;
             break;
         }
         default: {
