@@ -59,7 +59,7 @@ class Code:
             OpCodeByte.OP_JUMP: Definition("OpJump", 1, [2])
         }
 
-    def make(self, opcode: OpCode, n, args):
+    def make(self, opcode: OpCode, n, args) -> tuple:
         definition = self.lookup(opcode.byte_code)
         instruction_len = 1
         for i in range(definition.size):

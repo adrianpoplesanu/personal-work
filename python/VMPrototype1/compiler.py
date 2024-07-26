@@ -6,7 +6,7 @@ from instructions import Instructions
 from objects import AdObjectInteger, AdObject
 from opcode_ad import OpAdd, OpSub, OpMultiply, OpDivide, OpConstant, OpTrue, OpFalse, OpPop, op_equal, op_not_equal, \
     op_greater_than, op_greater_than_equal, op_add, op_sub, op_multiply, op_divide, op_pop, op_bang, op_minus, \
-    op_jump_not_truthy
+    op_jump_not_truthy, OpCode
 
 
 class Compiler:
@@ -87,12 +87,15 @@ class Compiler:
             # bogus 9999 value
             args = []
             args.append(9999)
-            self.emit(op_jump_not_truthy, 1, args)
+            jump_not_truthy_pos = self.emit(op_jump_not_truthy, 1, args)
 
             self.compile(node.consequence)
 
             if self.last_instruction_is_pop():
                 self.remove_last_pop()
+
+            after_consequence_pos = len(self.instructions.bytes)
+            self.change_operand(jump_not_truthy_pos, after_consequence_pos)
         elif node.statement_type == StatementType.BLOCK_STATEMENT:
             for stmt in node.statements:
                 self.compile(stmt)
@@ -114,7 +117,7 @@ class Compiler:
         return bytecode
 
     def add_instruction(self, size: int, instruction) -> int:
-        pos_new_instruction = size
+        pos_new_instruction = len(self.instructions.bytes)
         for i in range(size):
             self.instructions.add(instruction[i])
         return pos_new_instruction
@@ -136,3 +139,14 @@ class Compiler:
     def remove_last_pop(self) -> None:
         self.instructions.remove_last()
         self.last_instruction = self.previous_instruction
+
+    def replace_instruction(self, pos: int, new_instruction: tuple):
+        # TODO: check if list is the correct type for new_instruction
+        for i, element in enumerate(new_instruction[1]):
+            self.instructions.bytes[pos + i] = new_instruction[1][i]
+
+    def change_operand(self, op_pos: int, operand: int):
+        op = OpCode()
+        op.byte_code = self.instructions.bytes[op_pos]
+        new_instruction = self.code.make(op, 1, [operand])
+        self.replace_instruction(op_pos, new_instruction)
