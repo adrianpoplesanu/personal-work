@@ -8,6 +8,7 @@ public:
     int size;
     std::vector<unsigned char> bytes;
     void add(unsigned char);
+    void removeLast();
 };
 
 #endif

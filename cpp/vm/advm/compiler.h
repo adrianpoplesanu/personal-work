@@ -26,7 +26,7 @@ public:
     int addConstant(AdObject*);
     void setLastInstruction(OpCode, int);
     bool isLastInstructionPop();
-    void removeLastPop();
+    void removeLastInstruction();
     Bytecode getBytecode();
 };
 

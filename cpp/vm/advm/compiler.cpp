@@ -166,6 +166,10 @@ void Compiler::compile(ASTNode* node) {
             emit(opJumpNotTruthy, 1, args);
 
             compile(stmt->consequence);
+
+            if (isLastInstructionPop()) {
+                removeLastInstruction();
+            }
             break;
         }
         case AT_BLOCK_STATEMENT: {
@@ -186,15 +190,16 @@ int Compiler::emit(OpCode opcode, int n, std::vector<int> &args) {
     int size;
     unsigned char *ins = code.make(opcode, n, args, size);
     int pos = addInstruction(size, ins);
+    delete[] ins; // am mutat asta din addInstruction aici pentru ca aici se primeste adresa, aici e responsabilitatea de dezalocare
+    setLastInstruction(opcode, pos);
     return pos;
 }
 
 int Compiler::addInstruction(int size, unsigned char *ins) {
-    int posNewInstruction = size;
+    int posNewInstruction = instructions.size;
     for (int i = 0; i < size; i++) {
         instructions.add(ins[i]);
     }
-    delete[] ins; // aici a mers delete-ul asta, dar ma intreb daca asta e momentul oportun sa sterg pointerii astia
     return posNewInstruction;
 }
 
@@ -211,14 +216,18 @@ Bytecode Compiler::getBytecode() {
 }
 
 void Compiler::setLastInstruction(OpCode opcode, int pos) {
-    //...
+    EmittedInstruction previous = lastInstruction;
+    EmittedInstruction last = EmittedInstruction(opcode, pos);
+
+    previousInstruction = previous;
+    lastInstruction = last;
 }
 
 bool Compiler::isLastInstructionPop() {
-    //...
-    return false;
+    return lastInstruction.opcode.byteCode == OP_POP;
 }
 
-void Compiler::removeLastPop() {
-    //...
+void Compiler::removeLastInstruction() {
+    instructions.removeLast();
+    lastInstruction = previousInstruction;
 }
