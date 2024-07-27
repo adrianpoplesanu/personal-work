@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from definition import Definition
 from instructions import Instructions
 from opcode_ad import OpCodeByte, OpCode
@@ -59,7 +61,7 @@ class Code:
             OpCodeByte.OP_JUMP: Definition("OpJump", 1, [2])
         }
 
-    def make(self, opcode: OpCode, n, args) -> tuple:
+    def make(self, opcode: OpCode, n, args) -> Tuple[int, list]:
         definition = self.lookup(opcode.byte_code)
         instruction_len = 1
         for i in range(definition.size):

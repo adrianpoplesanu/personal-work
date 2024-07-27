@@ -6,7 +6,7 @@ from instructions import Instructions
 from objects import AdObjectInteger, AdObject
 from opcode_ad import OpAdd, OpSub, OpMultiply, OpDivide, OpConstant, OpTrue, OpFalse, OpPop, op_equal, op_not_equal, \
     op_greater_than, op_greater_than_equal, op_add, op_sub, op_multiply, op_divide, op_pop, op_bang, op_minus, \
-    op_jump_not_truthy, OpCode
+    op_jump_not_truthy, OpCode, op_jump
 
 
 class Compiler:
@@ -22,7 +22,7 @@ class Compiler:
         self.instructions = Instructions()
         self.bytecode = Bytecode()
 
-    def compile(self, node: ASTNode):
+    def compile(self, node: ASTNode) -> None:
         if node is None:
             print("severe error: node is null")
         elif node.statement_type == StatementType.PROGRAM:
@@ -94,8 +94,15 @@ class Compiler:
             if self.last_instruction_is_pop():
                 self.remove_last_pop()
 
-            after_consequence_pos = len(self.instructions.bytes)
-            self.change_operand(jump_not_truthy_pos, after_consequence_pos)
+            if node.alternative is None:
+                after_consequence_pos = len(self.instructions.bytes)
+                self.change_operand(jump_not_truthy_pos, after_consequence_pos)
+            else:
+                args = [9999]
+                self.emit(op_jump, 1, args)
+
+                after_consequence_pos = len(self.instructions.bytes)
+                self.change_operand(jump_not_truthy_pos, after_consequence_pos)
         elif node.statement_type == StatementType.BLOCK_STATEMENT:
             for stmt in node.statements:
                 self.compile(stmt)
@@ -140,13 +147,12 @@ class Compiler:
         self.instructions.remove_last()
         self.last_instruction = self.previous_instruction
 
-    def replace_instruction(self, pos: int, new_instruction: tuple):
-        # TODO: check if list is the correct type for new_instruction
-        for i, element in enumerate(new_instruction[1]):
-            self.instructions.bytes[pos + i] = new_instruction[1][i]
+    def replace_instruction(self, pos: int, new_instruction: list):
+        for i, element in enumerate(new_instruction):
+            self.instructions.bytes[pos + i] = new_instruction[i]
 
     def change_operand(self, op_pos: int, operand: int):
         op = OpCode()
         op.byte_code = self.instructions.bytes[op_pos]
-        new_instruction = self.code.make(op, 1, [operand])
+        size, new_instruction = self.code.make(op, 1, [operand])
         self.replace_instruction(op_pos, new_instruction)

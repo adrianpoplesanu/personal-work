@@ -17,11 +17,17 @@ token_type_map = {
 }
 
 keywords_map = {
-    "and": TokenType.AND,
+    "let": TokenType.LET,
+    "return": TokenType.RETURN,
+    "fun": TokenType.FUNCTION,
+    "def": TokenType.DEF,
+    "if": TokenType.IF,
+    "else": TokenType.ELSE,
     "true": TokenType.TRUE,
     "false": TokenType.FALSE,
-    "if": TokenType.IF,
-    "while": TokenType.WHILE
+    "while": TokenType.WHILE,
+    "for": TokenType.FOR,
+    "and": TokenType.AND
 }
 
 
