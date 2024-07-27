@@ -39,7 +39,9 @@ enum TokenType {
     TT_LTE,
     TT_EQUALS,
     TT_NOT_EQUALS,
-    TT_BANG
+    TT_BANG,
+    TT_AND,
+    TT_OR
 };
 
 std::map<TokenType, std::string> tokenTypeConverter = {
@@ -72,7 +74,9 @@ std::map<TokenType, std::string> tokenTypeConverter = {
     {TT_GTE, "GREATERTHANEQUAL"},
     {TT_LTE, "LOWERTHANEQUAL"},
     {TT_EQUALS, "EQUALS"},
-    {TT_NOT_EQUALS, "NOTEQUALS"}
+    {TT_NOT_EQUALS, "NOTEQUALS"},
+    {TT_AND, "AND"},
+    {TT_OR, "OR"}
 };
 
 std::map<std::string, TokenType> keywords = {
@@ -85,7 +89,8 @@ std::map<std::string, TokenType> keywords = {
     {"true", TT_TRUE},
     {"false", TT_FALSE},
     {"while", TT_WHILE},
-    {"for", TT_FOR}
+    {"for", TT_FOR},
+    {"and", TT_AND}
 };
 
 class Token {
