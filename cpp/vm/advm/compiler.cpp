@@ -237,7 +237,9 @@ void Compiler::removeLastInstruction() {
 }
 
 void Compiler::replaceInstruction(int pos, unsigned char *new_instruction, int size) {
-    //...
+    for (int i = 0; i < size; i++) {
+        instructions.bytes[pos + i] = new_instruction[i];
+    }
 }
 
 void Compiler::changeOperand(int opPos, int operand) {
