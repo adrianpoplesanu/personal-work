@@ -163,13 +163,17 @@ void Compiler::compile(ASTNode* node) {
             std::vector<int> args;
             // bogus 9999 value
             args.push_back(9999);
-            emit(opJumpNotTruthy, 1, args);
+            int jump_not_truthy_pos = emit(opJumpNotTruthy, 1, args);
 
             compile(stmt->consequence);
 
             if (isLastInstructionPop()) {
                 removeLastInstruction();
             }
+
+            int after_consequence_pos = instructions.size;
+            changeOperand(jump_not_truthy_pos, after_consequence_pos);
+
             break;
         }
         case AT_BLOCK_STATEMENT: {
@@ -230,4 +234,18 @@ bool Compiler::isLastInstructionPop() {
 void Compiler::removeLastInstruction() {
     instructions.removeLast();
     lastInstruction = previousInstruction;
+}
+
+void Compiler::replaceInstruction(int pos, unsigned char *new_instruction, int size) {
+    //...
+}
+
+void Compiler::changeOperand(int opPos, int operand) {
+    OpCode op = OpCode();
+    op.byteCode = static_cast<OpCodeByte>(instructions.bytes[opPos]);
+    int size;
+    std::vector<int> args;
+    args.push_back(operand);
+    unsigned char * new_instruction = code.make(op, 1, args, size);
+    replaceInstruction(opPos, new_instruction, size);
 }

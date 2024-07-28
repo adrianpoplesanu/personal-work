@@ -28,6 +28,8 @@ public:
     bool isLastInstructionPop();
     void removeLastInstruction();
     Bytecode getBytecode();
+    void changeOperand(int, int);
+    void replaceInstruction(int, unsigned char*, int);
 };
 
 #endif
