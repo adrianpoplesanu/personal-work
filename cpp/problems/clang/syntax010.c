@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+// USAGE: cat syntax001.c | ./a.out 
+
 main() {
     long nc;
     nc = 0;
