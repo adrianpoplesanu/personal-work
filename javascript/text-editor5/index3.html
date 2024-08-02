@@ -70,6 +70,7 @@ body {
     </div>
 </div>
 <button onclick="highlightKeywords()">Highlight Keywords</button>
+<button onclick="testingCursorRepositioning()">Reposition Cursor</button>
 
     <script>
       const textarea = document.querySelector('#editor')
@@ -224,6 +225,11 @@ body {
 
           editor.innerHTML = content;
           //setCaret();
+          //setCaret2();
+      }
+
+      function testingCursorRepositioning() {
+          highlightKeywords()
           setCaret2();
       }
     </script>

@@ -98,6 +98,7 @@ class Compiler:
                 after_consequence_pos = len(self.instructions.bytes)
                 self.change_operand(jump_not_truthy_pos, after_consequence_pos)
             else:
+                # op_jump with bogus 9999 value
                 args = [9999]
                 self.emit(op_jump, 1, args)
 

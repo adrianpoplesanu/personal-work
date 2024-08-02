@@ -1,5 +1,11 @@
 #include "game.h"
 
-void Game::loop() {
+Game::Game() {
+    isRunning = true;
+}
 
+void Game::loop() {
+    while(isRunning) {
+        
+    }
 }

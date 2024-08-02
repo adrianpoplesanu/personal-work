@@ -10,6 +10,7 @@ var texcoordLocation;
 var texcoordBuffer;
 var matrixLocation;
 var textureLocation;
+var offsetLocation;
 
 
 function createShader(webgl, type, source) {
@@ -116,11 +117,17 @@ function drawImage(tex, texWidth, texHeight, dstX, dstY) {
     // from 1 unit to texWidth, texHeight units
     matrix = m4.scale(matrix, texWidth, texHeight, 1);
 
+    //console.log("cacat");
+    //console.log(matrix);
     // Set the matrix.
     webgl.uniformMatrix4fv(matrixLocation, false, matrix);
 
     // Tell the shader to get the texture from texture unit 0
     webgl.uniform1i(textureLocation, 0);
+
+
+    var aaa = m4.orthographic(0, 0, 0, 0, -1, 1);
+    webgl.uniformMatrix4fv(offsetLocation, false, aaa);
 
     // draw the quad (2 triangles, 6 vertices)
     webgl.drawArrays(webgl.TRIANGLES, 0, 6);
@@ -179,6 +186,7 @@ function init() {
 
     matrixLocation = webgl.getUniformLocation(program, "u_matrix");
     textureLocation = webgl.getUniformLocation(program, "u_texture");
+    offsetLocation = webgl.getUniformLocation(program, "u_offset");
 
     positionBuffer = webgl.createBuffer();
     webgl.bindBuffer(webgl.ARRAY_BUFFER, positionBuffer);
