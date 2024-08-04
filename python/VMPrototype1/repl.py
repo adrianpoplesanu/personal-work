@@ -20,7 +20,10 @@ class Repl:
 
         self.vm.load(bytecode)
         self.vm.run()
-        result = self.vm.last_popped_stack_elem()
+        #result = self.vm.last_popped_stack_elem()
+        #print(self.vm.stack)
+        #print(self.vm.sp)
+        result = self.vm.last_popped_stack_element()
         if result:
             print(result.inspect())
 

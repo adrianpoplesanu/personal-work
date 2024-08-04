@@ -18,7 +18,7 @@ class AdObjectInteger(AdObject):
 
 
 class AdBoolean(AdObject):
-    def __init__(self, value: int):
+    def __init__(self, value: bool):
         self.object_type = AdObjectType.BOOL
         self.value = value
 

@@ -4,11 +4,12 @@ from bytecode import Bytecode
 from code_ad import read_uint16
 from objects import AdObject, AdObjectInteger, AdBoolean, AdObjectType
 from opcode_ad import OpCodeByte
+from settings import PRINT_LAST_ELEMENT_ON_STACK
 
-
-#NULLOBJECT = Ad_Null_Object()
+# NULLOBJECT = Ad_Null_Object()
 TRUE = AdBoolean(value=True)
 FALSE = AdBoolean(value=False)
+
 
 class VM:
     def __init__(self, instructions=None, constants=None):
@@ -72,7 +73,12 @@ class VM:
                 obj = self.native_bool_to_boolean_object(False)
                 self.push(obj)
             elif opcode == OpCodeByte.OP_POP:
-                self.pop()
+                if PRINT_LAST_ELEMENT_ON_STACK:
+                    if self.sp == 1:
+                        res = self.pop()
+                        print(res.inspect())
+                else:
+                    self.pop()
             elif opcode == OpCodeByte.OP_EQUAL:
                 self.execute_comparison(opcode)
             elif opcode == OpCodeByte.OP_NOTEQUAL:
@@ -85,6 +91,16 @@ class VM:
                 self.execute_bang_operator()
             elif opcode == OpCodeByte.OP_MINUS:
                 self.execute_minus_operator()
+            elif opcode == OpCodeByte.OP_JUMP:
+                pos = read_uint16(self.instructions, ip + 1)
+                ip = pos - 1
+            elif opcode == OpCodeByte.OP_JUMP_NOT_TRUTHY:
+                pos = read_uint16(self.instructions, ip + 1)
+                ip += 2
+
+                condition = self.pop()
+                if not self.is_truthy(condition):
+                    ip = pos - 1
             else:
                 print('severe error: vm.run() error')
             ip += 1
@@ -113,7 +129,7 @@ class VM:
     def push(self, obj: AdObject):
         self.stack[self.sp] = obj
         self.sp += 1
-        #self.stack.append(obj)
+        # self.stack.append(obj)
 
     def pop(self) -> AdObject:
         result = self.stack[self.sp - 1]
@@ -168,3 +184,8 @@ class VM:
         if value:
             return TRUE
         return FALSE
+
+    def is_truthy(self, obj) -> bool:
+        if obj.object_type == AdObjectType.BOOL:
+            return obj.value
+        return False
