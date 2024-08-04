@@ -160,10 +160,10 @@ void Compiler::compile(ASTNode* node) {
             ASTIfStatement *stmt = (ASTIfStatement*) node;
             compile(stmt->condition);
             OpJumpNotTruthy opJumpNotTruthy = OpJumpNotTruthy();
-            std::vector<int> args;
+            std::vector<int> jump_not_truthy_args;
             // bogus 9999 value
-            args.push_back(9999);
-            int jump_not_truthy_pos = emit(opJumpNotTruthy, 1, args);
+            jump_not_truthy_args.push_back(9999);
+            int jump_not_truthy_pos = emit(opJumpNotTruthy, 1, jump_not_truthy_args);
 
             compile(stmt->consequence);
 
@@ -171,8 +171,27 @@ void Compiler::compile(ASTNode* node) {
                 removeLastInstruction();
             }
 
-            int after_consequence_pos = instructions.size;
-            changeOperand(jump_not_truthy_pos, after_consequence_pos);
+            if (stmt->alternative == NULL) {
+                int after_consequence_pos = instructions.size;
+                changeOperand(jump_not_truthy_pos, after_consequence_pos);
+            } else {
+                OpJump opJump = OpJump();
+                std::vector<int> jump_args;
+                // bogus 9999 value
+                jump_args.push_back(9999);
+                int jump_pos = emit(opJump, 1, jump_args);
+
+                int after_consequence_pos = instructions.size;
+                changeOperand(jump_not_truthy_pos, after_consequence_pos);
+
+                compile(stmt->alternative);
+                if (isLastInstructionPop()) {
+                    removeLastInstruction();
+                }
+
+                int after_alternative_pos = instructions.size;
+                changeOperand(jump_pos, after_alternative_pos);
+            }
 
             break;
         }
