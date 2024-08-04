@@ -85,8 +85,7 @@ class Compiler:
         elif node.statement_type == StatementType.IF_EXPRESSION:
             self.compile(node.condition)
             # bogus 9999 value
-            args = []
-            args.append(9999)
+            args = [9999]
             jump_not_truthy_pos = self.emit(op_jump_not_truthy, 1, args)
 
             self.compile(node.consequence)
