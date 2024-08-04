@@ -100,10 +100,18 @@ class Compiler:
             else:
                 # op_jump with bogus 9999 value
                 args = [9999]
-                self.emit(op_jump, 1, args)
+                jump_pos = self.emit(op_jump, 1, args)
 
                 after_consequence_pos = len(self.instructions.bytes)
                 self.change_operand(jump_not_truthy_pos, after_consequence_pos)
+
+                self.compile(node.alternative)
+
+                if self.last_instruction_is_pop():
+                    self.remove_last_pop()
+
+                after_alternative_pos = len(self.instructions.bytes)
+                self.change_operand(jump_pos, after_alternative_pos)
         elif node.statement_type == StatementType.BLOCK_STATEMENT:
             for stmt in node.statements:
                 self.compile(stmt)
