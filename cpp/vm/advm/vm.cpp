@@ -93,7 +93,14 @@ void VM::run() {
             }
             case OP_POP: {
                 // 5 e OpPop
-                pop();
+                if (PRINT_LAST_ELEMENT_ON_STACK) {
+                    if (sp == 1) {
+                        AdObject *res = pop();
+                        std::cout << res->inspect() << "\n";
+                    }
+                } else {
+                    pop();
+                }
                 break;
             }
             case OP_TRUE: {
@@ -159,6 +166,22 @@ void VM::run() {
                 push(obj);
                 break;
             }
+            case OP_JUMP: {
+                int pos = readUint16(instructions, ip + 1);
+                ip = pos - 1;
+                break;
+            }
+            case OP_JUMP_NOT_TRUTHY: {
+                int pos = readUint16(instructions, ip + 1);
+                ip += 2;
+
+                AdObject *condition = pop();
+                if (!isTruthy(condition)) {
+                    ip = pos - 1;
+                }
+
+                break;
+            }
             default: {
                 break;
             }
@@ -213,4 +236,11 @@ AdObject* VM::nativeBooleanToBooleanObject(bool value) {
         return &TRUE;
     }
     return &FALSE;
+}
+
+bool VM::isTruthy(AdObject* obj) {
+    if (obj->type == OT_BOOL) {
+        return ((AdObjectBoolean*) obj)->value;
+    }
+    return false;
 }

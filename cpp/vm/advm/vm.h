@@ -5,6 +5,7 @@
 #include "bytecode.h"
 #include "code.h"
 #include "gc.h"
+#include "settings.h"
 #include <vector>
 
 class VM {
@@ -29,6 +30,7 @@ public:
     void push(AdObject *);
     AdObject* pop();
     AdObject* nativeBooleanToBooleanObject(bool);
+    bool isTruthy(AdObject*);
 };
 
 #endif
