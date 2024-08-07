@@ -1,5 +1,7 @@
 #include <iostream>
 
+// using auto as type
+
 template<typename T>
 T plus1(T x) {
     return x + 1;
