@@ -24,7 +24,8 @@ class Parser:
             TokenType.FALSE: self.parse_boolean,
             TokenType.BANG: self.parse_prefix_expression,
             TokenType.MINUS: self.parse_prefix_expression,
-            TokenType.LPAREN: self.parse_grouped_expression
+            TokenType.LPAREN: self.parse_grouped_expression,
+            TokenType.IF: self.parse_if_statement
         }
 
         self.infix_parse_fns = {
@@ -84,8 +85,8 @@ class Parser:
         return PrecedenceType.LOWEST
 
     def parse_statement(self) -> Optional[ASTNode]:
-        if self.current_token.token_type in self.statement_parse_fns:
-            return self.statement_parse_fns[self.current_token.token_type]()
+        #if self.current_token.token_type in self.statement_parse_fns:
+        #    return self.statement_parse_fns[self.current_token.token_type]()
         return self.parse_expression_statement()
 
     def parse_identifier(self):
