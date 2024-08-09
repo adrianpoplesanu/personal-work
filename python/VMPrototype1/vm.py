@@ -127,11 +127,15 @@ class VM:
         print(']')
 
     def push(self, obj: AdObject):
+        if self.sp < 0:
+            raise Exception("stack error: index out of bounds")
         self.stack[self.sp] = obj
         self.sp += 1
         # self.stack.append(obj)
 
     def pop(self) -> AdObject:
+        if self.sp - 1 < 0:
+            raise Exception("stack error: index out of bounds")
         result = self.stack[self.sp - 1]
         # result = self.stack.pop()
         self.sp -= 1
