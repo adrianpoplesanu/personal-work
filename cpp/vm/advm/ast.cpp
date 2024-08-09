@@ -225,7 +225,7 @@ std::string ASTIfStatement::inspect() {
 }
 
 std::string ASTIfStatement::toString() {
-    return "ASTIfExpression\n";
+    return "ASTIfExpression";
 }
 
 ASTBlockStatement::ASTBlockStatement() {
