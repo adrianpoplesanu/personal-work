@@ -55,6 +55,13 @@ public:
     virtual std::string toString();
 };
 
+class AdObjectNull : public AdObject {
+public:
+    AdObjectNull();
+    virtual std::string inspect();
+    virtual std::string toString();
+};
+
 class AdObjectString : public AdObject {
 public:
     std::string value;

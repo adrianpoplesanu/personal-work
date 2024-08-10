@@ -53,6 +53,18 @@ std::string AdObjectBoolean::toString() {
     return "todo";
 }
 
+AdObjectNull::AdObjectNull() {
+    type = OT_NULL;
+}
+
+std::string AdObjectNull::inspect() {
+    return "null";
+}
+
+std::string AdObjectNull::toString() {
+    return "todo";
+}
+
 void AD_INCREF(AdObject* obj) {
     if (obj != NULL) {
         obj->ref_count++;
