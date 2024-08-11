@@ -205,6 +205,14 @@ ASTBoolean::~ASTBoolean() {
     //...
 }
 
+std::string ASTBoolean::toString() {
+    return "ASTBoolean";
+}
+
+std::string ASTBoolean::inspect() {
+    return "ASTBoolean";
+}
+
 ASTIfStatement::ASTIfStatement() {
     type = AT_IF_STATEMENT;
 }
@@ -251,12 +259,16 @@ std::string ASTBlockStatement::toString() {
     return "todo: implement this";
 }
 
-std::string ASTBoolean::toString() {
-    return "ASTBoolean";
+ASTNullExpression::ASTNullExpression() {
+    type = AT_NULL_EXPRESSION;
 }
 
-std::string ASTBoolean::inspect() {
-    return "ASTBoolean";
+std::string ASTNullExpression::inspect() {
+    return "ASTNullExpression";
+}
+
+std::string ASTNullExpression::toString() {
+    return "ASTNullExpression";
 }
 
 void Ad_INCREF(ASTNode* node) {
@@ -333,6 +345,10 @@ void free_memory_ASTNode(ASTNode* node) {
         }
         case AT_BLOCK_STATEMENT: {
             delete (ASTBlockStatement*) node;
+            break;
+        }
+        case AT_NULL_EXPRESSION: {
+            delete (ASTNullExpression*) node;
             break;
         }
         default: {

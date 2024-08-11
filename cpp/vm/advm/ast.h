@@ -19,7 +19,8 @@ enum ASTType {
     AT_DEF_STATEMENT,
     AT_WHILE_STATEMENT,
     AT_FOR_STATEMENT,
-    AT_IF_STATEMENT
+    AT_IF_STATEMENT,
+    AT_NULL_EXPRESSION
 };
 
 class ASTNode {
@@ -166,6 +167,13 @@ public:
     ASTBlockStatement();
     ASTBlockStatement(Token);
     ~ASTBlockStatement();
+    virtual std::string inspect();
+    virtual std::string toString();
+};
+
+class ASTNullExpression : public ASTNode {
+public:
+    ASTNullExpression();
     virtual std::string inspect();
     virtual std::string toString();
 };
