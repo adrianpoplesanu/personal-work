@@ -17,7 +17,8 @@ enum OpCodeByte {
     OP_MINUS,
     OP_BANG,
     OP_JUMP_NOT_TRUTHY,
-    OP_JUMP
+    OP_JUMP,
+    OP_NULL
 };
 
 class OpCode {
@@ -134,6 +135,13 @@ class OpJump : public OpCode {
 public:
     OpJump() {
         byteCode = OP_JUMP;
+    }
+};
+
+class OpNull : public OpCode {
+public:
+    OpNull() {
+        byteCode = OP_NULL;
     }
 };
 

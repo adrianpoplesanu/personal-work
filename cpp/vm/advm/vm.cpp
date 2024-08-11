@@ -1,5 +1,6 @@
 #include "vm.h"
 
+AdObjectNull NULLOBJECT;
 AdObjectBoolean TRUE(true, true);
 AdObjectBoolean FALSE(false, true);
 
@@ -145,13 +146,18 @@ void VM::run() {
             }
             case OP_BANG: {
                 AdObject *obj = pop();
-                AdObjectBoolean* operand = (AdObjectBoolean*) obj;
-                if (operand->value == TRUE.value) {
-                    push(nativeBooleanToBooleanObject(false));
-                } else if (operand->value == FALSE.value) {
+                if (obj->type == OT_BOOL) {
+                    AdObjectBoolean* operand = (AdObjectBoolean*) obj;
+                    if (operand->value == TRUE.value) {
+                        push(nativeBooleanToBooleanObject(false));
+                    } else if (operand->value == FALSE.value) {
+                        push(nativeBooleanToBooleanObject(true));
+                    } else {
+                        push(nativeBooleanToBooleanObject(false));
+                    }
+                }
+                if (obj->type == OT_NULL) {
                     push(nativeBooleanToBooleanObject(true));
-                } else {
-                    push(nativeBooleanToBooleanObject(false));
                 }
                 break;
             }
@@ -180,6 +186,10 @@ void VM::run() {
                     ip = pos - 1;
                 }
 
+                break;
+            }
+            case OP_NULL: {
+                push(&NULLOBJECT);
                 break;
             }
             default: {
@@ -242,5 +252,8 @@ bool VM::isTruthy(AdObject* obj) {
     if (obj->type == OT_BOOL) {
         return ((AdObjectBoolean*) obj)->value;
     }
-    return false;
+    if (obj->type == OT_NULL) {
+        return false;
+    }
+    return true;
 }

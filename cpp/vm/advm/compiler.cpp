@@ -171,28 +171,34 @@ void Compiler::compile(ASTNode* node) {
                 removeLastInstruction();
             }
 
+            OpJump opJump = OpJump();
+            std::vector<int> jump_args;
+            // bogus 9999 value
+            jump_args.push_back(9999);
+            int jump_pos = emit(opJump, 1, jump_args);
+
+            int after_consequence_pos = instructions.size;
+            changeOperand(jump_not_truthy_pos, after_consequence_pos);
+
             if (stmt->alternative == NULL) {
-                int after_consequence_pos = instructions.size;
-                changeOperand(jump_not_truthy_pos, after_consequence_pos);
+                OpNull opNull = OpNull();
+                std::vector<int> null_args;
+                emit(opNull, 0, null_args);
             } else {
-                OpJump opJump = OpJump();
-                std::vector<int> jump_args;
-                // bogus 9999 value
-                jump_args.push_back(9999);
-                int jump_pos = emit(opJump, 1, jump_args);
-
-                int after_consequence_pos = instructions.size;
-                changeOperand(jump_not_truthy_pos, after_consequence_pos);
-
                 compile(stmt->alternative);
                 if (isLastInstructionPop()) {
                     removeLastInstruction();
                 }
-
-                int after_alternative_pos = instructions.size;
-                changeOperand(jump_pos, after_alternative_pos);
             }
+            int after_alternative_pos = instructions.size;
+            changeOperand(jump_pos, after_alternative_pos);
 
+            break;
+        }
+        case AT_NULL_EXPRESSION: {
+            OpNull opNull = OpNull();
+            std::vector<int> null_args;
+            emit(opNull, 0, null_args);
             break;
         }
         case AT_BLOCK_STATEMENT: {
@@ -269,4 +275,5 @@ void Compiler::changeOperand(int opPos, int operand) {
     args.push_back(operand);
     unsigned char * new_instruction = code.make(op, 1, args, size);
     replaceInstruction(opPos, new_instruction, size);
+    delete new_instruction; // IMPORTANT: free this as every call leaks 16 bytes of memory
 }
