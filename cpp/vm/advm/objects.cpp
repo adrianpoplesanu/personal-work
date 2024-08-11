@@ -54,7 +54,12 @@ std::string AdObjectBoolean::toString() {
 }
 
 AdObjectNull::AdObjectNull() {
+    //std::cout << "allocating a null object\n";
     type = OT_NULL;
+}
+
+AdObjectNull::~AdObjectNull() {
+    //std::cout << "freeing a null object\n";
 }
 
 std::string AdObjectNull::inspect() {

@@ -58,6 +58,7 @@ public:
 class AdObjectNull : public AdObject {
 public:
     AdObjectNull();
+    ~AdObjectNull();
     virtual std::string inspect();
     virtual std::string toString();
 };
