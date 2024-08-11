@@ -67,6 +67,7 @@ public:
     ASTNode* parseIfStatement();
     ASTNode* parseSingleBlockStatement();
     ASTNode* parseBlockStatement();
+    ASTNode* parseNullExpression();
 };
 
 #endif

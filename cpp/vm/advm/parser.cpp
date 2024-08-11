@@ -11,7 +11,8 @@ Parser::Parser() {
     prefixParseFns.insert(std::make_pair(TT_FALSE, &Parser::parseBooleanExpression));
     prefixParseFns.insert(std::make_pair(TT_LPAREN, &Parser::parseGroupedExpression));
     //prefixParseFns.insert(std::make_pair(TT_IF, [this]() { return parseIfStatement(); } ));
-     prefixParseFns.insert(std::make_pair(TT_IF, &Parser::parseIfStatement));
+    prefixParseFns.insert(std::make_pair(TT_IF, &Parser::parseIfStatement));
+    prefixParseFns.insert(std::make_pair(TT_NULL, &Parser::parseNullExpression));
 
     infixParseFns.insert(std::make_pair(TT_PLUS, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parseInfixExpression));
@@ -200,7 +201,12 @@ ASTNode* Parser::parseBlockStatement() {
         nextToken();
     }
     return block;
+}
 
+ASTNode* Parser::parseNullExpression() {
+    ASTNullExpression *expr = new ASTNullExpression();
+    nextToken();
+    return expr;
 }
 
 ASTNode* Parser::parsePrefixExpression() {
