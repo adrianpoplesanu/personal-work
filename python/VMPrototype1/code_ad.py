@@ -58,7 +58,8 @@ class Code:
             OpCodeByte.OP_MINUS: Definition("OpMinus", 0, []),
             OpCodeByte.OP_BANG: Definition("OpBang", 0, []),
             OpCodeByte.OP_JUMP_NOT_TRUTHY: Definition("OpJumpNotTruthy", 1, [2]),
-            OpCodeByte.OP_JUMP: Definition("OpJump", 1, [2])
+            OpCodeByte.OP_JUMP: Definition("OpJump", 1, [2]),
+            OpCodeByte.OP_NULL: Definition("OpNull", 0, [])
         }
 
     def make(self, opcode: OpCode, n, args) -> Tuple[int, list]:

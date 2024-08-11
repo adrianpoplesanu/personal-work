@@ -2,11 +2,11 @@ from typing import Optional
 
 from bytecode import Bytecode
 from code_ad import read_uint16
-from objects import AdObject, AdObjectInteger, AdBoolean, AdObjectType
+from objects import AdObject, AdObjectInteger, AdBoolean, AdObjectType, AdNullObject
 from opcode_ad import OpCodeByte
 from settings import PRINT_LAST_ELEMENT_ON_STACK
 
-# NULLOBJECT = Ad_Null_Object()
+NULL_OBJECT = AdNullObject()
 TRUE = AdBoolean(value=True)
 FALSE = AdBoolean(value=False)
 
@@ -101,6 +101,8 @@ class VM:
                 condition = self.pop()
                 if not self.is_truthy(condition):
                     ip = pos - 1
+            elif opcode == OpCodeByte.OP_NULL:
+                self.push(NULL_OBJECT)
             else:
                 print('severe error: vm.run() error')
             ip += 1
@@ -172,6 +174,8 @@ class VM:
             self.push(FALSE)
         elif operand == FALSE:
             self.push(TRUE)
+        elif operand == NULL_OBJECT:
+            self.push(TRUE)
         else:
             self.push(FALSE)
 
@@ -192,4 +196,6 @@ class VM:
     def is_truthy(self, obj) -> bool:
         if obj.object_type == AdObjectType.BOOL:
             return obj.value
-        return False
+        if obj.object_type == AdObjectType.NULL:
+            return False
+        return True

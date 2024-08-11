@@ -6,7 +6,7 @@ from instructions import Instructions
 from objects import AdObjectInteger, AdObject
 from opcode_ad import OpAdd, OpSub, OpMultiply, OpDivide, OpConstant, OpTrue, OpFalse, OpPop, op_equal, op_not_equal, \
     op_greater_than, op_greater_than_equal, op_add, op_sub, op_multiply, op_divide, op_pop, op_bang, op_minus, \
-    op_jump_not_truthy, OpCode, op_jump
+    op_jump_not_truthy, OpCode, op_jump, op_null
 
 
 class Compiler:
@@ -93,24 +93,23 @@ class Compiler:
             if self.last_instruction_is_pop():
                 self.remove_last_pop()
 
+            #  op_jump with bogus 9999 value
+            args = [9999]
+            jump_pos = self.emit(op_jump, 1, args)
+
+            after_consequence_pos = len(self.instructions.bytes)
+            self.change_operand(jump_not_truthy_pos, after_consequence_pos)
+
             if node.alternative is None:
-                after_consequence_pos = len(self.instructions.bytes)
-                self.change_operand(jump_not_truthy_pos, after_consequence_pos)
+                self.emit(op_null, 0, [])
             else:
-                # op_jump with bogus 9999 value
-                args = [9999]
-                jump_pos = self.emit(op_jump, 1, args)
-
-                after_consequence_pos = len(self.instructions.bytes)
-                self.change_operand(jump_not_truthy_pos, after_consequence_pos)
-
                 self.compile(node.alternative)
 
                 if self.last_instruction_is_pop():
                     self.remove_last_pop()
 
-                after_alternative_pos = len(self.instructions.bytes)
-                self.change_operand(jump_pos, after_alternative_pos)
+            after_alternative_pos = len(self.instructions.bytes)
+            self.change_operand(jump_pos, after_alternative_pos)
         elif node.statement_type == StatementType.BLOCK_STATEMENT:
             for stmt in node.statements:
                 self.compile(stmt)
