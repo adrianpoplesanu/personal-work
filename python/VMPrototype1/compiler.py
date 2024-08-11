@@ -113,6 +113,8 @@ class Compiler:
         elif node.statement_type == StatementType.BLOCK_STATEMENT:
             for stmt in node.statements:
                 self.compile(stmt)
+        elif node.statement_type == StatementType.NULL_EXPRESSION:
+            self.emit(op_null, 0, [])
         else:
             print("severe error: node type unknown " + statement_type_map[node.statement_type])
 

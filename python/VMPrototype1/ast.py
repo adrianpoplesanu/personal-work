@@ -10,7 +10,7 @@ class StatementType:
     BOOLEAN = 'BOOLEAN'
     IF_EXPRESSION = 'IF_EXPRESSION'
     BLOCK_STATEMENT = 'BLOCK_STATEMENT'
-
+    NULL_EXPRESSION = 'NULL_EXPRESSION'
 
 statement_type_map = {
     StatementType.PROGRAM: 'PROGRAM',
@@ -20,7 +20,8 @@ statement_type_map = {
     StatementType.PREFIX_EXPRESSION: 'PREFIX_EXPRESSION',
     StatementType.BOOLEAN: 'BOOLEAN',
     StatementType.IF_EXPRESSION: 'IF_EXPRESSION',
-    StatementType.BLOCK_STATEMENT: 'BLOCK_STATEMENT'
+    StatementType.BLOCK_STATEMENT: 'BLOCK_STATEMENT',
+    StatementType.NULL_EXPRESSION: 'NULL_EXPRESSION'
 }
 
 
@@ -170,3 +171,16 @@ class ASTBlockStatement(ASTNode):
         for statement in self.statements:
             out += str(statement)
         return out
+
+
+class ASTNullExpression(ASTNode):
+    statement_type = StatementType.NULL_EXPRESSION
+
+    def __init__(self, token=None):
+        self.token = token
+
+    def token_literal(self):
+        return self.token.literal
+
+    def __str__(self):
+        return "ASTNullExpression"

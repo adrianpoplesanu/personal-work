@@ -13,7 +13,8 @@ token_type_map = {
     TokenType.TRUE: "TRUE",
     TokenType.FALSE: "FALSE",
     TokenType.IF: "IF",
-    TokenType.WHILE: "WHILE"
+    TokenType.WHILE: "WHILE",
+    TokenType.NULL: "NULL"
 }
 
 keywords_map = {
@@ -27,7 +28,8 @@ keywords_map = {
     "false": TokenType.FALSE,
     "while": TokenType.WHILE,
     "for": TokenType.FOR,
-    "and": TokenType.AND
+    "and": TokenType.AND,
+    "null": TokenType.NULL
 }
 
 

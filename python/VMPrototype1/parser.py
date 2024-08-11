@@ -1,7 +1,7 @@
 from typing import Optional
 
 from ast import ASTProgram, ASTNode, ASTExpressionStatement, ASTInteger, ASTInfixExpression, ASTPrefixExpression, \
-    ASTBoolean, ASTIfExpression, ASTBlockStatement
+    ASTBoolean, ASTIfExpression, ASTBlockStatement, ASTNullExpression
 from lexer import Lexer
 from precedence_type import PrecedenceType, precedences
 from token_type import TokenType
@@ -25,7 +25,8 @@ class Parser:
             TokenType.BANG: self.parse_prefix_expression,
             TokenType.MINUS: self.parse_prefix_expression,
             TokenType.LPAREN: self.parse_grouped_expression,
-            TokenType.IF: self.parse_if_statement
+            TokenType.IF: self.parse_if_statement,
+            TokenType.NULL: self.parse_null_expression
         }
 
         self.infix_parse_fns = {
@@ -156,6 +157,11 @@ class Parser:
         stmt = self.parse_statement()
         block.statements.append(stmt)
         return block
+
+    def parse_null_expression(self):
+        expr = ASTNullExpression(token=self.current_token)
+        self.next_token()
+        return expr
 
     def parse_infix_expression(self, left):
         expr = ASTInfixExpression(token=self.current_token, operator=self.current_token.literal, left=left)
