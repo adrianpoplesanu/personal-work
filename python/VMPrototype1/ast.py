@@ -11,6 +11,8 @@ class StatementType:
     IF_EXPRESSION = 'IF_EXPRESSION'
     BLOCK_STATEMENT = 'BLOCK_STATEMENT'
     NULL_EXPRESSION = 'NULL_EXPRESSION'
+    LET_STATEMENT = 'LET_STATEMENT'
+    IDENTIFIER = 'IDENTIFIER'
 
 statement_type_map = {
     StatementType.PROGRAM: 'PROGRAM',
@@ -21,7 +23,9 @@ statement_type_map = {
     StatementType.BOOLEAN: 'BOOLEAN',
     StatementType.IF_EXPRESSION: 'IF_EXPRESSION',
     StatementType.BLOCK_STATEMENT: 'BLOCK_STATEMENT',
-    StatementType.NULL_EXPRESSION: 'NULL_EXPRESSION'
+    StatementType.NULL_EXPRESSION: 'NULL_EXPRESSION',
+    StatementType.LET_STATEMENT: 'LET_STATEMENT',
+    StatementType.IDENTIFIER: 'IDENTIFIER'
 }
 
 
@@ -162,6 +166,21 @@ class ASTBlockStatement(ASTNode):
             self.statements = statements
         else:
             self.statements = []
+
+
+class ASTLetStatement(ASTNode):
+    statement_type = StatementType.LET_STATEMENT
+
+    def __init__(self, token=None):
+        self.token = token
+
+
+class ASTIdentifier(ASTNode):
+    statement_type = StatementType.IDENTIFIER
+
+    def __init__(self, token=None, value=None):
+        self.token = token
+        self.value = value
 
     def token_literal(self):
         return self.token.literal

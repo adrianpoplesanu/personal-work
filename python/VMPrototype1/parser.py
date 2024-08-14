@@ -1,7 +1,7 @@
 from typing import Optional
 
 from ast import ASTProgram, ASTNode, ASTExpressionStatement, ASTInteger, ASTInfixExpression, ASTPrefixExpression, \
-    ASTBoolean, ASTIfExpression, ASTBlockStatement, ASTNullExpression
+    ASTBoolean, ASTIfExpression, ASTBlockStatement, ASTNullExpression, ASTLetStatement, ASTIdentifier
 from lexer import Lexer
 from precedence_type import PrecedenceType, precedences
 from token_type import TokenType
@@ -88,6 +88,8 @@ class Parser:
     def parse_statement(self) -> Optional[ASTNode]:
         #if self.current_token.token_type in self.statement_parse_fns:
         #    return self.statement_parse_fns[self.current_token.token_type]()
+        if self.current_token.token_type == TokenType.LET:
+            return self.parse_let_expression()
         return self.parse_expression_statement()
 
     def parse_identifier(self):
@@ -162,6 +164,19 @@ class Parser:
         expr = ASTNullExpression(token=self.current_token)
         self.next_token()
         return expr
+
+    def parse_let_expression(self):
+        stmt = ASTLetStatement(token=self.current_token)
+        if not self.expect_peek(TokenType.IDENT):
+            return None
+        stmt.name = ASTIdentifier(token=self.current_token, value=self.current_token.literal)
+        if not self.expect_peek(TokenType.ASSIGN):
+            return None
+        self.next_token()
+        stmt.value = self.parse_expression(PrecedenceType.LOWEST)
+        if self.current_token_is(TokenType.SEMICOLON):
+            self.next_token()
+        return stmt
 
     def parse_infix_expression(self, left):
         expr = ASTInfixExpression(token=self.current_token, operator=self.current_token.literal, left=left)
