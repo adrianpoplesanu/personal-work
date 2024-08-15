@@ -14,7 +14,8 @@ token_type_map = {
     TokenType.FALSE: "FALSE",
     TokenType.IF: "IF",
     TokenType.WHILE: "WHILE",
-    TokenType.NULL: "NULL"
+    TokenType.NULL: "NULL",
+    TokenType.ASSIGN: 'ASSIGN'
 }
 
 keywords_map = {

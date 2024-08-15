@@ -5,7 +5,7 @@ from token_type import TokenType
 def lookup_ident(ident: str) -> TokenType:
     if ident in keywords_map:
         return keywords_map[ident]
-    return TokenType.ILLEGAL
+    return TokenType.IDENT
 
 
 class Lexer:

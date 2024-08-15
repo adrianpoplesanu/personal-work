@@ -2,7 +2,8 @@ from token_type import TokenType
 
 
 class PrecedenceType:
-    LOWEST = 0
+    LOWEST = 1
+    ASSIGN = 2
     EQUALS = 3
     LESSGREATER = 5
     SUM = 6
@@ -11,6 +12,7 @@ class PrecedenceType:
 
 
 precedences = {
+    TokenType.ASSIGN: PrecedenceType.ASSIGN,
     TokenType.PLUS: PrecedenceType.SUM,
     TokenType.MINUS: PrecedenceType.SUM,
     TokenType.SLASH: PrecedenceType.PRODUCT,

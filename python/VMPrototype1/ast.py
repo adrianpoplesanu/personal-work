@@ -167,12 +167,21 @@ class ASTBlockStatement(ASTNode):
         else:
             self.statements = []
 
+    def __str__(self):
+        out = ""
+        for statement in self.statements:
+            out += str(statement)
+        return out
+
 
 class ASTLetStatement(ASTNode):
     statement_type = StatementType.LET_STATEMENT
 
     def __init__(self, token=None):
         self.token = token
+
+    def __str__(self):
+        return 'ASTLetStatement'
 
 
 class ASTIdentifier(ASTNode):
@@ -184,12 +193,6 @@ class ASTIdentifier(ASTNode):
 
     def token_literal(self):
         return self.token.literal
-
-    def __str__(self):
-        out = ""
-        for statement in self.statements:
-            out += str(statement)
-        return out
 
 
 class ASTNullExpression(ASTNode):
