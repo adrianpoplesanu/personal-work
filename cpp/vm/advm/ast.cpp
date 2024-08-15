@@ -271,6 +271,18 @@ std::string ASTNullExpression::toString() {
     return "ASTNullExpression";
 }
 
+ASTLetStatement::ASTLetStatement() {
+
+}
+
+std::string ASTLetStatement::inspect() {
+    return "ASTLetStatement";
+}
+
+std::string ASTLetStatement::toString() {
+    return "ASTLetStatement";
+}
+
 void Ad_INCREF(ASTNode* node) {
     if (node) {
         node->ref_count++;

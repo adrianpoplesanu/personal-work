@@ -80,7 +80,10 @@ public:
 };
 
 class ASTLetStatement : public ASTNode {
-
+public:
+    ASTLetStatement();
+    virtual std::string inspect();
+    virtual std::string toString();
 };
 
 class ASTReturnStatement : public ASTNode {
