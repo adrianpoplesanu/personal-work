@@ -71,9 +71,9 @@ void Parser::nextToken() {
 }
 
 ASTNode* Parser::parseStatement() {
-    /*if (currentToken.type == TT_LET)
+    if (currentToken.type == TT_LET)
         return parseLetStatement();
-    if (currentToken.type == TT_RETURN)
+    /*if (currentToken.type == TT_RETURN)
         return parseReturnStatement();
     if (currentToken.type == TT_BREAK)
         return parseBreakStatement();
@@ -94,7 +94,28 @@ ASTNode* Parser::parseIdent() {
 }
 
 ASTNode* Parser::parseLetStatement() {
-    return NULL;
+    ASTLetStatement* stmt = new ASTLetStatement(currentToken);
+
+    if (!expectPeek(TT_IDENT)) {
+        //delete stmt;
+        free_memory_ASTNode(stmt);
+        return NULL;
+    }
+
+    stmt->name = ASTIdentifier(currentToken, currentToken.stringLiteral);
+
+    if (!expectPeek(TT_ASSIGN)) {
+        //delete stmt;
+        free_memory_ASTNode(stmt);
+        return NULL;
+    }
+
+    nextToken();
+    stmt->value = parseExpression(PT_LOWEST);
+    if (currentTokenIs(TT_SEMICOLON)) {
+        nextToken();
+    }
+    return stmt;
 }
 
 ASTNode* Parser::parseReturnStatement() {

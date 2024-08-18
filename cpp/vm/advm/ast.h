@@ -44,6 +44,16 @@ public:
     void reset();
 };
 
+class ASTIdentifier : public ASTNode {
+public:
+    std::string value;
+
+    ASTIdentifier();
+    ASTIdentifier(Token, std::string);
+    virtual std::string inspect();
+    virtual std::string toString();
+};
+
 class ASTExpressionStatement : public ASTNode {
 public:
     ASTNode* expression;
@@ -81,7 +91,11 @@ public:
 
 class ASTLetStatement : public ASTNode {
 public:
+    ASTIdentifier name;
+    ASTNode *value;
+
     ASTLetStatement();
+    ASTLetStatement(Token);
     virtual std::string inspect();
     virtual std::string toString();
 };
@@ -118,16 +132,6 @@ public:
     ASTBoolean(Token);
     ASTBoolean(Token, bool);
     ~ASTBoolean();
-    virtual std::string inspect();
-    virtual std::string toString();
-};
-
-class ASTIdentifier : public ASTNode {
-public:
-    std::string value;
-
-    ASTIdentifier();
-    ASTIdentifier(Token, std::string);
     virtual std::string inspect();
     virtual std::string toString();
 };

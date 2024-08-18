@@ -139,6 +139,7 @@ void Compiler::compile(ASTNode* node) {
             break;
         }
         case AT_LET_STATEMENT: {
+            std::cout << "TODO: handle compile let stateme\n";
             break;
         }
         case AT_RETURN_STATEMENT: {

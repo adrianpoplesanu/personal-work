@@ -6,6 +6,7 @@
 
 enum PrecedenceType {
     PT_LOWEST,
+    PT_ASSIGN,
     PT_EQUALS,
     PT_LESSGREATER,
     PT_SUM,
@@ -14,6 +15,7 @@ enum PrecedenceType {
 };
 
 std::map<TokenType, PrecedenceType> precedenceMap = {
+    {TT_ASSIGN, PT_ASSIGN},
     {TT_PLUS, PT_SUM},
     {TT_MINUS, PT_SUM},
     {TT_MULTIPLY, PT_PRODUCT},

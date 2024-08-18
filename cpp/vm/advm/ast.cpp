@@ -272,7 +272,12 @@ std::string ASTNullExpression::toString() {
 }
 
 ASTLetStatement::ASTLetStatement() {
+    type = AT_LET_STATEMENT;
+}
 
+ASTLetStatement::ASTLetStatement(Token t) {
+    type = AT_LET_STATEMENT;
+    token = t;
 }
 
 std::string ASTLetStatement::inspect() {
