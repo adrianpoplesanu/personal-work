@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/bpmTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="BPM: 60"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/increaseBpmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Increase BPM" />
+
+    <Button
+        android:id="@+id/decreaseBpmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Decrease BPM" />
+
+    <Button
+        android:id="@+id/startMetronomeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Metronome" />
+
+    <Button
+        android:id="@+id/stopMetronomeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop Metronome"
+        android:visibility="gone" /> <!-- Initially hidden -->
+</LinearLayout>

@@ -6,64 +6,87 @@
 
 package ro.adrianus.soundchecker1.presentation
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
+import android.widget.TextView
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
 import ro.adrianus.soundchecker1.R
-import ro.adrianus.soundchecker1.presentation.theme.SoundChecker1Theme
+import ro.adrianus.soundchecker1.presentation.services.MetronomeService
 
 class MainActivity : ComponentActivity() {
+
+    private var bpm = 60
+    private lateinit var bpmTextView: TextView
+    private lateinit var startMetronomeButton: Button
+    private lateinit var stopMetronomeButton: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            WearApp("Adish")
+        setContentView(R.layout.activity_main)
+
+        bpmTextView = findViewById(R.id.bpmTextView)
+        val increaseBpmButton: Button = findViewById(R.id.increaseBpmButton)
+        val decreaseBpmButton: Button = findViewById(R.id.decreaseBpmButton)
+        startMetronomeButton = findViewById(R.id.startMetronomeButton)
+        stopMetronomeButton = findViewById(R.id.stopMetronomeButton)
+
+        increaseBpmButton.setOnClickListener {
+            if (bpm < 240) { // Prevent BPM from exceeding 240
+                bpm += 6
+                updateBpm()
+            }
+        }
+
+        decreaseBpmButton.setOnClickListener {
+            if (bpm > 20) { // Prevent BPM from going below 20
+                bpm -= 6
+                updateBpm()
+            }
+        }
+
+        startMetronomeButton.setOnClickListener {
+            startMetronomeService()
+        }
+
+        stopMetronomeButton.setOnClickListener {
+            stopMetronomeService()
         }
     }
-}
 
-@Composable
-fun WearApp(greetingName: String) {
-    SoundChecker1Theme {
-        /* If you have enough items in your list, use [ScalingLazyColumn] which is an optimized
-         * version of LazyColumn for wear devices with some added features. For more information,
-         * see d.android.com/wear/compose.
-         */
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.background),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Greeting(greetingName = greetingName)
-        }
+    private fun updateBpm() {
+        bpmTextView.text = "BPM: $bpm"
+        stopMetronomeService()
     }
-}
 
-@Composable
-fun Greeting(greetingName: String) {
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center,
-        color = MaterialTheme.colors.primary,
-        text = stringResource(R.string.hello_world, greetingName)
-    )
-}
+    private fun startMetronomeService() {
+        Log.d("main_activity", "starting metronome service")
+        val intent = Intent(this, MetronomeService::class.java).apply {
+            putExtra("BPM", bpm)
+        }
+        startService(intent)
+        toggleButtons(isRunning = true)
+    }
 
-@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
-@Composable
-fun DefaultPreview() {
-    WearApp("Preview Android")
+    private fun stopMetronomeService() {
+        stopService(Intent(this, MetronomeService::class.java))
+        toggleButtons(isRunning = false)
+    }
+
+    private fun toggleButtons(isRunning: Boolean) {
+        startMetronomeButton.visibility = if (isRunning) Button.GONE else Button.VISIBLE
+        stopMetronomeButton.visibility = if (isRunning) Button.VISIBLE else Button.GONE
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopService(Intent(this, MetronomeService::class.java))
+        toggleButtons(isRunning = false)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopService(Intent(this, MetronomeService::class.java))
+    }
 }
