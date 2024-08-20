@@ -6,8 +6,10 @@
 
 package ro.adrianus.soundchecker1.presentation
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.PowerManager
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
@@ -18,13 +20,20 @@ import ro.adrianus.soundchecker1.presentation.services.MetronomeService
 class MainActivity : ComponentActivity() {
 
     private var bpm = 60
+    private var tempos = setOf(40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 63, 66, 69, 72, 76, 80, 84, 88, 92, 96, 100, 104, 108, 112, 116, 120, 126, 132, 138, 144, 152, 160, 168, 176, 184, 192, 200, 208)
+    private var index = 10
     private lateinit var bpmTextView: TextView
     private lateinit var startMetronomeButton: Button
     private lateinit var stopMetronomeButton: Button
+    private lateinit var wakeLock: PowerManager.WakeLock
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "SoundChecker1::MetronomeWakelock")
+        wakeLock.acquire()
 
         bpmTextView = findViewById(R.id.bpmTextView)
         val increaseBpmButton: Button = findViewById(R.id.increaseBpmButton)
@@ -88,5 +97,8 @@ class MainActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         stopService(Intent(this, MetronomeService::class.java))
+        if (wakeLock.isHeld) {
+            wakeLock.release()
+        }
     }
 }
