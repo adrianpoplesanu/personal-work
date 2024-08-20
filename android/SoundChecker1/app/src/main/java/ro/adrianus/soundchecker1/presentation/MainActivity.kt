@@ -19,7 +19,6 @@ import ro.adrianus.soundchecker1.presentation.services.MetronomeService
 
 class MainActivity : ComponentActivity() {
 
-    private var bpm = 60
     private var tempos = setOf(40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 63, 66, 69, 72, 76, 80, 84, 88, 92, 96, 100, 104, 108, 112, 116, 120, 126, 132, 138, 144, 152, 160, 168, 176, 184, 192, 200, 208)
     private var index = 10
     private lateinit var bpmTextView: TextView
@@ -42,17 +41,19 @@ class MainActivity : ComponentActivity() {
         stopMetronomeButton = findViewById(R.id.stopMetronomeButton)
 
         increaseBpmButton.setOnClickListener {
-            if (bpm < 240) { // Prevent BPM from exceeding 240
-                bpm += 6
-                updateBpm()
+            index++
+            if (index >= tempos.size) {
+                index = tempos.size - 1
             }
+            updateBpm()
         }
 
         decreaseBpmButton.setOnClickListener {
-            if (bpm > 20) { // Prevent BPM from going below 20
-                bpm -= 6
-                updateBpm()
+            index--
+            if (index < 0) {
+                index = 0
             }
+            updateBpm()
         }
 
         startMetronomeButton.setOnClickListener {
@@ -65,14 +66,15 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun updateBpm() {
-        bpmTextView.text = "BPM: $bpm"
+        val tempo = tempos.elementAt(index)
+        bpmTextView.text = "BPM: $tempo"
         stopMetronomeService()
     }
 
     private fun startMetronomeService() {
         Log.d("main_activity", "starting metronome service")
         val intent = Intent(this, MetronomeService::class.java).apply {
-            putExtra("BPM", bpm)
+            putExtra("BPM", tempos.elementAt(index))
         }
         startService(intent)
         toggleButtons(isRunning = true)
