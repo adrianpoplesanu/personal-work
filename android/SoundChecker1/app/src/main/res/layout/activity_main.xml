@@ -10,8 +10,11 @@
         android:id="@+id/bpmTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
         android:text="BPM: 60"
-        android:textSize="24sp" />
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/increaseBpmButton"
@@ -23,18 +26,34 @@
         android:id="@+id/decreaseBpmButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="-8dp"
         android:text="Decrease BPM" />
 
     <Button
         android:id="@+id/startMetronomeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#6DC507"
+        android:fontFamily="sans-serif-black"
         android:text="Start Metronome" />
 
     <Button
         android:id="@+id/stopMetronomeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#ED1C1C"
+        android:fontFamily="sans-serif-black"
         android:text="Stop Metronome"
         android:visibility="gone" /> <!-- Initially hidden -->
+
+    <TextView
+        android:id="@+id/copyrightTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:text="SoundChecker v1.0, Adrianus 2o24"
+        android:layout_marginTop="-6dp"
+        android:textColor="#FFFFFF"
+        android:textSize="7sp"
+        android:textStyle="normal" />
 </LinearLayout>

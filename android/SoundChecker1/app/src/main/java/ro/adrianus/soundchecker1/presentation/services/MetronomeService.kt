@@ -18,7 +18,7 @@ class MetronomeService : Service() {
         override fun run() {
             Log.d("metronome_service", "Vibrating at BPM: $bpm")
             if (vibrator.hasVibrator()) {
-                vibrator.vibrate(100)
+                vibrator.vibrate(85)
             } else {
                 Log.d("metronome_service", "No vibrator found on the device")
             }
