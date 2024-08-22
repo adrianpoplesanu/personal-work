@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 // USAGE: cat syntax012.c | ./a.out
+// 1.5.3 Line Counting
 
 main() {
     int c, nl;
