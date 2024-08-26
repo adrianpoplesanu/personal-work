@@ -93,8 +93,8 @@ class Parser:
         return self.parse_expression_statement()
 
     def parse_identifier(self):
-        print('parsing an identifier')
-        pass
+        stmt = ASTIdentifier(token=self.current_token, value=self.current_token.literal)
+        return stmt
 
     def parse_integer_literal(self):
         stmt = ASTInteger(token=self.current_token, value=int(self.current_token.literal))
@@ -167,7 +167,6 @@ class Parser:
         return expr
 
     def parse_let_expression(self):
-        print('parsing let expression...')
         stmt = ASTLetStatement(token=self.current_token)
         if not self.expect_peek(TokenType.IDENT):
             return None
