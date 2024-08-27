@@ -16,6 +16,8 @@ class OpCodeByte:
     OP_JUMP_NOT_TRUTHY = 14
     OP_JUMP = 15
     OP_NULL = 16
+    OP_GET_GLOBAL = 17
+    OP_SET_GLOBAL = 18
 
 
 class OpCode:
