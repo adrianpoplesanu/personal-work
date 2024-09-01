@@ -116,7 +116,7 @@ class Compiler:
         elif node.statement_type == StatementType.NULL_EXPRESSION:
             self.emit(op_null, 0, [])
         elif node.statement_type == StatementType.LET_STATEMENT:
-            print("TODO: handle compile let statement")
+            self.compile(node.value)
         else:
             print("severe error: node type unknown " + statement_type_map[node.statement_type])
 

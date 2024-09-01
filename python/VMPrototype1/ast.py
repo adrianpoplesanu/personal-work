@@ -177,8 +177,10 @@ class ASTBlockStatement(ASTNode):
 class ASTLetStatement(ASTNode):
     statement_type = StatementType.LET_STATEMENT
 
-    def __init__(self, token=None):
+    def __init__(self, token=None, name=None, value=None):
         self.token = token
+        self.name = name
+        self.value = value
 
     def __str__(self):
         return 'ASTLetStatement'
