@@ -18,7 +18,9 @@ enum OpCodeByte {
     OP_BANG,
     OP_JUMP_NOT_TRUTHY,
     OP_JUMP,
-    OP_NULL
+    OP_NULL,
+    OP_GET_GLOBAL,
+    OP_SET_GLOBAL
 };
 
 class OpCode {

@@ -19,6 +19,8 @@ Code::Code() {
     definitionsMap.insert(std::make_pair(OP_JUMP_NOT_TRUTHY, new Definition("OpJumpNotTruthy", 1, new int[1] {2})));
     definitionsMap.insert(std::make_pair(OP_JUMP, new Definition("OpJump", 1, new int[1] {2})));
     definitionsMap.insert(std::make_pair(OP_NULL, new Definition("OpNull", 0, new int)));
+    definitionsMap.insert(std::make_pair(OP_GET_GLOBAL, new Definition("OpGetGlobal", 1, new int[1] {2})));
+    definitionsMap.insert(std::make_pair(OP_SET_GLOBAL, new Definition("OpSetGlobal", 1, new int[1] {2})));
 }
 
 Code::~Code() {
