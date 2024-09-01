@@ -6,7 +6,8 @@ from instructions import Instructions
 from objects import AdObjectInteger, AdObject
 from opcode_ad import OpAdd, OpSub, OpMultiply, OpDivide, OpConstant, OpTrue, OpFalse, OpPop, op_equal, op_not_equal, \
     op_greater_than, op_greater_than_equal, op_add, op_sub, op_multiply, op_divide, op_pop, op_bang, op_minus, \
-    op_jump_not_truthy, OpCode, op_jump, op_null
+    op_jump_not_truthy, OpCode, op_jump, op_null, op_set_global, op_get_global
+from symbol_table import new_symbol_table
 
 
 class Compiler:
@@ -17,6 +18,7 @@ class Compiler:
         self.constants = []
         self.last_instruction = None
         self.previous_instruction = None
+        self.symbol_table = new_symbol_table()
 
     def reset(self):
         self.instructions = Instructions()
@@ -117,6 +119,11 @@ class Compiler:
             self.emit(op_null, 0, [])
         elif node.statement_type == StatementType.LET_STATEMENT:
             self.compile(node.value)
+            symbol = self.symbol_table.define(node.name.value)
+            self.emit(op_set_global, 1, [symbol.index])
+        elif node.statement_type == StatementType.IDENTIFIER:
+            symbol = self.symbol_table.resolve(node.value)
+            self.emit(op_get_global, 1, [symbol.index])
         else:
             print("severe error: node type unknown " + statement_type_map[node.statement_type])
 

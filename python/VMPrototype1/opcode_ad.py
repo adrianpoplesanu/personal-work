@@ -92,6 +92,14 @@ class OpNull(OpCode):
     byte_code = OpCodeByte.OP_NULL
 
 
+class OpGetGlobal(OpCode):
+    byte_code = OpCodeByte.OP_GET_GLOBAL
+
+
+class OpSetGlobal(OpCode):
+    byte_code = OpCodeByte.OP_SET_GLOBAL
+
+
 op_constant = OpConstant()
 op_add = OpAdd()
 op_sub = OpSub()
@@ -109,3 +117,5 @@ op_minus = OpMinus()
 op_jump_not_truthy = OpJumpNotTruthy()
 op_jump = OpJump()
 op_null = OpNull()
+op_get_global = OpGetGlobal()
+op_set_global = OpSetGlobal()

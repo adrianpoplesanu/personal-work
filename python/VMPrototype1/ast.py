@@ -196,6 +196,9 @@ class ASTIdentifier(ASTNode):
     def token_literal(self):
         return self.token.literal
 
+    def __str__(self):
+        return 'ASTIdentifier[' + self.value + ']'
+
 
 class ASTNullExpression(ASTNode):
     statement_type = StatementType.NULL_EXPRESSION
