@@ -2,6 +2,7 @@
 
 Compiler::Compiler() {
     // ...
+    symbolTable = newSymbolTable();
 }
 
 void Compiler::reset() {
@@ -136,11 +137,21 @@ void Compiler::compile(ASTNode* node) {
             }
         }
         case AT_IDENTIFIER: {
-            break;
+            ASTIdentifier *ident = (ASTIdentifier*) node;
+            Symbol symbol = symbolTable.resolve(ident->value);
+            OpGetGlobal opGetGlobal = OpGetGlobal();
+            std::vector<int> args;
+            args.push_back(symbol.index);
+            emit(opGetGlobal, 1, args);
         }
         case AT_LET_STATEMENT: {
-            std::cout << "TODO: handle compile let stateme\n";
-            break;
+            ASTLetStatement *stmt = (ASTLetStatement*) node;
+            compile(stmt->value);
+            Symbol symbol = symbolTable.define(stmt->name.value);
+            OpSetGlobal opSetGlobal = OpSetGlobal();
+            std::vector<int> args;
+            args.push_back(symbol.index);
+            emit(opSetGlobal, 1, args);
         }
         case AT_RETURN_STATEMENT: {
             break;

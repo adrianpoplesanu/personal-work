@@ -147,4 +147,18 @@ public:
     }
 };
 
+class OpGetGlobal : public OpCode {
+public:
+    OpGetGlobal() {
+        byteCode = OP_GET_GLOBAL;
+    }
+};
+
+class OpSetGlobal : public OpCode {
+public:
+    OpSetGlobal() {
+        byteCode = OP_SET_GLOBAL;
+    }
+};
+
 #endif

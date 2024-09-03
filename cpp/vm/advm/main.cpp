@@ -37,6 +37,8 @@
 #include "vm.cpp"
 #include "emitted_instruction.h"
 #include "emitted_instruction.cpp"
+#include "symbol_table.h"
+#include "symbol_table.cpp"
 
 int main(int argc, char* argv[]) {
     if (RUN_TESTS) {

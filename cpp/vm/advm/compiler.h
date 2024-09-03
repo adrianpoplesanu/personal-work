@@ -7,6 +7,7 @@
 #include "opcode.h"
 #include "gc.h"
 #include "emitted_instruction.h"
+#include "symbol_table.h"
 
 class Compiler {
 public:
@@ -17,6 +18,7 @@ public:
     GarbageCollector *gc;
     EmittedInstruction previousInstruction = EmittedInstruction();
     EmittedInstruction lastInstruction = EmittedInstruction();
+    SymbolTable symbolTable;
 
     Compiler();
     void reset();
