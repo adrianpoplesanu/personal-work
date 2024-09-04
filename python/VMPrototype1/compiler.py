@@ -31,8 +31,9 @@ class Compiler:
             for stmt in node.statements:
                 self.compile(stmt)
         elif node.statement_type == StatementType.EXPRESSION_STATEMENT:
-            self.compile(node.expression)
-            self.emit(op_pop, 0, [])
+            if (node.expression):
+                self.compile(node.expression)
+                self.emit(op_pop, 0, [])
         elif node.statement_type == StatementType.PREFIX_EXPRESSION:
             self.compile(node.right)
             if node.operator == "!":

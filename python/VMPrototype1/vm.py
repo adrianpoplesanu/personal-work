@@ -17,6 +17,7 @@ class VM:
         self.constants = constants
         self.stack = [None] * 1024
         self.sp = 0
+        self.globals = [None] * 65536  # GlobalsSize
 
     def load(self, bytecode: Bytecode):
         self.instructions = bytecode.instructions
@@ -103,6 +104,16 @@ class VM:
                     ip = pos - 1
             elif opcode == OpCodeByte.OP_NULL:
                 self.push(NULL_OBJECT)
+            elif opcode == OpCodeByte.OP_SET_GLOBAL:
+                global_index: int = read_uint16(self.instructions, ip + 1)
+                ip += 2
+
+                self.globals[global_index] = self.pop()
+            elif opcode == OpCodeByte.OP_GET_GLOBAL:
+                global_index: int = read_uint16(self.instructions, ip + 1)
+                ip += 2
+
+                self.push(self.globals[global_index])
             else:
                 print('severe error: vm.run() error')
             ip += 1

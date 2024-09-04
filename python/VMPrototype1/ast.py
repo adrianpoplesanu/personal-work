@@ -183,7 +183,7 @@ class ASTLetStatement(ASTNode):
         self.value = value
 
     def __str__(self):
-        return 'ASTLetStatement'
+        return 'ASTLetStatement<' + str(self.name) + '> [' + str(self.value) + ']'
 
 
 class ASTIdentifier(ASTNode):
