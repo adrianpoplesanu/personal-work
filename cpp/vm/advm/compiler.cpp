@@ -25,10 +25,12 @@ void Compiler::compile(ASTNode* node) {
         }
         case AT_EXPRESSION_STATEMENT: {
             ASTExpressionStatement *expressionStatement = (ASTExpressionStatement*) node;
-            compile(expressionStatement->expression);
-            OpPop opPop = OpPop();
-            std::vector<int> args;
-            emit(opPop, 0, args); // emmiting a pop when there's a parsing error is wrong
+            if (expressionStatement->expression) {
+                compile(expressionStatement->expression);
+                OpPop opPop = OpPop();
+                std::vector<int> args;
+                emit(opPop, 0, args); // emmiting a pop when there's a parsing error is wrong
+            }
             break;
         }
         case AT_INFIX_EXPRESSION: {
@@ -135,6 +137,7 @@ void Compiler::compile(ASTNode* node) {
                 std::vector<int> args;
                 emit(opFalse, 0, args);
             }
+            break;
         }
         case AT_IDENTIFIER: {
             ASTIdentifier *ident = (ASTIdentifier*) node;
@@ -143,6 +146,7 @@ void Compiler::compile(ASTNode* node) {
             std::vector<int> args;
             args.push_back(symbol.index);
             emit(opGetGlobal, 1, args);
+            break;
         }
         case AT_LET_STATEMENT: {
             ASTLetStatement *stmt = (ASTLetStatement*) node;
@@ -152,6 +156,7 @@ void Compiler::compile(ASTNode* node) {
             std::vector<int> args;
             args.push_back(symbol.index);
             emit(opSetGlobal, 1, args);
+            break;
         }
         case AT_RETURN_STATEMENT: {
             break;

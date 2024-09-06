@@ -192,6 +192,18 @@ void VM::run() {
                 push(&NULLOBJECT);
                 break;
             }
+            case OP_SET_GLOBAL: {
+                int globalIndex = readUint16(instructions, ip + 1);
+                ip += 2;
+                globals[globalIndex] = pop();
+                break;
+            }
+            case OP_GET_GLOBAL: {
+                int globalIndex = readUint16(instructions, ip + 1);
+                ip += 2;
+                push(globals[globalIndex]);
+                break;
+            }
             default: {
                 break;
             }

@@ -285,7 +285,7 @@ std::string ASTLetStatement::inspect() {
 }
 
 std::string ASTLetStatement::toString() {
-    return "ASTLetStatement";
+    return "ASTLetStatement<" + name.toString() + "> [" + value->toString() + "]\n";
 }
 
 void Ad_INCREF(ASTNode* node) {

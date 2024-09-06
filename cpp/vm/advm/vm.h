@@ -17,6 +17,7 @@ public:
     Instructions instructions;
     std::vector<AdObject*> constants;
     AdObject *stack[2048];
+    AdObject *globals[65536];
     GarbageCollector *gc;
 
     VM();
