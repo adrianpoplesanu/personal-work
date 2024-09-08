@@ -1,12 +1,21 @@
+from typing import List, Dict
+
+
 class AdObjectType:
     INT = 0
     BOOL = 1
     NULL = 2
+    STRING = 3
+    LIST = 4
+    HASH = 5
 
 
 class AdObject:
     object_type = None
     value = None
+
+    def inspect(self) -> str:
+        return 'not implemented'
 
 
 class AdObjectInteger(AdObject):
@@ -27,6 +36,52 @@ class AdBoolean(AdObject):
         if self.value:
             return 'true'
         return 'false'
+
+
+class AdString(AdObject):
+    def __init__(self, value: str):
+        self.object_type = AdObjectType.STRING
+        self.value = value
+
+    def inspect(self) -> str:
+        return "'" + self.value + "'"
+
+
+class AdList(AdObject):
+    def __init__(self, elements: List[AdObject]):
+        self.object_type = AdObjectType.LIST
+        self.elements = elements
+
+    def inspect(self) -> str:
+        out = '['
+        out += ', '.join([element.inspect() for element in self.elements])
+        out += ']'
+        return out
+
+
+class HashPair(object):
+    def __init__(self, key=None, value=None):
+        """
+        todo: write this
+        """
+        self.key = key
+        self.value = value
+
+
+class AdHash(AdObject):
+
+    def __init__(self, pairs=Dict):
+        """
+        todo: write this
+        """
+        self.object_type = AdObjectType.HASH
+        self.pairs = pairs
+
+    def inspect(self):
+        out = "{"
+        out += ', '.join(['{0}: {1}'.format(pair.key.inspect(), pair.value.inspect()) for pair in self.pairs.values()])
+        out += "}"
+        return out
 
 
 class AdNullObject(AdObject):
