@@ -13,6 +13,7 @@ class StatementType:
     NULL_EXPRESSION = 'NULL_EXPRESSION'
     LET_STATEMENT = 'LET_STATEMENT'
     IDENTIFIER = 'IDENTIFIER'
+    STRING_LITERAL = 'STRING_LITERAL'
 
 statement_type_map = {
     StatementType.PROGRAM: 'PROGRAM',
@@ -25,7 +26,8 @@ statement_type_map = {
     StatementType.BLOCK_STATEMENT: 'BLOCK_STATEMENT',
     StatementType.NULL_EXPRESSION: 'NULL_EXPRESSION',
     StatementType.LET_STATEMENT: 'LET_STATEMENT',
-    StatementType.IDENTIFIER: 'IDENTIFIER'
+    StatementType.IDENTIFIER: 'IDENTIFIER',
+    StatementType.STRING_LITERAL: 'STRING_LITERAL'
 }
 
 
@@ -85,6 +87,19 @@ class ASTInteger(ASTNode):
     def __str__(self):
         return 'ASTInteger[' + str(self.value) + ']'
 
+
+class ASTString(ASTNode):
+    statement_type = StatementType.STRING_LITERAL
+
+    def __init__(self, token:Token, value: str = None):
+        self.token = token
+        self.value = value
+
+    def token_literal(self):
+        return self.token.literal
+
+    def __str__(self):
+        return 'ASTString[' + self.value + ']'
 
 class ASTInfixExpression(ASTNode):
     statement_type = StatementType.INFIX_EXPRESSION

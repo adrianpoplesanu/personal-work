@@ -100,6 +100,12 @@ class Lexer:
             else:
                 token.token_type = TokenType.BANG
                 token.literal = '!'
+        elif self.ch == '"':
+            token.token_type = TokenType.STRING
+            token.literal = self.read_double_quotes_string()
+        elif self.ch == "'":
+            token.token_type = TokenType.STRING
+            token.literal = self.read_double_quotes_string()
         else:
             if self.is_letter():
                 token.literal = self.read_ident()
@@ -150,10 +156,24 @@ class Lexer:
         return self.source[start:self.position]
 
     def read_double_quotes_string(self):
-        pass
+        self.read_char()
+        start = self.position
+        while self.ch != '"':
+            if self.ch == '\\' and self.peek_char() == '\"':
+                # escaping \"
+                self.read_char()
+            self.read_char()
+        return self.source[start:self.position]
 
     def read_single_quotes_string(self):
-        pass
+        self.read_char()
+        start = self.position
+        while self.ch != "'":
+            if self.ch == '\\' and self.peek_char() == "\'":
+                # escaping \'
+                self.read_char()
+            self.read_char()
+        return self.source[start:self.position]
 
     def peek_char(self):
         if self.read_position >= len(self.source):
