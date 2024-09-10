@@ -2,7 +2,7 @@ from typing import Optional
 
 from bytecode import Bytecode
 from code_ad import read_uint16
-from objects import AdObject, AdObjectInteger, AdBoolean, AdObjectType, AdNullObject
+from objects import AdObject, AdObjectInteger, AdBoolean, AdObjectType, AdNullObject, AdString
 from opcode_ad import OpCodeByte
 from settings import PRINT_LAST_ELEMENT_ON_STACK
 
@@ -31,42 +31,8 @@ class VM:
                 const_index = read_uint16(self.instructions, ip + 1)
                 ip += 2
                 self.push(self.constants[const_index])
-            elif opcode == OpCodeByte.OP_ADD:
-                right = self.pop()
-                left = self.pop()
-
-                right_value = right.value
-                left_value = left.value
-                result = right_value + left_value
-                obj = AdObjectInteger(result)
-                self.push(obj)
-            elif opcode == OpCodeByte.OP_SUB:
-                right = self.pop()
-                left = self.pop()
-
-                right_value = right.value
-                left_value = left.value
-                result = left_value - right_value
-                obj = AdObjectInteger(result)
-                self.push(obj)
-            elif opcode == OpCodeByte.OP_MULTIPLY:
-                right = self.pop()
-                left = self.pop()
-
-                right_value = right.value
-                left_value = left.value
-                result = right_value * left_value
-                obj = AdObjectInteger(result)
-                self.push(obj)
-            elif opcode == OpCodeByte.OP_DIVIDE:
-                right = self.pop()
-                left = self.pop()
-
-                right_value = right.value
-                left_value = left.value
-                result = left_value / right_value
-                obj = AdObjectInteger(int(result))
-                self.push(obj)
+            elif opcode in (OpCodeByte.OP_ADD, OpCodeByte.OP_SUB, OpCodeByte.OP_MULTIPLY, OpCodeByte.OP_DIVIDE):
+                self.execute_binary_operation(opcode)
             elif opcode == OpCodeByte.OP_TRUE:
                 obj = self.native_bool_to_boolean_object(True)
                 self.push(obj)
@@ -177,6 +143,44 @@ class VM:
             self.push(self.native_bool_to_boolean_object(left.value > right.value))
         if opcode == OpCodeByte.OP_GREATERTHAN_EQUAL:
             self.push(self.native_bool_to_boolean_object(left.value >= right.value))
+
+    def execute_binary_operation(self, opcode):
+        right = self.pop()
+        left = self.pop()
+
+        right_type = right.object_type
+        left_type = left.object_type
+
+        if right_type == AdObjectType.INT and left_type == AdObjectType.INT:
+            return self.execute_binary_integer_operation(opcode, right, left)
+        if right_type == AdObjectType.STRING and left_type == AdObjectType.STRING:
+            return self.execute_binary_string_operation(opcode, right, left)
+
+    def execute_binary_integer_operation(self, opcode, right, left):
+        right_value = right.value
+        left_value = left.value
+
+        result = AdObjectInteger()
+        if opcode == OpCodeByte.OP_ADD:
+            result.value = left_value + right_value
+        elif opcode == OpCodeByte.OP_SUB:
+            result.value = left_value - right_value
+        elif opcode == OpCodeByte.OP_MULTIPLY:
+            result.value = left_value * right_value
+        elif opcode == OpCodeByte.OP_DIVIDE:
+            result.value = int(left_value / right_value)
+
+        self.push(result)
+
+    def execute_binary_string_operation(self, opcode, right, left):
+        right_value = right.value
+        left_value = left.value
+
+        result = AdString()
+        if opcode == OpCodeByte.OP_ADD:
+            result.value = str(left_value) + str(right_value)
+
+        self.push(result)
 
     def execute_bang_operator(self):
         operand = self.pop()

@@ -3,10 +3,10 @@ from bytecode import Bytecode
 from code_ad import Code
 from emitted_instruction import EmittedInstruction
 from instructions import Instructions
-from objects import AdObjectInteger, AdObject
+from objects import AdObjectInteger, AdObject, AdString
 from opcode_ad import OpAdd, OpSub, OpMultiply, OpDivide, OpConstant, OpTrue, OpFalse, OpPop, op_equal, op_not_equal, \
     op_greater_than, op_greater_than_equal, op_add, op_sub, op_multiply, op_divide, op_pop, op_bang, op_minus, \
-    op_jump_not_truthy, OpCode, op_jump, op_null, op_set_global, op_get_global
+    op_jump_not_truthy, OpCode, op_jump, op_null, op_set_global, op_get_global, op_constant
 from symbol_table import new_symbol_table
 
 
@@ -125,6 +125,11 @@ class Compiler:
         elif node.statement_type == StatementType.IDENTIFIER:
             symbol = self.symbol_table.resolve(node.value)
             self.emit(op_get_global, 1, [symbol.index])
+        elif node.statement_type == StatementType.STRING_LITERAL:
+            string_obj = AdString(node.value)
+            args = []
+            args.append(self.add_constant(string_obj))
+            self.emit(op_constant, 1, args)
         else:
             print("severe error: node type unknown " + statement_type_map[node.statement_type])
 

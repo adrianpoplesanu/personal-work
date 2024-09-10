@@ -19,7 +19,7 @@ class AdObject:
 
 
 class AdObjectInteger(AdObject):
-    def __init__(self, value: int):
+    def __init__(self, value: int = None):
         self.object_type = AdObjectType.INT
         self.value = value
 
@@ -39,7 +39,7 @@ class AdBoolean(AdObject):
 
 
 class AdString(AdObject):
-    def __init__(self, value: str):
+    def __init__(self, value: str = None):
         self.object_type = AdObjectType.STRING
         self.value = value
 
