@@ -20,7 +20,8 @@ enum ASTType {
     AT_WHILE_STATEMENT,
     AT_FOR_STATEMENT,
     AT_IF_STATEMENT,
-    AT_NULL_EXPRESSION
+    AT_NULL_EXPRESSION,
+    AT_STRING_LITERAL
 };
 
 class ASTNode {
@@ -120,6 +121,18 @@ public:
     ASTInteger(Token);
     ASTInteger(Token, int);
     ~ASTInteger();
+    virtual std::string inspect();
+    virtual std::string toString();
+};
+
+class ASTString : public ASTNode {
+public:
+    std::string value;
+
+    ASTString();
+    ASTString(Token);
+    ASTString(Token, std::string);
+    ~ASTString();
     virtual std::string inspect();
     virtual std::string toString();
 };

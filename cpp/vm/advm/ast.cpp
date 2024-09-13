@@ -288,6 +288,33 @@ std::string ASTLetStatement::toString() {
     return "ASTLetStatement<" + name.toString() + "> [" + value->toString() + "]\n";
 }
 
+ASTString::ASTString() {
+    type = AT_STRING_LITERAL;
+}
+
+ASTString::ASTString(Token t) {
+    type = AT_STRING_LITERAL;
+    token = t;
+}
+
+ASTString::ASTString(Token t, std::string v) {
+    type = AT_STRING_LITERAL;
+    token = t;
+    value = v;
+}
+
+ASTString::~ASTString() {
+    //...
+}
+
+std::string ASTString::inspect() {
+    return "ASTString.inspect()";
+}
+
+std::string ASTString::toString() {
+    return "ASTString[" + value + "]";
+}
+
 void Ad_INCREF(ASTNode* node) {
     if (node) {
         node->ref_count++;
@@ -366,6 +393,10 @@ void free_memory_ASTNode(ASTNode* node) {
         }
         case AT_NULL_EXPRESSION: {
             delete (ASTNullExpression*) node;
+            break;
+        }
+        case AT_STRING_LITERAL: {
+            delete (ASTString*) node;
             break;
         }
         default: {
