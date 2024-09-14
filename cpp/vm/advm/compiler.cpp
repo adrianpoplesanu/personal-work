@@ -225,6 +225,16 @@ void Compiler::compile(ASTNode* node) {
             }
             break;
         }
+        case AT_STRING_LITERAL: {
+            ASTString *expr = (ASTString*) node;
+            AdObjectString *stringObj = new AdObjectString(expr->value);
+            gc->addObject(stringObj);
+            OpConstant opConstant = OpConstant();
+            std::vector<int> args;
+            args.push_back(addConstant(stringObj));
+            emit(opConstant, 1, args);
+            break;
+        }
         default: {
             std::cout << "ERROR: unhndled ast type compiled\n";
             break;

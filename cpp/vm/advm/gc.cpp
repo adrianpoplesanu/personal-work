@@ -44,6 +44,10 @@ void GarbageCollector::markObject(AdObject* obj) {
             obj->marked = true;
             break;
         }
+        case OT_STRING: {
+            obj->marked = true;
+            break;
+        }
         default: {
             std::cout << "MEMORY ERROR!!! garbage collection inconsistency!\n";
             break;

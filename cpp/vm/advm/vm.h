@@ -32,6 +32,10 @@ public:
     AdObject* pop();
     AdObject* nativeBooleanToBooleanObject(bool);
     bool isTruthy(AdObject*);
+
+    void executeBinaryOperations(unsigned char);
+    void executeBinaryIntegerOperations(unsigned char, AdObject*, AdObject*);
+    void executeBinaryStringOperations(unsigned char, AdObject*, AdObject*);
 };
 
 #endif

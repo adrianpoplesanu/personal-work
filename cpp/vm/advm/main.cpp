@@ -23,6 +23,8 @@
 #include "instructions.cpp"
 #include "lexer.h"
 #include "lexer.cpp"
+#include "hashpair.h"
+#include "hashpair.cpp"
 #include "objects.h"
 #include "objects.cpp"
 #include "parser.h"

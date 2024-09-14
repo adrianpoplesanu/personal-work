@@ -36,7 +36,14 @@ void VM::run() {
                 push(constants.at(constIndex));
                 break;
             }
-            case OP_ADD: {
+            case OP_ADD:
+            case OP_SUB:
+            case OP_MULTIPLY:
+            case OP_DIVIDE: {
+                executeBinaryOperations(opcode);
+                break;
+            }
+            /*case OP_ADD: {
                 // 1 e OpAdd
                 AdObject *right = pop();
                 AdObject *left = pop();
@@ -91,7 +98,7 @@ void VM::run() {
                 gc->addObject(obj);
                 push(obj);
                 break;
-            }
+            }*/
             case OP_POP: {
                 // 5 e OpPop
                 if (PRINT_LAST_ELEMENT_ON_STACK) {
@@ -268,4 +275,54 @@ bool VM::isTruthy(AdObject* obj) {
         return false;
     }
     return true;
+}
+
+void VM::executeBinaryOperations(unsigned char opcode) {
+    AdObject *right = pop();
+    AdObject *left = pop();
+
+    ObjectType right_type = right->type;
+    ObjectType left_type = left->type;
+
+    if (right_type == OT_INT && left_type == OT_INT) {
+        executeBinaryIntegerOperations(opcode, right, left);
+    }
+    if (right_type == OT_STRING && left_type == OT_STRING) {
+        executeBinaryStringOperations(opcode, right, left);
+    }
+}
+
+void VM::executeBinaryIntegerOperations(unsigned char opcode, AdObject *right, AdObject *left) {
+    int resultValue;
+    int rightValue = ((AdObjectInteger*) right)->value;
+    int leftValue = ((AdObjectInteger*) left)->value;
+    switch(opcode) {
+        case OP_ADD:
+            resultValue = leftValue + rightValue;
+            break;
+        case OP_SUB:
+            resultValue = leftValue - rightValue;
+            break;
+        case OP_MULTIPLY:
+            resultValue = leftValue * rightValue;
+            break;
+        case OP_DIVIDE:
+            resultValue = leftValue / rightValue;
+            break;
+    }
+    AdObjectInteger *result = new AdObjectInteger(resultValue);
+    push(result);
+}
+
+void VM::executeBinaryStringOperations(unsigned char opcode, AdObject *right, AdObject *left) {
+    std::string resultValue = "";
+    std::string rightValue = ((AdObjectString*) right)->value;
+    std::string leftValue = ((AdObjectString*) left)->value;
+    switch(opcode) {
+        case OP_ADD:
+            resultValue = leftValue + rightValue;
+            break;
+    }
+    AdObjectString *result = new AdObjectString(resultValue);
+    push(result);
 }
