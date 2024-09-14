@@ -8,6 +8,14 @@ std::string AdObject::toString() {
     return "unimplemented in subclass";
 }
 
+std::string AdObject::hash() {
+    return "todo: implement this";
+}
+
+AdObject *AdObject::copy() {
+    return NULL;
+}
+
 AdObjectInteger::AdObjectInteger() {
     type = OT_INT;
 }
@@ -25,6 +33,14 @@ std::string AdObjectInteger::inspect() {
 
 std::string AdObjectInteger::toString() {
     return "todo";
+}
+
+std::string AdObjectInteger::hash() {
+    return "todo: implement this";
+}
+
+AdObject *AdObjectInteger::copy() {
+    return nullptr;
 }
 
 AdObjectBoolean::AdObjectBoolean() {
@@ -53,6 +69,14 @@ std::string AdObjectBoolean::toString() {
     return "todo";
 }
 
+std::string AdObjectBoolean::hash() {
+    return "todo: implement this";
+}
+
+AdObject *AdObjectBoolean::copy() {
+    return nullptr;
+}
+
 AdObjectNull::AdObjectNull() {
     //std::cout << "allocating a null object\n";
     type = OT_NULL;
@@ -68,6 +92,39 @@ std::string AdObjectNull::inspect() {
 
 std::string AdObjectNull::toString() {
     return "todo";
+}
+
+std::string AdObjectNull::hash() {
+    return "todo: implement this";
+}
+
+AdObject *AdObjectNull::copy() {
+    return nullptr;
+}
+
+AdObjectString::AdObjectString() {
+    type = OT_STRING;
+}
+
+AdObjectString::AdObjectString(std::string v) {
+    type = OT_STRING;
+    value = v;
+}
+
+std::string AdObjectString::inspect() {
+    return "'" + value + "'";
+}
+
+std::string AdObjectString::toString() {
+    return "AdObjectString.toString()";
+}
+
+std::string AdObjectString::hash() {
+    return "todo: implement this";
+}
+
+AdObject *AdObjectString::copy() {
+    return nullptr;
 }
 
 void AD_INCREF(AdObject* obj) {
@@ -93,6 +150,10 @@ void free_memory_AdObject(AdObject* obj) {
             if (!((AdObjectBoolean*) obj)->permanent) {
                 delete (AdObjectBoolean*) obj;
             }
+            break;
+        }
+        case OT_STRING: {
+            delete (AdObjectString*) obj;
             break;
         }
         default: {

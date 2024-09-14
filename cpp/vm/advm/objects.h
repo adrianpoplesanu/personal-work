@@ -2,6 +2,9 @@
 #define __OBJECTS_H
 
 #include <iostream>
+#include <vector>
+#include <unordered_map>
+#include "hashpair.h"
 
 enum ObjectType {
     OT_INT,
@@ -31,6 +34,8 @@ public:
 
     virtual std::string inspect();
     virtual std::string toString();
+    virtual std::string hash();
+    virtual AdObject* copy();
 };
 
 class AdObjectInteger : public AdObject {
@@ -41,6 +46,8 @@ public:
     AdObjectInteger(int);
     virtual std::string inspect();
     virtual std::string toString();
+    virtual std::string hash();
+    virtual AdObject* copy();
 };
 
 class AdObjectBoolean : public AdObject {
@@ -53,6 +60,8 @@ public:
     AdObjectBoolean(bool, bool);
     virtual std::string inspect();
     virtual std::string toString();
+    virtual std::string hash();
+    virtual AdObject* copy();
 };
 
 class AdObjectNull : public AdObject {
@@ -61,6 +70,8 @@ public:
     ~AdObjectNull();
     virtual std::string inspect();
     virtual std::string toString();
+    virtual std::string hash();
+    virtual AdObject* copy();
 };
 
 class AdObjectString : public AdObject {
@@ -68,8 +79,35 @@ public:
     std::string value;
 
     AdObjectString();
+    AdObjectString(std::string);
     virtual std::string inspect();
     virtual std::string toString();
+    virtual std::string hash();
+    virtual AdObject* copy();
+};
+
+class AdObjectList : public AdObject {
+public:
+    std::vector<AdObject*> elements;
+
+    AdObjectList();
+    AdObjectList(std::vector<AdObject>);
+    virtual std::string inspect();
+    virtual std::string toString();
+    virtual std::string hash();
+    virtual AdObject* copy();
+};
+
+class AdObjectHash : public AdObject {
+public:
+	std::unordered_map<std::string, HashPair> pairs;
+
+    AdObjectHash();
+    AdObjectHash(std::unordered_map<std::string, HashPair>);
+    virtual std::string inspect();
+    virtual std::string toString();
+    virtual std::string hash();
+    virtual AdObject* copy();
 };
 
 class AdObjectFunction : public AdObject {

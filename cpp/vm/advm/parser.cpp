@@ -13,6 +13,7 @@ Parser::Parser() {
     //prefixParseFns.insert(std::make_pair(TT_IF, [this]() { return parseIfStatement(); } ));
     prefixParseFns.insert(std::make_pair(TT_IF, &Parser::parseIfStatement));
     prefixParseFns.insert(std::make_pair(TT_NULL, &Parser::parseNullExpression));
+    prefixParseFns.insert(std::make_pair(TT_STRING, &Parser::parseStringLiteral));
 
     infixParseFns.insert(std::make_pair(TT_PLUS, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parseInfixExpression));
@@ -227,6 +228,11 @@ ASTNode* Parser::parseBlockStatement() {
 ASTNode* Parser::parseNullExpression() {
     ASTNullExpression *expr = new ASTNullExpression();
     nextToken();
+    return expr;
+}
+
+ASTNode* Parser::parseStringLiteral() {
+    ASTString *expr = new ASTString(currentToken, currentToken.stringLiteral);
     return expr;
 }
 

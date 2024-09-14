@@ -67,6 +67,30 @@ TokenType Lexer::lookupKeyword(std::string literal) {
     return TT_IDENT;
 }
 
+std::string Lexer::readDoubleQuotesString() {
+    readChar();
+    int start = position;
+    while (currentChar != '"') {
+        if (currentChar == '\\' && peekChar() == '"') {  // escaping \"
+            readChar();
+        }
+        readChar();
+    }
+    return source.substr(start, position - start);
+}
+
+std::string Lexer::readSingleQuotesString() {
+    readChar();
+    int start = position;
+    while (currentChar != '\'') {
+        if (currentChar == '\\' && peekChar() == '\'') {  // escaping \'
+            readChar();
+        }
+        readChar();
+    }
+    return source.substr(start, position - start);
+}
+
 Token Lexer::nextToken() {
     bool readNextChar = true;
     Token token;
@@ -111,6 +135,14 @@ Token Lexer::nextToken() {
         case ';':
             token.stringLiteral = ';';
             token.type = TT_SEMICOLON;
+            break;
+        case '"':
+            token.stringLiteral = readDoubleQuotesString();
+            token.type = TT_STRING;
+            break;
+        case '\'':
+            token.stringLiteral = readSingleQuotesString();
+            token.type = TT_STRING;
             break;
         case '>':
             if (peekChar() == '=') {

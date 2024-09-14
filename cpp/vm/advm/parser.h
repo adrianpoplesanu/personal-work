@@ -70,6 +70,7 @@ public:
     ASTNode* parseSingleBlockStatement();
     ASTNode* parseBlockStatement();
     ASTNode* parseNullExpression();
+    ASTNode* parseStringLiteral();
 };
 
 #endif

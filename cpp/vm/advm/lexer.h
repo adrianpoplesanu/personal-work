@@ -25,6 +25,8 @@ public:
     bool isDigit();
     bool isLetter();
     TokenType lookupKeyword(std::string);
+    std::string readDoubleQuotesString();
+    std::string readSingleQuotesString();
 };
 
 #endif
