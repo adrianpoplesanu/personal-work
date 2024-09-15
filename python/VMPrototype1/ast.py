@@ -1,3 +1,5 @@
+from typing import List, Dict
+
 from token_ad import Token
 
 
@@ -14,6 +16,10 @@ class StatementType:
     LET_STATEMENT = 'LET_STATEMENT'
     IDENTIFIER = 'IDENTIFIER'
     STRING_LITERAL = 'STRING_LITERAL'
+    LIST_LITERAL = 'LIST_LITERAL'
+    INDEX_EXPRESSION = 'INDEX_EXPRESSION'
+    HASH_LITERAL = 'HASH_LITERAL'
+
 
 statement_type_map = {
     StatementType.PROGRAM: 'PROGRAM',
@@ -27,7 +33,10 @@ statement_type_map = {
     StatementType.NULL_EXPRESSION: 'NULL_EXPRESSION',
     StatementType.LET_STATEMENT: 'LET_STATEMENT',
     StatementType.IDENTIFIER: 'IDENTIFIER',
-    StatementType.STRING_LITERAL: 'STRING_LITERAL'
+    StatementType.STRING_LITERAL: 'STRING_LITERAL',
+    StatementType.LIST_LITERAL: 'LIST_LITERAL',
+    StatementType.INDEX_EXPRESSION: 'INDEX_EXPRESSION',
+    StatementType.HASH_LITERAL: 'HASH_LITERAL'
 }
 
 
@@ -91,7 +100,7 @@ class ASTInteger(ASTNode):
 class ASTString(ASTNode):
     statement_type = StatementType.STRING_LITERAL
 
-    def __init__(self, token:Token, value: str = None):
+    def __init__(self, token: Token, value: str = None):
         self.token = token
         self.value = value
 
@@ -100,6 +109,56 @@ class ASTString(ASTNode):
 
     def __str__(self):
         return 'ASTString[' + self.value + ']'
+
+
+class ASTList(ASTNode):
+    statement_type = StatementType.LIST_LITERAL
+
+    def __init__(self, token: Token = None, elements: List = None):
+        super().__init__()
+        self.token = token
+        self.elements = elements
+
+    def token_literal(self) -> str:
+        return self.token.literal
+
+    def __str__(self) -> str:
+        return 'TODO: implement __str__ in ASTListLiteral'
+
+
+class ASTIndexExpression(ASTNode):
+    statement_type = StatementType.INDEX_EXPRESSION
+
+    def __init__(self, token: Token = None, left: ASTNode = None, index: ASTNode = None):
+        super().__init__()
+        self.token = token
+        self.left = left
+        self.index = index
+
+    def token_literal(self) -> str:
+        return self.token.literal
+
+    def __str__(self) -> str:
+        return 'TODO: implement __str__ in ASTIndexExpression'
+
+
+class ASTHash(ASTNode):
+    type = StatementType.HASH_LITERAL
+
+    def __init__(self, token: Token = None, pairs: Dict[ASTNode, ASTNode] = None):
+        """
+        @param token: the node's token
+        @param pairs: map [Expression] => Expression
+        """
+        self.token = token
+        self.pairs = pairs
+
+    def token_literal(self):
+        return self.token.literal
+
+    def __str__(self):
+        return 'TODO: implement __str__ in ASTHashLiteral'
+
 
 class ASTInfixExpression(ASTNode):
     statement_type = StatementType.INFIX_EXPRESSION

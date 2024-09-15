@@ -68,6 +68,15 @@ class Lexer:
         elif self.ch == '}':
             token.token_type = TokenType.RBRACE
             token.literal = "}"
+        elif self.ch == '[':
+            token.token_type = TokenType.LBRACKET
+            token.literal = '['
+        elif self.ch == ']':
+            token.token_type = TokenType.RBRACKET
+            token.literal = ']'
+        elif self.ch == ',':
+            token.token_type = TokenType.COMMA
+            token.literal = ','
         elif self.ch == '<':
             if self.peek_char() == '=':
                 self.read_char()

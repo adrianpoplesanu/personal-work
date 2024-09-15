@@ -1,7 +1,8 @@
 from typing import Optional
 
 from ast import ASTProgram, ASTNode, ASTExpressionStatement, ASTInteger, ASTInfixExpression, ASTPrefixExpression, \
-    ASTBoolean, ASTIfExpression, ASTBlockStatement, ASTNullExpression, ASTLetStatement, ASTIdentifier, ASTString
+    ASTBoolean, ASTIfExpression, ASTBlockStatement, ASTNullExpression, ASTLetStatement, ASTIdentifier, ASTString, \
+    ASTList, ASTIndexExpression, ASTHash
 from lexer import Lexer
 from precedence_type import PrecedenceType, precedences
 from token_type import TokenType
@@ -27,7 +28,9 @@ class Parser:
             TokenType.LPAREN: self.parse_grouped_expression,
             TokenType.IF: self.parse_if_statement,
             TokenType.NULL: self.parse_null_expression,
-            TokenType.STRING: self.parse_string_literal
+            TokenType.STRING: self.parse_string_literal,
+            TokenType.LBRACKET: self.parse_list_literal,
+            TokenType.LBRACE: self.parse_hash_literal
         }
 
         self.infix_parse_fns = {
@@ -40,7 +43,8 @@ class Parser:
             TokenType.GT: self.parse_infix_expression,
             TokenType.LT: self.parse_infix_expression,
             TokenType.GTE: self.parse_infix_expression,
-            TokenType.LTE: self.parse_infix_expression
+            TokenType.LTE: self.parse_infix_expression,
+            TokenType.LBRACKET: self.parse_index_expression
         }
 
     def load(self, source):
@@ -73,7 +77,7 @@ class Parser:
             return True
         else:
             #self.errors.append('ERROR: i was expecting a different token here: ' + token_type)
-            print(('ERROR: i was expecting a different token here: ' + str(token_type)))
+            print('ERROR: i was expecting a different token here: ' + str(token_type))
             return False
 
     def peek_precedence(self):
@@ -93,15 +97,15 @@ class Parser:
             return self.parse_let_expression()
         return self.parse_expression_statement()
 
-    def parse_identifier(self):
+    def parse_identifier(self) -> ASTNode:
         stmt = ASTIdentifier(token=self.current_token, value=self.current_token.literal)
         return stmt
 
-    def parse_integer_literal(self):
+    def parse_integer_literal(self) -> ASTNode:
         stmt = ASTInteger(token=self.current_token, value=int(self.current_token.literal))
         return stmt
 
-    def parse_boolean(self):
+    def parse_boolean(self) -> ASTNode:
         stmt = ASTBoolean(token=self.current_token, value=bool(self.current_token.token_type == TokenType.TRUE))
         return stmt
 
@@ -112,20 +116,20 @@ class Parser:
             self.next_token()
         return stmt
 
-    def parse_prefix_expression(self):
+    def parse_prefix_expression(self) -> ASTNode:
         expr = ASTPrefixExpression(token=self.current_token, operator=self.current_token.literal)
         self.next_token()
         expr.right = self.parse_expression(PrecedenceType.PREFIX)
         return expr
 
-    def parse_grouped_expression(self):
+    def parse_grouped_expression(self) -> Optional[ASTNode]:
         self.next_token()
         expr = self.parse_expression(PrecedenceType.LOWEST)
         if not self.expect_peek(TokenType.RPAREN):
             return None
         return expr
 
-    def parse_if_statement(self):
+    def parse_if_statement(self) -> Optional[ASTNode]:
         expr = ASTIfExpression(token=self.current_token)
         if not self.expect_peek(TokenType.LPAREN):
             return None
@@ -162,13 +166,58 @@ class Parser:
         block.statements.append(stmt)
         return block
 
-    def parse_null_expression(self):
+    def parse_null_expression(self) -> ASTNode:
         expr = ASTNullExpression(token=self.current_token)
         self.next_token()
         return expr
 
-    def parse_string_literal(self):
+    def parse_string_literal(self) -> ASTNode:
         return ASTString(token=self.current_token, value=str(self.current_token.literal))
+
+    def parse_list_literal(self) -> ASTNode:
+        expr = ASTList(self.current_token)
+        expr.elements = self.parse_expression_list()
+        return expr
+
+    def parse_hash_literal(self) -> Optional[ASTNode]:
+        node = ASTHash(token=self.current_token)
+        node.pairs = {}
+        while not self.peek_token_is(TokenType.RBRACE):
+            self.next_token()
+            key = self.parse_expression(PrecedenceType.LOWEST)
+            if not self.expect_peek(TokenType.COLON):
+                return None
+            self.next_token()
+            value = self.parse_expression(PrecedenceType.LOWEST)
+            node.pairs[key] = value
+            if not self.peek_token_is(TokenType.RBRACE) and not self.expect_peek(TokenType.COMMA):
+                return None
+        if not self.expect_peek(TokenType.RBRACE):
+            return None
+        return node
+
+    def parse_expression_list(self):
+        elements = []
+        if self.peek_token_is(TokenType.RBRACKET):
+            self.next_token()
+            return elements
+        self.next_token()
+        elements.append(self.parse_expression(PrecedenceType.LOWEST))
+        while self.peek_token_is(TokenType.COMMA):
+            self.next_token()
+            self.next_token()
+            elements.append(self.parse_expression(PrecedenceType.LOWEST))
+        if not self.expect_peek(TokenType.RBRACKET):
+            return None
+        return elements
+
+    def parse_index_expression(self, left: ASTNode) -> Optional[ASTNode]:
+        expr = ASTIndexExpression(token=self.current_token, left=left)
+        self.next_token()
+        expr.index = self.parse_expression(PrecedenceType.LOWEST)
+        if not self.expect_peek(TokenType.RBRACKET):
+            return None
+        return expr
 
     def parse_let_expression(self):
         stmt = ASTLetStatement(token=self.current_token)
@@ -183,18 +232,18 @@ class Parser:
             self.next_token()
         return stmt
 
-    def parse_infix_expression(self, left):
+    def parse_infix_expression(self, left: ASTNode) -> ASTNode:
         expr = ASTInfixExpression(token=self.current_token, operator=self.current_token.literal, left=left)
         precedence = self.current_precedence()
         self.next_token()
         expr.right = self.parse_expression(precedence)
         return expr
 
-    def parse_expression(self, precedence):
+    def parse_expression(self, precedence) -> Optional[ASTNode]:
         if self.current_token.token_type not in self.prefix_parse_fns:
             return None
         prefix = self.prefix_parse_fns[self.current_token.token_type]
-        left_exp = prefix()
+        left_exp: Optional[ASTNode] = prefix()
         while (not self.peek_token_is(TokenType.SEMICOLON)) and precedence < self.peek_precedence():
             if self.peek_token.token_type not in self.infix_parse_fns:
                 return left_exp
