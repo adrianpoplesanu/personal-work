@@ -2,7 +2,7 @@ from typing import Optional
 
 from bytecode import Bytecode
 from code_ad import read_uint16
-from objects import AdObject, AdObjectInteger, AdBoolean, AdObjectType, AdNullObject, AdString
+from objects import AdObject, AdObjectInteger, AdBoolean, AdObjectType, AdNullObject, AdString, AdList
 from opcode_ad import OpCodeByte
 from settings import PRINT_LAST_ELEMENT_ON_STACK
 
@@ -80,6 +80,14 @@ class VM:
                 ip += 2
 
                 self.push(self.globals[global_index])
+            elif opcode == OpCodeByte.OP_ARRAY:
+                numElements: int = read_uint16(self.instructions, ip + 1)
+                ip += 2
+
+                array_obj: AdObject = self.build_array(self.sp - numElements, self.sp)
+                self.sp = self.sp - numElements
+
+                self.push(array_obj)
             else:
                 print('severe error: vm.run() error')
             ip += 1
@@ -202,6 +210,12 @@ class VM:
 
         value = operand.value
         self.push(AdObjectInteger(-value))
+
+    def build_array(self, start_index: int, end_index: int) -> AdObject:
+        elements = []
+        for i in range(start_index, end_index):
+            elements.append(self.stack[i])
+        return AdList(elements)
 
     def native_bool_to_boolean_object(self, value):
         if value:

@@ -61,7 +61,8 @@ class Code:
             OpCodeByte.OP_JUMP: Definition("OpJump", 1, [2]),
             OpCodeByte.OP_NULL: Definition("OpNull", 0, []),
             OpCodeByte.OP_GET_GLOBAL: Definition("OpGetGlobal", 1, [2]),
-            OpCodeByte.OP_SET_GLOBAL: Definition("OpSetGlobal", 1, [2])
+            OpCodeByte.OP_SET_GLOBAL: Definition("OpSetGlobal", 1, [2]),
+            OpCodeByte.OP_ARRAY: Definition("OpArray", 1, [2])
         }
 
     def make(self, opcode: OpCode, n, args) -> Tuple[int, list]:
