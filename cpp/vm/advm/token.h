@@ -24,6 +24,10 @@ enum TokenType {
     TT_RPAREN,
     TT_LBRACE,
     TT_RBRACE,
+    TT_LBRACKET,
+    TT_RBRACKET,
+    TT_COMMA,
+    TT_COLON,
     TT_TRUE,
     TT_FALSE,
     TT_WHILE,
@@ -45,7 +49,15 @@ enum TokenType {
     TT_BANG,
     TT_AND,
     TT_OR,
-    TT_NULL
+    TT_NULL,
+    TT_EQ,
+    TT_NOT_EQ,
+    TT_MODULUS,
+    TT_DOT,
+    TT_PLUSPLUS,
+    TT_MINUSMINUS,
+    TT_PLUS_EQ,
+    TT_MINUS_EQ
 };
 
 std::map<TokenType, std::string> tokenTypeConverter = {
@@ -68,6 +80,9 @@ std::map<TokenType, std::string> tokenTypeConverter = {
     {TT_RPAREN, "RPAREN"},
     {TT_LBRACE, "LBRACE"},
     {TT_RBRACE, "RBRACE"},
+    {TT_LBRACKET, "LBRACKET"},
+    {TT_RBRACKET, "RBRACKET"},
+    {TT_COMMA, "COMMA"},
     {TT_TRUE, "TRUE"},
     {TT_FALSE, "FALSE"},
     {TT_WHILE, "WHILE"},

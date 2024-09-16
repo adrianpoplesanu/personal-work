@@ -315,6 +315,100 @@ std::string ASTString::toString() {
     return "ASTString[" + value + "]";
 }
 
+ASTList::ASTList() {
+    type = AT_LIST_LITERAL;
+}
+
+ASTList::ASTList(Token t) {
+    type = AT_LIST_LITERAL;
+    token = t;
+}
+
+ASTList::ASTList(Token t, std::vector<ASTNode*> e) {
+    type = AT_LIST_LITERAL;
+    token = t;
+    elements = e;
+}
+
+ASTList::~ASTList() {
+    for (auto& it : elements) {
+        free_memory_ASTNode(it);
+    }
+}
+
+std::string ASTList::inspect() {
+    return "ASTList.inspect()";
+}
+
+std::string ASTList::toString() {
+    std::string out = "ASTList[";
+    int i = 0, size = elements.size();
+    for (auto el : elements) {
+        if (i < size - 1) {
+            out += el->inspect() + ", ";
+        } else {
+            out += el->inspect();
+        }
+        ++i;
+    }
+    out += "]";
+    return out;
+}
+
+ASTIndexExpression::ASTIndexExpression() {
+    type = AT_INDEX_EXPRESSION;
+}
+
+ASTIndexExpression::ASTIndexExpression(Token t) {
+    type = AT_INDEX_EXPRESSION;
+    token = t;
+}
+
+ASTIndexExpression::ASTIndexExpression(Token t, ASTNode *l) {
+    type = AT_INDEX_EXPRESSION;
+    token = t;
+    left = l;
+}
+
+ASTIndexExpression::~ASTIndexExpression() {
+    //...
+}
+
+std::string ASTIndexExpression::inspect() {
+    return "ASTIndexExpression.inspect()";
+}
+
+std::string ASTIndexExpression::toString() {
+    std::string out = "ASTIndexExpression[";
+    out += "<" + left->toString() + ">";
+    out += "<" + index->toString() + ">";
+    out += "<" + indexEnd->toString() + ">";
+    out += "<" + step->toString() + ">";
+    out += "]";
+    return out;
+}
+
+ASTHash::ASTHash() {
+    type = AT_HASH_LITERAL;
+}
+
+ASTHash::ASTHash(Token t) {
+    type = AT_HASH_LITERAL;
+    token = t;
+}
+
+ASTHash::~ASTHash() {
+    //...
+}
+
+std::string ASTHash::inspect() {
+    return "TODO: implement ASTHash.inspect()";
+}
+
+std::string ASTHash::toString() {
+    return "TODO: implement ASTHash.toString()";
+}
+
 void Ad_INCREF(ASTNode* node) {
     if (node) {
         node->ref_count++;
@@ -397,6 +491,10 @@ void free_memory_ASTNode(ASTNode* node) {
         }
         case AT_STRING_LITERAL: {
             delete (ASTString*) node;
+            break;
+        }
+        case AT_LIST_LITERAL: {
+            delete (ASTList*) node;
             break;
         }
         default: {

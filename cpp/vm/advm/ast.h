@@ -3,6 +3,7 @@
 
 #include "token.h"
 #include <vector>
+#include <unordered_map>
 
 enum ASTType {
     AT_PROGRAM,
@@ -21,7 +22,10 @@ enum ASTType {
     AT_FOR_STATEMENT,
     AT_IF_STATEMENT,
     AT_NULL_EXPRESSION,
-    AT_STRING_LITERAL
+    AT_STRING_LITERAL,
+    AT_LIST_LITERAL,
+    AT_HASH_LITERAL,
+    AT_INDEX_EXPRESSION
 };
 
 class ASTNode {
@@ -133,6 +137,44 @@ public:
     ASTString(Token);
     ASTString(Token, std::string);
     ~ASTString();
+    virtual std::string inspect();
+    virtual std::string toString();
+};
+
+class ASTList : public ASTNode {
+public:
+    std::vector<ASTNode*> elements;
+
+    ASTList();
+    ASTList(Token);
+    ASTList(Token, std::vector<ASTNode*>);
+    ~ASTList();
+    virtual std::string inspect();
+    virtual std::string toString();
+};
+
+class ASTHash : public ASTNode {
+public:
+    std::unordered_map<ASTNode*, ASTNode*> pairs;
+
+    ASTHash();
+    ASTHash(Token);
+    ~ASTHash();
+    virtual std::string inspect();
+    virtual std::string toString();
+};
+
+class ASTIndexExpression : public ASTNode {
+public:
+    ASTNode *left;
+    ASTNode *index;
+    ASTNode *indexEnd;
+    ASTNode *step;
+
+    ASTIndexExpression();
+    ASTIndexExpression(Token);
+    ASTIndexExpression(Token, ASTNode*);
+    ~ASTIndexExpression();
     virtual std::string inspect();
     virtual std::string toString();
 };

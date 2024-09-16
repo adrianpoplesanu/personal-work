@@ -91,7 +91,8 @@ public:
     std::vector<AdObject*> elements;
 
     AdObjectList();
-    AdObjectList(std::vector<AdObject>);
+    AdObjectList(std::vector<AdObject*>);
+    ~AdObjectList();
     virtual std::string inspect();
     virtual std::string toString();
     virtual std::string hash();

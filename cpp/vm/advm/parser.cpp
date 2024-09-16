@@ -14,6 +14,7 @@ Parser::Parser() {
     prefixParseFns.insert(std::make_pair(TT_IF, &Parser::parseIfStatement));
     prefixParseFns.insert(std::make_pair(TT_NULL, &Parser::parseNullExpression));
     prefixParseFns.insert(std::make_pair(TT_STRING, &Parser::parseStringLiteral));
+    prefixParseFns.insert(std::make_pair(TT_LBRACKET, &Parser::parseListLiteral));
 
     infixParseFns.insert(std::make_pair(TT_PLUS, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parseInfixExpression));
@@ -24,6 +25,7 @@ Parser::Parser() {
     infixParseFns.insert(std::make_pair(TT_GTE, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_LTE, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_EQUALS, &Parser::parseInfixExpression));
+    infixParseFns.insert(std::make_pair(TT_LBRACKET, &Parser::parseIndexExpression));
 }
 
 PrecedenceType Parser::currentPrecedence() {
@@ -233,6 +235,110 @@ ASTNode* Parser::parseNullExpression() {
 
 ASTNode* Parser::parseStringLiteral() {
     ASTString *expr = new ASTString(currentToken, currentToken.stringLiteral);
+    return expr;
+}
+
+ASTNode* Parser::parseListLiteral() {
+    ASTList* expr = new ASTList(currentToken);
+    expr->elements = parseListExpressions();
+    return expr;
+}
+
+std::vector<ASTNode*> Parser::parseListExpressions() {
+    std::vector<ASTNode*> elements;
+    if (peekTokenIs(TT_RBRACKET)) {
+        nextToken();
+        return elements;
+    }
+    nextToken();
+    ASTNode* element = parseExpression(PT_LOWEST);
+    //Ad_INCREF(element); // this might be needed
+    elements.push_back(element);
+    while(peekTokenIs(TT_COMMA)) {
+        nextToken();
+        nextToken();
+        element = parseExpression(PT_LOWEST);
+        //Ad_INCREF(element); // this might be needed
+        elements.push_back(element);
+    }
+    if (!expectPeek(TT_RBRACKET)) {
+        std::vector<ASTNode*> empty;
+        return empty;
+    }
+    return elements;
+}
+
+ASTNode* Parser::parseHashLiteral() {
+    ASTHash* hash = new ASTHash(currentToken);
+    while (!peekTokenIs(TT_RBRACE)) {
+        nextToken();
+        ASTNode* key = parseExpression(PT_LOWEST);
+        if (!expectPeek(TT_COLON)) {
+            return NULL;
+        }
+        nextToken();
+        ASTNode* value = parseExpression(PT_LOWEST);
+        //Ad_INCREF(key);
+        //Ad_INCREF(value);
+        hash->pairs.insert(std::make_pair(key, value));
+        if (!peekTokenIs(TT_RBRACE) && !expectPeek(TT_COMMA)) {
+            return NULL;
+        }
+    }
+    if (!expectPeek(TT_RBRACE)) {
+        return NULL;
+    }
+    return hash;
+}
+
+ASTNode* Parser::parseIndexExpression(ASTNode* left) {
+    ASTIndexExpression* expr = new ASTIndexExpression(currentToken, left);
+    nextToken();
+
+    if (currentTokenIs(TT_COLON)) {
+        ASTNode *index = new ASTNullExpression();
+        expr->index = index;
+    } else {
+        ASTNode *index = parseExpression(PT_LOWEST);
+        expr->index = index;
+        nextToken();
+        if (currentTokenIs(TT_RBRACKET)) {
+            return expr;
+        }
+    }
+
+    nextToken();
+
+    if (currentTokenIs(TT_COLON)) {
+        ASTNode *indexEnd = new ASTNullExpression();
+        expr->indexEnd = indexEnd;
+    } else {
+        ASTNode *indexEnd = parseExpression(PT_LOWEST);
+        expr->indexEnd = indexEnd;
+        nextToken();
+        if (currentTokenIs(TT_RBRACKET)) {
+            ASTNode *step = new ASTInteger(currentToken, 1);
+            expr->step = step;
+            return expr;
+        }
+    }
+
+    nextToken();
+
+    if (currentTokenIs(TT_RBRACKET)) {
+        ASTNode *step = new ASTInteger(currentToken, 1);
+        expr->step = step;
+        return expr;
+    } else {
+        ASTNode *step = parseExpression(PT_LOWEST);
+        nextToken();
+        expr->step = step;
+    }
+
+    if (!currentTokenIs(TT_RBRACKET)) {
+        return NULL;
+    }
+
     return expr;
 }
 

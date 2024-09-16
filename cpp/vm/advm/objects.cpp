@@ -123,6 +123,43 @@ std::string AdObjectString::hash() {
     return "todo: implement this";
 }
 
+AdObjectList::AdObjectList() {
+    type = OT_LIST;
+}
+
+AdObjectList::AdObjectList(std::vector<AdObject*> e) {
+    type = OT_LIST;
+    elements = e;
+}
+
+AdObjectList::~AdObjectList() {
+    //...
+}
+
+std::string AdObjectList::inspect() {
+    std::string out = "[";
+    int size = elements.size();
+    int i = 0;
+    for (auto& it : elements) {
+        out += it->inspect();
+        if (++i < size) out += ", ";
+    }
+    out += "]";
+    return out;
+}
+
+std::string AdObjectList::toString() {
+    return "TODO: implement this";
+}
+
+std::string AdObjectList::hash() {
+    return "TODO: implement this";
+}
+
+AdObject* AdObjectList::copy() {
+    return nullptr;
+}
+
 AdObject *AdObjectString::copy() {
     return nullptr;
 }
@@ -154,6 +191,10 @@ void free_memory_AdObject(AdObject* obj) {
         }
         case OT_STRING: {
             delete (AdObjectString*) obj;
+            break;
+        }
+        case OT_LIST: {
+            delete (AdObjectList*) obj;
             break;
         }
         default: {
