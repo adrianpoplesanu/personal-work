@@ -48,6 +48,13 @@ void GarbageCollector::markObject(AdObject* obj) {
             obj->marked = true;
             break;
         }
+        case OT_LIST: {
+            obj->marked = true;
+            for (auto& el : ((AdObjectList*)obj)->elements) {
+                markObject(el);
+            }
+            break;
+        }
         default: {
             std::cout << "MEMORY ERROR!!! garbage collection inconsistency!\n";
             break;

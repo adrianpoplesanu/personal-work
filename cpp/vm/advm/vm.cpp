@@ -211,6 +211,17 @@ void VM::run() {
                 push(globals[globalIndex]);
                 break;
             }
+            case OP_ARRAY: {
+                int numElements = readUint16(instructions, ip + 1);
+                ip += 2;
+
+                AdObject *arrayObj = buildArray(sp - numElements, sp);
+                sp = sp - numElements;
+
+                push(arrayObj);
+
+                break;
+            }
             default: {
                 break;
             }
@@ -258,6 +269,16 @@ AdObject* VM::pop() {
     AdObject* result = stack[sp - 1];
     sp--;
     return result;
+}
+
+AdObject* VM::buildArray(int start, int end) {
+    std::vector<AdObject*> elements;
+    for (int i = start; i < end; ++i) {
+        elements.push_back(stack[i]);
+    }
+    AdObjectList *obj = new AdObjectList(elements);
+    gc->addObject(obj);
+    return obj;
 }
 
 AdObject* VM::nativeBooleanToBooleanObject(bool value) {
@@ -311,6 +332,7 @@ void VM::executeBinaryIntegerOperations(unsigned char opcode, AdObject *right, A
             break;
     }
     AdObjectInteger *result = new AdObjectInteger(resultValue);
+    gc->addObject(result);
     push(result);
 }
 

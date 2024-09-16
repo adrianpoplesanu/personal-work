@@ -235,6 +235,17 @@ void Compiler::compile(ASTNode* node) {
             emit(opConstant, 1, args);
             break;
         }
+        case AT_LIST_LITERAL: {
+            ASTList *expr = (ASTList*) node;
+            for (auto& el : expr->elements) {
+                compile(el);
+            }
+            OpArray opArray = OpArray();
+            std::vector<int> args;
+            args.push_back(expr->elements.size());
+            emit(opArray, 1, args);
+            break;
+        }
         default: {
             std::cout << "ERROR: unhndled ast type compiled\n";
             break;

@@ -132,6 +132,22 @@ Token Lexer::nextToken() {
             token.stringLiteral = '}';
             token.type = TT_RBRACE;
             break;
+        case '[':
+            token.stringLiteral = '[';
+            token.type = TT_LBRACKET;
+            break;
+        case ']':
+            token.stringLiteral = ']';
+            token.type = TT_RBRACKET;
+            break;
+        case ',':
+            token.stringLiteral = ',';
+            token.type = TT_COMMA;
+            break;
+        case ':':
+            token.stringLiteral = ':';
+            token.type = TT_COLON;
+            break;
         case ';':
             token.stringLiteral = ';';
             token.type = TT_SEMICOLON;

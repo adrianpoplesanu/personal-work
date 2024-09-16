@@ -20,7 +20,8 @@ enum OpCodeByte {
     OP_JUMP,
     OP_NULL,
     OP_GET_GLOBAL,
-    OP_SET_GLOBAL
+    OP_SET_GLOBAL,
+    OP_ARRAY
 };
 
 class OpCode {
@@ -158,6 +159,13 @@ class OpSetGlobal : public OpCode {
 public:
     OpSetGlobal() {
         byteCode = OP_SET_GLOBAL;
+    }
+};
+
+class OpArray : public OpCode {
+public:
+    OpArray() {
+        byteCode = OP_ARRAY;
     }
 };
 
