@@ -143,13 +143,14 @@ class ASTIndexExpression(ASTNode):
 
 
 class ASTHash(ASTNode):
-    type = StatementType.HASH_LITERAL
+    statement_type = StatementType.HASH_LITERAL
 
     def __init__(self, token: Token = None, pairs: Dict[ASTNode, ASTNode] = None):
         """
         @param token: the node's token
         @param pairs: map [Expression] => Expression
         """
+        super().__init__()
         self.token = token
         self.pairs = pairs
 
@@ -157,7 +158,11 @@ class ASTHash(ASTNode):
         return self.token.literal
 
     def __str__(self):
-        return 'TODO: implement __str__ in ASTHashLiteral'
+        out = 'ASTHashLiteral['
+        for key, value in self.pairs.items():
+            out += "<" + str(key) + ": " + str(value) + ">"
+        out += "]"
+        return out
 
 
 class ASTInfixExpression(ASTNode):

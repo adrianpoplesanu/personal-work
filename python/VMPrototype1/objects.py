@@ -1,5 +1,7 @@
 from typing import List, Dict
 
+from hash_utils import HashKey
+
 
 class AdObjectType:
     INT = 0
@@ -25,6 +27,9 @@ class AdObjectInteger(AdObject):
 
     def inspect(self) -> str:
         return str(self.value)
+
+    def hash_key(self):
+        return HashKey(type=type, value=hash(self.value))
 
 
 class AdBoolean(AdObject):
