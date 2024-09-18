@@ -19,6 +19,7 @@ class OpCodeByte:
     OP_GET_GLOBAL = 17
     OP_SET_GLOBAL = 18
     OP_ARRAY = 19
+    OP_HASH = 20
 
 
 class OpCode:
@@ -105,6 +106,10 @@ class OpArray(OpCode):
     byte_code = OpCodeByte.OP_ARRAY
 
 
+class OpHash(OpCode):
+    byte_code = OpCodeByte.OP_HASH
+
+
 op_constant = OpConstant()
 op_add = OpAdd()
 op_sub = OpSub()
@@ -125,3 +130,4 @@ op_null = OpNull()
 op_get_global = OpGetGlobal()
 op_set_global = OpSetGlobal()
 op_array = OpArray()
+op_hash = OpHash()

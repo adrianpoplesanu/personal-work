@@ -1,8 +1,9 @@
-from typing import Optional
+from typing import Optional, Dict
 
 from bytecode import Bytecode
 from code_ad import read_uint16
-from objects import AdObject, AdObjectInteger, AdBoolean, AdObjectType, AdNullObject, AdString, AdList
+from hash_utils import HashKey
+from objects import AdObject, AdObjectInteger, AdBoolean, AdObjectType, AdNullObject, AdString, AdList, HashPair, AdHash
 from opcode_ad import OpCodeByte
 from settings import PRINT_LAST_ELEMENT_ON_STACK
 
@@ -88,6 +89,14 @@ class VM:
                 self.sp = self.sp - numElements
 
                 self.push(array_obj)
+            elif opcode == OpCodeByte.OP_HASH:
+                numElements: int = read_uint16(self.instructions, ip + 1)
+                ip += 2
+
+                hash_obj = self.build_hash(self.sp - numElements, self.sp)
+                self.sp = self.sp - numElements
+
+                self.push(hash_obj)
             else:
                 print('severe error: vm.run() error')
             ip += 1
@@ -216,6 +225,16 @@ class VM:
         for i in range(start_index, end_index):
             elements.append(self.stack[i])
         return AdList(elements)
+
+    def build_hash(self, start_index: int, end_index: int) -> AdObject:
+        hashed_pairs: Dict[HashKey, HashPair] = {}
+        for i in range(start_index, end_index, 2):
+            key = self.stack[i]
+            value = self.stack[i + 1]
+
+            pair = HashPair(key=key, value=value)
+            hashed_pairs[key.hash_key()] = pair
+        return AdHash(pairs=hashed_pairs)
 
     def native_bool_to_boolean_object(self, value):
         if value:

@@ -6,7 +6,7 @@ from instructions import Instructions
 from objects import AdObjectInteger, AdObject, AdString
 from opcode_ad import OpAdd, OpSub, OpMultiply, OpDivide, OpConstant, OpTrue, OpFalse, OpPop, op_equal, op_not_equal, \
     op_greater_than, op_greater_than_equal, op_add, op_sub, op_multiply, op_divide, op_pop, op_bang, op_minus, \
-    op_jump_not_truthy, OpCode, op_jump, op_null, op_set_global, op_get_global, op_constant, op_array
+    op_jump_not_truthy, OpCode, op_jump, op_null, op_set_global, op_get_global, op_constant, op_array, op_hash
 from symbol_table import new_symbol_table
 
 
@@ -136,6 +136,17 @@ class Compiler:
             args = []
             args.append(len(node.elements))
             self.emit(op_array, 1, args)
+        elif node.statement_type == StatementType.HASH_LITERAL:
+            keys = []
+            for key in node.pairs.keys():
+                keys.append(key)
+            keys = sorted(keys, key=lambda x: str(x))
+            for k in keys:
+                self.compile(k)
+                self.compile(node.pairs[k])
+            args = []
+            args.append(len(node.pairs) * 2)
+            self.emit(op_hash, 1, args)
         else:
             print("severe error: node type unknown " + statement_type_map[node.statement_type])
 
