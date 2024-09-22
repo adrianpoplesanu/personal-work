@@ -37,6 +37,7 @@ public:
     void executeBinaryIntegerOperations(unsigned char, AdObject*, AdObject*);
     void executeBinaryStringOperations(unsigned char, AdObject*, AdObject*);
     AdObject* buildArray(int, int);
+    AdObject* buildHash(int, int);
 };
 
 #endif

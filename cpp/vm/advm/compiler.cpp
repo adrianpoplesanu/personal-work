@@ -246,6 +246,22 @@ void Compiler::compile(ASTNode* node) {
             emit(opArray, 1, args);
             break;
         }
+        case AT_HASH_LITERAL: {
+            std::vector<ASTNode*> keys;
+            for (auto& it: ((ASTHash*) node)->pairs) {
+                keys.push_back(it.first);
+            }
+            // TODO: sort the array of keys
+            for (auto& key : keys) {
+                compile(key);
+                compile(((ASTHash*) node)->pairs[key]);
+            }
+            OpHash opHash = OpHash();
+            std::vector<int> args;
+            args.push_back(keys.size() * 2);
+            emit(opHash, 1, args);
+            break;
+        }
         default: {
             std::cout << "ERROR: unhndled ast type compiled\n";
             break;

@@ -222,6 +222,16 @@ void VM::run() {
 
                 break;
             }
+            case OP_HASH: {
+                int numElements = readUint16(instructions, ip + 1);
+                ip += 2;
+
+                AdObject *hashObj = buildHash(sp - numElements, sp);
+                sp = sp - numElements;
+
+                push(hashObj);
+                break;
+            }
             default: {
                 break;
             }
@@ -277,6 +287,23 @@ AdObject* VM::buildArray(int start, int end) {
         elements.push_back(stack[i]);
     }
     AdObjectList *obj = new AdObjectList(elements);
+    gc->addObject(obj);
+    return obj;
+}
+
+AdObject* VM::buildHash(int start, int end) {
+    std::unordered_map<std::string, HashPair> hashedPairs;
+
+    for (int i = start; i < end; i+=2) {
+        AdObject *key = stack[i];
+        AdObject *value = stack[i + 1];
+
+        std::hash<std::string> hash_string;
+        HashPair hash_pair(key, value);
+        hashedPairs.insert(std::make_pair(std::to_string(hash_string(key->hash())), hash_pair)); // value needs to be a HashPair
+    }
+
+    AdObjectHash *obj = new AdObjectHash(hashedPairs);
     gc->addObject(obj);
     return obj;
 }

@@ -21,7 +21,8 @@ enum OpCodeByte {
     OP_NULL,
     OP_GET_GLOBAL,
     OP_SET_GLOBAL,
-    OP_ARRAY
+    OP_ARRAY,
+    OP_HASH
 };
 
 class OpCode {
@@ -166,6 +167,13 @@ class OpArray : public OpCode {
 public:
     OpArray() {
         byteCode = OP_ARRAY;
+    }
+};
+
+class OpHash : public OpCode {
+public:
+    OpHash() {
+        byteCode = OP_HASH;
     }
 };
 
