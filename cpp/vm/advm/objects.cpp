@@ -36,7 +36,7 @@ std::string AdObjectInteger::toString() {
 }
 
 std::string AdObjectInteger::hash() {
-    return "todo: implement this";
+    return object_type_map[type] + inspect();
 }
 
 AdObject *AdObjectInteger::copy() {
@@ -123,6 +123,10 @@ std::string AdObjectString::hash() {
     return "todo: implement this";
 }
 
+AdObject *AdObjectString::copy() {
+    return nullptr;
+}
+
 AdObjectList::AdObjectList() {
     type = OT_LIST;
 }
@@ -160,7 +164,44 @@ AdObject* AdObjectList::copy() {
     return nullptr;
 }
 
-AdObject *AdObjectString::copy() {
+AdObjectHash::AdObjectHash() {
+    type = OT_HASH;
+    ref_count = 0;
+    marked = false;
+}
+
+AdObjectHash::AdObjectHash(std::unordered_map<std::string, HashPair> p) {
+    type = OT_HASH;
+    ref_count = 0;
+    marked = false;
+    pairs = p;
+}
+
+AdObjectHash::~AdObjectHash() {
+    //...
+}
+
+std::string AdObjectHash::inspect() {
+    std::string out = "{";
+    bool displayed_first = false;
+    for(std::unordered_map<std::string, HashPair>::iterator it = pairs.begin(); it != pairs.end(); it++) {
+        if (displayed_first) out += ", ";
+        else displayed_first = true;
+        out += it->second.key->inspect() + ": " + it->second.value->inspect();
+    }
+    out += "}";
+    return out;
+}
+
+std::string AdObjectHash::toString() {
+    return "todo: implement Print() in Ad_Hash_Object\n";
+}
+
+std::string AdObjectHash::hash() {
+    return "TODO: implement AdObjectHash.hash()";
+}
+
+AdObject* AdObjectHash::copy() {
     return nullptr;
 }
 
@@ -195,6 +236,10 @@ void free_memory_AdObject(AdObject* obj) {
         }
         case OT_LIST: {
             delete (AdObjectList*) obj;
+            break;
+        }
+        case OT_HASH: {
+            delete (AdObjectHash*) obj;
             break;
         }
         default: {

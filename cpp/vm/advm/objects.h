@@ -24,6 +24,11 @@ enum ObjectType {
     OT_SOCKET
 };
 
+std::unordered_map<ObjectType, std::string> object_type_map = {
+    {OT_NULL, "NULL"},
+    {OT_INT, "INT"}
+};
+
 class AdObject {
 public:
     ObjectType type;
@@ -105,6 +110,7 @@ public:
 
     AdObjectHash();
     AdObjectHash(std::unordered_map<std::string, HashPair>);
+    ~AdObjectHash();
     virtual std::string inspect();
     virtual std::string toString();
     virtual std::string hash();
