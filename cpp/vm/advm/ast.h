@@ -36,6 +36,7 @@ public:
 
     virtual std::string inspect();
     virtual std::string toString();
+    virtual std::string hash();
 };
 
 class ASTProgram : public ASTNode {
@@ -127,6 +128,7 @@ public:
     ~ASTInteger();
     virtual std::string inspect();
     virtual std::string toString();
+    //virtual std::string hash();
 };
 
 class ASTString : public ASTNode {
@@ -159,6 +161,7 @@ public:
 
     ASTHash();
     ASTHash(Token);
+    ASTHash(Token, std::unordered_map<ASTNode*, ASTNode*>);
     ~ASTHash();
     virtual std::string inspect();
     virtual std::string toString();

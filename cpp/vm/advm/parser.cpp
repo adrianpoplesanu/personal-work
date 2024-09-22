@@ -15,6 +15,7 @@ Parser::Parser() {
     prefixParseFns.insert(std::make_pair(TT_NULL, &Parser::parseNullExpression));
     prefixParseFns.insert(std::make_pair(TT_STRING, &Parser::parseStringLiteral));
     prefixParseFns.insert(std::make_pair(TT_LBRACKET, &Parser::parseListLiteral));
+    prefixParseFns.insert(std::make_pair(TT_LBRACE, &Parser::parseHashLiteral));
 
     infixParseFns.insert(std::make_pair(TT_PLUS, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parseInfixExpression));

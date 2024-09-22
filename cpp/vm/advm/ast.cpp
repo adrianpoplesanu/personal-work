@@ -4,6 +4,10 @@ std::string ASTNode::toString() {
     return "unimplemented in subclass";
 }
 
+std::string ASTNode::hash() {
+    return "unimplemented in subclass";
+}
+
 std::string ASTNode::inspect() {
     return "unimplemented in subclass";
 }
@@ -171,6 +175,10 @@ std::string ASTInteger::toString() {
 std::string ASTInteger::inspect() {
     return "ASTInteger";
 }
+
+/*std::string ASTInteger::hash() {
+    return "test";
+}*/
 
 ASTPrefixExpression::ASTPrefixExpression(Token t, std::string o) {
     type = AT_PREFIX_EXPRESSION;
@@ -397,8 +405,17 @@ ASTHash::ASTHash(Token t) {
     token = t;
 }
 
+ASTHash::ASTHash(Token t, std::unordered_map<ASTNode*, ASTNode*> p) {
+    type = AT_HASH_LITERAL;
+    token = t;
+    pairs = p;
+}
+
 ASTHash::~ASTHash() {
-    //...
+    for (auto& it : pairs) {
+        free_memory_ASTNode(it.first);
+        free_memory_ASTNode(it.second);
+    }
 }
 
 std::string ASTHash::inspect() {
@@ -406,7 +423,12 @@ std::string ASTHash::inspect() {
 }
 
 std::string ASTHash::toString() {
-    return "TODO: implement ASTHash.toString()";
+    std::string out = "ASTHashLiteral[";
+    for (auto& it: pairs) {
+        out += "<" + it.first->toString() + ": " + it.second->toString() + ">";
+    }
+    out += "]";
+    return out;
 }
 
 void Ad_INCREF(ASTNode* node) {
@@ -495,6 +517,10 @@ void free_memory_ASTNode(ASTNode* node) {
         }
         case AT_LIST_LITERAL: {
             delete (ASTList*) node;
+            break;
+        }
+        case AT_HASH_LITERAL: {
+            delete (ASTHash*) node;
             break;
         }
         default: {
