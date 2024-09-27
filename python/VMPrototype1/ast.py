@@ -123,7 +123,7 @@ class ASTList(ASTNode):
         return self.token.literal
 
     def __str__(self) -> str:
-        return 'TODO: implement __str__ in ASTListLiteral'
+        return '[' + ','.join([str(element) for element in self.elements]) + ']'
 
 
 class ASTIndexExpression(ASTNode):
@@ -139,7 +139,7 @@ class ASTIndexExpression(ASTNode):
         return self.token.literal
 
     def __str__(self) -> str:
-        return 'TODO: implement __str__ in ASTIndexExpression'
+        return 'ASTIndexExpression<' + str(self.left) + '>[' + str(self.index) + ']'
 
 
 class ASTHash(ASTNode):

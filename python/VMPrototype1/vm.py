@@ -97,6 +97,10 @@ class VM:
                 self.sp = self.sp - numElements
 
                 self.push(hash_obj)
+            elif opcode == OpCodeByte.OP_INDEX:
+                index = self.pop()
+                left = self.pop()
+                self.execute_index_expression(left, index)
             else:
                 print('severe error: vm.run() error')
             ip += 1
@@ -235,6 +239,22 @@ class VM:
             pair = HashPair(key=key, value=value)
             hashed_pairs[key.hash_key()] = pair
         return AdHash(pairs=hashed_pairs)
+
+    def execute_index_expression(self, left, index):
+        if left.object_type == AdObjectType.LIST:
+            return self.execute_array_index(left, index)
+        if left.object_type == AdObjectType.HASH:
+            return self.execute_hash_index(left, index)
+
+    def execute_array_index(self, left: AdList, index):
+        i = index.value
+        max = len(left.elements)
+        if i < 0 or i >= max:
+            self.push(NULL_OBJECT)
+        self.push(left.elements[i])
+
+    def execute_hash_index(self, left: AdHash, index):
+        pass
 
     def native_bool_to_boolean_object(self, value):
         if value:

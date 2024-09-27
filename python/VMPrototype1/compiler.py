@@ -6,7 +6,7 @@ from instructions import Instructions
 from objects import AdObjectInteger, AdObject, AdString
 from opcode_ad import OpAdd, OpSub, OpMultiply, OpDivide, OpConstant, OpTrue, OpFalse, OpPop, op_equal, op_not_equal, \
     op_greater_than, op_greater_than_equal, op_add, op_sub, op_multiply, op_divide, op_pop, op_bang, op_minus, \
-    op_jump_not_truthy, OpCode, op_jump, op_null, op_set_global, op_get_global, op_constant, op_array, op_hash
+    op_jump_not_truthy, OpCode, op_jump, op_null, op_set_global, op_get_global, op_constant, op_array, op_hash, op_index
 from symbol_table import new_symbol_table
 
 
@@ -147,6 +147,11 @@ class Compiler:
             args = []
             args.append(len(node.pairs) * 2)
             self.emit(op_hash, 1, args)
+        elif node.statement_type == StatementType.INDEX_EXPRESSION:
+            self.compile(node.left)
+            self.compile(node.index)
+            args = []
+            self.emit(op_index, 0, args)
         else:
             print("severe error: node type unknown " + statement_type_map[node.statement_type])
 
