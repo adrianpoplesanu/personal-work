@@ -390,8 +390,12 @@ std::string ASTIndexExpression::toString() {
     std::string out = "ASTIndexExpression[";
     out += "<" + left->toString() + ">";
     out += "<" + index->toString() + ">";
-    out += "<" + indexEnd->toString() + ">";
-    out += "<" + step->toString() + ">";
+    if (indexEnd) {
+        out += "<" + indexEnd->toString() + ">";
+    }
+    if (step) {
+        out += "<" + step->toString() + ">";
+    }
     out += "]";
     return out;
 }
