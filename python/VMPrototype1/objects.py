@@ -51,6 +51,9 @@ class AdString(AdObject):
     def inspect(self) -> str:
         return "'" + self.value + "'"
 
+    def hash_key(self):
+        return HashKey(type=type, value=hash(self.value))
+
 
 class AdList(AdObject):
     def __init__(self, elements: List[AdObject]):
