@@ -237,7 +237,7 @@ class VM:
             value = self.stack[i + 1]
 
             pair = HashPair(key=key, value=value)
-            hashed_pairs[key.hash_key()] = pair
+            hashed_pairs[key.hash_key().value] = pair
         return AdHash(pairs=hashed_pairs)
 
     def execute_index_expression(self, left, index):
@@ -251,10 +251,16 @@ class VM:
         max = len(left.elements)
         if i < 0 or i >= max:
             self.push(NULL_OBJECT)
-        self.push(left.elements[i])
+        else:
+            self.push(left.elements[i])
 
     def execute_hash_index(self, left: AdHash, index):
-        pass
+        hash_key = index.hash_key()
+        pair = left.pairs[hash_key.value]
+        if pair:
+            self.push(pair.value)
+        else:
+            self.push(NULL_OBJECT)
 
     def native_bool_to_boolean_object(self, value):
         if value:
