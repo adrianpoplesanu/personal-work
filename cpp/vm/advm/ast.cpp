@@ -527,6 +527,10 @@ void free_memory_ASTNode(ASTNode* node) {
             delete (ASTHash*) node;
             break;
         }
+        case AT_INDEX_EXPRESSION: {
+            delete (ASTIndexExpression*) node;
+            break;
+        }
         default: {
             std::cout << "SEVERE MEMORY ERROR!!!\n";
             break;
