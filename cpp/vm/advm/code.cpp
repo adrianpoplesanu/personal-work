@@ -23,6 +23,7 @@ Code::Code() {
     definitionsMap.insert(std::make_pair(OP_SET_GLOBAL, new Definition("OpSetGlobal", 1, new int[1] {2})));
     definitionsMap.insert(std::make_pair(OP_ARRAY, new Definition("OpArray", 1, new int[1] {2})));
     definitionsMap.insert(std::make_pair(OP_HASH, new Definition("OpHash", 1, new int[1] {2})));
+    definitionsMap.insert(std::make_pair(OP_INDEX_EXPRESSION, new Definition("OpIndexExpression", 0, new int)));
 }
 
 Code::~Code() {

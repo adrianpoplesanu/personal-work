@@ -120,7 +120,7 @@ std::string AdObjectString::toString() {
 }
 
 std::string AdObjectString::hash() {
-    return "todo: implement this";
+    return object_type_map[type] + inspect();
 }
 
 AdObject *AdObjectString::copy() {

@@ -232,6 +232,12 @@ void VM::run() {
                 push(hashObj);
                 break;
             }
+            case OP_INDEX_EXPRESSION: {
+                AdObject *index = pop();
+                AdObject *left = pop();
+                executeIndexExpression(left, index);
+                break;
+            }
             default: {
                 break;
             }
@@ -374,4 +380,34 @@ void VM::executeBinaryStringOperations(unsigned char opcode, AdObject *right, Ad
     }
     AdObjectString *result = new AdObjectString(resultValue);
     push(result);
+}
+
+void VM::executeIndexExpression(AdObject *left, AdObject *index) {
+    if (left->type == OT_LIST) {
+        executeArrayIndex(left, index);
+    }
+    if (left->type == OT_HASH) {
+        executeHashIndex(left, index);
+    }
+}
+
+void VM::executeArrayIndex(AdObject *left, AdObject *index) {
+    int i = ((AdObjectInteger*) index)->value;
+    int max = ((AdObjectList*) left)->elements.size();
+    if (i < 0 || i >= max) {
+        push(&NULLOBJECT);
+    } else {
+        push(((AdObjectList*) left)->elements.at(i));
+    }
+}
+
+void VM::executeHashIndex(AdObject *left, AdObject *index) {
+    AdObjectHash *hashObject = (AdObjectHash*) left;
+    std::hash<std::string> hash_string;
+    AdObject *result = hashObject->pairs[std::to_string(hash_string(index->hash()))].value;
+    if (result) {
+        push(result);
+    } else {
+        push(&NULLOBJECT);
+    }
 }

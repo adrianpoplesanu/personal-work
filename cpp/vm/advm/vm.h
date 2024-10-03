@@ -38,6 +38,9 @@ public:
     void executeBinaryStringOperations(unsigned char, AdObject*, AdObject*);
     AdObject* buildArray(int, int);
     AdObject* buildHash(int, int);
+    void executeIndexExpression(AdObject*, AdObject*);
+    void executeArrayIndex(AdObject*, AdObject*);
+    void executeHashIndex(AdObject*, AdObject*);
 };
 
 #endif

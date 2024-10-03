@@ -262,6 +262,15 @@ void Compiler::compile(ASTNode* node) {
             emit(opHash, 1, args);
             break;
         }
+        case AT_INDEX_EXPRESSION: {
+            ASTIndexExpression *expr = (ASTIndexExpression*) node;
+            compile(expr->left);
+            compile(expr->index);
+            OpIndexExpression opIndexExpression = OpIndexExpression();
+            std::vector<int> args;
+            emit(opIndexExpression, 0, args);
+            break;
+        }
         default: {
             std::cout << "ERROR: unhndled ast type compiled\n";
             break;
