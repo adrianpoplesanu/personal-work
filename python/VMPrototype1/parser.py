@@ -232,6 +232,17 @@ class Parser:
             self.next_token()
         return stmt
 
+    def parse_func_literal(self):
+        func = ASTFunctionLiteral(token=self.current_token)
+        if not self.expect_peek(TokenType.LPAREN):
+            return None
+        res = self.parse_function_parameters()
+        func.parameters, func.default_params = res[0], res[1]
+        if not self.expect_peek(TokenType.LBRACE):
+            return None
+        func.body = self.parse_block_statement()
+        return func
+
     def parse_infix_expression(self, left: ASTNode) -> ASTNode:
         expr = ASTInfixExpression(token=self.current_token, operator=self.current_token.literal, left=left)
         precedence = self.current_precedence()

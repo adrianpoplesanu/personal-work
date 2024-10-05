@@ -19,6 +19,7 @@ class StatementType:
     LIST_LITERAL = 'LIST_LITERAL'
     INDEX_EXPRESSION = 'INDEX_EXPRESSION'
     HASH_LITERAL = 'HASH_LITERAL'
+    FUNCTION_LITERAL = 'FUNCTION_LITERAL'
 
 
 statement_type_map = {
@@ -263,6 +264,17 @@ class ASTLetStatement(ASTNode):
 
     def __str__(self):
         return 'ASTLetStatement<' + str(self.name) + '> [' + str(self.value) + ']'
+
+
+class ASTFunctionLiteral(ASTNode):
+    statement_type = StatementType.FUNCTION_LITERAL
+
+    def __init__(self, token=None, parameters=None, default_params=None, body=None):
+        super().__init__()
+        self.token = token
+        self.parameters = parameters
+        self.default_params = default_params
+        self.body = body
 
 
 class ASTIdentifier(ASTNode):
