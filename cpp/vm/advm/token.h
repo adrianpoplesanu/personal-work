@@ -57,7 +57,8 @@ enum TokenType {
     TT_PLUSPLUS,
     TT_MINUSMINUS,
     TT_PLUS_EQ,
-    TT_MINUS_EQ
+    TT_MINUS_EQ,
+    TT_FUNC
 };
 
 std::map<TokenType, std::string> tokenTypeConverter = {
@@ -96,7 +97,8 @@ std::map<TokenType, std::string> tokenTypeConverter = {
     {TT_NOT_EQUALS, "NOTEQUALS"},
     {TT_AND, "AND"},
     {TT_OR, "OR"},
-    {TT_NULL, "NULL"}
+    {TT_NULL, "NULL"},
+    {TT_FUNC, "FUNCTION_LITERAL"}
 };
 
 std::map<std::string, TokenType> keywords = {

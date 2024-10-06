@@ -17,6 +17,8 @@ Parser::Parser() {
     prefixParseFns.insert(std::make_pair(TT_LBRACKET, &Parser::parseListLiteral));
     prefixParseFns.insert(std::make_pair(TT_LBRACE, &Parser::parseHashLiteral));
 
+    prefixParseFns.insert(std::make_pair(TT_FUNC, &Parser::parseFunctionLiteral));
+
     infixParseFns.insert(std::make_pair(TT_PLUS, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_MULTIPLY, &Parser::parseInfixExpression));
@@ -290,6 +292,35 @@ ASTNode* Parser::parseHashLiteral() {
         return NULL;
     }
     return hash;
+}
+
+ASTNode* Parser::parseFunctionLiteral() {
+    ASTFunctionLiteral* fun_lit = new ASTFunctionLiteral(currentToken);
+    if (!expectPeek(TT_LPAREN)) {
+        //delete fun_lit;
+        free_memory_ASTNode(fun_lit);
+        return NULL;
+    }
+    std::pair<std::vector<ASTNode*>, std::vector<ASTNode*>> res = parseFunctionParameters();
+    fun_lit->parameters = res.first;
+    fun_lit->default_params = res.second;
+    if (!expectPeek(TT_LBRACE)) {
+        //delete fun_lit;
+        free_memory_ASTNode(fun_lit);
+        return NULL;
+    }
+    fun_lit->body = parseBlockStatement();
+    Ad_INCREF(fun_lit->body);
+    return fun_lit;
+}
+
+std::pair<std::vector<ASTNode*>, std::vector<ASTNode*>> Parser::parseFunctionParameters() {
+    std::vector<ASTNode*> identifiers;
+    std::vector<ASTNode*> defaultParams;
+
+    //...
+
+    return std::make_pair(identifiers, defaultParams);
 }
 
 ASTNode* Parser::parseIndexExpression(ASTNode* left) {
