@@ -435,6 +435,52 @@ std::string ASTHash::toString() {
     return out;
 }
 
+ASTFunctionLiteral::ASTFunctionLiteral() {
+    type = AT_FUNCTION_LITERAL;
+    ref_count = 0; // poate aici ar trebui sa fie 1
+}
+
+ASTFunctionLiteral::ASTFunctionLiteral(Token t) {
+    type = AT_FUNCTION_LITERAL;
+    ref_count = 0; // poate aici ar trebui sa fie 1
+    token = t;
+}
+
+ASTFunctionLiteral::~ASTFunctionLiteral() {
+    if (body) {
+        Ad_DECREF(body); // asta merge si e super cool
+        free_memory_ASTNode(body);
+    }
+    for (std::vector<ASTNode*>::iterator it = parameters.begin() ; it != parameters.end(); ++it) {
+        ASTNode *node = *it;
+        Ad_DECREF(node); // asta merge si e super cool
+        free_memory_ASTNode(node);
+    }
+    for (std::vector<ASTNode*>::iterator it = default_params.begin() ; it != default_params.end(); ++it) {
+        ASTNode *node = *it;
+        Ad_DECREF(node); // asta merge si e super cool
+        free_memory_ASTNode(node);
+    }
+}
+
+std::string ASTFunctionLiteral::inspect() {
+    return "TODO: implement ASTFunctionLiteral.inspect()";
+}
+
+std::string ASTFunctionLiteral::toString() {
+    std::string out = "[FunctionLiteral] <";
+    for (std::vector<ASTNode*>::iterator it = parameters.begin() ; it != parameters.end(); ++it) {
+        ASTNode *current = *it;
+        if (it != parameters.begin()) out += ", ";
+        out += current->toString();
+    }
+    out += "><";
+    out += body->toString();
+    out += ">";
+    return out;
+}
+
+
 void Ad_INCREF(ASTNode* node) {
     if (node) {
         node->ref_count++;

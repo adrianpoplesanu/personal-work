@@ -25,7 +25,8 @@ enum ASTType {
     AT_STRING_LITERAL,
     AT_LIST_LITERAL,
     AT_HASH_LITERAL,
-    AT_INDEX_EXPRESSION
+    AT_INDEX_EXPRESSION,
+    AT_FUNCTION_LITERAL
 };
 
 class ASTNode {
@@ -232,6 +233,20 @@ public:
     ASTBlockStatement();
     ASTBlockStatement(Token);
     ~ASTBlockStatement();
+    virtual std::string inspect();
+    virtual std::string toString();
+};
+
+class ASTFunctionLiteral : public ASTNode {
+public:
+    Token token;
+    std::vector<ASTNode*> parameters;
+    std::vector<ASTNode*> default_params;
+    ASTNode* body;
+
+    ASTFunctionLiteral();
+    ASTFunctionLiteral(Token);
+    ~ASTFunctionLiteral();
     virtual std::string inspect();
     virtual std::string toString();
 };
