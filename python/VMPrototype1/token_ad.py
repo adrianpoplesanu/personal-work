@@ -21,7 +21,7 @@ token_type_map = {
 keywords_map = {
     "let": TokenType.LET,
     "return": TokenType.RETURN,
-    "fun": TokenType.FUNCTION,
+    "func": TokenType.FUNC,
     "def": TokenType.DEF,
     "if": TokenType.IF,
     "else": TokenType.ELSE,

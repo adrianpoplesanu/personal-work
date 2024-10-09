@@ -37,7 +37,8 @@ statement_type_map = {
     StatementType.STRING_LITERAL: 'STRING_LITERAL',
     StatementType.LIST_LITERAL: 'LIST_LITERAL',
     StatementType.INDEX_EXPRESSION: 'INDEX_EXPRESSION',
-    StatementType.HASH_LITERAL: 'HASH_LITERAL'
+    StatementType.HASH_LITERAL: 'HASH_LITERAL',
+    StatementType.FUNCTION_LITERAL: 'FUNCTION_LITERAL'
 }
 
 
@@ -275,6 +276,9 @@ class ASTFunctionLiteral(ASTNode):
         self.parameters = parameters
         self.default_params = default_params
         self.body = body
+
+    def __str__(self):
+        return 'ASTFunctionLiteral'
 
 
 class ASTIdentifier(ASTNode):

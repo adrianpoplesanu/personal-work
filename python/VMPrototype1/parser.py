@@ -2,7 +2,7 @@ from typing import Optional
 
 from ast import ASTProgram, ASTNode, ASTExpressionStatement, ASTInteger, ASTInfixExpression, ASTPrefixExpression, \
     ASTBoolean, ASTIfExpression, ASTBlockStatement, ASTNullExpression, ASTLetStatement, ASTIdentifier, ASTString, \
-    ASTList, ASTIndexExpression, ASTHash
+    ASTList, ASTIndexExpression, ASTHash, ASTFunctionLiteral
 from lexer import Lexer
 from precedence_type import PrecedenceType, precedences
 from token_type import TokenType
@@ -30,7 +30,8 @@ class Parser:
             TokenType.NULL: self.parse_null_expression,
             TokenType.STRING: self.parse_string_literal,
             TokenType.LBRACKET: self.parse_list_literal,
-            TokenType.LBRACE: self.parse_hash_literal
+            TokenType.LBRACE: self.parse_hash_literal,
+            TokenType.FUNC: self.parse_func_literal
         }
 
         self.infix_parse_fns = {
@@ -242,6 +243,38 @@ class Parser:
             return None
         func.body = self.parse_block_statement()
         return func
+
+    def parse_function_parameters(self):
+        identifiers = []
+        default_params = []
+        if self.peek_token_is(TokenType.RPAREN):
+            self.next_token()
+            return identifiers, default_params
+        self.next_token()
+        ident = ASTIdentifier(token=self.current_token, value=self.current_token.literal)
+        identifiers.append(ident)
+        if self.peek_token_is(TokenType.ASSIGN):
+            self.next_token()
+            self.next_token()
+            value = self.parse_expression(PrecedenceType.LOWEST)
+            default_params.append(value)
+        while self.peek_token_is(TokenType.COMMA):
+            self.next_token()
+            self.next_token()
+            ident = ASTIdentifier(token=self.current_token, value=self.current_token.literal)
+            identifiers.append(ident)
+            if self.peek_token_is(TokenType.ASSIGN):
+                self.next_token()
+                self.next_token()
+                value = self.parse_expression(PrecedenceType.LOWEST)
+                default_params.append(value)
+            else:
+                if len(default_params) > 0 and default_params[-1] is not None:
+                    raise Exception("problem!!!")
+                #default_params.append(None)
+        if not self.expect_peek(TokenType.RPAREN):
+            return [], []
+        return identifiers, default_params
 
     def parse_infix_expression(self, left: ASTNode) -> ASTNode:
         expr = ASTInfixExpression(token=self.current_token, operator=self.current_token.literal, left=left)
