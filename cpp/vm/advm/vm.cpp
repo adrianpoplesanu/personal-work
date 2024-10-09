@@ -271,7 +271,7 @@ void VM::printStack() {
 
 void VM::push(AdObject* obj) {
     if (sp >= stackSize) {
-        std::cout << "ERROR: stack overflow";
+        std::cout << "stack error: index out of bounds\n";
     } else {
         stack[sp++] = obj;
     }
@@ -279,7 +279,7 @@ void VM::push(AdObject* obj) {
 
 AdObject* VM::pop() {
     if (sp - 1 < 0) {
-        std::cout << "error: stack underflow\n";
+        std::cout << "stack error: index out of bounds\n";
         return NULL;
     }
     AdObject* result = stack[sp - 1];

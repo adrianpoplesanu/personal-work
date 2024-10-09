@@ -1,1 +1,1 @@
-let fivePlusTen = fn() { 5 + 10 }; fivePlusTen();
+let fivePlusTen = func() { 5 + 10 }; fivePlusTen();

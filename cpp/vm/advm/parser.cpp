@@ -317,9 +317,43 @@ ASTNode* Parser::parseFunctionLiteral() {
 std::pair<std::vector<ASTNode*>, std::vector<ASTNode*>> Parser::parseFunctionParameters() {
     std::vector<ASTNode*> identifiers;
     std::vector<ASTNode*> defaultParams;
-
-    //...
-
+    if (peekTokenIs(TT_RPAREN)) {
+        nextToken();
+        return std::make_pair(identifiers, defaultParams);
+    }
+    nextToken();
+    ASTIdentifier* ident = new ASTIdentifier(currentToken, currentToken.stringLiteral);
+    identifiers.push_back(ident);
+    Ad_INCREF(ident);
+    if (peekTokenIs(TT_ASSIGN)) {
+        nextToken();
+        nextToken();
+        ASTNode *value = parseExpression(PT_LOWEST);
+        defaultParams.push_back(value);
+        Ad_INCREF(value);
+    }
+    while (peekTokenIs(TT_COMMA)) {
+        nextToken();
+        nextToken();
+        ident = new ASTIdentifier(currentToken, currentToken.stringLiteral);
+        identifiers.push_back(ident);
+        Ad_INCREF(ident);
+        if (peekTokenIs(TT_ASSIGN)) {
+            nextToken();
+            nextToken();
+            ASTNode *value = parseExpression(PT_LOWEST);
+            defaultParams.push_back(value);
+            Ad_INCREF(value);
+        } else {
+            if (defaultParams.size() > 0) {
+                std::cout << "ERROR: no positional arguments allowed after defaulted params!";
+            }
+        }
+    }
+    if (!expectPeek(TT_RPAREN)) {
+        std::vector<ASTNode*> empty; // i don't like this, it should be NULL
+        return std::make_pair(empty, empty);
+    }
     return std::make_pair(identifiers, defaultParams);
 }
 

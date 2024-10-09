@@ -105,6 +105,7 @@ std::map<std::string, TokenType> keywords = {
     {"let", TT_LET},
     {"return", TT_RETURN},
     {"fun", TT_FUNCTION},
+    {"func", TT_FUNC},
     {"def", TT_DEF},
     {"if", TT_IF},
     {"else", TT_ELSE},

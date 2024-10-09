@@ -123,7 +123,7 @@ ASTIdentifier::ASTIdentifier(Token t, std::string val) {
 }
 
 std::string ASTIdentifier::toString() {
-    return "ASTIdentifier";
+    return "ASTIdentifier[" + token.stringLiteral + "]";
 }
 
 std::string ASTIdentifier::inspect() {
