@@ -2,7 +2,7 @@ from typing import Optional
 
 from ast import ASTProgram, ASTNode, ASTExpressionStatement, ASTInteger, ASTInfixExpression, ASTPrefixExpression, \
     ASTBoolean, ASTIfExpression, ASTBlockStatement, ASTNullExpression, ASTLetStatement, ASTIdentifier, ASTString, \
-    ASTList, ASTIndexExpression, ASTHash, ASTFunctionLiteral
+    ASTList, ASTIndexExpression, ASTHash, ASTFunctionLiteral, ASTCallExpression, StatementType
 from lexer import Lexer
 from precedence_type import PrecedenceType, precedences
 from token_type import TokenType
@@ -45,7 +45,8 @@ class Parser:
             TokenType.LT: self.parse_infix_expression,
             TokenType.GTE: self.parse_infix_expression,
             TokenType.LTE: self.parse_infix_expression,
-            TokenType.LBRACKET: self.parse_index_expression
+            TokenType.LBRACKET: self.parse_index_expression,
+            TokenType.LPAREN: self.parse_call_expression
         }
 
     def load(self, source):
@@ -211,6 +212,36 @@ class Parser:
         if not self.expect_peek(TokenType.RBRACKET):
             return None
         return elements
+
+    def parse_call_expression(self, left: ASTNode) -> Optional[ASTNode]:
+        expr = ASTCallExpression(self.current_token, left)
+        res = self.parse_call_arguments()
+        expr.arguments = res[0]
+        expr.kw_args = res[1]
+        return expr
+
+    def parse_call_arguments(self):
+        args = []
+        kw_args = []
+        if self.peek_token_is(TokenType.RPAREN):
+            self.next_token()
+            return args, kw_args
+        self.next_token()
+        expr1 = self.parse_expression(PrecedenceType.LOWEST)
+        if expr1.type == StatementType.ASSIGN_STATEMENT:
+            kw_args.append(expr1)
+        else:
+            args.append(expr1)
+        while self.peek_token_is(TokenType.COMMA):
+            self.next_token()
+            self.next_token()
+            if self.peek_token_is(TokenType.ASSIGN):
+                kw_args.append(self.parse_expression(PrecedenceType.LOWEST))
+            else:
+                args.append(self.parse_expression(PrecedenceType.LOWEST))
+        if not self.expect_peek(TokenType.RPAREN):
+            return [], {}
+        return args, kw_args
 
     def parse_index_expression(self, left: ASTNode) -> Optional[ASTNode]:
         expr = ASTIndexExpression(token=self.current_token, left=left)

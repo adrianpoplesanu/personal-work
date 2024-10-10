@@ -28,5 +28,6 @@ precedences = {
     TokenType.LT: PrecedenceType.LESSGREATER,
     TokenType.GTE: PrecedenceType.LESSGREATER,
     TokenType.LTE: PrecedenceType.LESSGREATER,
-    TokenType.LBRACKET: PrecedenceType.INDEX
+    TokenType.LBRACKET: PrecedenceType.INDEX,
+    TokenType.LPAREN:  PrecedenceType.CALL
 }

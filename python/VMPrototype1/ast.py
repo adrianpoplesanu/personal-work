@@ -20,6 +20,8 @@ class StatementType:
     INDEX_EXPRESSION = 'INDEX_EXPRESSION'
     HASH_LITERAL = 'HASH_LITERAL'
     FUNCTION_LITERAL = 'FUNCTION_LITERAL'
+    CALL_EXPRESSION = 'CALL_EXPRESSION'
+    ASSIGN_STATEMENT = 'ASSIGN_STATEMENT'
 
 
 statement_type_map = {
@@ -38,7 +40,9 @@ statement_type_map = {
     StatementType.LIST_LITERAL: 'LIST_LITERAL',
     StatementType.INDEX_EXPRESSION: 'INDEX_EXPRESSION',
     StatementType.HASH_LITERAL: 'HASH_LITERAL',
-    StatementType.FUNCTION_LITERAL: 'FUNCTION_LITERAL'
+    StatementType.FUNCTION_LITERAL: 'FUNCTION_LITERAL',
+    StatementType.CALL_EXPRESSION: 'CALL_EXPRESSION',
+    StatementType.ASSIGN_STATEMENT: 'ASSIGN_STATEMENT'
 }
 
 
@@ -279,6 +283,23 @@ class ASTFunctionLiteral(ASTNode):
 
     def __str__(self):
         return 'ASTFunctionLiteral'
+
+
+class ASTCallExpression(ASTNode):
+    statement_type = StatementType.CALL_EXPRESSION
+
+    def __init__(self, token=None, func=None):
+        super().__init__()
+        self.token = token
+        self.func = func
+        self.arguments = None
+        self.kw_args = None
+
+    def token_literal(self):
+        return self.token.literal
+
+    def __str__(self):
+        return 'ASTCallExpression[some arguments here]'
 
 
 class ASTIdentifier(ASTNode):
