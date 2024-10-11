@@ -480,6 +480,36 @@ std::string ASTFunctionLiteral::toString() {
     return out;
 }
 
+ASTCallExpression::ASTCallExpression() {
+    type = AT_CALL_EXPRESSION;
+}
+
+ASTCallExpression::ASTCallExpression(Token t) {
+    type = AT_CALL_EXPRESSION;
+    token = t;
+}
+
+ASTCallExpression::ASTCallExpression(Token t, ASTNode* f) {
+    type = AT_CALL_EXPRESSION;
+    token = t;
+    function = f;
+}
+
+ASTCallExpression::~ASTCallExpression() {
+    //...
+}
+
+std::string ASTCallExpression::inspect() {
+    return "todo: implement ASTCallExpression.inspect()";
+}
+
+std::string ASTCallExpression::toString() {
+    return "todo: implement ASTCallExpression.toString()";
+}
+
+ASTNode* ASTCallExpression::copy() {
+    return nullptr;
+}
 
 void Ad_INCREF(ASTNode* node) {
     if (node) {

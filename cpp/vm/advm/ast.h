@@ -26,7 +26,35 @@ enum ASTType {
     AT_LIST_LITERAL,
     AT_HASH_LITERAL,
     AT_INDEX_EXPRESSION,
-    AT_FUNCTION_LITERAL
+    AT_FUNCTION_LITERAL,
+    AT_CALL_EXPRESSION,
+    AT_ASSIGN_STATEMENT
+};
+
+std::unordered_map<ASTType, std::string> ast_type_map = {
+    {AT_PROGRAM, "Program"},
+    {AT_EXPRESSION_STATEMENT, "ExpressionStatement"},
+    {AT_IDENTIFIER, "Identifier"},
+    {AT_INTEGER, "Integer"},
+    {AT_BOOLEAN, "Boolean"},
+    {AT_INFIX_EXPRESSION, "InfixExpression"},
+    {AT_PREFIX_EXPRESSION, "PrefixExpression"},
+    {AT_BLOCK_STATEMENT, "BlockStatement"},
+    {AT_LET_STATEMENT, "LetStatement"},
+    {AT_RETURN_STATEMENT, "ReturnStatement"},
+    {AT_FUNCTION_STATEMENT, "FunctionStatement"},
+    {AT_DEF_STATEMENT, "DefStatement"},
+    {AT_WHILE_STATEMENT, "WhileStatement"},
+    {AT_FOR_STATEMENT, "ForStatement"},
+    {AT_IF_STATEMENT, "IfStatement"},
+    {AT_NULL_EXPRESSION, "NullExpression"},
+    {AT_STRING_LITERAL, "String"},
+    {AT_LIST_LITERAL, "List"},
+    {AT_HASH_LITERAL, "Hash"},
+    {AT_INDEX_EXPRESSION, "IndexExpression"},
+    {AT_FUNCTION_LITERAL, "Function"},
+    {AT_CALL_EXPRESSION, "CallExpression"},
+    {AT_ASSIGN_STATEMENT, "AssignStatement"}
 };
 
 class ASTNode {
@@ -38,6 +66,7 @@ public:
     virtual std::string inspect();
     virtual std::string toString();
     virtual std::string hash();
+    //virtual ASTNode* copy(); // TODO: uncomment this
 };
 
 class ASTProgram : public ASTNode {
@@ -249,6 +278,22 @@ public:
     ~ASTFunctionLiteral();
     virtual std::string inspect();
     virtual std::string toString();
+};
+
+class ASTCallExpression : public ASTNode {
+public:
+    Token token;
+    std::vector<ASTNode*> arguments;
+    std::vector<ASTNode*> kw_args;
+    ASTNode* function;
+
+    ASTCallExpression();
+    ASTCallExpression(Token);
+    ASTCallExpression(Token, ASTNode*);
+    ~ASTCallExpression();
+    virtual std::string inspect();
+    virtual std::string toString();
+    virtual ASTNode* copy();
 };
 
 class ASTNullExpression : public ASTNode {
