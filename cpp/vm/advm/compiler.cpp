@@ -272,7 +272,7 @@ void Compiler::compile(ASTNode* node) {
             break;
         }
         default: {
-            std::cout << "ERROR: unhndled ast type compiled\n";
+            std::cout << "severe error: node type unknown " << ast_type_map[node->type] << "\n";
             break;
         }
     }
