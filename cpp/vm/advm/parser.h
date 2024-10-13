@@ -90,6 +90,8 @@ public:
     std::vector<ASTNode*> parseListExpressions();
     ASTNode* parseHashLiteral();
     ASTNode* parseIndexExpression(ASTNode*);
+    ASTNode* parseCallExpression(ASTNode*);
+    std::pair<std::vector<ASTNode*>, std::vector<ASTNode*>> parseCallArguments();
     ASTNode* parseFunctionLiteral();
     std::pair<std::vector<ASTNode*>, std::vector<ASTNode*>> parseFunctionParameters();
 };

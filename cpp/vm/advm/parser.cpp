@@ -29,6 +29,7 @@ Parser::Parser() {
     infixParseFns.insert(std::make_pair(TT_LTE, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_EQUALS, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_LBRACKET, &Parser::parseIndexExpression));
+    infixParseFns.insert(std::make_pair(TT_LPAREN, &Parser::parseCallExpression));
 }
 
 PrecedenceType Parser::currentPrecedence() {
@@ -355,6 +356,45 @@ std::pair<std::vector<ASTNode*>, std::vector<ASTNode*>> Parser::parseFunctionPar
         return std::make_pair(empty, empty);
     }
     return std::make_pair(identifiers, defaultParams);
+}
+
+ASTNode* Parser::parseCallExpression(ASTNode* left) {
+    ASTCallExpression* expr = new ASTCallExpression(currentToken, left);
+    std::pair<std::vector<ASTNode*>, std::vector<ASTNode*>> res = parseCallArguments();
+    expr->arguments = res.first;
+    expr->kw_args = res.second;
+    return expr;
+}
+
+std::pair<std::vector<ASTNode*>, std::vector<ASTNode*>> Parser::parseCallArguments() {
+    std::vector<ASTNode*> args;
+    std::vector<ASTNode*> kw_args;
+    if (peekTokenIs(TT_RPAREN)) {
+        nextToken();
+        return std::make_pair(args, kw_args);
+    }
+    nextToken();
+    ASTNode *expr1 = parseExpression(PT_LOWEST);
+    if (expr1->type == AT_ASSIGN_STATEMENT) {
+        kw_args.push_back(expr1);
+    } else {
+        args.push_back(expr1);
+    }
+    while (peekTokenIs(TT_COMMA)) {
+        nextToken();
+        nextToken();
+        ASTNode *expr1 = parseExpression(PT_LOWEST);
+        if (expr1->type == AT_ASSIGN_STATEMENT) {
+            kw_args.push_back(expr1);
+        } else {
+            args.push_back(expr1);
+        }
+    }
+    if (!expectPeek(TT_RPAREN)) {
+        std::vector<ASTNode*> empty; // i don't like this, it should be NULL
+        return std::make_pair(empty, empty);
+    }
+    return std::make_pair(args, kw_args);
 }
 
 ASTNode* Parser::parseIndexExpression(ASTNode* left) {
