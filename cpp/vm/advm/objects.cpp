@@ -205,6 +205,30 @@ AdObject* AdObjectHash::copy() {
     return nullptr;
 }
 
+AdObjectCompiledFunction::AdObjectCompiledFunction() {
+    //...
+}
+
+AdObjectCompiledFunction::~AdObjectCompiledFunction() {
+    //...
+}
+
+std::string AdObjectCompiledFunction::inspect() {
+    return "TODO: implement AdObjectCompiledFunction.inspect()";
+}
+
+std::string AdObjectCompiledFunction::toString() {
+    return "TODO: implement AdObjectCompiledFunction.toString()";
+}
+
+std::string AdObjectCompiledFunction::hash() {
+    return "TODO: implement AdObjectCompiledFunction.hash()";
+}
+
+AdObject* AdObjectCompiledFunction::copy() {
+    return nullptr;
+}
+
 void AD_INCREF(AdObject* obj) {
     if (obj != NULL) {
         obj->ref_count++;

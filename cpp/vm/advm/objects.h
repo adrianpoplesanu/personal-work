@@ -21,12 +21,27 @@ enum ObjectType {
     OT_CLASS,
     OT_INSTANCE,
     OT_FILE,
-    OT_SOCKET
+    OT_SOCKET,
+    OT_COMPILED_FUNCTION
 };
 
 std::unordered_map<ObjectType, std::string> object_type_map = {
+    {OT_INT, "INT"},
+    {OT_FLOAT, "FLOAT"},
+    {OT_BOOL, "BOOL"},
+    {OT_STRING, "STRING"},
     {OT_NULL, "NULL"},
-    {OT_INT, "INT"}
+    {OT_FUNCTION, "FUNCTION"},
+    {OT_RETURN_VALUE, "RETURN_VALUE"},
+    {OT_ERROR, "ERROR"},
+    {OT_BUILTIN, "BUILTIN"},
+    {OT_LIST, "LIST"},
+    {OT_HASH, "HASH"},
+    {OT_CLASS, "CLASS"},
+    {OT_INSTANCE, "INSTANCE"},
+    {OT_FILE, "FILE"},
+    {OT_SOCKET, "SOCKET"},
+    {OT_COMPILED_FUNCTION, "COMPILED_FUNCTION"}
 };
 
 class AdObject {
@@ -119,6 +134,16 @@ public:
 
 class AdObjectFunction : public AdObject {
 
+};
+
+class AdObjectCompiledFunction : public AdObject {
+public:
+    AdObjectCompiledFunction();
+    ~AdObjectCompiledFunction();
+    virtual std::string inspect();
+    virtual std::string toString();
+    virtual std::string hash();
+    virtual AdObject* copy();
 };
 
 void Ad_INCREF(AdObject*);
