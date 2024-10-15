@@ -4,12 +4,13 @@ from hash_utils import HashKey
 
 
 class AdObjectType:
-    INT = 0
-    BOOL = 1
-    NULL = 2
-    STRING = 3
-    LIST = 4
-    HASH = 5
+    INT = "INT"
+    BOOL = "BOOL"
+    NULL = "NULL"
+    STRING = "STRING"
+    LIST = "LIST"
+    HASH = "HASH"
+    COMPILED_FUNCTION = "COMPILED_FUNCTION"
 
 
 class AdObject:
@@ -90,6 +91,15 @@ class AdHash(AdObject):
         out += ', '.join(['{0}: {1}'.format(pair.key.inspect(), pair.value.inspect()) for pair in self.pairs.values()])
         out += "}"
         return out
+
+
+class AdCompiledFunction(AdObject):
+
+    def __init__(self):
+        self.object_type = AdObjectType.COMPILED_FUNCTION
+
+    def inspect(self) -> str:
+        return "todo: implement AdCompiledFunction.inspect()"
 
 
 class AdNullObject(AdObject):
