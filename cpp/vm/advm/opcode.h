@@ -23,7 +23,9 @@ enum OpCodeByte {
     OP_SET_GLOBAL,
     OP_ARRAY,
     OP_HASH,
-    OP_INDEX_EXPRESSION
+    OP_INDEX_EXPRESSION,
+    OP_CALL,
+    OP_RETURN_VALUE
 };
 
 class OpCode {
@@ -182,6 +184,20 @@ class OpIndexExpression : public OpCode {
 public:
     OpIndexExpression() {
         byteCode = OP_INDEX_EXPRESSION;
+    }
+};
+
+class OpCall : public OpCode {
+public:
+    OpCall() {
+        byteCode = OP_CALL;
+    }
+};
+
+class Op_Return_Value : public OpCode {
+public:
+    Op_Return_Value() {
+        byteCode = OP_RETURN_VALUE;
     }
 };
 
