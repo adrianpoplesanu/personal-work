@@ -21,6 +21,8 @@ class OpCodeByte:
     OP_ARRAY = 19
     OP_HASH = 20
     OP_INDEX = 21
+    OP_CALL = 22
+    OP_RETURN_VALUE = 23
 
 
 class OpCode:
@@ -115,6 +117,14 @@ class OpIndex(OpCode):
     byte_code = OpCodeByte.OP_INDEX
 
 
+class OpCall(OpCode):
+    byte_code = OpCodeByte.OP_CALL
+
+
+class OpReturnValue(OpCode):
+    byte_code = OpCodeByte.OP_RETURN_VALUE
+
+
 op_constant = OpConstant()
 op_add = OpAdd()
 op_sub = OpSub()
@@ -137,3 +147,5 @@ op_set_global = OpSetGlobal()
 op_array = OpArray()
 op_hash = OpHash()
 op_index = OpIndex()
+op_call = OpCall()
+op_return_value = OpReturnValue()

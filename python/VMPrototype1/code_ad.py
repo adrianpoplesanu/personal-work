@@ -64,7 +64,9 @@ class Code:
             OpCodeByte.OP_SET_GLOBAL: Definition("OpSetGlobal", 1, [2]),
             OpCodeByte.OP_ARRAY: Definition("OpArray", 1, [2]),
             OpCodeByte.OP_HASH: Definition("OpHash", 1, [2]),
-            OpCodeByte.OP_INDEX: Definition("OpIndex", 0, [])
+            OpCodeByte.OP_INDEX: Definition("OpIndex", 0, []),
+            OpCodeByte.OP_CALL: Definition("OpCall", 0, []),
+            OpCodeByte.OP_RETURN_VALUE: Definition("OpReturnValue", 0, [])
         }
 
     def make(self, opcode: OpCode, n, args) -> Tuple[int, list]:
