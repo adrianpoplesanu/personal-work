@@ -1,6 +1,7 @@
 from typing import List, Dict
 
 from hash_utils import HashKey
+from instructions import Instructions
 
 
 class AdObjectType:
@@ -94,6 +95,8 @@ class AdHash(AdObject):
 
 
 class AdCompiledFunction(AdObject):
+    def __init__(self, instructions: Instructions):
+        self.instructions = instructions
 
     def __init__(self):
         self.object_type = AdObjectType.COMPILED_FUNCTION

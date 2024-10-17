@@ -101,6 +101,10 @@ class VM:
                 index = self.pop()
                 left = self.pop()
                 self.execute_index_expression(left, index)
+            elif opcode == OpCodeByte.OP_CALL:
+                print("todo: implement OP_CALL in vm.run()")
+            elif opcode == OpCodeByte.OP_RETURN_VALUE:
+                print("todo: implement OP_RETURN_VALUE in vm.run()")
             else:
                 print('severe error: vm.run() error')
             ip += 1

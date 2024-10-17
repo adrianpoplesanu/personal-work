@@ -152,6 +152,10 @@ class Compiler:
             self.compile(node.index)
             args = []
             self.emit(op_index, 0, args)
+        elif node.statement_type == StatementType.FUNCTION_LITERAL:
+            print("todo: handle function literals in compiler")
+        elif node.statement_type == StatementType.CALL_EXPRESSION:
+            print("todo: handle call expressions in compiler")
         else:
             print("severe error: node type unknown " + statement_type_map[node.statement_type])
 
