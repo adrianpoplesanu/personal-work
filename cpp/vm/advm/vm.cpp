@@ -238,6 +238,14 @@ void VM::run() {
                 executeIndexExpression(left, index);
                 break;
             }
+            case OP_CALL: {
+                std::cout << "todo: handle OP_CALL in vm.run()\n";
+                break;
+            }
+            case OP_RETURN_VALUE: {
+                std::cout << "todo: handle OP_RETURN_VALUE in vm.run()\n";
+                break;
+            }
             default: {
                 break;
             }

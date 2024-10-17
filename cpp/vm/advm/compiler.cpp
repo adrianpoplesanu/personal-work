@@ -271,6 +271,14 @@ void Compiler::compile(ASTNode* node) {
             emit(opIndexExpression, 0, args);
             break;
         }
+        case AT_FUNCTION_LITERAL: {
+            std::cout << "todo: handle AT_FUNCTION_LITERAL in compiler.compile()\n";
+            break;
+        }
+        case AT_CALL_EXPRESSION: {
+            std::cout << "todo: handle AT_CALL_EXPRESSION in compiler.compile()\n";
+            break;
+        }
         default: {
             std::cout << "severe error: node type unknown " << ast_type_map[node->type] << "\n";
             break;

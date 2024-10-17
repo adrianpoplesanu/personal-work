@@ -5,6 +5,7 @@
 #include <vector>
 #include <unordered_map>
 #include "hashpair.h"
+#include "instructions.h"
 
 enum ObjectType {
     OT_INT,
@@ -138,6 +139,8 @@ class AdObjectFunction : public AdObject {
 
 class AdObjectCompiledFunction : public AdObject {
 public:
+    Instructions instructions;
+
     AdObjectCompiledFunction();
     ~AdObjectCompiledFunction();
     virtual std::string inspect();
