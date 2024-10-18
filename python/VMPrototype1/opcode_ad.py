@@ -23,6 +23,7 @@ class OpCodeByte:
     OP_INDEX = 21
     OP_CALL = 22
     OP_RETURN_VALUE = 23
+    OP_RETURN = 24
 
 
 class OpCode:
@@ -123,6 +124,10 @@ class OpCall(OpCode):
 
 class OpReturnValue(OpCode):
     byte_code = OpCodeByte.OP_RETURN_VALUE
+
+
+class OpReturn(OpCode):
+    byte_code = OpCodeByte.OP_RETURN
 
 
 op_constant = OpConstant()

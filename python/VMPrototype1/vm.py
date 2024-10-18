@@ -105,6 +105,8 @@ class VM:
                 print("todo: implement OP_CALL in vm.run()")
             elif opcode == OpCodeByte.OP_RETURN_VALUE:
                 print("todo: implement OP_RETURN_VALUE in vm.run()")
+            elif opcode == OpCodeByte.OP_RETURN:
+                print("todo: implement OP_RETURN in vm.run()")
             else:
                 print('severe error: vm.run() error')
             ip += 1
