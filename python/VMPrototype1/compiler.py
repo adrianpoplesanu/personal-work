@@ -1,6 +1,9 @@
+from typing import List
+
 from ast import ASTNode, StatementType, statement_type_map
 from bytecode import Bytecode
 from code_ad import Code
+from compilation_scope import CompilationScope
 from emitted_instruction import EmittedInstruction
 from instructions import Instructions
 from objects import AdObjectInteger, AdObject, AdString
@@ -19,6 +22,9 @@ class Compiler:
         self.last_instruction = None
         self.previous_instruction = None
         self.symbol_table = new_symbol_table()
+        main_scope: CompilationScope = CompilationScope(self.code.instructions)
+        self.scopes: List[CompilationScope] = [main_scope]
+        self.scope_index: int = 0
 
     def reset(self):
         self.instructions = Instructions()
