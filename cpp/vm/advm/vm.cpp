@@ -246,6 +246,10 @@ void VM::run() {
                 std::cout << "todo: handle OP_RETURN_VALUE in vm.run()\n";
                 break;
             }
+            case OP_RETURN: {
+                std::cout << "todo: handle OP_RETURN in vm.run()\n";
+                break;
+            }
             default: {
                 break;
             }

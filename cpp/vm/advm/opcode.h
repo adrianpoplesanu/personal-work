@@ -25,7 +25,8 @@ enum OpCodeByte {
     OP_HASH,
     OP_INDEX_EXPRESSION,
     OP_CALL,
-    OP_RETURN_VALUE
+    OP_RETURN_VALUE,
+    OP_RETURN
 };
 
 class OpCode {
@@ -198,6 +199,13 @@ class Op_Return_Value : public OpCode {
 public:
     Op_Return_Value() {
         byteCode = OP_RETURN_VALUE;
+    }
+};
+
+class Op_Return : public OpCode {
+public:
+    Op_Return() {
+        byteCode = OP_RETURN;
     }
 };
 

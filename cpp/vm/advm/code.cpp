@@ -26,6 +26,7 @@ Code::Code() {
     definitionsMap.insert(std::make_pair(OP_INDEX_EXPRESSION, new Definition("OpIndexExpression", 0, new int)));
     definitionsMap.insert(std::make_pair(OP_CALL, new Definition("OpCall", 0, new int)));
     definitionsMap.insert(std::make_pair(OP_RETURN_VALUE, new Definition("OpReturnValue", 0, new int)));
+    definitionsMap.insert(std::make_pair(OP_RETURN, new Definition("OpReturn", 0, new int)));
 }
 
 Code::~Code() {
