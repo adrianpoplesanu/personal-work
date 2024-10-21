@@ -260,11 +260,21 @@ ASTBlockStatement::~ASTBlockStatement() {
 }
 
 std::string ASTBlockStatement::inspect() {
-    return "todo: implement this";
+    std::string out = "{";
+    for (auto& it : statements) {
+        out += it->inspect();
+    }
+    out += "}";
+    return out;
 }
 
 std::string ASTBlockStatement::toString() {
-    return "todo: implement this";
+    std::string out = "{";
+    for (auto& it : statements) {
+        out += it->inspect();
+    }
+    out += "}";
+    return out;
 }
 
 ASTNullExpression::ASTNullExpression() {
