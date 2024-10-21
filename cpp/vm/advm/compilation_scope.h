@@ -6,6 +6,7 @@
 
 class CompilationScope {
 public:
+    CompilationScope();
     Instructions instructions; // TODO: check if this is correct
     EmittedInstruction previousInstruction = EmittedInstruction();
     EmittedInstruction lastInstruction = EmittedInstruction();

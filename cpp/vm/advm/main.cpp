@@ -39,6 +39,8 @@
 #include "vm.cpp"
 #include "emitted_instruction.h"
 #include "emitted_instruction.cpp"
+#include "compilation_scope.h"
+#include "compilation_scope.cpp"
 #include "symbol_table.h"
 #include "symbol_table.cpp"
 
