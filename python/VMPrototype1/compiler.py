@@ -6,7 +6,7 @@ from code_ad import Code
 from compilation_scope import CompilationScope
 from emitted_instruction import EmittedInstruction
 from instructions import Instructions
-from objects import AdObjectInteger, AdObject, AdString
+from objects import AdObjectInteger, AdObject, AdString, AdCompiledFunction
 from opcode_ad import OpAdd, OpSub, OpMultiply, OpDivide, OpConstant, OpTrue, OpFalse, OpPop, op_equal, op_not_equal, \
     op_greater_than, op_greater_than_equal, op_add, op_sub, op_multiply, op_divide, op_pop, op_bang, op_minus, \
     op_jump_not_truthy, OpCode, op_jump, op_null, op_set_global, op_get_global, op_constant, op_array, op_hash, op_index
@@ -106,7 +106,7 @@ class Compiler:
             args = [9999]
             jump_pos = self.emit(op_jump, 1, args)
 
-            after_consequence_pos = len(self.instructions.bytes)
+            after_consequence_pos = self.current_instructions().size
             self.change_operand(jump_not_truthy_pos, after_consequence_pos)
 
             if node.alternative is None:
@@ -117,7 +117,7 @@ class Compiler:
                 if self.last_instruction_is_pop():
                     self.remove_last_pop()
 
-            after_alternative_pos = len(self.instructions.bytes)
+            after_alternative_pos = self.current_instructions().size
             self.change_operand(jump_pos, after_alternative_pos)
         elif node.statement_type == StatementType.BLOCK_STATEMENT:
             for stmt in node.statements:
@@ -159,7 +159,14 @@ class Compiler:
             args = []
             self.emit(op_index, 0, args)
         elif node.statement_type == StatementType.FUNCTION_LITERAL:
-            print("todo: handle function literals in compiler")
+            self.enter_scope()
+            self.compile(node.body)
+            instructions = self.leave_scope()
+            compiled_func = AdCompiledFunction()
+            compiled_func.instructions = instructions
+            args = []
+            args.append(self.add_constant(compiled_func))
+            self.emit(op_constant, 1, args)
         elif node.statement_type == StatementType.CALL_EXPRESSION:
             print("todo: handle call expressions in compiler")
         else:
@@ -175,14 +182,22 @@ class Compiler:
 
     def get_bytecode(self) -> Bytecode:
         bytecode = Bytecode()
-        bytecode.instructions = self.instructions
+        bytecode.instructions = self.current_instructions()
         bytecode.constants = self.constants
         return bytecode
 
+    def current_instructions(self) -> Instructions:
+        return self.scopes[self.scope_index].instructions
+
     def add_instruction(self, size: int, instruction) -> int:
-        pos_new_instruction = len(self.instructions.bytes)
+        pos_new_instruction = self.current_instructions().size
+        updated_instructions = Instructions()
+        for x in self.current_instructions().bytes:
+            updated_instructions.add(x)
         for i in range(size):
-            self.instructions.add(instruction[i])
+            updated_instructions.add(instruction[i])
+
+        self.scopes[self.scope_index].instructions = updated_instructions
         return pos_new_instruction
 
     def add_constant(self, obj: AdObject) -> int:
@@ -190,25 +205,46 @@ class Compiler:
         return len(self.constants) - 1
 
     def set_last_instruction(self, op, pos) -> None:
-        previous = self.last_instruction
+        previous = self.scopes[self.scope_index].last_instruction
         last = EmittedInstruction(op, pos)
 
-        self.previous_instruction = previous
-        self.last_instruction = last
+        self.scopes[self.scope_index].previous_instruction = previous
+        self.scopes[self.scope_index].last_instruction = last
 
     def last_instruction_is_pop(self) -> bool:
-        return self.last_instruction.opcode == op_pop
+        return self.scopes[self.scope_index].last_instruction.opcode == op_pop
 
     def remove_last_pop(self) -> None:
-        self.instructions.remove_last()
-        self.last_instruction = self.previous_instruction
+        last = self.scopes[self.scope_index].last_instruction
+        previous = self.scopes[self.scope_index].previous_instruction
+
+        old = self.current_instructions().bytes
+        new = old[:last.position]
+
+        self.scopes[self.scope_index].instructions.bytes = new
+        self.scopes[self.scope_index].instructions.size = last.position
+        self.scopes[self.scope_index].last_instruction = previous
 
     def replace_instruction(self, pos: int, new_instruction: list):
+        ins = self.current_instructions()
         for i, element in enumerate(new_instruction):
-            self.instructions.bytes[pos + i] = new_instruction[i]
+            ins.bytes[pos + i] = new_instruction[i]
 
     def change_operand(self, op_pos: int, operand: int):
         op = OpCode()
-        op.byte_code = self.instructions.bytes[op_pos]
+        op.byte_code = self.current_instructions().bytes[op_pos]
         size, new_instruction = self.code.make(op, 1, [operand])
         self.replace_instruction(op_pos, new_instruction)
+
+    def enter_scope(self):
+        scope = CompilationScope(self.instructions, EmittedInstruction(), EmittedInstruction())
+        self.scopes.append(scope)
+        self.scope_index += 1
+
+    def leave_scope(self):
+        instructions = self.current_instructions()
+
+        self.scopes = self.scopes[:len(self.scopes) - 1]
+        self.scope_index -= 1
+
+        return instructions
