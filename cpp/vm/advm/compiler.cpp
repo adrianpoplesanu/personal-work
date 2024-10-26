@@ -3,6 +3,9 @@
 Compiler::Compiler() {
     // ...
     symbolTable = newSymbolTable();
+    CompilationScope mainScope(code.instructions);
+    scopes.push_back(mainScope);
+    scopeIndex = 0;
 }
 
 void Compiler::reset() {
@@ -159,6 +162,11 @@ void Compiler::compile(ASTNode* node) {
             break;
         }
         case AT_RETURN_STATEMENT: {
+            ASTReturnStatement *stmt = (ASTReturnStatement*) node;
+            compile(stmt->value);
+            OpReturnValue opReturnValue = OpReturnValue();
+            std::vector<int> args;
+            emit(opReturnValue, 0, args);
             break;
         }
         case AT_FUNCTION_STATEMENT: {
@@ -194,7 +202,7 @@ void Compiler::compile(ASTNode* node) {
             jump_args.push_back(9999);
             int jump_pos = emit(opJump, 1, jump_args);
 
-            int after_consequence_pos = instructions.size;
+            int after_consequence_pos = currentInstructions().size;
             changeOperand(jump_not_truthy_pos, after_consequence_pos);
 
             if (stmt->alternative == NULL) {
@@ -207,7 +215,7 @@ void Compiler::compile(ASTNode* node) {
                     removeLastInstruction();
                 }
             }
-            int after_alternative_pos = instructions.size;
+            int after_alternative_pos = currentInstructions().size;
             changeOperand(jump_pos, after_alternative_pos);
 
             break;
@@ -272,7 +280,17 @@ void Compiler::compile(ASTNode* node) {
             break;
         }
         case AT_FUNCTION_LITERAL: {
-            std::cout << "todo: handle AT_FUNCTION_LITERAL in compiler.compile()\n";
+            //std::cout << "todo: handle AT_FUNCTION_LITERAL in compiler.compile()\n";
+            ASTFunctionLiteral *expr = (ASTFunctionLiteral*) node;
+            enterScope();
+            compile(expr->body);
+            Instructions instructions = leaveScope();
+            AdObjectCompiledFunction *compiled_func = new AdObjectCompiledFunction();
+            compiled_func->instructions = instructions;
+            OpConstant opConstant = OpConstant();
+            std::vector<int> args;
+            args.push_back(addConstant(compiled_func));
+            emit(opConstant, 1, args);
             break;
         }
         case AT_CALL_EXPRESSION: {
@@ -295,11 +313,20 @@ int Compiler::emit(OpCode opcode, int n, std::vector<int> &args) {
     return pos;
 }
 
+Instructions Compiler::currentInstructions() {
+    return scopes[scopeIndex].instructions;
+}
+
 int Compiler::addInstruction(int size, unsigned char *ins) {
-    int posNewInstruction = instructions.size;
-    for (int i = 0; i < size; i++) {
-        instructions.add(ins[i]);
+    int posNewInstruction = currentInstructions().size;
+    Instructions updated_instructions = Instructions();
+    for (auto x: currentInstructions().bytes) {
+        updated_instructions.add(x);
     }
+    for (int i = 0; i < size; i++) {
+        updated_instructions.add(ins[i]);
+    }
+    scopes[scopeIndex].instructions = updated_instructions;
     return posNewInstruction;
 }
 
@@ -310,41 +337,67 @@ int Compiler::addConstant(AdObject* obj) {
 
 Bytecode Compiler::getBytecode() {
     Bytecode bytecode;
-    bytecode.instructions = instructions;
+    bytecode.instructions = currentInstructions();
     bytecode.constants = constants;
     return bytecode;
 }
 
 void Compiler::setLastInstruction(OpCode opcode, int pos) {
-    EmittedInstruction previous = lastInstruction;
+    EmittedInstruction previous = scopes[scopeIndex].lastInstruction;
     EmittedInstruction last = EmittedInstruction(opcode, pos);
 
-    previousInstruction = previous;
-    lastInstruction = last;
+    scopes[scopeIndex].previousInstruction = previous;
+    scopes[scopeIndex].lastInstruction = last;
 }
 
 bool Compiler::isLastInstructionPop() {
-    return lastInstruction.opcode.byteCode == OP_POP;
+    return scopes[scopeIndex].lastInstruction.opcode.byteCode == OP_POP;
 }
 
 void Compiler::removeLastInstruction() {
-    instructions.removeLast();
-    lastInstruction = previousInstruction;
+    EmittedInstruction last = scopes[scopeIndex].lastInstruction;
+    EmittedInstruction previous = scopes[scopeIndex].previousInstruction;
+
+    std::vector<unsigned char> old = currentInstructions().bytes;
+    std::vector<unsigned char> new_bytes;
+
+    for (int i = 0; i < last.position; i++) new_bytes.push_back(old[i]);
+
+    scopes[scopeIndex].instructions.bytes = new_bytes;
+    scopes[scopeIndex].instructions.size = last.position;
+    scopes[scopeIndex].lastInstruction = previous;
 }
 
 void Compiler::replaceInstruction(int pos, unsigned char *new_instruction, int size) {
+    Instructions ins = currentInstructions();
     for (int i = 0; i < size; i++) {
-        instructions.bytes[pos + i] = new_instruction[i];
+        scopes[scopeIndex].instructions.bytes[pos + i] = new_instruction[i]; // haha, doar asa merge
     }
+    int bb = 5;
 }
 
 void Compiler::changeOperand(int opPos, int operand) {
     OpCode op = OpCode();
-    op.byteCode = static_cast<OpCodeByte>(instructions.bytes[opPos]);
+    op.byteCode = static_cast<OpCodeByte>(currentInstructions().bytes[opPos]);
     int size;
     std::vector<int> args;
     args.push_back(operand);
-    unsigned char * new_instruction = code.make(op, 1, args, size);
+    unsigned char *new_instruction = code.make(op, 1, args, size);
     replaceInstruction(opPos, new_instruction, size);
     delete new_instruction; // IMPORTANT: free this as every call leaks 16 bytes of memory
+}
+
+void Compiler::enterScope() {
+    CompilationScope scope(instructions, EmittedInstruction(), EmittedInstruction());
+    scopes.push_back(scope);
+    scopeIndex++;
+}
+
+Instructions Compiler::leaveScope() {
+    Instructions instructions = currentInstructions();
+
+    scopes.pop_back();
+    scopeIndex--;
+
+    return instructions;
 }

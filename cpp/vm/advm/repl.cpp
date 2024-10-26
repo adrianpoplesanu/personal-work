@@ -71,6 +71,7 @@ void Repl::executeFile(std::ifstream &target) {
 
         Bytecode bytecode = compiler.getBytecode();
         compiler.code.instructions = bytecode.instructions;
+        compiler.code.instructions.size = bytecode.instructions.bytes.size();
         std::cout << compiler.code.toString(); // asta pare ca functioneaza cum trebuie
 
         vm.load(bytecode);

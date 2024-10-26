@@ -137,7 +137,15 @@ public:
 };
 
 class ASTReturnStatement : public ASTNode {
-    
+public:
+    Token token;
+    ASTNode* value;
+
+    ASTReturnStatement();
+    ASTReturnStatement(Token);
+    ~ASTReturnStatement();
+    virtual std::string inspect();
+    virtual std::string toString();
 };
 
 class ASTFunctionStatement : public ASTNode {

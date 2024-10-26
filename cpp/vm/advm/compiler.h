@@ -7,6 +7,7 @@
 #include "opcode.h"
 #include "gc.h"
 #include "emitted_instruction.h"
+#include "compilation_scope.h"
 #include "symbol_table.h"
 
 class Compiler {
@@ -19,6 +20,8 @@ public:
     EmittedInstruction previousInstruction = EmittedInstruction();
     EmittedInstruction lastInstruction = EmittedInstruction();
     SymbolTable symbolTable;
+    std::vector<CompilationScope> scopes;
+    int scopeIndex;
 
     Compiler();
     void reset();
@@ -32,6 +35,9 @@ public:
     Bytecode getBytecode();
     void changeOperand(int, int);
     void replaceInstruction(int, unsigned char*, int);
+    Instructions currentInstructions();
+    void enterScope();
+    Instructions leaveScope();
 };
 
 #endif

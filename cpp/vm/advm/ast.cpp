@@ -306,6 +306,27 @@ std::string ASTLetStatement::toString() {
     return "ASTLetStatement<" + name.toString() + "> [" + value->toString() + "]\n";
 }
 
+ASTReturnStatement::ASTReturnStatement() {
+    type = AT_RETURN_STATEMENT;
+}
+
+ASTReturnStatement::ASTReturnStatement(Token t) {
+    type = AT_RETURN_STATEMENT;
+    token = t;
+}
+
+ASTReturnStatement::~ASTReturnStatement() {
+    //...
+}
+
+std::string ASTReturnStatement::inspect() {
+    return "todo: implement ASTReturnStatement.inspect()";
+}
+
+std::string ASTReturnStatement::toString() {
+    return "todo: implement ASTReturnStatement.toString()";
+}
+
 ASTString::ASTString() {
     type = AT_STRING_LITERAL;
 }

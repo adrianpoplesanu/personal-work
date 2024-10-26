@@ -195,16 +195,16 @@ public:
     }
 };
 
-class Op_Return_Value : public OpCode {
+class OpReturnValue : public OpCode {
 public:
-    Op_Return_Value() {
+    OpReturnValue() {
         byteCode = OP_RETURN_VALUE;
     }
 };
 
-class Op_Return : public OpCode {
+class OpReturn : public OpCode {
 public:
-    Op_Return() {
+    OpReturn() {
         byteCode = OP_RETURN;
     }
 };

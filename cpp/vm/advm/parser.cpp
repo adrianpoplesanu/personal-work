@@ -80,9 +80,9 @@ void Parser::nextToken() {
 ASTNode* Parser::parseStatement() {
     if (currentToken.type == TT_LET)
         return parseLetStatement();
-    /*if (currentToken.type == TT_RETURN)
+    if (currentToken.type == TT_RETURN)
         return parseReturnStatement();
-    if (currentToken.type == TT_BREAK)
+    /*if (currentToken.type == TT_BREAK)
         return parseBreakStatement();
     if (currentToken.type == TT_CONTINUE)
         return parseContinueStatement();
@@ -126,7 +126,13 @@ ASTNode* Parser::parseLetStatement() {
 }
 
 ASTNode* Parser::parseReturnStatement() {
-    return NULL;
+    ASTReturnStatement* stmt = new ASTReturnStatement(currentToken);
+    nextToken();
+    stmt->value = parseExpression(PT_LOWEST);
+    if (peekTokenIs(TT_RBRACE) || peekTokenIs(TT_SEMICOLON) || peekTokenIs(TT_EOF)) {
+        return stmt;
+    }
+    return stmt;
 }
 
 ASTNode* Parser::parseBreakStatement() {
