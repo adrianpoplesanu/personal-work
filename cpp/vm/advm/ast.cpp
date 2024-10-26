@@ -112,7 +112,8 @@ std::string ASTInfixExpression::inspect() {
 }
 
 ASTIdentifier::ASTIdentifier() {
-    // ...
+    type = AT_IDENTIFIER;
+    ref_count = 0;
 }
 
 ASTIdentifier::ASTIdentifier(Token t, std::string val) {
@@ -223,11 +224,19 @@ std::string ASTBoolean::inspect() {
 
 ASTIfStatement::ASTIfStatement() {
     type = AT_IF_STATEMENT;
+    ref_count = 0;
+    condition = nullptr;
+    consequence = nullptr;
+    alternative = nullptr;
 }
 
 ASTIfStatement::ASTIfStatement(Token t) {
     type = AT_IF_STATEMENT;
+    ref_count = 0;
     token = t;
+    condition = nullptr;
+    consequence = nullptr;
+    alternative = nullptr;
 }
 
 ASTIfStatement::~ASTIfStatement() {
@@ -246,10 +255,12 @@ std::string ASTIfStatement::toString() {
 
 ASTBlockStatement::ASTBlockStatement() {
     type = AT_BLOCK_STATEMENT;
+    ref_count = 0;
 }
 
 ASTBlockStatement::ASTBlockStatement(Token t) {
     type = AT_BLOCK_STATEMENT;
+    ref_count = 0;
     token = t;
 }
 
@@ -279,6 +290,7 @@ std::string ASTBlockStatement::toString() {
 
 ASTNullExpression::ASTNullExpression() {
     type = AT_NULL_EXPRESSION;
+    ref_count = 0;
 }
 
 std::string ASTNullExpression::inspect() {
@@ -291,10 +303,12 @@ std::string ASTNullExpression::toString() {
 
 ASTLetStatement::ASTLetStatement() {
     type = AT_LET_STATEMENT;
+    ref_count = 0;
 }
 
 ASTLetStatement::ASTLetStatement(Token t) {
     type = AT_LET_STATEMENT;
+    ref_count = 0;
     token = t;
 }
 
@@ -308,10 +322,12 @@ std::string ASTLetStatement::toString() {
 
 ASTReturnStatement::ASTReturnStatement() {
     type = AT_RETURN_STATEMENT;
+    ref_count = 0;
 }
 
 ASTReturnStatement::ASTReturnStatement(Token t) {
     type = AT_RETURN_STATEMENT;
+    ref_count = 0;
     token = t;
 }
 
@@ -329,15 +345,18 @@ std::string ASTReturnStatement::toString() {
 
 ASTString::ASTString() {
     type = AT_STRING_LITERAL;
+    ref_count = 0;
 }
 
 ASTString::ASTString(Token t) {
     type = AT_STRING_LITERAL;
+    ref_count = 0;
     token = t;
 }
 
 ASTString::ASTString(Token t, std::string v) {
     type = AT_STRING_LITERAL;
+    ref_count = 0;
     token = t;
     value = v;
 }
@@ -356,15 +375,18 @@ std::string ASTString::toString() {
 
 ASTList::ASTList() {
     type = AT_LIST_LITERAL;
+    ref_count = 0;
 }
 
 ASTList::ASTList(Token t) {
     type = AT_LIST_LITERAL;
+    ref_count = 0;
     token = t;
 }
 
 ASTList::ASTList(Token t, std::vector<ASTNode*> e) {
     type = AT_LIST_LITERAL;
+    ref_count = 0;
     token = t;
     elements = e;
 }
@@ -396,15 +418,18 @@ std::string ASTList::toString() {
 
 ASTIndexExpression::ASTIndexExpression() {
     type = AT_INDEX_EXPRESSION;
+    ref_count = 0;
 }
 
 ASTIndexExpression::ASTIndexExpression(Token t) {
     type = AT_INDEX_EXPRESSION;
+    ref_count = 0;
     token = t;
 }
 
 ASTIndexExpression::ASTIndexExpression(Token t, ASTNode *l) {
     type = AT_INDEX_EXPRESSION;
+    ref_count = 0;
     token = t;
     left = l;
 }
@@ -433,15 +458,18 @@ std::string ASTIndexExpression::toString() {
 
 ASTHash::ASTHash() {
     type = AT_HASH_LITERAL;
+    ref_count = 0;
 }
 
 ASTHash::ASTHash(Token t) {
     type = AT_HASH_LITERAL;
+    ref_count = 0;
     token = t;
 }
 
 ASTHash::ASTHash(Token t, std::unordered_map<ASTNode*, ASTNode*> p) {
     type = AT_HASH_LITERAL;
+    ref_count = 0;
     token = t;
     pairs = p;
 }

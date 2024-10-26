@@ -373,7 +373,6 @@ void Compiler::replaceInstruction(int pos, unsigned char *new_instruction, int s
     for (int i = 0; i < size; i++) {
         scopes[scopeIndex].instructions.bytes[pos + i] = new_instruction[i]; // haha, doar asa merge
     }
-    int bb = 5;
 }
 
 void Compiler::changeOperand(int opPos, int operand) {
