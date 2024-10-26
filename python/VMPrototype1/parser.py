@@ -2,7 +2,7 @@ from typing import Optional
 
 from ast import ASTProgram, ASTNode, ASTExpressionStatement, ASTInteger, ASTInfixExpression, ASTPrefixExpression, \
     ASTBoolean, ASTIfExpression, ASTBlockStatement, ASTNullExpression, ASTLetStatement, ASTIdentifier, ASTString, \
-    ASTList, ASTIndexExpression, ASTHash, ASTFunctionLiteral, ASTCallExpression, StatementType
+    ASTList, ASTIndexExpression, ASTHash, ASTFunctionLiteral, ASTCallExpression, StatementType, ASTReturnStatement
 from lexer import Lexer
 from precedence_type import PrecedenceType, precedences
 from token_type import TokenType
@@ -97,6 +97,8 @@ class Parser:
         #    return self.statement_parse_fns[self.current_token.token_type]()
         if self.current_token.token_type == TokenType.LET:
             return self.parse_let_expression()
+        if self.current_token.token_type == TokenType.RETURN:
+            return self.parse_return_statement()
         return self.parse_expression_statement()
 
     def parse_identifier(self) -> ASTNode:
@@ -306,6 +308,16 @@ class Parser:
         if not self.expect_peek(TokenType.RPAREN):
             return [], []
         return identifiers, default_params
+
+    def parse_return_statement(self):
+        stmt = ASTReturnStatement(token=self.current_token)
+        self.next_token()
+        stmt.value = self.parse_expression(PrecedenceType.LOWEST)
+        if self.peek_token_is(TokenType.SEMICOLON) or self.peek_token_is(TokenType.RBRACE) or self.peek_token_is(TokenType.EOF):
+            return stmt
+        while not self.current_token_is(TokenType.SEMICOLON) and not self.current_token_is(TokenType.RBRACE) and not self.current_token_is(TokenType.EOF):
+            self.next_token()
+        return stmt
 
     def parse_infix_expression(self, left: ASTNode) -> ASTNode:
         expr = ASTInfixExpression(token=self.current_token, operator=self.current_token.literal, left=left)

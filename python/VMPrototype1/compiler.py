@@ -9,7 +9,8 @@ from instructions import Instructions
 from objects import AdObjectInteger, AdObject, AdString, AdCompiledFunction
 from opcode_ad import OpAdd, OpSub, OpMultiply, OpDivide, OpConstant, OpTrue, OpFalse, OpPop, op_equal, op_not_equal, \
     op_greater_than, op_greater_than_equal, op_add, op_sub, op_multiply, op_divide, op_pop, op_bang, op_minus, \
-    op_jump_not_truthy, OpCode, op_jump, op_null, op_set_global, op_get_global, op_constant, op_array, op_hash, op_index
+    op_jump_not_truthy, OpCode, op_jump, op_null, op_set_global, op_get_global, op_constant, op_array, op_hash, \
+    op_index, op_return_value
 from symbol_table import new_symbol_table
 
 
@@ -169,6 +170,10 @@ class Compiler:
             self.emit(op_constant, 1, args)
         elif node.statement_type == StatementType.CALL_EXPRESSION:
             print("todo: handle call expressions in compiler")
+        elif node.statement_type == StatementType.RETURN_STATEMENT:
+            self.compile(node.value)
+            args = []
+            self.emit(op_return_value, 0, args)
         else:
             print("severe error: node type unknown " + statement_type_map[node.statement_type])
 

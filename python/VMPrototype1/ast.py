@@ -22,6 +22,7 @@ class StatementType:
     FUNCTION_LITERAL = 'FUNCTION_LITERAL'
     CALL_EXPRESSION = 'CALL_EXPRESSION'
     ASSIGN_STATEMENT = 'ASSIGN_STATEMENT'
+    RETURN_STATEMENT = 'RETURN_STATEMENT'
 
 
 statement_type_map = {
@@ -42,7 +43,8 @@ statement_type_map = {
     StatementType.HASH_LITERAL: 'HASH_LITERAL',
     StatementType.FUNCTION_LITERAL: 'FUNCTION_LITERAL',
     StatementType.CALL_EXPRESSION: 'CALL_EXPRESSION',
-    StatementType.ASSIGN_STATEMENT: 'ASSIGN_STATEMENT'
+    StatementType.ASSIGN_STATEMENT: 'ASSIGN_STATEMENT',
+    StatementType.RETURN_STATEMENT: 'RETURN_STATEMENT'
 }
 
 
@@ -300,6 +302,21 @@ class ASTCallExpression(ASTNode):
 
     def __str__(self):
         return 'ASTCallExpression[some arguments here]'
+
+
+class ASTReturnStatement(ASTNode):
+    statement_type = StatementType.RETURN_STATEMENT
+
+    def __init__(self, token: Token = None, value: ASTNode = None):
+        super().__init__()
+        self.token = token
+        self.value = value
+
+    def token_literal(self):
+        return self.token.literal
+
+    def __str__(self):
+        return 'ASTReturnStatement[some arguments here]'
 
 
 class ASTIdentifier(ASTNode):
