@@ -100,7 +100,7 @@ class Compiler:
 
             self.compile(node.consequence)
 
-            if self.last_instruction_is_pop():
+            if self.last_instruction_is(op_pop):
                 self.remove_last_pop()
 
             #  op_jump with bogus 9999 value
@@ -115,7 +115,7 @@ class Compiler:
             else:
                 self.compile(node.alternative)
 
-                if self.last_instruction_is_pop():
+                if self.last_instruction_is(op_pop):
                     self.remove_last_pop()
 
             after_alternative_pos = self.current_instructions().size
@@ -162,6 +162,8 @@ class Compiler:
         elif node.statement_type == StatementType.FUNCTION_LITERAL:
             self.enter_scope()
             self.compile(node.body)
+            if self.last_instruction_is(op_pop):
+                self.replace_last_pop_with_return()
             instructions = self.leave_scope()
             compiled_func = AdCompiledFunction()
             compiled_func.instructions = instructions
@@ -218,6 +220,17 @@ class Compiler:
 
     def last_instruction_is_pop(self) -> bool:
         return self.scopes[self.scope_index].last_instruction.opcode == op_pop
+
+    def last_instruction_is(self, op: OpCode) -> bool:
+        if self.current_instructions().size == 0:
+            return False
+        return self.scopes[self.scope_index].last_instruction.opcode == op
+
+    def replace_last_pop_with_return(self):
+        last_pos = self.scopes[self.scope_index].last_instruction.position
+        instr_len, instr = self.code.make(op_return_value, 0, [])
+        self.replace_instruction(last_pos, instr)
+        self.scopes[self.scope_index].last_instruction.opcode = op_return_value
 
     def remove_last_pop(self) -> None:
         last = self.scopes[self.scope_index].last_instruction
