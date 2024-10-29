@@ -192,8 +192,9 @@ void Compiler::compile(ASTNode* node) {
 
             compile(stmt->consequence);
 
-            if (isLastInstructionPop()) {
-                removeLastInstruction();
+            OpPop opPop = OpPop();
+            if (isLastInstruction(opPop)) {
+                removeLastPop();
             }
 
             OpJump opJump = OpJump();
@@ -211,8 +212,9 @@ void Compiler::compile(ASTNode* node) {
                 emit(opNull, 0, null_args);
             } else {
                 compile(stmt->alternative);
-                if (isLastInstructionPop()) {
-                    removeLastInstruction();
+                OpPop opPop = OpPop();
+                if (isLastInstruction(opPop)) {
+                    removeLastPop();
                 }
             }
             int after_alternative_pos = currentInstructions().size;
@@ -280,10 +282,13 @@ void Compiler::compile(ASTNode* node) {
             break;
         }
         case AT_FUNCTION_LITERAL: {
-            //std::cout << "todo: handle AT_FUNCTION_LITERAL in compiler.compile()\n";
             ASTFunctionLiteral *expr = (ASTFunctionLiteral*) node;
             enterScope();
             compile(expr->body);
+            OpPop opPop = OpPop();
+            if (isLastInstruction(opPop)) {
+                replaceLastPopWithReturn();
+            }
             Instructions instructions = leaveScope();
             AdObjectCompiledFunction *compiled_func = new AdObjectCompiledFunction();
             compiled_func->instructions = instructions;
@@ -354,7 +359,24 @@ bool Compiler::isLastInstructionPop() {
     return scopes[scopeIndex].lastInstruction.opcode.byteCode == OP_POP;
 }
 
-void Compiler::removeLastInstruction() {
+bool Compiler::isLastInstruction(OpCode opcode) {
+    if (scopes[scopeIndex].instructions.size == 0) {
+        return false;
+    }
+    return scopes[scopeIndex].lastInstruction.opcode.byteCode == opcode.byteCode;
+}
+
+void Compiler::replaceLastPopWithReturn() {
+    int last_pos = scopes[scopeIndex].lastInstruction.position;
+    OpReturnValue opReturnValue = OpReturnValue();
+    int size;
+    std::vector<int> args;
+    unsigned char *new_instruction = code.make(opReturnValue, 0, args, size);
+    replaceInstruction(last_pos, new_instruction, size);
+    scopes[scopeIndex].lastInstruction.opcode = opReturnValue;
+}
+
+void Compiler::removeLastPop() {
     EmittedInstruction last = scopes[scopeIndex].lastInstruction;
     EmittedInstruction previous = scopes[scopeIndex].previousInstruction;
 

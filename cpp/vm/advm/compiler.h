@@ -31,7 +31,9 @@ public:
     int addConstant(AdObject*);
     void setLastInstruction(OpCode, int);
     bool isLastInstructionPop();
-    void removeLastInstruction();
+    bool isLastInstruction(OpCode);
+    void removeLastPop();
+    void replaceLastPopWithReturn();
     Bytecode getBytecode();
     void changeOperand(int, int);
     void replaceInstruction(int, unsigned char*, int);
