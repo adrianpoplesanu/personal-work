@@ -10,7 +10,7 @@ from objects import AdObjectInteger, AdObject, AdString, AdCompiledFunction
 from opcode_ad import OpAdd, OpSub, OpMultiply, OpDivide, OpConstant, OpTrue, OpFalse, OpPop, op_equal, op_not_equal, \
     op_greater_than, op_greater_than_equal, op_add, op_sub, op_multiply, op_divide, op_pop, op_bang, op_minus, \
     op_jump_not_truthy, OpCode, op_jump, op_null, op_set_global, op_get_global, op_constant, op_array, op_hash, \
-    op_index, op_return_value
+    op_index, op_return_value, op_return
 from symbol_table import new_symbol_table
 
 
@@ -164,6 +164,9 @@ class Compiler:
             self.compile(node.body)
             if self.last_instruction_is(op_pop):
                 self.replace_last_pop_with_return()
+            if not self.last_instruction_is(op_return_value):
+                args = []
+                self.emit(op_return, 0, args)
             instructions = self.leave_scope()
             compiled_func = AdCompiledFunction()
             compiled_func.instructions = instructions
