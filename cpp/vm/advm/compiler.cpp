@@ -289,6 +289,12 @@ void Compiler::compile(ASTNode* node) {
             if (isLastInstruction(opPop)) {
                 replaceLastPopWithReturn();
             }
+            OpReturnValue opReturnValue = OpReturnValue();
+            if (!isLastInstruction(opReturnValue)) {
+                OpReturn opReturn = OpReturn();
+                std::vector<int> args;
+                emit(opReturn, 0, args);
+            }
             Instructions instructions = leaveScope();
             AdObjectCompiledFunction *compiled_func = new AdObjectCompiledFunction();
             compiled_func->instructions = instructions;
@@ -299,8 +305,11 @@ void Compiler::compile(ASTNode* node) {
             break;
         }
         case AT_CALL_EXPRESSION: {
-            std::cout << "todo: handle AT_CALL_EXPRESSION in compiler.compile()\n";
-            break;
+            ASTCallExpression *expr = (ASTCallExpression*) node;
+            compile(expr->function);
+            OpCall opCall = OpCall();
+            std::vector<int> args;
+            emit(opCall, 0, args);
         }
         default: {
             std::cout << "severe error: node type unknown " << ast_type_map[node->type] << "\n";
