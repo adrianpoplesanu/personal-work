@@ -297,6 +297,7 @@ void Compiler::compile(ASTNode* node) {
             }
             Instructions instructions = leaveScope();
             AdObjectCompiledFunction *compiled_func = new AdObjectCompiledFunction();
+            gc->addObject(compiled_func);
             compiled_func->instructions = instructions;
             OpConstant opConstant = OpConstant();
             std::vector<int> args;
