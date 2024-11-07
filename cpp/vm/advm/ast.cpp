@@ -312,6 +312,12 @@ ASTLetStatement::ASTLetStatement(Token t) {
     token = t;
 }
 
+ASTLetStatement::~ASTLetStatement() {
+    if (value) {
+        free_memory_ASTNode(value);
+    }
+}
+
 std::string ASTLetStatement::inspect() {
     return "ASTLetStatement";
 }
@@ -555,7 +561,15 @@ ASTCallExpression::ASTCallExpression(Token t, ASTNode* f) {
 }
 
 ASTCallExpression::~ASTCallExpression() {
-    //...
+    free_memory_ASTNode(function);
+    for (std::vector<ASTNode*>::iterator it = arguments.begin() ; it != arguments.end(); ++it) {
+        ASTNode *node = *it;
+        free_memory_ASTNode(node);
+    }
+    for (std::vector<ASTNode*>::iterator it = kw_args.begin() ; it != kw_args.end(); ++it) {
+        ASTNode *node = *it;
+        free_memory_ASTNode(node);
+    }
 }
 
 std::string ASTCallExpression::inspect() {
@@ -666,8 +680,16 @@ void free_memory_ASTNode(ASTNode* node) {
             delete (ASTIndexExpression*) node;
             break;
         }
+        case AT_FUNCTION_LITERAL: {
+            delete (ASTFunctionLiteral*) node;
+            break;
+        }
+        case AT_CALL_EXPRESSION: {
+            delete (ASTCallExpression*) node;
+            break;
+        }
         default: {
-            std::cout << "SEVERE MEMORY ERROR!!!\n";
+            std::cout << "SEVERE MEMORY ERROR: " << ast_type_map[node->type] << "!!!\n";
             break;
         }
     }

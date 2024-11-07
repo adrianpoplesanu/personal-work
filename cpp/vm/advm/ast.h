@@ -132,6 +132,7 @@ public:
 
     ASTLetStatement();
     ASTLetStatement(Token);
+    ~ASTLetStatement();
     virtual std::string inspect();
     virtual std::string toString();
 };
