@@ -206,7 +206,12 @@ AdObject* AdObjectHash::copy() {
 }
 
 AdObjectCompiledFunction::AdObjectCompiledFunction() {
-    //...
+    type = OT_COMPILED_FUNCTION;
+}
+
+AdObjectCompiledFunction::AdObjectCompiledFunction(Instructions i) {
+    type = OT_COMPILED_FUNCTION;
+    instructions = i;
 }
 
 AdObjectCompiledFunction::~AdObjectCompiledFunction() {
@@ -264,6 +269,10 @@ void free_memory_AdObject(AdObject* obj) {
         }
         case OT_HASH: {
             delete (AdObjectHash*) obj;
+            break;
+        }
+        case OT_COMPILED_FUNCTION: {
+            delete (AdObjectCompiledFunction*) obj;
             break;
         }
         default: {

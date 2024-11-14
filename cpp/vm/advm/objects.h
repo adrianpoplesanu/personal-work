@@ -142,6 +142,7 @@ public:
     Instructions instructions;
 
     AdObjectCompiledFunction();
+    AdObjectCompiledFunction(Instructions);
     ~AdObjectCompiledFunction();
     virtual std::string inspect();
     virtual std::string toString();
