@@ -311,6 +311,7 @@ void Compiler::compile(ASTNode* node) {
             OpCall opCall = OpCall();
             std::vector<int> args;
             emit(opCall, 0, args);
+            break;
         }
         default: {
             std::cout << "severe error: node type unknown " << ast_type_map[node->type] << "\n";
@@ -383,6 +384,7 @@ void Compiler::replaceLastPopWithReturn() {
     std::vector<int> args;
     unsigned char *new_instruction = code.make(opReturnValue, 0, args, size);
     replaceInstruction(last_pos, new_instruction, size);
+    delete new_instruction; // or delete[] ???
     scopes[scopeIndex].lastInstruction.opcode = opReturnValue;
 }
 
