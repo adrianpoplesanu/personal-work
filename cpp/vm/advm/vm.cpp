@@ -9,9 +9,7 @@ VM::VM() {
 }
 
 VM::~VM() {
-    for (int i = 0; i < framesIndex; i++) {
-        delete frames[i];
-    }
+    clearFrames();
 }
 
 void VM::load(Bytecode b) {
@@ -24,6 +22,7 @@ void VM::load(Bytecode b) {
     for (int i = 0; i < 2048; i++) {
         stack[i] = NULL;
     }
+    clearFrames();
     for (int i = 0; i < 1024; i++) {
         frames[i] = nullptr;
     }
@@ -203,20 +202,24 @@ void VM::run() {
             }
             case OP_CALL: {
                 AdObjectCompiledFunction *fn = (AdObjectCompiledFunction*) stack[sp - 1];
-                Frame *frame = newFrame(fn);
+                AdObjectCompiledFunction *target = new AdObjectCompiledFunction(fn->instructions);
+                Frame *frame = newFrame(target);
                 pushFrame(frame);
                 break;
             }
             case OP_RETURN_VALUE: {
                 AdObject *returnValue = pop();
-                popFrame();
+                Frame *poppedFrame = popFrame();
+                pop();
                 push(returnValue);
+                delete poppedFrame;
                 break;
             }
             case OP_RETURN: {
-                popFrame();
+                Frame *poppedFrame = popFrame();
                 pop();
                 push(&NULLOBJECT);
+                delete poppedFrame;
                 break;
             }
             default: {
@@ -405,4 +408,10 @@ void VM::pushFrame(Frame* frame) {
 Frame* VM::popFrame() {
     framesIndex--;
     return frames[framesIndex];
+}
+
+void VM::clearFrames() {
+    for (int i = 0; i < framesIndex; i++) {
+        delete frames[i];
+    }
 }

@@ -5,7 +5,7 @@
 
 class Frame {
 public:
-    AdObjectCompiledFunction* fn;
+    AdObjectCompiledFunction* fn = nullptr;
     int ip;
 
     Frame(AdObjectCompiledFunction*, int);

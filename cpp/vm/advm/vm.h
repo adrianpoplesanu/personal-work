@@ -20,7 +20,7 @@ public:
     AdObject *stack[2048];
     AdObject *globals[65536];
     Frame *frames[1024];
-    int framesIndex = 1;
+    int framesIndex = 0;
     GarbageCollector *gc;
 
     VM();
@@ -48,6 +48,7 @@ public:
     Frame* currentFrame();
     void pushFrame(Frame*);
     Frame* popFrame();
+    void clearFrames();
 };
 
 #endif
