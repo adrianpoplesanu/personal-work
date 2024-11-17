@@ -1,0 +1,4 @@
+let noReturn = func() { };
+let noReturnTwo = func() { noReturn(); };
+noReturn();
+noReturnTwo();

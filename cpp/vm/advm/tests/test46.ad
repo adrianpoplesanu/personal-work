@@ -1,0 +1,3 @@
+let one = func() { 1; };
+let two = func() { 2; };
+one() + two()
