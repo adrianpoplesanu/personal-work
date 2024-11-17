@@ -6,6 +6,7 @@
 #include "code.h"
 #include "gc.h"
 #include "settings.h"
+#include "frame.h"
 #include <vector>
 
 class VM {
@@ -18,9 +19,12 @@ public:
     std::vector<AdObject*> constants;
     AdObject *stack[2048];
     AdObject *globals[65536];
+    Frame *frames[1024];
+    int framesIndex = 1;
     GarbageCollector *gc;
 
     VM();
+    ~VM();
     void load(Bytecode);
     void setGarbageCollector(GarbageCollector*);
     AdObject* stackTop();
@@ -41,6 +45,9 @@ public:
     void executeIndexExpression(AdObject*, AdObject*);
     void executeArrayIndex(AdObject*, AdObject*);
     void executeHashIndex(AdObject*, AdObject*);
+    Frame* currentFrame();
+    void pushFrame(Frame*);
+    Frame* popFrame();
 };
 
 #endif

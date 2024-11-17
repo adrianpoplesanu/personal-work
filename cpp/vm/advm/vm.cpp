@@ -8,12 +8,28 @@ VM::VM() {
     sp = 0;
 }
 
+VM::~VM() {
+    for (int i = 0; i < framesIndex; i++) {
+        delete frames[i];
+    }
+}
+
 void VM::load(Bytecode b) {
     instructions = b.instructions;
     constants = b.constants;
+    AdObjectCompiledFunction *mainFn = new AdObjectCompiledFunction(b.instructions);
+    //gc->addObject(mainFn); // daca il adaug aici, trebuie sa si marchez din frame-uri la ciclul de gc
+    Frame *mainFrame = newFrame(mainFn);
+
     for (int i = 0; i < 2048; i++) {
         stack[i] = NULL;
     }
+    for (int i = 0; i < 1024; i++) {
+        frames[i] = nullptr;
+    }
+
+    frames[0] = mainFrame;
+    framesIndex = 1;
 }
 
 void VM::setGarbageCollector(GarbageCollector *gc) {
@@ -26,13 +42,16 @@ AdObject* VM::stackTop() {
 }
 
 void VM::run() {
-    for (int ip = 0; ip < instructions.bytes.size(); ip++) {
-        unsigned char opcode = instructions.bytes[ip];
+    while (currentFrame()->ip < currentFrame()->instructions().size - 1) {
+        currentFrame()->ip += 1;
+        int ip = currentFrame()->ip;
+        Instructions ins = currentFrame()->instructions();
+        unsigned char opcode = ins.bytes[ip];
         switch (opcode) {
             case OP_CONSTANT: {
                 // 0 e OpConstant
-                int constIndex = readUint16(instructions, ip + 1);
-                ip += 2;
+                int constIndex = readUint16(ins, ip + 1);
+                currentFrame()->ip += 2;
                 push(constants.at(constIndex));
                 break;
             }
@@ -43,62 +62,6 @@ void VM::run() {
                 executeBinaryOperations(opcode);
                 break;
             }
-            /*case OP_ADD: {
-                // 1 e OpAdd
-                AdObject *right = pop();
-                AdObject *left = pop();
-
-                int leftValue = ((AdObjectInteger*) left)->value;
-                int rightValue = ((AdObjectInteger*) right)->value;
-
-                int result = leftValue + rightValue;
-                AdObject* obj = new AdObjectInteger(result);
-                gc->addObject(obj);
-                push(obj);
-                break;
-            }
-            case OP_SUB: {
-                // 2 e OpMinus
-                AdObject *right = pop();
-                AdObject *left = pop();
-
-                int leftValue = ((AdObjectInteger*) left)->value;
-                int rightValue = ((AdObjectInteger*) right)->value;
-
-                int result = leftValue - rightValue;
-                AdObject* obj = new AdObjectInteger(result);
-                gc->addObject(obj);
-                push(obj);
-                break;
-            }
-            case OP_MULTIPLY: {
-                // 3 e OpMultiply
-                AdObject *right = pop();
-                AdObject *left = pop();
-
-                int leftValue = ((AdObjectInteger*) left)->value;
-                int rightValue = ((AdObjectInteger*) right)->value;
-
-                int result = leftValue * rightValue;
-                AdObject* obj = new AdObjectInteger(result);
-                gc->addObject(obj);
-                push(obj);
-                break;
-            }
-            case OP_DIVIDE: {
-                // 4 e OpDivide
-                AdObject *right = pop();
-                AdObject *left = pop();
-
-                int leftValue = ((AdObjectInteger*) left)->value;
-                int rightValue = ((AdObjectInteger*) right)->value;
-
-                int result = leftValue / rightValue;
-                AdObject* obj = new AdObjectInteger(result);
-                gc->addObject(obj);
-                push(obj);
-                break;
-            }*/
             case OP_POP: {
                 // 5 e OpPop
                 if (PRINT_LAST_ELEMENT_ON_STACK) {
@@ -180,17 +143,17 @@ void VM::run() {
                 break;
             }
             case OP_JUMP: {
-                int pos = readUint16(instructions, ip + 1);
-                ip = pos - 1;
+                int pos = readUint16(ins, ip + 1);
+                currentFrame()->ip = pos - 1;
                 break;
             }
             case OP_JUMP_NOT_TRUTHY: {
-                int pos = readUint16(instructions, ip + 1);
-                ip += 2;
+                int pos = readUint16(ins, ip + 1);
+                currentFrame()->ip += 2;
 
                 AdObject *condition = pop();
                 if (!isTruthy(condition)) {
-                    ip = pos - 1;
+                    currentFrame()->ip = pos - 1;
                 }
 
                 break;
@@ -200,20 +163,20 @@ void VM::run() {
                 break;
             }
             case OP_SET_GLOBAL: {
-                int globalIndex = readUint16(instructions, ip + 1);
-                ip += 2;
+                int globalIndex = readUint16(ins, ip + 1);
+                currentFrame()->ip += 2;
                 globals[globalIndex] = pop();
                 break;
             }
             case OP_GET_GLOBAL: {
-                int globalIndex = readUint16(instructions, ip + 1);
-                ip += 2;
+                int globalIndex = readUint16(ins, ip + 1);
+                currentFrame()->ip += 2;
                 push(globals[globalIndex]);
                 break;
             }
             case OP_ARRAY: {
-                int numElements = readUint16(instructions, ip + 1);
-                ip += 2;
+                int numElements = readUint16(ins, ip + 1);
+                currentFrame()->ip += 2;
 
                 AdObject *arrayObj = buildArray(sp - numElements, sp);
                 sp = sp - numElements;
@@ -223,8 +186,8 @@ void VM::run() {
                 break;
             }
             case OP_HASH: {
-                int numElements = readUint16(instructions, ip + 1);
-                ip += 2;
+                int numElements = readUint16(ins, ip + 1);
+                currentFrame()->ip += 2;
 
                 AdObject *hashObj = buildHash(sp - numElements, sp);
                 sp = sp - numElements;
@@ -239,15 +202,21 @@ void VM::run() {
                 break;
             }
             case OP_CALL: {
-                std::cout << "todo: handle OP_CALL in vm.run()\n";
+                AdObjectCompiledFunction *fn = (AdObjectCompiledFunction*) stack[sp - 1];
+                Frame *frame = newFrame(fn);
+                pushFrame(frame);
                 break;
             }
             case OP_RETURN_VALUE: {
-                std::cout << "todo: handle OP_RETURN_VALUE in vm.run()\n";
+                AdObject *returnValue = pop();
+                popFrame();
+                push(returnValue);
                 break;
             }
             case OP_RETURN: {
-                std::cout << "todo: handle OP_RETURN in vm.run()\n";
+                popFrame();
+                pop();
+                push(&NULLOBJECT);
                 break;
             }
             default: {
@@ -422,4 +391,18 @@ void VM::executeHashIndex(AdObject *left, AdObject *index) {
     } else {
         push(&NULLOBJECT);
     }
+}
+
+Frame* VM::currentFrame() {
+    return frames[framesIndex - 1];
+}
+
+void VM::pushFrame(Frame* frame) {
+    frames[framesIndex] = frame;
+    framesIndex++;
+}
+
+Frame* VM::popFrame() {
+    framesIndex--;
+    return frames[framesIndex];
 }

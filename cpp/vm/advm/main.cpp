@@ -43,6 +43,8 @@
 #include "compilation_scope.cpp"
 #include "symbol_table.h"
 #include "symbol_table.cpp"
+#include "frame.h"
+#include "frame.cpp"
 
 int main(int argc, char* argv[]) {
     if (RUN_TESTS) {
