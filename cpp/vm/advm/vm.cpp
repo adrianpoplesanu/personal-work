@@ -363,6 +363,7 @@ void VM::executeBinaryStringOperations(unsigned char opcode, AdObject *right, Ad
             break;
     }
     AdObjectString *result = new AdObjectString(resultValue);
+    gc->addObject(result);
     push(result);
 }
 

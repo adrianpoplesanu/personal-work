@@ -338,7 +338,9 @@ ASTReturnStatement::ASTReturnStatement(Token t) {
 }
 
 ASTReturnStatement::~ASTReturnStatement() {
-    //...
+    if (value) {
+        free_memory_ASTNode(value);
+    }
 }
 
 std::string ASTReturnStatement::inspect() {
@@ -441,7 +443,18 @@ ASTIndexExpression::ASTIndexExpression(Token t, ASTNode *l) {
 }
 
 ASTIndexExpression::~ASTIndexExpression() {
-    //...
+    if (left) {
+        free_memory_ASTNode(left);
+    }
+    if (index) {
+        free_memory_ASTNode(index);
+    }
+    if (indexEnd) {
+        free_memory_ASTNode(indexEnd);
+    }
+    if (step) {
+        free_memory_ASTNode(step);
+    }
 }
 
 std::string ASTIndexExpression::inspect() {
