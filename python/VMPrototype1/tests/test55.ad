@@ -1,0 +1,5 @@
+let one = func() {
+    let one = 1;
+    one
+};
+one();

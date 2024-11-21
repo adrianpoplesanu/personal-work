@@ -1,0 +1,9 @@
+let firstFoobar = func() {
+    let foobar = 50;
+    foobar;
+};
+let secondFoobar = func() {
+    let foobar = 100;
+    foobar;
+};
+firstFoobar() + secondFoobar();

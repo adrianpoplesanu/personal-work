@@ -1,0 +1,2 @@
+let fivePlusTen = func() { 5 + 10; };
+fivePlusTen();

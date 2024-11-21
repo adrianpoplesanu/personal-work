@@ -1,0 +1,10 @@
+let globalSeed = 50;
+let minusOne = func() {
+    let num = 1;
+    globalSeed - num;
+}
+let minusTwo = func() {
+    let num = 2;
+    globalSeed - num;
+}
+minusOne() + minusTwo()

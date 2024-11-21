@@ -1,0 +1,4 @@
+let a = func() { 1 };
+let b = func() { a() + 1 };
+let c = func() { b() + 1 };
+c();
