@@ -1,0 +1,4 @@
+func() {
+    let num = 55;
+    num
+}

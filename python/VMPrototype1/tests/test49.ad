@@ -1,0 +1,2 @@
+let earlyExit = func() { return 99; return 100; };
+earlyExit();
