@@ -24,6 +24,8 @@ class OpCodeByte:
     OP_CALL = 22
     OP_RETURN_VALUE = 23
     OP_RETURN = 24
+    OP_GET_LOCAL = 25
+    OP_SET_LOCAL = 26
 
 
 class OpCode:
@@ -130,6 +132,14 @@ class OpReturn(OpCode):
     byte_code = OpCodeByte.OP_RETURN
 
 
+class OpGetLocal(OpCode):
+    byte_code = OpCodeByte.OP_GET_LOCAL
+
+
+class OpSetLocal(OpCode):
+    byte_code = OpCodeByte.OP_SET_LOCAL
+
+
 op_constant = OpConstant()
 op_add = OpAdd()
 op_sub = OpSub()
@@ -155,3 +165,5 @@ op_index = OpIndex()
 op_call = OpCall()
 op_return_value = OpReturnValue()
 op_return = OpReturn()
+op_get_local = OpGetLocal()
+op_set_local = OpSetLocal()
