@@ -24,6 +24,7 @@ public:
 std::vector<unsigned char> intToBytes(int);
 void readOperands(Definition*, Instructions, int, std::vector<int>&, int&);
 int readUint16(Instructions, int);
+int readUint8(Instructions, int);
 std::string formatInt(int);
 std::string formatInstruction(Definition*, std::vector<int>);
 

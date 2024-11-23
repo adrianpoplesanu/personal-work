@@ -27,6 +27,8 @@ Code::Code() {
     definitionsMap.insert(std::make_pair(OP_CALL, new Definition("OpCall", 0, new int)));
     definitionsMap.insert(std::make_pair(OP_RETURN_VALUE, new Definition("OpReturnValue", 0, new int)));
     definitionsMap.insert(std::make_pair(OP_RETURN, new Definition("OpReturn", 0, new int)));
+    definitionsMap.insert(std::make_pair(OP_GET_LOCAL, new Definition("OpGetLocal", 1, new int[1] {1})));
+    definitionsMap.insert(std::make_pair(OP_SET_LOCAL, new Definition("OpSetLocal", 1, new int[1] {1})));
 }
 
 Code::~Code() {
@@ -35,7 +37,7 @@ Code::~Code() {
     }
 }
 
-unsigned char* Code::make(OpCode opCode, int n, std::vector<int> &args, int &size) {
+unsigned char* Code::make(OpCode opCode, int n, std::vector<int> &args, int &size) { // TODO: rename args to operands, it's what it is
     Definition *definition = lookup(opCode.byteCode);
 
     int instructionLen = 1;
@@ -57,6 +59,15 @@ unsigned char* Code::make(OpCode opCode, int n, std::vector<int> &args, int &siz
                 int argument = args.at(j);
                 instruction[offset] = intToBytes(argument)[2];
                 instruction[offset + 1] = intToBytes(argument)[3];
+                break;
+            }
+            case 1: {
+                int argument = args.at(j);
+                instruction[offset] = intToBytes(argument)[0]; // sau poate trebui [1]
+                break;
+            }
+            default: {
+                std::cout << "severe error: unknown width " << width << "\n";
                 break;
             }
         }
@@ -105,6 +116,10 @@ void readOperands(Definition *definition, Instructions instructions, int start, 
                 operands.push_back(readUint16(instructions, start + offset));
                 break;
             }
+            case 1: {
+                operands.push_back(readUint8(instructions, start + offset));
+                break;
+            }
         }
         offset += definition->operandWidths[w];
     }
@@ -118,6 +133,14 @@ int readUint16(Instructions instructions, int offset) {
 
     int value;
     std::memcpy(&value, bytes, sizeof(int));
+    return value;
+}
+
+int readUint8(Instructions instructions, int offset) {
+    unsigned char bytes[2]{ instructions.bytes[offset], 0 };
+
+    int value;
+    std::memcpy(&value, bytes, sizeof(short));
     return value;
 }
 
