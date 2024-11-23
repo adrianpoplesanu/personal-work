@@ -8,6 +8,9 @@ from opcode_ad import OpCodeByte, OpCode
 def read_uint16(instructions: Instructions, offset: int) -> int:
     return int.from_bytes([instructions.bytes[offset], instructions.bytes[offset + 1]], byteorder='big')
 
+def read_uint8(instructions: Instructions, offset: int) -> int:
+    return int.from_bytes([instructions.bytes[offset]], byteorder='big')
+
 
 def int_to_bytes(param_int):
     print(param_int)
@@ -21,6 +24,8 @@ def read_operands(definition: Definition, instructions, start, operands) -> int:
     for w in range(definition.size):
         if definition.operand_widths[w] == 2:
             operands.append(read_uint16(instructions, start + offset))
+        elif definition.operand_widths[w] == 1:
+            operands.append(read_uint8(instructions, start + offset))
         offset += definition.operand_widths[w]
     return offset
 
@@ -67,10 +72,13 @@ class Code:
             OpCodeByte.OP_INDEX: Definition("OpIndex", 0, []),
             OpCodeByte.OP_CALL: Definition("OpCall", 0, []),
             OpCodeByte.OP_RETURN_VALUE: Definition("OpReturnValue", 0, []),
-            OpCodeByte.OP_RETURN: Definition("OpReturn", 0, [])
+            OpCodeByte.OP_RETURN: Definition("OpReturn", 0, []),
+            OpCodeByte.OP_GET_LOCAL: Definition("OpGetLocal", 1, [1]),
+            OpCodeByte.OP_SET_LOCAL: Definition("OpSetLocal", 1, [1])
         }
 
     def make(self, opcode: OpCode, n, args) -> Tuple[int, list]:
+        # TODO: rename args to operands
         definition = self.lookup(opcode.byte_code)
         instruction_len = 1
         for i in range(definition.size):
@@ -90,8 +98,12 @@ class Code:
                 operand_bytes = argument.to_bytes(2, 'big')
                 instruction[offset] = operand_bytes[0]
                 instruction[offset + 1] = operand_bytes[1]
+            elif width == 1:
+                argument = args[j]
+                operand_bytes = argument.to_bytes(1, 'big')
+                instruction[offset] = operand_bytes[0]
             else:
-                print("severe error")
+                print("severe error: unknown width " + str(width))
             offset += width
 
         return instruction_len, instruction
