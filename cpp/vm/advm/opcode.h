@@ -26,7 +26,9 @@ enum OpCodeByte {
     OP_INDEX_EXPRESSION,
     OP_CALL,
     OP_RETURN_VALUE,
-    OP_RETURN
+    OP_RETURN,
+    OP_GET_LOCAL,
+    OP_SET_LOCAL
 };
 
 class OpCode {
@@ -206,6 +208,20 @@ class OpReturn : public OpCode {
 public:
     OpReturn() {
         byteCode = OP_RETURN;
+    }
+};
+
+class OpGetLocal : public OpCode {
+public:
+    OpGetLocal() {
+        byteCode = OP_GET_LOCAL;
+    }
+};
+
+class OpSetLocal : public OpCode {
+public:
+    OpSetLocal() {
+        byteCode = OP_SET_LOCAL;
     }
 };
 
