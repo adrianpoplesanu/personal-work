@@ -13,6 +13,7 @@ public:
 };
 
 SymbolScope globalScope("GLOBAL");
+SymbolScope localScope("LOCAL");
 
 class Symbol {
 public:
@@ -26,6 +27,7 @@ public:
 
 class SymbolTable {
 public:
+    SymbolTable *outer = nullptr;
     std::map<std::string, Symbol> store;
     int numDefinitions;
 
@@ -36,6 +38,7 @@ public:
     Symbol resolve(std::string);
 };
 
-SymbolTable newSymbolTable();
+SymbolTable* newSymbolTable();
+SymbolTable* newEnclosedSymbolTable(SymbolTable *outer);
 
 #endif
