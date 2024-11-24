@@ -207,11 +207,19 @@ AdObject* AdObjectHash::copy() {
 
 AdObjectCompiledFunction::AdObjectCompiledFunction() {
     type = OT_COMPILED_FUNCTION;
+    num_locals = 0;
 }
 
 AdObjectCompiledFunction::AdObjectCompiledFunction(Instructions i) {
     type = OT_COMPILED_FUNCTION;
     instructions = i;
+    num_locals = 0;
+}
+
+AdObjectCompiledFunction::AdObjectCompiledFunction(Instructions i, int n_l) {
+    type = OT_COMPILED_FUNCTION;
+    instructions = i;
+    num_locals = n_l;
 }
 
 AdObjectCompiledFunction::~AdObjectCompiledFunction() {

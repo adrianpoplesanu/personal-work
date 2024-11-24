@@ -140,9 +140,11 @@ class AdObjectFunction : public AdObject {
 class AdObjectCompiledFunction : public AdObject {
 public:
     Instructions instructions;
+    int num_locals;
 
     AdObjectCompiledFunction();
     AdObjectCompiledFunction(Instructions);
+    AdObjectCompiledFunction(Instructions, int);
     ~AdObjectCompiledFunction();
     virtual std::string inspect();
     virtual std::string toString();
