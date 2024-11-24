@@ -47,7 +47,7 @@ unsigned char* Code::make(OpCode opCode, int n, std::vector<int> &args, int &siz
     }
 
     unsigned char *instruction = new unsigned char[instructionLen];
-    instruction[0] = opCode.byteCode;
+    instruction[0] = (unsigned char)opCode.byteCode;
     //std::cout << (int) instruction[0];
 
     int offset = 1;
@@ -63,7 +63,7 @@ unsigned char* Code::make(OpCode opCode, int n, std::vector<int> &args, int &siz
             }
             case 1: {
                 int argument = args.at(j);
-                instruction[offset] = intToBytes(argument)[0]; // sau poate trebui [1]
+                instruction[offset] = (unsigned char)intToBytes(argument)[3]; // am pus intToBytes[0] sau poate trebui [1], nu fii atent, trebuie sa fie [3]
                 break;
             }
             default: {
