@@ -10,8 +10,8 @@ from objects import AdObjectInteger, AdObject, AdString, AdCompiledFunction
 from opcode_ad import OpAdd, OpSub, OpMultiply, OpDivide, OpConstant, OpTrue, OpFalse, OpPop, op_equal, op_not_equal, \
     op_greater_than, op_greater_than_equal, op_add, op_sub, op_multiply, op_divide, op_pop, op_bang, op_minus, \
     op_jump_not_truthy, OpCode, op_jump, op_null, op_set_global, op_get_global, op_constant, op_array, op_hash, \
-    op_index, op_return_value, op_return
-from symbol_table import new_symbol_table
+    op_index, op_return_value, op_return, op_call, op_set_local, op_get_local
+from symbol_table import new_symbol_table, new_enclosed_symbol_table, GlobalScope
 
 
 class Compiler:
@@ -128,10 +128,16 @@ class Compiler:
         elif node.statement_type == StatementType.LET_STATEMENT:
             self.compile(node.value)
             symbol = self.symbol_table.define(node.name.value)
-            self.emit(op_set_global, 1, [symbol.index])
+            if symbol.scope == GlobalScope:
+                self.emit(op_set_global, 1, [symbol.index])
+            else:
+                self.emit(op_set_local, 1, [symbol.index])
         elif node.statement_type == StatementType.IDENTIFIER:
             symbol = self.symbol_table.resolve(node.value)
-            self.emit(op_get_global, 1, [symbol.index])
+            if symbol.scope == GlobalScope:
+                self.emit(op_get_global, 1, [symbol.index])
+            else:
+                self.emit(op_get_local, 1, [symbol.index])
         elif node.statement_type == StatementType.STRING_LITERAL:
             string_obj = AdString(node.value)
             args = []
@@ -167,14 +173,18 @@ class Compiler:
             if not self.last_instruction_is(op_return_value):
                 args = []
                 self.emit(op_return, 0, args)
+            num_locals = self.symbol_table.num_definitions
             instructions = self.leave_scope()
             compiled_func = AdCompiledFunction()
             compiled_func.instructions = instructions
+            compiled_func.num_locals = num_locals
             args = []
             args.append(self.add_constant(compiled_func))
             self.emit(op_constant, 1, args)
         elif node.statement_type == StatementType.CALL_EXPRESSION:
-            print("todo: handle call expressions in compiler")
+            self.compile(node.func)
+            args = []
+            self.emit(op_call, 0, args)
         elif node.statement_type == StatementType.RETURN_STATEMENT:
             self.compile(node.value)
             args = []
@@ -261,11 +271,14 @@ class Compiler:
         scope = CompilationScope(self.instructions, EmittedInstruction(), EmittedInstruction())
         self.scopes.append(scope)
         self.scope_index += 1
+        self.symbol_table = new_enclosed_symbol_table(self.symbol_table)
 
     def leave_scope(self):
         instructions = self.current_instructions()
 
         self.scopes = self.scopes[:len(self.scopes) - 1]
         self.scope_index -= 1
+
+        self.symbol_table = self.symbol_table.outer
 
         return instructions

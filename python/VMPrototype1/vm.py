@@ -1,9 +1,11 @@
-from typing import Optional, Dict
+from typing import Optional, Dict, List
 
 from bytecode import Bytecode
-from code_ad import read_uint16
+from code_ad import read_uint16, read_uint8
+from frame import Frame, new_frame
 from hash_utils import HashKey
-from objects import AdObject, AdObjectInteger, AdBoolean, AdObjectType, AdNullObject, AdString, AdList, HashPair, AdHash
+from objects import AdObject, AdObjectInteger, AdBoolean, AdObjectType, AdNullObject, AdString, AdList, HashPair, \
+    AdHash, AdCompiledFunction
 from opcode_ad import OpCodeByte
 from settings import PRINT_LAST_ELEMENT_ON_STACK
 
@@ -16,21 +18,36 @@ class VM:
     def __init__(self, instructions=None, constants=None):
         self.instructions = instructions
         self.constants = constants
-        self.stack = [None] * 1024
-        self.sp = 0
+        self.stack: List[Optional[AdObject]] = [None] * 1024
+        self.sp: int = 0
         self.globals = [None] * 65536  # GlobalsSize
+        self.frames: List[Optional[Frame]] = [None] * 1024
+        self.frames_index: int = 0
 
     def load(self, bytecode: Bytecode):
-        self.instructions = bytecode.instructions
+        main_fn = AdCompiledFunction(instructions=bytecode.instructions)
+        main_frame = new_frame(main_fn, 0)
+
+        # self.instructions = bytecode.instructions # remove-ul asta da peste cap run()
         self.constants = bytecode.constants
 
+        self.stack = [None] * 1024
+        self.sp = 0
+
+        self.globals = [None] * 65536  # GlobalsSize
+
+        self.frames[0] = main_frame
+        self.frames_index = 1
+
     def run(self):
-        ip = 0
-        while ip < len(self.instructions.bytes):
-            opcode = self.instructions.bytes[ip]
+        while self.current_frame().ip < len(self.current_frame().instructions().bytes) - 1:
+            self.current_frame().ip += 1
+            ip = self.current_frame().ip
+            ins = self.current_frame().instructions()
+            opcode = ins.bytes[ip]
             if opcode == OpCodeByte.OP_CONSTANT:
-                const_index = read_uint16(self.instructions, ip + 1)
-                ip += 2
+                const_index = read_uint16(ins, ip + 1)
+                self.current_frame().ip += 2
                 self.push(self.constants[const_index])
             elif opcode in (OpCodeByte.OP_ADD, OpCodeByte.OP_SUB, OpCodeByte.OP_MULTIPLY, OpCodeByte.OP_DIVIDE):
                 self.execute_binary_operation(opcode)
@@ -60,38 +77,38 @@ class VM:
             elif opcode == OpCodeByte.OP_MINUS:
                 self.execute_minus_operator()
             elif opcode == OpCodeByte.OP_JUMP:
-                pos = read_uint16(self.instructions, ip + 1)
-                ip = pos - 1
+                pos = read_uint16(ins, ip + 1)
+                self.current_frame().ip = pos - 1
             elif opcode == OpCodeByte.OP_JUMP_NOT_TRUTHY:
-                pos = read_uint16(self.instructions, ip + 1)
-                ip += 2
+                pos = read_uint16(ins, ip + 1)
+                self.current_frame().ip += 2
 
                 condition = self.pop()
                 if not self.is_truthy(condition):
-                    ip = pos - 1
+                    self.current_frame().ip = pos - 1
             elif opcode == OpCodeByte.OP_NULL:
                 self.push(NULL_OBJECT)
             elif opcode == OpCodeByte.OP_SET_GLOBAL:
-                global_index: int = read_uint16(self.instructions, ip + 1)
-                ip += 2
+                global_index: int = read_uint16(ins, ip + 1)
+                self.current_frame().ip += 2
 
                 self.globals[global_index] = self.pop()
             elif opcode == OpCodeByte.OP_GET_GLOBAL:
-                global_index: int = read_uint16(self.instructions, ip + 1)
-                ip += 2
+                global_index: int = read_uint16(ins, ip + 1)
+                self.current_frame().ip += 2
 
                 self.push(self.globals[global_index])
             elif opcode == OpCodeByte.OP_ARRAY:
-                numElements: int = read_uint16(self.instructions, ip + 1)
-                ip += 2
+                numElements: int = read_uint16(ins, ip + 1)
+                self.current_frame().ip += 2
 
                 array_obj: AdObject = self.build_array(self.sp - numElements, self.sp)
                 self.sp = self.sp - numElements
 
                 self.push(array_obj)
             elif opcode == OpCodeByte.OP_HASH:
-                numElements: int = read_uint16(self.instructions, ip + 1)
-                ip += 2
+                numElements: int = read_uint16(ins, ip + 1)
+                self.current_frame().ip += 2
 
                 hash_obj = self.build_hash(self.sp - numElements, self.sp)
                 self.sp = self.sp - numElements
@@ -102,14 +119,31 @@ class VM:
                 left = self.pop()
                 self.execute_index_expression(left, index)
             elif opcode == OpCodeByte.OP_CALL:
-                print("todo: implement OP_CALL in vm.run()")
+                fn: AdCompiledFunction = self.stack[self.sp - 1]
+                frame = new_frame(fn, self.sp)
+                self.push_frame(frame)
+                self.sp = frame.base_pointer + fn.num_locals
             elif opcode == OpCodeByte.OP_RETURN_VALUE:
-                print("todo: implement OP_RETURN_VALUE in vm.run()")
+                return_value = self.pop()
+                frame = self.pop_frame()
+                self.sp = frame.base_pointer - 1
+                self.push(return_value)
             elif opcode == OpCodeByte.OP_RETURN:
-                print("todo: implement OP_RETURN in vm.run()")
+                frame = self.pop_frame()
+                self.sp = frame.base_pointer - 1
+                self.push(NULL_OBJECT)
+            elif opcode == OpCodeByte.OP_SET_LOCAL:
+                local_index = read_uint8(ins, ip + 1)
+                self.current_frame().ip += 1
+                frame = self.current_frame()
+                self.stack[frame.base_pointer + int(local_index)] = self.pop()
+            elif opcode == OpCodeByte.OP_GET_LOCAL:
+                local_index = read_uint8(ins, ip + 1)
+                self.current_frame().ip += 1
+                frame = self.current_frame()
+                self.push(self.stack[frame.base_pointer + int(local_index)])
             else:
                 print('severe error: vm.run() error')
-            ip += 1
 
     def last_popped_stack_element(self) -> Optional[AdObject]:
         if self.sp == 0:
@@ -146,6 +180,17 @@ class VM:
         # result = self.stack.pop()
         self.sp -= 1
         return result
+
+    def current_frame(self) -> Frame:
+        return self.frames[self.frames_index - 1]
+
+    def push_frame(self, f: Frame):
+        self.frames[self.frames_index] = f
+        self.frames_index += 1
+
+    def pop_frame(self) -> Frame:
+        self.frames_index -= 1
+        return self.frames[self.frames_index]
 
     def execute_comparison(self, opcode):
         right = self.pop()
