@@ -7,12 +7,14 @@ class Frame {
 public:
     AdObjectCompiledFunction* fn = nullptr;
     int ip;
+    int basePointer;
 
     Frame(AdObjectCompiledFunction*, int);
+    Frame(AdObjectCompiledFunction*, int, int);
     ~Frame();
     Instructions instructions();
 };
 
-Frame* newFrame(AdObjectCompiledFunction*);
+Frame* newFrame(AdObjectCompiledFunction*, int);
 
 #endif

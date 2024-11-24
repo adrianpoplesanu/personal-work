@@ -64,7 +64,7 @@ void Repl::executeFile(std::ifstream &target) {
         parser.load(text);
         program->reset();
         parser.buildProgramStatement(program);
-        //std::cout << program->toString(); // uncomment this for ast elements printing
+        std::cout << program->toString(); // uncomment this for ast elements printing
 
         compiler.reset();
         compiler.compile(program);
@@ -72,7 +72,7 @@ void Repl::executeFile(std::ifstream &target) {
         Bytecode bytecode = compiler.getBytecode();
         compiler.code.instructions = bytecode.instructions;
         compiler.code.instructions.size = bytecode.instructions.bytes.size();
-        //std::cout << compiler.code.toString(); // uncomment this for bytecode printing
+        std::cout << compiler.code.toString(); // uncomment this for bytecode printing
 
         vm.load(bytecode);
         vm.run();

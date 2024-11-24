@@ -17,7 +17,7 @@ void VM::load(Bytecode b) {
     constants = b.constants;
     AdObjectCompiledFunction *mainFn = new AdObjectCompiledFunction(b.instructions);
     //gc->addObject(mainFn); // daca il adaug aici, trebuie sa si marchez din frame-uri la ciclul de gc
-    Frame *mainFrame = newFrame(mainFn);
+    Frame *mainFrame = newFrame(mainFn, 0);
 
     for (int i = 0; i < 2048; i++) {
         stack[i] = NULL;
@@ -202,24 +202,41 @@ void VM::run() {
             }
             case OP_CALL: {
                 AdObjectCompiledFunction *fn = (AdObjectCompiledFunction*) stack[sp - 1];
-                AdObjectCompiledFunction *target = new AdObjectCompiledFunction(fn->instructions);
-                Frame *frame = newFrame(target);
+                AdObjectCompiledFunction *target = new AdObjectCompiledFunction(fn->instructions, fn->num_locals);
+                Frame *frame = newFrame(target, sp);
                 pushFrame(frame);
+                sp = frame->basePointer + fn->num_locals;
                 break;
             }
             case OP_RETURN_VALUE: {
                 AdObject *returnValue = pop();
-                Frame *poppedFrame = popFrame();
-                pop();
+                Frame *frame = popFrame();
+                sp = frame->basePointer - 1;
+                //pop();
                 push(returnValue);
-                delete poppedFrame;
+                delete frame;
                 break;
             }
             case OP_RETURN: {
-                Frame *poppedFrame = popFrame();
-                pop();
+                Frame *frame = popFrame();
+                sp = frame->basePointer - 1;
+                //pop();
                 push(&NULLOBJECT);
-                delete poppedFrame;
+                delete frame;
+                break;
+            }
+            case OP_SET_LOCAL: {
+                int local_index = readUint8(ins, ip + 1);
+                currentFrame()->ip += 1;
+                Frame *frame = currentFrame();
+                stack[frame->basePointer + int(local_index)] = pop();
+                break;
+            }
+            case OP_GET_LOCAL: {
+                int local_index = readUint8(ins, ip + 1);
+                currentFrame()->ip += 1;
+                Frame *frame = currentFrame();
+                push(stack[frame->basePointer + int(local_index)]);
                 break;
             }
             default: {
