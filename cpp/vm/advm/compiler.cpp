@@ -8,6 +8,10 @@ Compiler::Compiler() {
     scopeIndex = 0;
 }
 
+Compiler::~Compiler() {
+    delete symbolTable;
+}
+
 void Compiler::reset() {
     instructions = Instructions();
     bytecode = Bytecode();
@@ -144,21 +148,35 @@ void Compiler::compile(ASTNode* node) {
         }
         case AT_IDENTIFIER: {
             ASTIdentifier *ident = (ASTIdentifier*) node;
-            Symbol symbol = symbolTable.resolve(ident->value);
-            OpGetGlobal opGetGlobal = OpGetGlobal();
-            std::vector<int> args;
-            args.push_back(symbol.index);
-            emit(opGetGlobal, 1, args);
+            Symbol symbol = symbolTable->resolve(ident->value);
+            if (symbol.scope.scope == globalScope.scope) {
+                OpGetGlobal opGetGlobal = OpGetGlobal();
+                std::vector<int> args;
+                args.push_back(symbol.index);
+                emit(opGetGlobal, 1, args);
+            } else {
+                OpGetLocal opGetLocal = OpGetLocal();
+                std::vector<int> args;
+                args.push_back(symbol.index);
+                emit(opGetLocal, 1, args);
+            }
             break;
         }
         case AT_LET_STATEMENT: {
             ASTLetStatement *stmt = (ASTLetStatement*) node;
             compile(stmt->value);
-            Symbol symbol = symbolTable.define(stmt->name.value);
-            OpSetGlobal opSetGlobal = OpSetGlobal();
-            std::vector<int> args;
-            args.push_back(symbol.index);
-            emit(opSetGlobal, 1, args);
+            Symbol symbol = symbolTable->define(stmt->name.value);
+            if (symbol.scope.scope == globalScope.scope) {
+                OpSetGlobal opSetGlobal = OpSetGlobal();
+                std::vector<int> args;
+                args.push_back(symbol.index);
+                emit(opSetGlobal, 1, args);
+            } else {
+                OpSetLocal opSetLocal = OpSetLocal();
+                std::vector<int> args;
+                args.push_back(symbol.index);
+                emit(opSetLocal, 1, args);
+            }
             break;
         }
         case AT_RETURN_STATEMENT: {
@@ -295,10 +313,12 @@ void Compiler::compile(ASTNode* node) {
                 std::vector<int> args;
                 emit(opReturn, 0, args);
             }
+            int num_locals = symbolTable->numDefinitions;
             Instructions instructions = leaveScope();
             AdObjectCompiledFunction *compiled_func = new AdObjectCompiledFunction();
             gc->addObject(compiled_func);
             compiled_func->instructions = instructions;
+            compiled_func->num_locals = num_locals;
             OpConstant opConstant = OpConstant();
             std::vector<int> args;
             args.push_back(addConstant(compiled_func));
@@ -424,6 +444,7 @@ void Compiler::enterScope() {
     CompilationScope scope(instructions, EmittedInstruction(), EmittedInstruction());
     scopes.push_back(scope);
     scopeIndex++;
+    symbolTable = newEnclosedSymbolTable(symbolTable);
 }
 
 Instructions Compiler::leaveScope() {
@@ -432,5 +453,9 @@ Instructions Compiler::leaveScope() {
     scopes.pop_back();
     scopeIndex--;
 
+    SymbolTable *discardedSymbolTable = symbolTable;
+    symbolTable = symbolTable->outer;
+
+    delete discardedSymbolTable;
     return instructions;
 }

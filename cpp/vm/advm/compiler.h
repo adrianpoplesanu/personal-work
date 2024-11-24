@@ -19,11 +19,12 @@ public:
     GarbageCollector *gc;
     EmittedInstruction previousInstruction = EmittedInstruction();
     EmittedInstruction lastInstruction = EmittedInstruction();
-    SymbolTable symbolTable;
+    SymbolTable *symbolTable;
     std::vector<CompilationScope> scopes;
     int scopeIndex;
 
     Compiler();
+    ~Compiler();
     void reset();
     void compile(ASTNode*);
     int emit(OpCode, int, std::vector<int>&);
