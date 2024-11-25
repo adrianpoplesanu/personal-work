@@ -1,0 +1,7 @@
+let returnsOneReturner = func() {
+    let returnsOne = func() {
+        1;
+    };
+    returnsOne;
+};
+returnsOneReturner()();
