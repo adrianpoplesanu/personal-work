@@ -1,0 +1,5 @@
+let sum = func(a, b) {
+    let c = a + b;
+    c;
+};
+sum(1, 2);

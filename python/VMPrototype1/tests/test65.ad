@@ -1,0 +1,8 @@
+let sum = func(a, b) {
+    let c = a + b;
+    c;
+};
+let outer = func() {
+    sum(1, 2) + sum(3, 4);
+};
+outer();
