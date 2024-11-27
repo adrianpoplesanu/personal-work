@@ -95,10 +95,11 @@ class AdHash(AdObject):
 
 
 class AdCompiledFunction(AdObject):
-    def __init__(self, instructions: Instructions = None, num_locals: int = 0):
+    def __init__(self, instructions: Instructions = None, num_locals: int = 0, num_parameters: int = 0):
         self.object_type = AdObjectType.COMPILED_FUNCTION
         self.instructions = instructions
         self.num_locals = num_locals
+        self.num_parameters = num_parameters
 
 
     def inspect(self) -> str:
