@@ -230,7 +230,7 @@ class Parser:
             return args, kw_args
         self.next_token()
         expr1 = self.parse_expression(PrecedenceType.LOWEST)
-        if expr1.type == StatementType.ASSIGN_STATEMENT:
+        if expr1.statement_type == StatementType.ASSIGN_STATEMENT:
             kw_args.append(expr1)
         else:
             args.append(expr1)
