@@ -119,10 +119,9 @@ class VM:
                 left = self.pop()
                 self.execute_index_expression(left, index)
             elif opcode == OpCodeByte.OP_CALL:
-                fn: AdCompiledFunction = self.stack[self.sp - 1]
-                frame = new_frame(fn, self.sp)
-                self.push_frame(frame)
-                self.sp = frame.base_pointer + fn.num_locals
+                num_args = read_uint8(ins, ip + 1)
+                self.current_frame().ip += 1
+                self.call_function(int(num_args))
             elif opcode == OpCodeByte.OP_RETURN_VALUE:
                 return_value = self.pop()
                 frame = self.pop_frame()
@@ -191,6 +190,16 @@ class VM:
     def pop_frame(self) -> Frame:
         self.frames_index -= 1
         return self.frames[self.frames_index]
+
+    def call_function(self, num_args):
+        fn: AdCompiledFunction = self.stack[self.sp - 1 - int(num_args)]
+
+        if num_args != fn.num_parameters:
+            print("ERROR: wrong number of arguments expecting: {0} got: {1}".format(fn.num_parameters, num_args))
+
+        frame = new_frame(fn, self.sp - num_args)
+        self.push_frame(frame)
+        self.sp = frame.base_pointer + fn.num_locals
 
     def execute_comparison(self, opcode):
         right = self.pop()

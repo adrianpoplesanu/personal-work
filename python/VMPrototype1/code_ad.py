@@ -8,6 +8,7 @@ from opcode_ad import OpCodeByte, OpCode
 def read_uint16(instructions: Instructions, offset: int) -> int:
     return int.from_bytes([instructions.bytes[offset], instructions.bytes[offset + 1]], byteorder='big')
 
+
 def read_uint8(instructions: Instructions, offset: int) -> int:
     return int.from_bytes([instructions.bytes[offset]], byteorder='big')
 
@@ -70,7 +71,7 @@ class Code:
             OpCodeByte.OP_ARRAY: Definition("OpArray", 1, [2]),
             OpCodeByte.OP_HASH: Definition("OpHash", 1, [2]),
             OpCodeByte.OP_INDEX: Definition("OpIndex", 0, []),
-            OpCodeByte.OP_CALL: Definition("OpCall", 0, []),
+            OpCodeByte.OP_CALL: Definition("OpCall", 1, [1]),
             OpCodeByte.OP_RETURN_VALUE: Definition("OpReturnValue", 0, []),
             OpCodeByte.OP_RETURN: Definition("OpReturn", 0, []),
             OpCodeByte.OP_GET_LOCAL: Definition("OpGetLocal", 1, [1]),

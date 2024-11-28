@@ -167,6 +167,8 @@ class Compiler:
             self.emit(op_index, 0, args)
         elif node.statement_type == StatementType.FUNCTION_LITERAL:
             self.enter_scope()
+            for p in node.parameters:
+                self.symbol_table.define(p.value)
             self.compile(node.body)
             if self.last_instruction_is(op_pop):
                 self.replace_last_pop_with_return()
@@ -178,13 +180,16 @@ class Compiler:
             compiled_func = AdCompiledFunction()
             compiled_func.instructions = instructions
             compiled_func.num_locals = num_locals
+            compiled_func.num_parameters = len(node.parameters)
             args = []
             args.append(self.add_constant(compiled_func))
             self.emit(op_constant, 1, args)
         elif node.statement_type == StatementType.CALL_EXPRESSION:
             self.compile(node.func)
-            args = []
-            self.emit(op_call, 0, args)
+            for argument in node.arguments:
+                self.compile(argument)
+            args = [len(node.arguments)]
+            self.emit(op_call, 1, args)
         elif node.statement_type == StatementType.RETURN_STATEMENT:
             self.compile(node.value)
             args = []
