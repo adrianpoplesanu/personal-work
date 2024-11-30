@@ -302,6 +302,9 @@ void Compiler::compile(ASTNode* node) {
         case AT_FUNCTION_LITERAL: {
             ASTFunctionLiteral *expr = (ASTFunctionLiteral*) node;
             enterScope();
+            for (auto &p : expr->parameters) {
+                symbolTable->define(((ASTIdentifier*)p)->value);
+            }
             compile(expr->body);
             OpPop opPop = OpPop();
             if (isLastInstruction(opPop)) {
@@ -319,6 +322,7 @@ void Compiler::compile(ASTNode* node) {
             gc->addObject(compiled_func);
             compiled_func->instructions = instructions;
             compiled_func->num_locals = num_locals;
+            compiled_func->num_parameters = expr->parameters.size();
             OpConstant opConstant = OpConstant();
             std::vector<int> args;
             args.push_back(addConstant(compiled_func));
@@ -328,9 +332,13 @@ void Compiler::compile(ASTNode* node) {
         case AT_CALL_EXPRESSION: {
             ASTCallExpression *expr = (ASTCallExpression*) node;
             compile(expr->function);
+            for (auto &argument : expr->arguments) {
+                compile(argument);
+            }
             OpCall opCall = OpCall();
             std::vector<int> args;
-            emit(opCall, 0, args);
+            args.push_back(expr->arguments.size());
+            emit(opCall, 1, args);
             break;
         }
         default: {
