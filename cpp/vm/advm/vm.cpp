@@ -201,11 +201,9 @@ void VM::run() {
                 break;
             }
             case OP_CALL: {
-                AdObjectCompiledFunction *fn = (AdObjectCompiledFunction*) stack[sp - 1];
-                AdObjectCompiledFunction *target = new AdObjectCompiledFunction(fn->instructions, fn->num_locals);
-                Frame *frame = newFrame(target, sp);
-                pushFrame(frame);
-                sp = frame->basePointer + fn->num_locals;
+                int num_args = readUint8(ins, ip + 1);
+                currentFrame()->ip += 1;
+                callFunction(num_args);
                 break;
             }
             case OP_RETURN_VALUE: {
@@ -426,6 +424,20 @@ void VM::pushFrame(Frame* frame) {
 Frame* VM::popFrame() {
     framesIndex--;
     return frames[framesIndex];
+}
+
+void VM::callFunction(int num_args) {
+    AdObjectCompiledFunction *fn = (AdObjectCompiledFunction*) stack[sp - 1 - num_args];
+
+    if (num_args != fn->num_parameters) {
+        std::cout << "ERROR: wrong number of arguments expecting: " << fn->num_parameters << " got: " << num_args << "\n";
+    }
+
+    AdObjectCompiledFunction *target = new AdObjectCompiledFunction(fn->instructions, fn->num_locals);
+
+    Frame *frame = newFrame(target, sp - num_args);
+    pushFrame(frame);
+    sp = frame->basePointer + fn->num_locals;
 }
 
 void VM::clearFrames() {

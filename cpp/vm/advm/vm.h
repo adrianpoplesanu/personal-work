@@ -48,6 +48,7 @@ public:
     Frame* currentFrame();
     void pushFrame(Frame*);
     Frame* popFrame();
+    void callFunction(int);
     void clearFrames();
 };
 
