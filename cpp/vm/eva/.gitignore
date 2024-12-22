@@ -1,0 +1,3 @@
+.vscode/
+*.dSYM
+src/eva-vm

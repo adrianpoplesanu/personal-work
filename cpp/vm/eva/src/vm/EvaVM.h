@@ -1,16 +1,21 @@
 #ifndef __EVAVM_H
 #define __EVAVM_H
 
+#include <iostream>
 #include <string>
 #include <vector>
 
-#include "../bytecode/OpCode.h"
+#include "bytecode/OpCode.h"
+
+#define READ_BYTE() *ip++
 
 class EvaVM {
 public:
     EvaVM() {}
 
     void exec(const std::string &progrm) {
+        code = {OP_HALT};
+
         ip = &code[0];
 
         return eval();
@@ -18,7 +23,10 @@ public:
 
     void eval() {
         for (;;) {
-            //...
+            switch(READ_BYTE()) {
+                case OP_HALT:
+                    return;
+            }
         }
     }
 
