@@ -112,3 +112,7 @@ class AdNullObject(AdObject):
 
     def inspect(self) -> str:
         return "null"
+
+
+class AdBuiltinObject(AdObject):
+    pass
