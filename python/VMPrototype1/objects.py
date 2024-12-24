@@ -12,6 +12,7 @@ class AdObjectType:
     LIST = "LIST"
     HASH = "HASH"
     COMPILED_FUNCTION = "COMPILED_FUNCTION"
+    BUILTIN = "BUILTIN"
 
 
 class AdObject:
@@ -115,4 +116,14 @@ class AdNullObject(AdObject):
 
 
 class AdBuiltinObject(AdObject):
-    pass
+    def __init__(self, builtin_function=None, env=None, accepted_parameters_size=None):
+        """
+        @param builtin_function: reference to a function
+        """
+        self.object_type = AdObjectType.BUILTIN
+        self.builtin_function = builtin_function
+        self.env = env
+        if accepted_parameters_size:
+            self.accepted_parameters_size = accepted_parameters_size
+        else:
+            self.accepted_parameters_size = []

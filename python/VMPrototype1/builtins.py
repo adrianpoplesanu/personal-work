@@ -1,5 +1,15 @@
 from typing import Dict
 
-from objects import AdBuiltinObject
+from objects import AdBuiltinObject, AdObjectType
 
-builtins: Dict[str, AdBuiltinObject] = {}
+
+def len_builtin(args):
+    obj = args[0]
+    if obj.object_type == AdObjectType.LIST:
+        return len(obj.elements)
+    return 0
+
+
+builtins: Dict[str, AdBuiltinObject] = {
+    'len': AdBuiltinObject(builtin_function=len_builtin)
+}
