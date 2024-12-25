@@ -13,3 +13,9 @@ def len_builtin(args):
 builtins: Dict[str, AdBuiltinObject] = {
     'len': AdBuiltinObject(builtin_function=len_builtin)
 }
+
+
+def get_builtin_by_name(name) -> AdBuiltinObject:
+    for k, v in builtins.items():
+        if k == name:
+            return v
