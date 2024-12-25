@@ -1,18 +1,18 @@
-from typing import Dict
+from typing import Dict, List
 
-from objects import AdBuiltinObject, AdObjectType
+from objects import AdBuiltinObject, AdObjectType, AdObjectInteger
 
 
 def len_builtin(args):
     obj = args[0]
     if obj.object_type == AdObjectType.LIST:
-        return len(obj.elements)
-    return 0
+        return AdObjectInteger(value=len(obj.elements))
+    return AdObjectInteger(value=0)
 
 
-builtins: Dict[str, AdBuiltinObject] = {
-    'len': AdBuiltinObject(builtin_function=len_builtin)
-}
+builtins: List = [
+    {'name': 'len', 'builtin': AdBuiltinObject(builtin_function=len_builtin)}
+]
 
 
 def get_builtin_by_name(name) -> AdBuiltinObject:
