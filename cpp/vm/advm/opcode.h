@@ -28,7 +28,8 @@ enum OpCodeByte {
     OP_RETURN_VALUE,
     OP_RETURN,
     OP_GET_LOCAL,
-    OP_SET_LOCAL
+    OP_SET_LOCAL,
+    OP_GET_BUILTIN
 };
 
 class OpCode {
@@ -222,6 +223,13 @@ class OpSetLocal : public OpCode {
 public:
     OpSetLocal() {
         byteCode = OP_SET_LOCAL;
+    }
+};
+
+class OpGetBuiltin : public OpCode {
+public:
+    OpGetBuiltin() {
+        byteCode = OP_GET_BUILTIN;
     }
 };
 

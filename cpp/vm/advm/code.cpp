@@ -29,6 +29,7 @@ Code::Code() {
     definitionsMap.insert(std::make_pair(OP_RETURN, new Definition("OpReturn", 0, new int)));
     definitionsMap.insert(std::make_pair(OP_GET_LOCAL, new Definition("OpGetLocal", 1, new int[1] {1})));
     definitionsMap.insert(std::make_pair(OP_SET_LOCAL, new Definition("OpSetLocal", 1, new int[1] {1})));
+    definitionsMap.insert(std::make_pair(OP_GET_BUILTIN, new Definition("OpGetBuiltin", 1, new int[1] {1})));
 }
 
 Code::~Code() {
