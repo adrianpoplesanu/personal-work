@@ -75,7 +75,8 @@ class Code:
             OpCodeByte.OP_RETURN_VALUE: Definition("OpReturnValue", 0, []),
             OpCodeByte.OP_RETURN: Definition("OpReturn", 0, []),
             OpCodeByte.OP_GET_LOCAL: Definition("OpGetLocal", 1, [1]),
-            OpCodeByte.OP_SET_LOCAL: Definition("OpSetLocal", 1, [1])
+            OpCodeByte.OP_SET_LOCAL: Definition("OpSetLocal", 1, [1]),
+            OpCodeByte.OP_GET_BUILTIN: Definition("OpGetBuiltin", 1, [1])
         }
 
     def make(self, opcode: OpCode, n, args) -> Tuple[int, list]:
