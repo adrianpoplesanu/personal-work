@@ -8,6 +8,7 @@ class SymbolScope:
 
 GlobalScope = SymbolScope("GLOBAL")
 LocalScope = SymbolScope("LOCAL")
+BuiltinScope = SymbolScope("BUILTIN")
 
 
 class Symbol:
@@ -38,6 +39,11 @@ class SymbolTable:
         if obj is None and self.outer:
             obj = self.outer.resolve(name)
         return obj
+
+    def define_builtin(self, index: int, name: str) -> Symbol:
+        symbol = Symbol(name=name, index=index, scope=BuiltinScope)
+        self.store[name] = symbol
+        return symbol
 
 
 def new_symbol_table():
