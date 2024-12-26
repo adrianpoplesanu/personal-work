@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include "hashpair.h"
 #include "instructions.h"
+#include "gc.h"
 
 enum ObjectType {
     OT_INT,
@@ -42,7 +43,8 @@ std::unordered_map<ObjectType, std::string> object_type_map = {
     {OT_INSTANCE, "INSTANCE"},
     {OT_FILE, "FILE"},
     {OT_SOCKET, "SOCKET"},
-    {OT_COMPILED_FUNCTION, "COMPILED_FUNCTION"}
+    {OT_COMPILED_FUNCTION, "COMPILED_FUNCTION"},
+    {OT_BUILTIN, "BUILTIN"}
 };
 
 class AdObject {
@@ -152,6 +154,16 @@ public:
     virtual std::string toString();
     virtual std::string hash();
     virtual AdObject* copy();
+};
+
+class AdObjectBuiltin : public AdObject {
+public:
+    typedef AdObject* (*BuiltinFunction)(std::vector<AdObject*>, GarbageCollector*);
+
+    BuiltinFunction builtin_function;
+    AdObjectBuiltin();
+    AdObjectBuiltin(BuiltinFunction);
+    ~AdObjectBuiltin();
 };
 
 void Ad_INCREF(AdObject*);

@@ -252,6 +252,19 @@ AdObject* AdObjectCompiledFunction::copy() {
     return nullptr;
 }
 
+AdObjectBuiltin::AdObjectBuiltin() {
+    type = OT_BUILTIN;
+}
+
+AdObjectBuiltin::AdObjectBuiltin(BuiltinFunction bf) {
+    type = OT_BUILTIN;
+    builtin_function = bf;
+}
+
+AdObjectBuiltin::~AdObjectBuiltin() {
+    //...
+}
+
 void AD_INCREF(AdObject* obj) {
     if (obj != NULL) {
         obj->ref_count++;
