@@ -2,13 +2,19 @@
 #define __BUILTIN_H
 
 #include "objects.h"
+#include "gc.h"
 #include <map>
 
-class Builtins {
+class Builtin {
 public:
-    std::map<std::string, AdObject*> store;
+    typedef AdObject* (*BuiltinFunction)(std::vector<AdObject*>, GarbageCollector*);
 
-    AdObject* get(std::string);
+    std::string name;
+    BuiltinFunction builtin_function;
+    AdObjectBuiltin *builtin_object;
+    Builtin(std::string, BuiltinFunction);
 };
+
+AdObject* len_builtin(std::vector<AdObject*>, GarbageCollector*);
 
 #endif
