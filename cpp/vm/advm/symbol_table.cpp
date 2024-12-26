@@ -50,6 +50,12 @@ Symbol SymbolTable::resolve(std::string name) {
     return obj;
 }
 
+Symbol SymbolTable::defineBuiltin(int index, std::string name) {
+    Symbol symbol = Symbol(name, builtinScope, index);
+    store[name] = symbol;
+    return symbol;
+}
+
 SymbolTable* newSymbolTable() {
     return new SymbolTable();
 }

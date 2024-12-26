@@ -14,6 +14,7 @@ public:
 
 SymbolScope globalScope("GLOBAL");
 SymbolScope localScope("LOCAL");
+SymbolScope builtinScope("BUILTIN");
 
 class Symbol {
 public:
@@ -36,6 +37,7 @@ public:
 
     Symbol define(std::string);
     Symbol resolve(std::string);
+    Symbol defineBuiltin(int, std::string);
 };
 
 SymbolTable* newSymbolTable();
