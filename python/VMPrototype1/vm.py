@@ -1,11 +1,12 @@
 from typing import Optional, Dict, List
 
+from builtins_ad import builtins
 from bytecode import Bytecode
 from code_ad import read_uint16, read_uint8
 from frame import Frame, new_frame
 from hash_utils import HashKey
 from objects import AdObject, AdObjectInteger, AdBoolean, AdObjectType, AdNullObject, AdString, AdList, HashPair, \
-    AdHash, AdCompiledFunction
+    AdHash, AdCompiledFunction, AdBuiltinObject
 from opcode_ad import OpCodeByte
 from settings import PRINT_LAST_ELEMENT_ON_STACK
 
@@ -121,7 +122,8 @@ class VM:
             elif opcode == OpCodeByte.OP_CALL:
                 num_args = read_uint8(ins, ip + 1)
                 self.current_frame().ip += 1
-                self.call_function(int(num_args))
+                #self.call_function(int(num_args))
+                self.execute_call(int(num_args))
             elif opcode == OpCodeByte.OP_RETURN_VALUE:
                 return_value = self.pop()
                 frame = self.pop_frame()
@@ -141,6 +143,11 @@ class VM:
                 self.current_frame().ip += 1
                 frame = self.current_frame()
                 self.push(self.stack[frame.base_pointer + int(local_index)])
+            elif opcode == OpCodeByte.OP_GET_BUILTIN:
+                builtin_index = read_uint8(ins, ip + 1)
+                self.current_frame().ip += 1
+                definition = builtins[builtin_index]
+                self.push(definition['builtin'])
             else:
                 print('severe error: vm.run() error')
 
@@ -191,8 +198,17 @@ class VM:
         self.frames_index -= 1
         return self.frames[self.frames_index]
 
-    def call_function(self, num_args):
-        fn: AdCompiledFunction = self.stack[self.sp - 1 - int(num_args)]
+    def execute_call(self, num_args: int):
+        callee = self.stack[self.sp - 1 - num_args]
+        if callee.object_type == AdObjectType.COMPILED_FUNCTION:
+            self.call_function(callee, num_args)
+        elif callee.object_type == AdObjectType.BUILTIN:
+            self.call_builtin(callee, num_args)
+        else:
+            print('SEVERE ERROR: calling error')
+
+    def call_function(self, fn: AdCompiledFunction, num_args):
+        #fn: AdCompiledFunction = self.stack[self.sp - 1 - int(num_args)]
 
         if num_args != fn.num_parameters:
             print("ERROR: wrong number of arguments expecting: {0} got: {1}".format(fn.num_parameters, num_args))
@@ -200,6 +216,17 @@ class VM:
         frame = new_frame(fn, self.sp - num_args)
         self.push_frame(frame)
         self.sp = frame.base_pointer + fn.num_locals
+
+    def call_builtin(self, builtin: AdBuiltinObject, num_args: int):
+        args = self.stack[self.sp - num_args: self.sp]
+        result = builtin.builtin_function(args)
+        self.sp = self.sp - num_args - 1
+
+        if result is not None:
+            self.push(result)
+        else:
+            self.push(NULL_OBJECT)
+        return None
 
     def execute_comparison(self, opcode):
         right = self.pop()
