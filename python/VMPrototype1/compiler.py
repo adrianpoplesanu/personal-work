@@ -1,6 +1,7 @@
 from typing import List
 
 from ast import ASTNode, StatementType, statement_type_map
+from builtins_ad import builtins
 from bytecode import Bytecode
 from code_ad import Code
 from compilation_scope import CompilationScope
@@ -10,8 +11,8 @@ from objects import AdObjectInteger, AdObject, AdString, AdCompiledFunction
 from opcode_ad import OpAdd, OpSub, OpMultiply, OpDivide, OpConstant, OpTrue, OpFalse, OpPop, op_equal, op_not_equal, \
     op_greater_than, op_greater_than_equal, op_add, op_sub, op_multiply, op_divide, op_pop, op_bang, op_minus, \
     op_jump_not_truthy, OpCode, op_jump, op_null, op_set_global, op_get_global, op_constant, op_array, op_hash, \
-    op_index, op_return_value, op_return, op_call, op_set_local, op_get_local
-from symbol_table import new_symbol_table, new_enclosed_symbol_table, GlobalScope
+    op_index, op_return_value, op_return, op_call, op_set_local, op_get_local, op_get_builtin
+from symbol_table import new_symbol_table, new_enclosed_symbol_table, GlobalScope, Symbol, LocalScope, BuiltinScope
 
 
 class Compiler:
@@ -23,6 +24,10 @@ class Compiler:
         self.last_instruction = None
         self.previous_instruction = None
         self.symbol_table = new_symbol_table()
+        i = 0
+        for b in builtins:
+            self.symbol_table.define_builtin(i, b['name'])
+            i += 1
         main_scope: CompilationScope = CompilationScope(self.code.instructions)
         self.scopes: List[CompilationScope] = [main_scope]
         self.scope_index: int = 0
@@ -134,10 +139,11 @@ class Compiler:
                 self.emit(op_set_local, 1, [symbol.index])
         elif node.statement_type == StatementType.IDENTIFIER:
             symbol = self.symbol_table.resolve(node.value)
-            if symbol.scope == GlobalScope:
-                self.emit(op_get_global, 1, [symbol.index])
-            else:
-                self.emit(op_get_local, 1, [symbol.index])
+            #if symbol.scope == GlobalScope:
+            #    self.emit(op_get_global, 1, [symbol.index])
+            #else:
+            #    self.emit(op_get_local, 1, [symbol.index])
+            self.load_symbol(symbol)
         elif node.statement_type == StatementType.STRING_LITERAL:
             string_obj = AdString(node.value)
             args = []
@@ -287,3 +293,11 @@ class Compiler:
         self.symbol_table = self.symbol_table.outer
 
         return instructions
+
+    def load_symbol(self, symbol: Symbol):
+        if symbol.scope == GlobalScope:
+            self.emit(op_get_global, 1, [symbol.index])
+        elif symbol.scope == LocalScope:
+            self.emit(op_get_local, 1, [symbol.index])
+        elif symbol.scope == BuiltinScope:
+            self.emit(op_get_builtin, 1, [symbol.index])
