@@ -203,7 +203,8 @@ void VM::run() {
             case OP_CALL: {
                 int num_args = readUint8(ins, ip + 1);
                 currentFrame()->ip += 1;
-                callFunction(num_args);
+                //callFunction(num_args);
+                executeCall(num_args);
                 break;
             }
             case OP_RETURN_VALUE: {
@@ -235,6 +236,15 @@ void VM::run() {
                 currentFrame()->ip += 1;
                 Frame *frame = currentFrame();
                 push(stack[frame->basePointer + int(local_index)]);
+                break;
+            }
+            case OP_GET_BUILTIN: {
+                int builtin_index = readUint8(ins, ip + 1);
+                currentFrame()->ip += 1;
+                Builtin builtin = builtins.at(builtin_index);
+                //push(stack[frame->basePointer + int(local_index)]);
+                //push(new AdObjectBuiltin(builtin.builtin_function)); // TODO: fix this
+                push(builtin.builtin_object);
                 break;
             }
             default: {
@@ -426,8 +436,20 @@ Frame* VM::popFrame() {
     return frames[framesIndex];
 }
 
-void VM::callFunction(int num_args) {
-    AdObjectCompiledFunction *fn = (AdObjectCompiledFunction*) stack[sp - 1 - num_args];
+void VM::executeCall(int num_args) {
+    AdObject *callee = stack[sp - 1 - num_args];
+    if (callee->type == OT_COMPILED_FUNCTION) {
+        callFunction(callee, num_args);
+    } else if (callee->type == OT_BUILTIN) {
+        callBuiltin(callee, num_args);
+    } else {
+        std::cout << "SEVERE ERROR: call operation\n";
+    }
+}
+
+void VM::callFunction(AdObject *callee, int num_args) {
+    //AdObjectCompiledFunction *fn = (AdObjectCompiledFunction*) stack[sp - 1 - num_args];
+    AdObjectCompiledFunction *fn = (AdObjectCompiledFunction*) callee;
 
     if (num_args != fn->num_parameters) {
         std::cout << "ERROR: wrong number of arguments expecting: " << fn->num_parameters << " got: " << num_args << "\n";
@@ -438,6 +460,21 @@ void VM::callFunction(int num_args) {
     Frame *frame = newFrame(target, sp - num_args);
     pushFrame(frame);
     sp = frame->basePointer + fn->num_locals;
+}
+
+void VM::callBuiltin(AdObject *callee, int num_args) {
+    AdObjectBuiltin *builtin = (AdObjectBuiltin*) callee;
+    std::vector<AdObject*> args;
+    for (int j = sp - num_args; j < sp; j++) {
+        args.push_back(stack[j]);
+    }
+    AdObject *result = builtin->builtin_function(args, gc);
+    sp = sp - num_args - 1;
+    if (result != NULL) {
+        push(result);
+    } else {
+        push(&NULLOBJECT);
+    }
 }
 
 void VM::clearFrames() {
