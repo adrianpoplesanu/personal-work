@@ -3,6 +3,11 @@
 Compiler::Compiler() {
     // ...
     symbolTable = newSymbolTable();
+    int i = 0;
+    for (auto builtin : builtins) {
+        symbolTable->defineBuiltin(i, builtin.name);
+        i++;
+    }
     CompilationScope mainScope(code.instructions);
     scopes.push_back(mainScope);
     scopeIndex = 0;
@@ -149,17 +154,7 @@ void Compiler::compile(ASTNode* node) {
         case AT_IDENTIFIER: {
             ASTIdentifier *ident = (ASTIdentifier*) node;
             Symbol symbol = symbolTable->resolve(ident->value);
-            if (symbol.scope.scope == globalScope.scope) {
-                OpGetGlobal opGetGlobal = OpGetGlobal();
-                std::vector<int> args;
-                args.push_back(symbol.index);
-                emit(opGetGlobal, 1, args);
-            } else {
-                OpGetLocal opGetLocal = OpGetLocal();
-                std::vector<int> args;
-                args.push_back(symbol.index);
-                emit(opGetLocal, 1, args);
-            }
+            loadSymbol(symbol);
             break;
         }
         case AT_LET_STATEMENT: {
@@ -466,4 +461,23 @@ Instructions Compiler::leaveScope() {
 
     delete discardedSymbolTable;
     return instructions;
+}
+
+void Compiler::loadSymbol(Symbol symbol) {
+    if (symbol.scope.scope == globalScope.scope) {
+        OpGetGlobal opGetGlobal = OpGetGlobal();
+        std::vector<int> args;
+        args.push_back(symbol.index);
+        emit(opGetGlobal, 1, args);
+    } else if (symbol.scope.scope == localScope.scope) {
+        OpGetLocal opGetLocal = OpGetLocal();
+        std::vector<int> args;
+        args.push_back(symbol.index);
+        emit(opGetLocal, 1, args);
+    } else if (symbol.scope.scope == builtinScope.scope) {
+        OpGetBuiltin opGetBuiltin = OpGetBuiltin();
+        std::vector<int> args;
+        args.push_back(symbol.index);
+        emit(opGetBuiltin, 1, args);
+    }
 }

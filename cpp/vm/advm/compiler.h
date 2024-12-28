@@ -41,6 +41,7 @@ public:
     Instructions currentInstructions();
     void enterScope();
     Instructions leaveScope();
+    void loadSymbol(Symbol);
 };
 
 #endif
