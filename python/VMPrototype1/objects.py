@@ -13,6 +13,7 @@ class AdObjectType:
     HASH = "HASH"
     COMPILED_FUNCTION = "COMPILED_FUNCTION"
     BUILTIN = "BUILTIN"
+    CLOJURE_OBJECT = "CLOSURE"
 
 
 class AdObject:
@@ -127,3 +128,13 @@ class AdBuiltinObject(AdObject):
             self.accepted_parameters_size = accepted_parameters_size
         else:
             self.accepted_parameters_size = []
+
+
+class AdClosureObject(AdObject):
+    def __init__(self, compiled_function: AdCompiledFunction = None, free: List[AdObject] = None):
+        self.object_type = AdObjectType.CLOJURE_OBJECT
+        self.compiled_function = compiled_function
+        self.free = free
+
+    def inspect(self) -> str:
+        return "todo: implement AdClosureObject.inspect()"
