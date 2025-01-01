@@ -1,0 +1,10 @@
+let global = 55;
+        func() {
+            let a = 66;
+            func() {
+                let b = 77;
+} }
+func() {
+    let c = 88;
+    global + a + b + c;
+}

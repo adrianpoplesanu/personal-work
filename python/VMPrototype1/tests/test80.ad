@@ -1,0 +1,5 @@
+let wrapper = func() {
+    let countDown = func(x) { if (x > -100) { countDown(x - 1); } };
+    countDown(1);
+};
+wrapper();

@@ -1,0 +1,6 @@
+let newAdder = func(a, b) {
+    let c = a + b;
+    func(d) { c + d };
+};
+let adder = newAdder(1, 2);
+adder(8);

@@ -1,0 +1,10 @@
+let newAdderOuter = func(a, b) {
+    let c = a + b;
+    func(d) {
+        let e = d + c;
+        func(f) { e + f; };
+    };
+};
+let newAdderInner = newAdderOuter(1, 2)
+let adder = newAdderInner(3);
+adder(8);

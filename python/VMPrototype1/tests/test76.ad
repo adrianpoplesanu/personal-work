@@ -1,0 +1,7 @@
+let newClosure = func(a, b) {
+    let one = func() { a; };
+    let two = func() { b; };
+    func() { one() + two(); };
+};
+let closure = newClosure(9, 90);
+closure();
