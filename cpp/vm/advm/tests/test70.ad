@@ -1,0 +1,5 @@
+let newClosure = func(a) {
+    func() { a; };
+};
+let closure = newClosure(99);
+closure();
