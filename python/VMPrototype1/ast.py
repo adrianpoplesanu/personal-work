@@ -276,12 +276,13 @@ class ASTLetStatement(ASTNode):
 class ASTFunctionLiteral(ASTNode):
     statement_type = StatementType.FUNCTION_LITERAL
 
-    def __init__(self, token=None, parameters=None, default_params=None, body=None):
+    def __init__(self, token=None, parameters=None, default_params=None, body=None, name: str = None):
         super().__init__()
         self.token = token
         self.parameters = parameters
         self.default_params = default_params
         self.body = body
+        self.name = name
 
     def __str__(self):
         return 'ASTFunctionLiteral'
