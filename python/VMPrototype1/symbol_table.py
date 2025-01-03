@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Dict, Optional, List
 
 
 class SymbolScope:
@@ -9,6 +9,8 @@ class SymbolScope:
 GlobalScope = SymbolScope("GLOBAL")
 LocalScope = SymbolScope("LOCAL")
 BuiltinScope = SymbolScope("BUILTIN")
+FreeScope = SymbolScope("FREE")
+FunctionScope = SymbolScope("FUNCTION")
 
 
 class Symbol:
@@ -19,9 +21,10 @@ class Symbol:
 
 
 class SymbolTable:
-    def __init__(self, store: Dict[str, Symbol] = None, num_definitions: int = None):
+    def __init__(self, store: Dict[str, Symbol] = None, free_symbols: List[Symbol] = None, num_definitions: int = None):
         self.outer: Optional[SymbolTable] = None
         self.store = store
+        self.free_symbols = free_symbols
         self.num_definitions = num_definitions
 
     def define(self, name: str):
@@ -38,6 +41,10 @@ class SymbolTable:
         obj = self.store.get(name)
         if obj is None and self.outer:
             obj = self.outer.resolve(name)
+            if obj and (obj.scope == GlobalScope or obj.scope == BuiltinScope):
+                return obj
+            free = self.define_free(obj)
+            return free
         return obj
 
     def define_builtin(self, index: int, name: str) -> Symbol:
@@ -45,10 +52,23 @@ class SymbolTable:
         self.store[name] = symbol
         return symbol
 
+    def define_free(self, original: Symbol) -> Symbol:
+        self.free_symbols.append(original)
+        symbol = Symbol(name=original.name, index=len(self.free_symbols) - 1)
+        symbol.scope = FreeScope
+
+        self.store[original.name] = symbol
+        return symbol
+
+    def define_function_name(self, name: str) -> Symbol:
+        symbol = Symbol(name=name, index=0, scope=FunctionScope)
+        self.store[name] = symbol
+        return symbol
 
 def new_symbol_table():
     store: Dict[str, Symbol] = {}
-    return SymbolTable(store=store, num_definitions=0)
+    free = []
+    return SymbolTable(store=store, free_symbols=free, num_definitions=0)
 
 
 def new_enclosed_symbol_table(outer: SymbolTable) -> SymbolTable:
