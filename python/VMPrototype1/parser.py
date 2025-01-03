@@ -262,6 +262,8 @@ class Parser:
             return None
         self.next_token()
         stmt.value = self.parse_expression(PrecedenceType.LOWEST)
+        if stmt.value.statement_type == StatementType.FUNCTION_LITERAL:
+            stmt.value.name = stmt.name.value
         if self.current_token_is(TokenType.SEMICOLON):
             self.next_token()
         return stmt
