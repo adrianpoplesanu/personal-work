@@ -41,6 +41,8 @@ def format_instruction(definition: Definition, operands) -> str:
         return definition.name
     elif operand_count == 2:
         return "{0} {1}".format(definition.name, operands[0])
+    elif operand_count == 3:
+        return "{0} {1} {2}".format(definition.name, operands[0], operands[1])
     else:
         print("unknowm instruction format")
 
@@ -76,7 +78,10 @@ class Code:
             OpCodeByte.OP_RETURN: Definition("OpReturn", 0, []),
             OpCodeByte.OP_GET_LOCAL: Definition("OpGetLocal", 1, [1]),
             OpCodeByte.OP_SET_LOCAL: Definition("OpSetLocal", 1, [1]),
-            OpCodeByte.OP_GET_BUILTIN: Definition("OpGetBuiltin", 1, [1])
+            OpCodeByte.OP_GET_BUILTIN: Definition("OpGetBuiltin", 1, [1]),
+            OpCodeByte.OP_CLOSURE: Definition("OpClosure", 2, [2, 1]),
+            OpCodeByte.OP_GET_FREE: Definition("OpGetFree", 1, [1]),
+            OpCodeByte.OP_CURRENT_CLOSURE: Definition("OpCurrentClosure", 0, [])
         }
 
     def make(self, opcode: OpCode, n, args) -> Tuple[int, list]:

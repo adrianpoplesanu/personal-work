@@ -28,6 +28,8 @@ class OpCodeByte:
     OP_SET_LOCAL = 26
     OP_GET_BUILTIN = 27
     OP_CLOSURE = 28
+    OP_GET_FREE = 29
+    OP_CURRENT_CLOSURE = 30
 
 
 class OpCode:
@@ -150,6 +152,14 @@ class OpClosure(OpCode):
     byte_code = OpCodeByte.OP_CLOSURE
 
 
+class OpGetFree(OpCode):
+    byte_code = OpCodeByte.OP_GET_FREE
+
+
+class OpCurrentClosure(OpClosure):
+    byte_code = OpCodeByte.OP_CURRENT_CLOSURE
+
+
 op_constant = OpConstant()
 op_add = OpAdd()
 op_sub = OpSub()
@@ -179,3 +189,5 @@ op_get_local = OpGetLocal()
 op_set_local = OpSetLocal()
 op_get_builtin = OpGetBuiltin()
 op_closure = OpClosure()
+op_get_free = OpGetFree()
+op_current_closure = OpCurrentClosure()
