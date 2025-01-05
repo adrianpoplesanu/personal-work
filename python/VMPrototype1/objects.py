@@ -131,9 +131,9 @@ class AdBuiltinObject(AdObject):
 
 
 class AdClosureObject(AdObject):
-    def __init__(self, compiled_function: AdCompiledFunction = None, free: List[AdObject] = None):
+    def __init__(self, fn: AdCompiledFunction = None, free: List[AdObject] = None):
         self.object_type = AdObjectType.CLOJURE_OBJECT
-        self.compiled_function = compiled_function
+        self.fn = fn
         self.free = free
 
     def inspect(self) -> str:

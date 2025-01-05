@@ -37,12 +37,16 @@ class SymbolTable:
         self.num_definitions += 1
         return symbol
 
-    def resolve(self, name: str):
+    def resolve(self, name: str) -> Optional[Symbol]:
         obj = self.store.get(name)
         if obj is None and self.outer:
             obj = self.outer.resolve(name)
             if obj and (obj.scope == GlobalScope or obj.scope == BuiltinScope):
                 return obj
+            if obj is None:
+                print("ERROR: variable: {0} not found in scope".format(name))
+                # TODO: is this correct? please check this
+                return None
             free = self.define_free(obj)
             return free
         return obj

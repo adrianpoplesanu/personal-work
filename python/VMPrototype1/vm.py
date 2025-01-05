@@ -6,7 +6,7 @@ from code_ad import read_uint16, read_uint8
 from frame import Frame, new_frame
 from hash_utils import HashKey
 from objects import AdObject, AdObjectInteger, AdBoolean, AdObjectType, AdNullObject, AdString, AdList, HashPair, \
-    AdHash, AdCompiledFunction, AdBuiltinObject
+    AdHash, AdCompiledFunction, AdBuiltinObject, AdClosureObject
 from opcode_ad import OpCodeByte
 from settings import PRINT_LAST_ELEMENT_ON_STACK
 
@@ -27,7 +27,8 @@ class VM:
 
     def load(self, bytecode: Bytecode):
         main_fn = AdCompiledFunction(instructions=bytecode.instructions)
-        main_frame = new_frame(main_fn, 0)
+        main_closure = AdClosureObject(fn=main_fn)
+        main_frame = new_frame(main_closure, 0)
 
         # self.instructions = bytecode.instructions # remove-ul asta da peste cap run()
         self.constants = bytecode.constants
@@ -148,6 +149,19 @@ class VM:
                 self.current_frame().ip += 1
                 definition = builtins[builtin_index]
                 self.push(definition['builtin'])
+            elif opcode == OpCodeByte.OP_CLOSURE:
+                const_index = read_uint16(ins, ip + 1)
+                num_free = read_uint8(ins, ip + 3)
+                self.current_frame().ip += 3
+                self.push_closure(int(const_index), num_free)
+            elif opcode == OpCodeByte.OP_GET_FREE:
+                free_index = read_uint8(ins, ip + 1)
+                self.current_frame().ip += 1
+                current_closure = self.current_frame().cl
+                self.push(current_closure.free[free_index])
+            elif opcode == OpCodeByte.OP_CURRENT_CLOSURE:
+                current_closure = self.current_frame().cl
+                self.push(current_closure)
             else:
                 print('severe error: vm.run() error')
 
@@ -198,24 +212,37 @@ class VM:
         self.frames_index -= 1
         return self.frames[self.frames_index]
 
+    def push_closure(self, const_index: int, num_free: int):
+        constant = self.constants[const_index]
+        function = constant
+        free = [None] * num_free
+        for i in range(num_free):
+            free[i] = self.stack[self.sp - num_free + i]
+        self.sp = self.sp - num_free
+
+        closure = AdClosureObject(fn=function, free=free)
+        self.push(closure)
+
     def execute_call(self, num_args: int):
         callee = self.stack[self.sp - 1 - num_args]
-        if callee.object_type == AdObjectType.COMPILED_FUNCTION:
-            self.call_function(callee, num_args)
+        if callee.object_type == AdObjectType.CLOJURE_OBJECT:
+            self.call_closure(callee, num_args)
         elif callee.object_type == AdObjectType.BUILTIN:
             self.call_builtin(callee, num_args)
         else:
             print('SEVERE ERROR: calling error')
 
-    def call_function(self, fn: AdCompiledFunction, num_args):
+    def call_closure(self, cl: AdClosureObject, num_args):
         #fn: AdCompiledFunction = self.stack[self.sp - 1 - int(num_args)]
 
-        if num_args != fn.num_parameters:
-            print("ERROR: wrong number of arguments expecting: {0} got: {1}".format(fn.num_parameters, num_args))
+        if num_args != cl.fn.num_parameters:
+            print("ERROR: wrong number of arguments expecting: {0} got: {1}".format(cl.fn.num_parameters, num_args))
 
-        frame = new_frame(fn, self.sp - num_args)
+        frame = new_frame(cl, self.sp - num_args)
         self.push_frame(frame)
-        self.sp = frame.base_pointer + fn.num_locals
+        self.sp = frame.base_pointer + cl.fn.num_locals
+
+        return None
 
     def call_builtin(self, builtin: AdBuiltinObject, num_args: int):
         args = self.stack[self.sp - num_args: self.sp]
