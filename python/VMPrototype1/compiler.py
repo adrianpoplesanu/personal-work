@@ -11,8 +11,10 @@ from objects import AdObjectInteger, AdObject, AdString, AdCompiledFunction
 from opcode_ad import OpAdd, OpSub, OpMultiply, OpDivide, OpConstant, OpTrue, OpFalse, OpPop, op_equal, op_not_equal, \
     op_greater_than, op_greater_than_equal, op_add, op_sub, op_multiply, op_divide, op_pop, op_bang, op_minus, \
     op_jump_not_truthy, OpCode, op_jump, op_null, op_set_global, op_get_global, op_constant, op_array, op_hash, \
-    op_index, op_return_value, op_return, op_call, op_set_local, op_get_local, op_get_builtin
-from symbol_table import new_symbol_table, new_enclosed_symbol_table, GlobalScope, Symbol, LocalScope, BuiltinScope
+    op_index, op_return_value, op_return, op_call, op_set_local, op_get_local, op_get_builtin, op_closure, op_get_free, \
+    op_current_closure
+from symbol_table import new_symbol_table, new_enclosed_symbol_table, GlobalScope, Symbol, LocalScope, BuiltinScope, \
+    FreeScope, FunctionScope
 
 
 class Compiler:
@@ -131,19 +133,16 @@ class Compiler:
         elif node.statement_type == StatementType.NULL_EXPRESSION:
             self.emit(op_null, 0, [])
         elif node.statement_type == StatementType.LET_STATEMENT:
-            self.compile(node.value)
             symbol = self.symbol_table.define(node.name.value)
+            self.compile(node.value)
             if symbol.scope == GlobalScope:
                 self.emit(op_set_global, 1, [symbol.index])
             else:
                 self.emit(op_set_local, 1, [symbol.index])
         elif node.statement_type == StatementType.IDENTIFIER:
             symbol = self.symbol_table.resolve(node.value)
-            #if symbol.scope == GlobalScope:
-            #    self.emit(op_get_global, 1, [symbol.index])
-            #else:
-            #    self.emit(op_get_local, 1, [symbol.index])
-            self.load_symbol(symbol)
+            if symbol:
+                self.load_symbol(symbol)
         elif node.statement_type == StatementType.STRING_LITERAL:
             string_obj = AdString(node.value)
             args = []
@@ -173,6 +172,10 @@ class Compiler:
             self.emit(op_index, 0, args)
         elif node.statement_type == StatementType.FUNCTION_LITERAL:
             self.enter_scope()
+
+            if node.name:
+                self.symbol_table.define_function_name(node.name)
+
             for p in node.parameters:
                 self.symbol_table.define(p.value)
             self.compile(node.body)
@@ -181,15 +184,21 @@ class Compiler:
             if not self.last_instruction_is(op_return_value):
                 args = []
                 self.emit(op_return, 0, args)
+            free_symbols = self.symbol_table.free_symbols
             num_locals = self.symbol_table.num_definitions
             instructions = self.leave_scope()
+
+            for s in free_symbols:
+                self.load_symbol(s)
+
             compiled_func = AdCompiledFunction()
             compiled_func.instructions = instructions
             compiled_func.num_locals = num_locals
             compiled_func.num_parameters = len(node.parameters)
             args = []
             args.append(self.add_constant(compiled_func))
-            self.emit(op_constant, 1, args)
+            args.append(len(free_symbols))
+            self.emit(op_closure, 2, args)
         elif node.statement_type == StatementType.CALL_EXPRESSION:
             self.compile(node.func)
             for argument in node.arguments:
@@ -301,3 +310,7 @@ class Compiler:
             self.emit(op_get_local, 1, [symbol.index])
         elif symbol.scope == BuiltinScope:
             self.emit(op_get_builtin, 1, [symbol.index])
+        elif symbol.scope == FreeScope:
+            self.emit(op_get_free, 1, [symbol.index])
+        elif symbol.scope == FunctionScope:
+            self.emit(op_current_closure, 0, [])
