@@ -24,7 +24,8 @@ enum ObjectType {
     OT_INSTANCE,
     OT_FILE,
     OT_SOCKET,
-    OT_COMPILED_FUNCTION
+    OT_COMPILED_FUNCTION,
+    OT_CLOSURE
 };
 
 std::unordered_map<ObjectType, std::string> object_type_map = {
@@ -164,6 +165,21 @@ public:
     AdObjectBuiltin();
     AdObjectBuiltin(BuiltinFunction);
     ~AdObjectBuiltin();
+};
+
+class AdClosureObject : public AdObject {
+public:
+    AdObjectCompiledFunction *fn;
+    std::vector<AdObject*> free;
+
+    AdClosureObject();
+    AdClosureObject(AdObjectCompiledFunction*);
+    AdClosureObject(AdObjectCompiledFunction*, std::vector<AdObject*>);
+    ~AdClosureObject();
+    virtual std::string inspect();
+    virtual std::string toString();
+    virtual std::string hash();
+    virtual AdObject* copy();
 };
 
 void Ad_INCREF(AdObject*);

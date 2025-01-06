@@ -265,6 +265,42 @@ AdObjectBuiltin::~AdObjectBuiltin() {
     //...
 }
 
+AdClosureObject::AdClosureObject() {
+    type = OT_CLOSURE;
+    fn = nullptr;
+}
+
+AdClosureObject::AdClosureObject(AdObjectCompiledFunction *f) {
+    type = OT_CLOSURE;
+    fn = f;
+}
+
+AdClosureObject::AdClosureObject(AdObjectCompiledFunction *f, std::vector<AdObject*> fr) {
+    type = OT_CLOSURE;
+    fn = f;
+    free = fr;
+}
+
+AdClosureObject::~AdClosureObject() {
+    //...
+}
+
+std::string AdClosureObject::inspect() {
+    return "TODO: implement AdClosureObject.inspect()";
+}
+
+std::string AdClosureObject::toString() {
+    return "TODO: implement AdClosureObject.toString()";
+}
+
+std::string AdClosureObject::hash() {
+    return "TODO: implement AdClosureObject.hash()";
+}
+
+AdObject* AdClosureObject::copy() {
+    return nullptr;
+}
+
 void AD_INCREF(AdObject* obj) {
     if (obj != NULL) {
         obj->ref_count++;
@@ -304,6 +340,10 @@ void free_memory_AdObject(AdObject* obj) {
         }
         case OT_COMPILED_FUNCTION: {
             delete (AdObjectCompiledFunction*) obj;
+            break;
+        }
+        case OT_CLOSURE: {
+            delete (AdClosureObject*) obj;
             break;
         }
         default: {
