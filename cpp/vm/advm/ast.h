@@ -281,6 +281,7 @@ public:
     std::vector<ASTNode*> parameters;
     std::vector<ASTNode*> default_params;
     ASTNode* body;
+    std::string name;
 
     ASTFunctionLiteral();
     ASTFunctionLiteral(Token);
