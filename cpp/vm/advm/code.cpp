@@ -30,6 +30,9 @@ Code::Code() {
     definitionsMap.insert(std::make_pair(OP_GET_LOCAL, new Definition("OpGetLocal", 1, new int[1] {1})));
     definitionsMap.insert(std::make_pair(OP_SET_LOCAL, new Definition("OpSetLocal", 1, new int[1] {1})));
     definitionsMap.insert(std::make_pair(OP_GET_BUILTIN, new Definition("OpGetBuiltin", 1, new int[1] {1})));
+    definitionsMap.insert(std::make_pair(OP_CLOSURE, new Definition("OpClosure", 2, new int[2] {2, 1})));
+    definitionsMap.insert(std::make_pair(OP_GET_FREE, new Definition("OpGetFree", 1, new int[1] {1})));
+    definitionsMap.insert(std::make_pair(OP_CURRENT_CLOSURE, new Definition("OpCurrentClosure", 0, new int)));
 }
 
 Code::~Code() {
@@ -160,6 +163,13 @@ std::string formatInstruction(Definition* definition, std::vector<int> operands)
         case 1: {
             std::ostringstream oss;
             oss << operands.at(0);
+            return definition->name + " " + oss.str();
+        }
+        case 2: {
+            std::ostringstream oss;
+            oss << operands.at(0);
+            oss << " ";
+            oss << operands.at(1);
             return definition->name + " " + oss.str();
         }
     }
