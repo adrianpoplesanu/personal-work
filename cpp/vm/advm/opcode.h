@@ -29,7 +29,10 @@ enum OpCodeByte {
     OP_RETURN,
     OP_GET_LOCAL,
     OP_SET_LOCAL,
-    OP_GET_BUILTIN
+    OP_GET_BUILTIN,
+    OP_CLOSURE,
+    OP_GET_FREE,
+    OP_CURRENT_CLOSURE
 };
 
 class OpCode {
@@ -230,6 +233,27 @@ class OpGetBuiltin : public OpCode {
 public:
     OpGetBuiltin() {
         byteCode = OP_GET_BUILTIN;
+    }
+};
+
+class OpClosure : public OpCode {
+public:
+    OpClosure() {
+        byteCode = OP_CLOSURE;
+    }
+};
+
+class OpGetFree : public OpCode {
+public:
+    OpGetFree() {
+        byteCode = OP_GET_FREE;
+    }
+};
+
+class OpCurrentClosure : public OpCode {
+public:
+    OpCurrentClosure() {
+        byteCode = OP_CURRENT_CLOSURE;
     }
 };
 
