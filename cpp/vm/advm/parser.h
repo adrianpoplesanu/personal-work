@@ -21,8 +21,10 @@ enum PrecedenceType {
 
 std::map<TokenType, PrecedenceType> precedenceMap = {
     {TT_ASSIGN, PT_ASSIGN},
-    {TT_EQ, PT_EQUALS},
-    {TT_NOT_EQ, PT_EQUALS},
+    //{TT_EQ, PT_EQUALS},
+    //{TT_NOT_EQ, PT_EQUALS},
+    {TT_EQUALS, PT_EQUALS},
+    {TT_NOT_EQUALS, PT_EQUALS},
     {TT_LT, PT_LESSGREATER},
     {TT_GT, PT_LESSGREATER},
     {TT_LTE, PT_LESSGREATER},

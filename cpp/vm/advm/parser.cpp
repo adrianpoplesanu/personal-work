@@ -119,6 +119,9 @@ ASTNode* Parser::parseLetStatement() {
 
     nextToken();
     stmt->value = parseExpression(PT_LOWEST);
+    if (stmt->value->type == AT_FUNCTION_LITERAL) {
+        ((ASTFunctionLiteral*) stmt->value)->name = stmt->name.value;
+    }
     if (currentTokenIs(TT_SEMICOLON)) {
         nextToken();
     }
