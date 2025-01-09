@@ -159,8 +159,8 @@ void Compiler::compile(ASTNode* node) {
         }
         case AT_LET_STATEMENT: {
             ASTLetStatement *stmt = (ASTLetStatement*) node;
-            compile(stmt->value);
             Symbol symbol = symbolTable->define(stmt->name.value);
+            compile(stmt->value);
             if (symbol.scope.scope == globalScope.scope) {
                 OpSetGlobal opSetGlobal = OpSetGlobal();
                 std::vector<int> args;
@@ -297,6 +297,11 @@ void Compiler::compile(ASTNode* node) {
         case AT_FUNCTION_LITERAL: {
             ASTFunctionLiteral *expr = (ASTFunctionLiteral*) node;
             enterScope();
+
+            if (expr->name != "") {
+                symbolTable->defineFunctionName(expr->name);
+            }
+
             for (auto &p : expr->parameters) {
                 symbolTable->define(((ASTIdentifier*)p)->value);
             }
@@ -311,17 +316,24 @@ void Compiler::compile(ASTNode* node) {
                 std::vector<int> args;
                 emit(opReturn, 0, args);
             }
+            std::vector<Symbol> freeSymbols = symbolTable->freeSymbols;
             int num_locals = symbolTable->numDefinitions;
             Instructions instructions = leaveScope();
+
+            for (auto s: freeSymbols) {
+                loadSymbol(s);
+            }
+
             AdObjectCompiledFunction *compiled_func = new AdObjectCompiledFunction();
             gc->addObject(compiled_func);
             compiled_func->instructions = instructions;
             compiled_func->num_locals = num_locals;
             compiled_func->num_parameters = expr->parameters.size();
-            OpConstant opConstant = OpConstant();
+            OpClosure opClosure = OpClosure();
             std::vector<int> args;
             args.push_back(addConstant(compiled_func));
-            emit(opConstant, 1, args);
+            args.push_back(freeSymbols.size());
+            emit(opClosure, 2, args);
             break;
         }
         case AT_CALL_EXPRESSION: {
@@ -479,5 +491,14 @@ void Compiler::loadSymbol(Symbol symbol) {
         std::vector<int> args;
         args.push_back(symbol.index);
         emit(opGetBuiltin, 1, args);
+    } else if (symbol.scope.scope == freeScope.scope) {
+        OpGetFree opGetFree = OpGetFree();
+        std::vector<int> args;
+        args.push_back(symbol.index);
+        emit(opGetFree, 1, args);
+    } else if (symbol.scope.scope == functionScope.scope) {
+        OpCurrentClosure opCurrentClosure = OpCurrentClosure();
+        std::vector<int> args;
+        emit(opCurrentClosure, 0, args);
     }
 }

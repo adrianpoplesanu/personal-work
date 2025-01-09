@@ -30,6 +30,13 @@ SymbolTable::SymbolTable(std::map<std::string, Symbol> s, int n) {
     outer = nullptr;
 }
 
+SymbolTable::SymbolTable(std::map<std::string, Symbol> s, std::vector<Symbol> f_s, int n) {
+    store = s;
+    freeSymbols = f_s;
+    numDefinitions = n;
+    outer = nullptr;
+}
+
 Symbol SymbolTable::define(std::string name) {
     Symbol symbol = Symbol(name, globalScope, numDefinitions);
     if (outer == nullptr) {
@@ -42,10 +49,33 @@ Symbol SymbolTable::define(std::string name) {
     return symbol;
 }
 
+Symbol SymbolTable::defineFree(Symbol original) {
+    freeSymbols.push_back(original);
+    Symbol symbol = Symbol(original.name, freeScope, freeSymbols.size() - 1);
+
+    store[original.name] = symbol;
+    return symbol;
+}
+
+Symbol SymbolTable::defineFunctionName(std::string name) {
+    Symbol symbol = Symbol(name, functionScope, 0);
+    store[name] = symbol;
+    return symbol;
+}
+
 Symbol SymbolTable::resolve(std::string name) {
     Symbol obj = store[name];
     if (obj.scope.scope == "" && outer != nullptr) { // TODO: check this, i'm not sure
         obj = outer->resolve(name);
+        if (obj.scope.scope != "" && (obj.scope.scope == globalScope.scope || obj.scope.scope == builtinScope.scope)) {
+            return obj;
+        }
+        if (obj.scope.scope == "") {
+            std::cout << "ERROR: variable: " << name << " not found in scope\n";
+            return obj; // TODO: is this correct? please check this
+        }
+        Symbol free = defineFree(obj);
+        return free;
     }
     return obj;
 }

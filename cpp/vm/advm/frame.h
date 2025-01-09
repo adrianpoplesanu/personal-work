@@ -5,16 +5,16 @@
 
 class Frame {
 public:
-    AdObjectCompiledFunction* fn = nullptr;
+    AdClosureObject* cl = nullptr;
     int ip;
     int basePointer;
 
-    Frame(AdObjectCompiledFunction*, int);
-    Frame(AdObjectCompiledFunction*, int, int);
+    Frame(AdClosureObject*, int);
+    Frame(AdClosureObject*, int, int);
     ~Frame();
     Instructions instructions();
 };
 
-Frame* newFrame(AdObjectCompiledFunction*, int);
+Frame* newFrame(AdClosureObject*, int);
 
 #endif

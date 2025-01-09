@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <map>
+#include <vector>
 
 class SymbolScope {
 public:
@@ -15,6 +16,8 @@ public:
 SymbolScope globalScope("GLOBAL");
 SymbolScope localScope("LOCAL");
 SymbolScope builtinScope("BUILTIN");
+SymbolScope freeScope("FREE");
+SymbolScope functionScope("FUNCTION");
 
 class Symbol {
 public:
@@ -31,13 +34,17 @@ public:
     SymbolTable *outer = nullptr;
     std::map<std::string, Symbol> store;
     int numDefinitions;
+    std::vector<Symbol> freeSymbols;
 
     SymbolTable();
     SymbolTable(std::map<std::string, Symbol>, int);
+    SymbolTable(std::map<std::string, Symbol>, std::vector<Symbol>, int);
 
     Symbol define(std::string);
     Symbol resolve(std::string);
     Symbol defineBuiltin(int, std::string);
+    Symbol defineFunctionName(std::string);
+    Symbol defineFree(Symbol);
 };
 
 SymbolTable* newSymbolTable();

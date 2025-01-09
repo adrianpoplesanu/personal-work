@@ -17,7 +17,8 @@ void VM::load(Bytecode b) {
     constants = b.constants;
     AdObjectCompiledFunction *mainFn = new AdObjectCompiledFunction(b.instructions);
     //gc->addObject(mainFn); // daca il adaug aici, trebuie sa si marchez din frame-uri la ciclul de gc
-    Frame *mainFrame = newFrame(mainFn, 0);
+    AdClosureObject *mainClosure = new AdClosureObject(mainFn);
+    Frame *mainFrame = newFrame(mainClosure, 0);
 
     for (int i = 0; i < 2048; i++) {
         stack[i] = NULL;
@@ -247,6 +248,25 @@ void VM::run() {
                 push(builtin.builtin_object);
                 break;
             }
+            case OP_CLOSURE: {
+                int const_index = readUint16(ins, ip + 1);
+                int num_free = readUint8(ins, ip + 3);
+                currentFrame()->ip += 3;
+                pushClosure(const_index, num_free);
+                break;
+            }
+            case OP_GET_FREE: {
+                int free_index = readUint8(ins, ip + 1);
+                currentFrame()->ip += 1;
+                AdClosureObject *currentClosure = currentFrame()->cl;
+                push(currentClosure->free[free_index]);
+                break;
+            }
+            case OP_CURRENT_CLOSURE: {
+                AdClosureObject *currentClosure = currentFrame()->cl;
+                push(currentClosure);
+                break;
+            }
             default: {
                 break;
             }
@@ -438,8 +458,8 @@ Frame* VM::popFrame() {
 
 void VM::executeCall(int num_args) {
     AdObject *callee = stack[sp - 1 - num_args];
-    if (callee->type == OT_COMPILED_FUNCTION) {
-        callFunction(callee, num_args);
+    if (callee->type == OT_CLOSURE) {
+        callClosure(callee, num_args);
     } else if (callee->type == OT_BUILTIN) {
         callBuiltin(callee, num_args);
     } else {
@@ -447,19 +467,31 @@ void VM::executeCall(int num_args) {
     }
 }
 
-void VM::callFunction(AdObject *callee, int num_args) {
-    //AdObjectCompiledFunction *fn = (AdObjectCompiledFunction*) stack[sp - 1 - num_args];
-    AdObjectCompiledFunction *fn = (AdObjectCompiledFunction*) callee;
+void VM::pushClosure(int const_index, int num_free) {
+    AdObject *constant = constants.at(const_index);
+    std::vector<AdObject*> free;
+    for (int i = 0; i < num_free; i++) {
+        free.push_back(stack[sp - num_free + i]);
+    }
+    sp -= num_free;
 
-    if (num_args != fn->num_parameters) {
-        std::cout << "ERROR: wrong number of arguments expecting: " << fn->num_parameters << " got: " << num_args << "\n";
+    AdClosureObject *closure = new AdClosureObject((AdObjectCompiledFunction*)constant, free);
+    push(closure);
+}
+
+void VM::callClosure(AdObject *callee, int num_args) {
+    //AdObjectCompiledFunction *fn = (AdObjectCompiledFunction*) stack[sp - 1 - num_args];
+    AdClosureObject *cl = (AdClosureObject*) callee;
+
+    if (num_args != cl->fn->num_parameters) {
+        std::cout << "ERROR: wrong number of arguments expecting: " << cl->fn->num_parameters << " got: " << num_args << "\n";
     }
 
-    AdObjectCompiledFunction *target = new AdObjectCompiledFunction(fn->instructions, fn->num_locals);
+    //AdClosureObject *target = new AdClosureObject(cl->fn);
 
-    Frame *frame = newFrame(target, sp - num_args);
+    Frame *frame = newFrame(cl, sp - num_args);
     pushFrame(frame);
-    sp = frame->basePointer + fn->num_locals;
+    sp = frame->basePointer + cl->fn->num_locals;
 }
 
 void VM::callBuiltin(AdObject *callee, int num_args) {

@@ -48,10 +48,11 @@ public:
     Frame* currentFrame();
     void pushFrame(Frame*);
     Frame* popFrame();
-    void callFunction(AdObject*, int);
+    void callClosure(AdObject*, int);
     void clearFrames();
     void executeCall(int);
     void callBuiltin(AdObject*, int);
+    void pushClosure(int, int);
 };
 
 #endif
