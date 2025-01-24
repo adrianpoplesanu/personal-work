@@ -1,5 +1,7 @@
 package syntax_fun
 
+import kotlinx.coroutines.withContext
+
 inline fun <T> withTimestamp(block: () -> T): T {
     val startTime = System.nanoTime()
     val result = block()
@@ -22,6 +24,18 @@ inline fun <T> withTimestampAndContext(context: kotlin.coroutines.CoroutineConte
     val startTime = System.nanoTime()
     return try {
         block()
+    } finally {
+        val endTime = System.nanoTime()
+        println("Execution took ${endTime - startTime} ns")
+    }
+}
+
+suspend inline fun <T> withTimestampAndContext2(context: kotlin.coroutines.CoroutineContext, crossinline block: () -> T): T {
+    val startTime = System.nanoTime()
+    return try {
+        withContext(context) {
+            block()
+        }
     } finally {
         val endTime = System.nanoTime()
         println("Execution took ${endTime - startTime} ns")

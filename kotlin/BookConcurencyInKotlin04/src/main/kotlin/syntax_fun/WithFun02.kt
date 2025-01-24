@@ -9,7 +9,7 @@ class ExampleClass {
 
     fun anotherMethod(): String = withTimestamp {
         // Another example operation
-        Thread.sleep(100) // Simulating some work
+        Thread.sleep(1000) // Simulating some work
         "Hello, World!"
     }
 }

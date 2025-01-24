@@ -5,6 +5,7 @@ import kotlin.coroutines.coroutineContext
 
 class BeverlyHillsController {
     suspend fun getUrl() : String = withTimestampAndContext(coroutineContext) {
+        println("Thread: ${Thread.currentThread().name}")
         return "https://adrianus.ro"
     }
 }
