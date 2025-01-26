@@ -16,8 +16,9 @@ void VM::load(Bytecode b) {
     instructions = b.instructions;
     constants = b.constants;
     AdObjectCompiledFunction *mainFn = new AdObjectCompiledFunction(b.instructions);
-    //gc->addObject(mainFn); // daca il adaug aici, trebuie sa si marchez din frame-uri la ciclul de gc
+    gc->addObject(mainFn); // daca il adaug aici, trebuie sa si marchez din frame-uri la ciclul de gc
     AdClosureObject *mainClosure = new AdClosureObject(mainFn);
+    gc->addObject(mainClosure);
     Frame *mainFrame = newFrame(mainClosure, 0);
 
     for (int i = 0; i < 2048; i++) {
@@ -476,6 +477,7 @@ void VM::pushClosure(int const_index, int num_free) {
     sp -= num_free;
 
     AdClosureObject *closure = new AdClosureObject((AdObjectCompiledFunction*)constant, free);
+    gc->addObject(closure);
     push(closure);
 }
 

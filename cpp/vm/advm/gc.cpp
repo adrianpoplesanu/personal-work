@@ -59,6 +59,13 @@ void GarbageCollector::markObject(AdObject* obj) {
             obj->marked = true;
             break;
         }
+        case OT_CLOSURE: {
+            obj->marked = true;
+            markObject(((AdClosureObject *) obj)->fn);
+            for (auto& el : ((AdClosureObject *) obj)->free) {
+                markObject(el);
+            }
+        }
         default: {
             std::cout << "MEMORY ERROR!!! garbage collection inconsistency!\n";
             break;
