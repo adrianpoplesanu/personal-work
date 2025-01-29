@@ -48,13 +48,26 @@ class ConcurrencyTest1 {
         }
     }
 
+    suspend fun test4() {
+        val tasks = mutableListOf<Deferred<Int>>()
+        for (i in 0 until 10) {
+            val task = GlobalScope.async {
+                doSomethingElse(i)
+            }
+            tasks.add(task)
+        }
+        val responses = tasks.awaitAll()
+        println(responses)
+    }
+
     companion object {
         @JvmStatic
         fun main(args: Array<String>) = runBlocking {
             val concurrencyTest1 = ConcurrencyTest1()
             //concurrencyTest1.test1()
             //concurrencyTest1.test2()
-            concurrencyTest1.test3()
+            //concurrencyTest1.test3()
+            concurrencyTest1.test4()
         }
     }
 }
