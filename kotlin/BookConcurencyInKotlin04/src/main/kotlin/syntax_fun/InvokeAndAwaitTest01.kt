@@ -13,16 +13,16 @@ class InvokeAndAwaitTest01 {
         }
     }
 
-    private suspend fun generate(): () -> SpecialResponse {
+    private suspend fun generate(age: Int): () -> SpecialResponse {
         delay(1000)
-        return { SpecialResponse(15, "bebe dex") }
+        return { SpecialResponse(age, "bebe dex $age") }
     }
 
     fun run() = runBlocking {
         val tasks = mutableListOf<Deferred<() -> SpecialResponse>>()
         for (i in 0 until 10) {
             tasks.add(GlobalScope.async {
-                generate()
+                generate(i)
             })
         }
         val tasksResponse = tasks.awaitAll()
