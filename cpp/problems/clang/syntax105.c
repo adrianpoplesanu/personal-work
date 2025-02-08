@@ -7,14 +7,17 @@
 
 int my_strcmp(char *s, char *t) {
     for (; *s == *t; s++, t++) if (*s == '\0') return 0;
-    return *s - *t;
+    int result = *s - *t;
+    if (result < 0) return -1;
+    if (result > 0) return 1;
+    return 0;
 }
 
 int main(int argc, char *argv[]) {
-    int result1 = my_strcmp("aaab", "aaac");
+    int result1 = my_strcmp("aaab", "aaat");
     printf("[ LOG ] %d\n", result1);
 
-    int result2 = my_strcmp("aaac", "aaab");
+    int result2 = my_strcmp("aaat", "aaab");
     printf("[ LOG ] %d\n", result2);
 
     int result3 = my_strcmp("aaaa", "aaaa");
