@@ -1,0 +1,12 @@
+let wrapper = func() {
+    let countDown = func(x) {
+        if (x == 0) {
+            return 0;
+        } else {
+            print(x)
+            countDown(x - 1);
+        }
+    };
+    countDown(10);
+};
+wrapper();
