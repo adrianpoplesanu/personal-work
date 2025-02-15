@@ -10,8 +10,15 @@ def len_builtin(args):
     return AdObjectInteger(value=0)
 
 
+def print_builtin(args):
+    obj = args[0]
+    print(obj.inspect(), end="")
+    return None
+
+
 builtins: List = [
-    {'name': 'len', 'builtin': AdBuiltinObject(builtin_function=len_builtin)}
+    {'name': 'len', 'builtin': AdBuiltinObject(builtin_function=len_builtin)},
+    {'name': 'print', 'builtin': AdBuiltinObject(builtin_function=print_builtin)}
 ]
 
 
