@@ -1,0 +1,8 @@
+class Elev {
+    def constructor(age) {
+        this.age = age
+    }
+}
+
+elev = Elev(23)
+print(elev.age)
