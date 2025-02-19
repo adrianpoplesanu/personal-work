@@ -16,6 +16,8 @@ AdObject* len_builtin(std::vector<AdObject*> args, GarbageCollector* gc) {
     return NULL;
 }
 
-std::vector<Builtin> builtins = {
-    Builtin("len", len_builtin)
-};
+AdObject* print_builtin(std::vector<AdObject*> args, GarbageCollector* gc) {
+    AdObject *obj = args.at(0);
+    std::cout << obj->inspect();
+    return NULL;
+}

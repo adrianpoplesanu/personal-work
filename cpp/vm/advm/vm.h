@@ -7,6 +7,7 @@
 #include "gc.h"
 #include "settings.h"
 #include "frame.h"
+#include "builtins.h"
 #include <vector>
 
 class VM {

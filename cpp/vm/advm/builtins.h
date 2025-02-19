@@ -1,5 +1,5 @@
-#ifndef __BUILTIN_H
-#define __BUILTIN_H
+#ifndef __BUILTINS_H
+#define __BUILTINS_H
 
 #include "objects.h"
 #include "gc.h"
@@ -16,5 +16,11 @@ public:
 };
 
 AdObject* len_builtin(std::vector<AdObject*>, GarbageCollector*);
+AdObject* print_builtin(std::vector<AdObject*>, GarbageCollector*);
+
+std::vector<Builtin> builtins = {
+    Builtin("len", len_builtin),
+    Builtin("print", print_builtin)
+};
 
 #endif
