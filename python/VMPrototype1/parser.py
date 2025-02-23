@@ -2,7 +2,8 @@ from typing import Optional
 
 from ast import ASTProgram, ASTNode, ASTExpressionStatement, ASTInteger, ASTInfixExpression, ASTPrefixExpression, \
     ASTBoolean, ASTIfExpression, ASTBlockStatement, ASTNullExpression, ASTLetStatement, ASTIdentifier, ASTString, \
-    ASTList, ASTIndexExpression, ASTHash, ASTFunctionLiteral, ASTCallExpression, StatementType, ASTReturnStatement
+    ASTList, ASTIndexExpression, ASTHash, ASTFunctionLiteral, ASTCallExpression, StatementType, ASTReturnStatement, \
+    ASTClassStatement, ASTDefStatement
 from lexer import Lexer
 from precedence_type import PrecedenceType, precedences
 from token_type import TokenType
@@ -15,7 +16,8 @@ class Parser:
         self.current_token = None
         self.peek_token = None
         self.statement_parse_fns = {
-            TokenType.IF: self.parse_if_statement
+            TokenType.IF: self.parse_if_statement,
+            TokenType.DEF: self.parse_def_statement
         }
 
         self.prefix_parse_fns = {
@@ -31,7 +33,9 @@ class Parser:
             TokenType.STRING: self.parse_string_literal,
             TokenType.LBRACKET: self.parse_list_literal,
             TokenType.LBRACE: self.parse_hash_literal,
-            TokenType.FUNC: self.parse_func_literal
+            TokenType.FUNC: self.parse_func_literal,
+            TokenType.DEF: self.parse_def_statement,
+            TokenType.CLASS: self.parse_class_statement
         }
 
         self.infix_parse_fns = {
@@ -278,6 +282,54 @@ class Parser:
             return None
         func.body = self.parse_block_statement()
         return func
+
+    def parse_def_statement(self):
+        stmt = ASTDefStatement(token=self.current_token)
+        self.next_token()
+        name = ASTIdentifier(token=self.current_token, value=self.current_token.literal)
+        stmt.name = name
+        if not self.expect_peek(TokenType.LPAREN):
+            # this should return an error object
+            return None
+        res = self.parse_function_parameters()
+        stmt.parameters, stmt.default_params = res[0], res[1]
+        if not self.expect_peek(TokenType.LBRACE):
+            return None
+        stmt.body = self.parse_block_statement()
+        return stmt
+
+    def parse_class_statement(self):
+        expr = ASTClassStatement(token=self.current_token)
+        self.next_token()
+        name = self.parse_identifier()
+        expr.name = name
+        self.next_token()
+        expr.attributes = []
+        expr.methods = []
+        expr.inherit_from = []
+
+        if self.current_token_is(TokenType.COLON):
+            self.next_token()
+            while not self.current_token_is(TokenType.LBRACE):
+                parent = self.parse_identifier()
+                expr.inherit_from.append(parent)
+                self.next_token()
+
+        while not self.current_token_is(TokenType.RBRACE):
+            if self.current_token_is(TokenType.DEF):
+                stmt = self.parse_def_statement()
+                expr.methods.append(stmt)
+            if self.current_token_is(TokenType.FUN):
+                stmt = self.parse_def_statement()
+                expr.methods.append(stmt)
+            if self.current_token_is(TokenType.METHOD):
+                stmt = self.parse_def_statement()
+                expr.methods.append(stmt)
+            elif self.current_token_is(TokenType.IDENT):
+                stmt = self.parse_expression_statement()
+                expr.attributes.append(stmt)
+            self.next_token()
+        return expr
 
     def parse_function_parameters(self):
         identifiers = []

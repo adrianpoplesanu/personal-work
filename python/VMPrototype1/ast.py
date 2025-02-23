@@ -5,24 +5,38 @@ from token_ad import Token
 
 class StatementType:
     PROGRAM = 'PROGRAM'
+    LET_STATEMENT = 'LET_STATEMENT'
+    RETURN_STATEMENT = 'RETURN_STATEMENT'
     EXPRESSION_STATEMENT = 'EXPRESSION_STATEMENT'
+    IDENTIFIER = 'IDENTIFIER'
     INTEGER_LITERAL = 'INTEGER_LITERAL'
+    FLOAT = 'FLOAT'
+    BOOLEAN = 'BOOLEAN'
     INFIX_EXPRESSION = 'INFIX_EXPRESSION'
     PREFIX_EXPRESSION = 'PREFIX_EXPRESSION'
-    BOOLEAN = 'BOOLEAN'
+    CALL_EXPRESSION = 'CALL_EXPRESSION'
     IF_EXPRESSION = 'IF_EXPRESSION'
     BLOCK_STATEMENT = 'BLOCK_STATEMENT'
-    NULL_EXPRESSION = 'NULL_EXPRESSION'
-    LET_STATEMENT = 'LET_STATEMENT'
-    IDENTIFIER = 'IDENTIFIER'
+    FUNCTION_LITERAL = 'FUNCTION_LITERAL'
+    WHILE_EXPRESSION = 'WHILE_EXPRESSION'
     STRING_LITERAL = 'STRING_LITERAL'
     LIST_LITERAL = 'LIST_LITERAL'
     INDEX_EXPRESSION = 'INDEX_EXPRESSION'
     HASH_LITERAL = 'HASH_LITERAL'
-    FUNCTION_LITERAL = 'FUNCTION_LITERAL'
-    CALL_EXPRESSION = 'CALL_EXPRESSION'
     ASSIGN_STATEMENT = 'ASSIGN_STATEMENT'
-    RETURN_STATEMENT = 'RETURN_STATEMENT'
+    DEF_STATEMENT = 'DEF_STATEMENT'
+    CLASS_STATEMENT = 'CLASS_STATEMENT'
+    MEMBER_ACCESS = 'MEMBER_ACCESS'
+    COMMENT = 'COMMENT'
+    PREFIX_INCREMENT = 'PREFIX_INCREMENT'
+    POSTFIX_INCREMENT = 'POSTFIX_INCREMENT'
+    FOR_EXPRESSION = 'FOR_EXPRESSION'
+    NULL_EXPRESSION = 'NULL_EXPRESSION'
+    THIS_EXPRESSION = 'THIS_EXPRESSION'
+    SUPER_EXPRESSION = 'SUPER_EXPRESSION'
+    BREAK_STATEMENT = 'BREAK_STATEMENT'
+    CONTINUE_STATEMENT = 'CONTINUE_STATEMENT'
+    PLUS_EQUALS_STATEMENT = 'ASSIGN_EQUALS_STATEMENT'
 
 
 statement_type_map = {
@@ -345,3 +359,36 @@ class ASTNullExpression(ASTNode):
 
     def __str__(self):
         return "ASTNullExpression"
+
+
+class ASTClassStatement(ASTNode):
+    statement_type = StatementType.CLASS_STATEMENT
+
+    def __init__(self, token: Token = None):
+        super().__init__()
+        self.token = token
+
+
+class ASTDefStatement(ASTNode):
+    statement_type = StatementType.DEF_STATEMENT
+
+    def __init__(self, token: Token = None, name=None, parameters=None, default_params=None, body=None):
+        """
+        @param name: AstNode - identifier that will store the function, it needs to be like a let statement in the eval
+        @param params: AstNode[] list of funtion arguments
+        @:param default_params: default params when missing argument
+        @param body: AstNode block statement that is the body of the function
+        """
+        super().__init__()
+        self.name = name
+        self.token = token
+        self.parameters = parameters
+        self.default_params = default_params
+        self.body = body
+
+    def token_literal(self):
+        return self.token.literal
+
+    def __str__(self):
+        return 'Token: ' + str(self.token) + '<name: ' + str(self.name) + ', params:' + str(
+            self.parameters) + ', body: ' + str(self.body) + '>'
