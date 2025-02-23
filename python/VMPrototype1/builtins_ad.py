@@ -16,9 +16,16 @@ def print_builtin(args):
     return None
 
 
+def println_builtin(args):
+    obj = args[0]
+    print(obj.inspect())
+    return None
+
+
 builtins: List = [
     {'name': 'len', 'builtin': AdBuiltinObject(builtin_function=len_builtin)},
-    {'name': 'print', 'builtin': AdBuiltinObject(builtin_function=print_builtin)}
+    {'name': 'print', 'builtin': AdBuiltinObject(builtin_function=print_builtin)},
+    {'name': 'println', 'builtin': AdBuiltinObject(builtin_function=println_builtin)}
 ]
 
 
