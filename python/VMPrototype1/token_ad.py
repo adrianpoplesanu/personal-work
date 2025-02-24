@@ -15,22 +15,32 @@ token_type_map = {
     TokenType.IF: "IF",
     TokenType.WHILE: "WHILE",
     TokenType.NULL: "NULL",
-    TokenType.ASSIGN: 'ASSIGN'
+    TokenType.ASSIGN: 'ASSIGN',
+    TokenType.DEF: "DEF"
 }
 
 keywords_map = {
     "let": TokenType.LET,
     "return": TokenType.RETURN,
     "func": TokenType.FUNC,
-    "def": TokenType.DEF,
     "if": TokenType.IF,
     "else": TokenType.ELSE,
     "true": TokenType.TRUE,
     "false": TokenType.FALSE,
     "while": TokenType.WHILE,
-    "for": TokenType.FOR,
+    "def": TokenType.DEF,
+    "fun": TokenType.FUN,
+    "function": TokenType.FUNCTION,
+    "method": TokenType.METHOD,
+    "null": TokenType.NULL,
+    "class": TokenType.CLASS,
+    "this": TokenType.THIS,
     "and": TokenType.AND,
-    "null": TokenType.NULL
+    "or": TokenType.OR,
+    "for": TokenType.FOR,
+    "break": TokenType.BREAK,
+    "continue": TokenType.CONTINUE,
+    "super": TokenType.SUPER
 }
 
 

@@ -46,8 +46,12 @@ class Compiler:
                 self.compile(stmt)
         elif node.statement_type == StatementType.EXPRESSION_STATEMENT:
             if (node.expression):
-                self.compile(node.expression)
-                self.emit(op_pop, 0, [])
+                if (node.expression.statement_type == StatementType.DEF_STATEMENT):
+                    # hmmm, dupa multe cautari am gasit fixul asta, ce ciudat mi se pare
+                    self.compile(node.expression)
+                else:
+                    self.compile(node.expression)
+                    self.emit(op_pop, 0, [])
         elif node.statement_type == StatementType.PREFIX_EXPRESSION:
             self.compile(node.right)
             if node.operator == "!":
@@ -209,6 +213,45 @@ class Compiler:
             self.compile(node.value)
             args = []
             self.emit(op_return_value, 0, args)
+        elif node.statement_type == StatementType.DEF_STATEMENT:
+            # am combinat LET_STATEMENT cu FUNCTION_LITERAL
+            symbol = self.symbol_table.define(node.name.value)
+
+            # aici e compile de function
+            self.enter_scope()
+
+            if node.name:
+                self.symbol_table.define_function_name(node.name.value)
+
+            for p in node.parameters:
+                self.symbol_table.define(p.value)
+            self.compile(node.body)
+            if self.last_instruction_is(op_pop):
+                self.replace_last_pop_with_return()
+            if not self.last_instruction_is(op_return_value):
+                args = []
+                self.emit(op_return, 0, args)
+            free_symbols = self.symbol_table.free_symbols
+            num_locals = self.symbol_table.num_definitions
+            instructions = self.leave_scope()
+
+            for s in free_symbols:
+                self.load_symbol(s)
+
+            compiled_func = AdCompiledFunction()
+            compiled_func.instructions = instructions
+            compiled_func.num_locals = num_locals
+            compiled_func.num_parameters = len(node.parameters)
+            args = []
+            args.append(self.add_constant(compiled_func))
+            args.append(len(free_symbols))
+            self.emit(op_closure, 2, args)
+            # END aici e compile de function
+
+            if symbol.scope == GlobalScope:
+                self.emit(op_set_global, 1, [symbol.index])
+            else:
+                self.emit(op_set_local, 1, [symbol.index])
         else:
             print("severe error: node type unknown " + statement_type_map[node.statement_type])
 

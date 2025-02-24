@@ -1,0 +1,13 @@
+def test() {
+    println("buna dimineata")
+}
+
+def test2() {
+    println("ala bala portocala")
+}
+
+let a = func() {
+    println("aaa")
+}
+
+test()
