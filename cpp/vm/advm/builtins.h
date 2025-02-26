@@ -17,10 +17,14 @@ public:
 
 AdObject* len_builtin(std::vector<AdObject*>, GarbageCollector*);
 AdObject* print_builtin(std::vector<AdObject*>, GarbageCollector*);
+AdObject* println_builtin(std::vector<AdObject*>, GarbageCollector*);
 
 std::vector<Builtin> builtins = {
     Builtin("len", len_builtin),
-    Builtin("print", print_builtin)
+    Builtin("print", print_builtin),
+    Builtin("println", println_builtin)
 };
+
+void finalize_free_all_builtin_objects();
 
 #endif

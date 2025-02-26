@@ -21,3 +21,15 @@ AdObject* print_builtin(std::vector<AdObject*> args, GarbageCollector* gc) {
     std::cout << obj->inspect();
     return NULL;
 }
+
+AdObject* println_builtin(std::vector<AdObject*> args, GarbageCollector* gc) {
+    AdObject *obj = args.at(0);
+    std::cout << obj->inspect() << '\n';
+    return NULL;
+}
+
+void finalize_free_all_builtin_objects() {
+    for (auto &builtin : builtins) {
+        free_memory_AdObject(builtin.builtin_object);
+    }
+}
