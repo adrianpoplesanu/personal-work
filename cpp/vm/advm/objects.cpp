@@ -346,6 +346,10 @@ void free_memory_AdObject(AdObject* obj) {
             delete (AdClosureObject*) obj;
             break;
         }
+        case OT_BUILTIN: {
+            delete (AdObjectBuiltin*) obj;
+            break;
+        }
         default: {
             std::cout << "ERROR: object type not handled\n";
             break;

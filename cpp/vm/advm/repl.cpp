@@ -11,6 +11,7 @@ Repl::Repl() {
 
 Repl::~Repl() {
     gc->forceFreeObjects();
+    finalize_free_all_builtin_objects();
     delete gc;
     delete program;
 }

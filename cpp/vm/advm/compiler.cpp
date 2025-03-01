@@ -39,10 +39,15 @@ void Compiler::compile(ASTNode* node) {
         case AT_EXPRESSION_STATEMENT: {
             ASTExpressionStatement *expressionStatement = (ASTExpressionStatement*) node;
             if (expressionStatement->expression) {
-                compile(expressionStatement->expression);
-                OpPop opPop = OpPop();
-                std::vector<int> args;
-                emit(opPop, 0, args); // emmiting a pop when there's a parsing error is wrong
+                if (expressionStatement->expression->type == AT_DEF_STATEMENT) {
+                    // check-ul asta l-am gasit dupa multe incercari
+                    compile(expressionStatement->expression);
+                } else {
+                    compile(expressionStatement->expression);
+                    OpPop opPop = OpPop();
+                    std::vector<int> args;
+                    emit(opPop, 0, args); // emmiting a pop when there's a parsing error is wrong
+                }
             }
             break;
         }
@@ -184,9 +189,6 @@ void Compiler::compile(ASTNode* node) {
             break;
         }
         case AT_FUNCTION_STATEMENT: {
-            break;
-        }
-        case AT_DEF_STATEMENT: {
             break;
         }
         case AT_WHILE_STATEMENT: {
@@ -335,6 +337,67 @@ void Compiler::compile(ASTNode* node) {
             args.push_back(addConstant(compiled_func));
             args.push_back(freeSymbols.size());
             emit(opClosure, 2, args);
+            break;
+        }
+        case AT_DEF_STATEMENT: {
+            // aici o sa combin LET_STATEMENT cu FUNCTION_LITERAL
+            ASTDefStatement *stmt = (ASTDefStatement*) node;
+            Symbol symbol = symbolTable->define(stmt->name); // aici am pus stmt->name vs stmt->name.value
+
+            // aici e compile de function
+
+            enterScope();
+
+            if (stmt->name != "") {
+                symbolTable->defineFunctionName(stmt->name);
+            }
+
+            for (auto &p : stmt->parameters) {
+                symbolTable->define(((ASTIdentifier*)p)->value);
+            }
+            compile(stmt->body);
+            OpPop opPop = OpPop();
+            if (isLastInstruction(opPop)) {
+                replaceLastPopWithReturn();
+            }
+            OpReturnValue opReturnValue = OpReturnValue();
+            if (!isLastInstruction(opReturnValue)) {
+                OpReturn opReturn = OpReturn();
+                std::vector<int> args;
+                emit(opReturn, 0, args);
+            }
+            std::vector<Symbol> freeSymbols = symbolTable->freeSymbols;
+            int num_locals = symbolTable->numDefinitions;
+            Instructions instructions = leaveScope();
+
+            for (auto s: freeSymbols) {
+                loadSymbol(s);
+            }
+
+            AdObjectCompiledFunction *compiled_func = new AdObjectCompiledFunction();
+            gc->addObject(compiled_func);
+            compiled_func->instructions = instructions;
+            compiled_func->num_locals = num_locals;
+            compiled_func->num_parameters = stmt->parameters.size();
+            OpClosure opClosure = OpClosure();
+            std::vector<int> args;
+            args.push_back(addConstant(compiled_func));
+            args.push_back(freeSymbols.size());
+            emit(opClosure, 2, args);
+
+            // END aici e compile de function
+
+            if (symbol.scope.scope == globalScope.scope) {
+                OpSetGlobal opSetGlobal = OpSetGlobal();
+                std::vector<int> args;
+                args.push_back(symbol.index);
+                emit(opSetGlobal, 1, args);
+            } else {
+                OpSetLocal opSetLocal = OpSetLocal();
+                std::vector<int> args;
+                args.push_back(symbol.index);
+                emit(opSetLocal, 1, args);
+            }
             break;
         }
         case AT_CALL_EXPRESSION: {
