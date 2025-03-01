@@ -558,6 +558,51 @@ std::string ASTFunctionLiteral::toString() {
     return out;
 }
 
+ASTDefStatement::ASTDefStatement() {
+    type = AT_DEF_STATEMENT;
+    ref_count = 0; // poate aici ar trebui sa fie 1
+}
+
+ASTDefStatement::ASTDefStatement(Token t) {
+    type = AT_DEF_STATEMENT;
+    ref_count = 0; // poate aici ar trebui sa fie 1
+    token = t;
+}
+
+ASTDefStatement::~ASTDefStatement() {
+    if (body) {
+        Ad_DECREF(body); // asta merge si e super cool
+        free_memory_ASTNode(body);
+    }
+    for (std::vector<ASTNode*>::iterator it = parameters.begin() ; it != parameters.end(); ++it) {
+        ASTNode *node = *it;
+        Ad_DECREF(node); // asta merge si e super cool
+        free_memory_ASTNode(node);
+    }
+    for (std::vector<ASTNode*>::iterator it = default_params.begin() ; it != default_params.end(); ++it) {
+        ASTNode *node = *it;
+        Ad_DECREF(node); // asta merge si e super cool
+        free_memory_ASTNode(node);
+    }
+}
+
+std::string ASTDefStatement::inspect() {
+    return "TODO: implement ASTDefStatement.inspect()";
+}
+
+std::string ASTDefStatement::toString() {
+    std::string out = "[ASTDefStatement] <";
+    for (std::vector<ASTNode*>::iterator it = parameters.begin() ; it != parameters.end(); ++it) {
+        ASTNode *current = *it;
+        if (it != parameters.begin()) out += ", ";
+        out += current->toString();
+    }
+    out += "><";
+    out += body->toString();
+    out += ">";
+    return out;
+}
+
 ASTCallExpression::ASTCallExpression() {
     type = AT_CALL_EXPRESSION;
 }

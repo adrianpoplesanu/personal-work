@@ -154,7 +154,18 @@ class ASTFunctionStatement : public ASTNode {
 };
 
 class ASTDefStatement : public ASTNode {
+public:
+    Token token;
+    std::vector<ASTNode*> parameters;
+    std::vector<ASTNode*> default_params;
+    ASTNode* body;
+    std::string name;
 
+    ASTDefStatement();
+    ASTDefStatement(Token);
+    ~ASTDefStatement();
+    virtual std::string inspect();
+    virtual std::string toString();
 };
 
 class ASTInteger : public ASTNode {
