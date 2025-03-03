@@ -317,6 +317,21 @@ public:
     virtual ASTNode* copy();
 };
 
+class ASTAssignStatement : public ASTNode {
+public:
+    Token token;
+    ASTNode* name;
+    ASTNode* value;
+
+    ASTAssignStatement();
+    ASTAssignStatement(Token);
+    ASTAssignStatement(Token, ASTNode*);
+    ASTAssignStatement(Token, ASTNode*, ASTNode*);
+    ~ASTAssignStatement();
+    virtual std::string inspect();
+    virtual std::string toString();
+};
+
 class ASTNullExpression : public ASTNode {
 public:
     ASTNullExpression();

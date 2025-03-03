@@ -642,6 +642,40 @@ ASTNode* ASTCallExpression::copy() {
     return nullptr;
 }
 
+ASTAssignStatement::ASTAssignStatement() {
+    type = AT_ASSIGN_STATEMENT;
+}
+
+ASTAssignStatement::ASTAssignStatement(Token t) {
+    type = AT_ASSIGN_STATEMENT;
+    token = t;
+}
+
+ASTAssignStatement::ASTAssignStatement(Token t, ASTNode *n) {
+    type = AT_ASSIGN_STATEMENT;
+    token = t;
+    name = n;
+}
+
+ASTAssignStatement::ASTAssignStatement(Token t, ASTNode *n, ASTNode *v) {
+    type = AT_ASSIGN_STATEMENT;
+    token = t;
+    name = n;
+    value = v;
+}
+
+ASTAssignStatement::~ASTAssignStatement() {
+    //...
+}
+
+std::string ASTAssignStatement::inspect() {
+    return "todo: implement ASTAssignStatement.inspect()";
+}
+
+std::string ASTAssignStatement::toString() {
+    return "todo: implement ASTAssignStatement.toString()";
+}
+
 void Ad_INCREF(ASTNode* node) {
     if (node) {
         node->ref_count++;
