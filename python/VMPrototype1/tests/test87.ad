@@ -1,0 +1,6 @@
+class Elev {
+    age = 15
+}
+
+elev = Elev()
+println(elev.age)
