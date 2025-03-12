@@ -45,9 +45,11 @@ class Compiler:
             for stmt in node.statements:
                 self.compile(stmt)
         elif node.statement_type == StatementType.EXPRESSION_STATEMENT:
-            if (node.expression):
-                if (node.expression.statement_type == StatementType.DEF_STATEMENT):
+            if node.expression:
+                if node.expression.statement_type == StatementType.DEF_STATEMENT:
                     # hmmm, dupa multe cautari am gasit fixul asta, ce ciudat mi se pare
+                    self.compile(node.expression)
+                elif node.expression.statement_type == StatementType.ASSIGN_STATEMENT:
                     self.compile(node.expression)
                 else:
                     self.compile(node.expression)
@@ -248,6 +250,13 @@ class Compiler:
             self.emit(op_closure, 2, args)
             # END aici e compile de function
 
+            if symbol.scope == GlobalScope:
+                self.emit(op_set_global, 1, [symbol.index])
+            else:
+                self.emit(op_set_local, 1, [symbol.index])
+        elif node.statement_type == StatementType.ASSIGN_STATEMENT:
+            symbol = self.symbol_table.define(node.name.value)
+            self.compile(node.value)
             if symbol.scope == GlobalScope:
                 self.emit(op_set_global, 1, [symbol.index])
             else:

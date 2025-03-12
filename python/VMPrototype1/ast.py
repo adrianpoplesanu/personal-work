@@ -337,7 +337,8 @@ class ASTReturnStatement(ASTNode):
 class ASTIdentifier(ASTNode):
     statement_type = StatementType.IDENTIFIER
 
-    def __init__(self, token=None, value=None):
+    def __init__(self, token: Token = None, value: str = None):
+        super().__init__()
         self.token = token
         self.value = value
 
@@ -392,3 +393,19 @@ class ASTDefStatement(ASTNode):
     def __str__(self):
         return 'Token: ' + str(self.token) + '<name: ' + str(self.name) + ', params:' + str(
             self.parameters) + ', body: ' + str(self.body) + '>'
+
+
+class ASTAssignStatement(ASTNode):
+    statement_type = StatementType.ASSIGN_STATEMENT
+
+    def __init__(self, token: Token = None, name: ASTNode = None, value: ASTNode = None):
+        super().__init__()
+        self.token = token
+        self.name = name
+        self.value = value
+
+    def token_literal(self):
+        return self.token.literal
+
+    def __str__(self):
+        return 'AssignStatement [' + str(self.token.literal) + '] <' + str(self.name.value) +'>: ' + (str(self.value) if self.value else '')

@@ -3,7 +3,7 @@ from typing import Optional
 from ast import ASTProgram, ASTNode, ASTExpressionStatement, ASTInteger, ASTInfixExpression, ASTPrefixExpression, \
     ASTBoolean, ASTIfExpression, ASTBlockStatement, ASTNullExpression, ASTLetStatement, ASTIdentifier, ASTString, \
     ASTList, ASTIndexExpression, ASTHash, ASTFunctionLiteral, ASTCallExpression, StatementType, ASTReturnStatement, \
-    ASTClassStatement, ASTDefStatement
+    ASTClassStatement, ASTDefStatement, ASTAssignStatement
 from lexer import Lexer
 from precedence_type import PrecedenceType, precedences
 from token_type import TokenType
@@ -50,7 +50,8 @@ class Parser:
             TokenType.GTE: self.parse_infix_expression,
             TokenType.LTE: self.parse_infix_expression,
             TokenType.LBRACKET: self.parse_index_expression,
-            TokenType.LPAREN: self.parse_call_expression
+            TokenType.LPAREN: self.parse_call_expression,
+            TokenType.ASSIGN: self.parse_assign_expression
         }
 
     def load(self, source):
@@ -256,6 +257,15 @@ class Parser:
         if not self.expect_peek(TokenType.RBRACKET):
             return None
         return expr
+
+    def parse_assign_expression(self, left: ASTNode) -> ASTNode:
+        stmt = ASTAssignStatement(token=self.current_token)
+        stmt.name = left
+        self.next_token()
+        stmt.value = self.parse_expression(PrecedenceType.LOWEST)
+        if self.current_token_is(TokenType.SEMICOLON):
+            self.next_token()
+        return stmt
 
     def parse_let_expression(self):
         stmt = ASTLetStatement(token=self.current_token)
