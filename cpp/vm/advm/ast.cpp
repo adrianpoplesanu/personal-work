@@ -644,28 +644,37 @@ ASTNode* ASTCallExpression::copy() {
 
 ASTAssignStatement::ASTAssignStatement() {
     type = AT_ASSIGN_STATEMENT;
+    ref_count = 0;
 }
 
 ASTAssignStatement::ASTAssignStatement(Token t) {
     type = AT_ASSIGN_STATEMENT;
+    ref_count = 0;
     token = t;
 }
 
 ASTAssignStatement::ASTAssignStatement(Token t, ASTNode *n) {
     type = AT_ASSIGN_STATEMENT;
+    ref_count = 0;
     token = t;
     name = n;
 }
 
 ASTAssignStatement::ASTAssignStatement(Token t, ASTNode *n, ASTNode *v) {
     type = AT_ASSIGN_STATEMENT;
+    ref_count = 0;
     token = t;
     name = n;
     value = v;
 }
 
 ASTAssignStatement::~ASTAssignStatement() {
-    //...
+    if (name) {
+        free_memory_ASTNode(name);
+    }
+    if (value) {
+        free_memory_ASTNode(value);
+    }
 }
 
 std::string ASTAssignStatement::inspect() {
@@ -778,6 +787,10 @@ void free_memory_ASTNode(ASTNode* node) {
         }
         case AT_CALL_EXPRESSION: {
             delete (ASTCallExpression*) node;
+            break;
+        }
+        case AT_ASSIGN_STATEMENT: {
+            delete (ASTAssignStatement*) node;
             break;
         }
         default: {
