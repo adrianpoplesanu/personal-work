@@ -42,6 +42,9 @@ void Compiler::compile(ASTNode* node) {
                 if (expressionStatement->expression->type == AT_DEF_STATEMENT) {
                     // check-ul asta l-am gasit dupa multe incercari
                     compile(expressionStatement->expression);
+                } else if (expressionStatement->expression->type == AT_ASSIGN_STATEMENT) {
+                    // check-ul asta l-am gasit dupa multe incercari
+                    compile(expressionStatement->expression);
                 } else {
                     compile(expressionStatement->expression);
                     OpPop opPop = OpPop();
@@ -387,6 +390,23 @@ void Compiler::compile(ASTNode* node) {
 
             // END aici e compile de function
 
+            if (symbol.scope.scope == globalScope.scope) {
+                OpSetGlobal opSetGlobal = OpSetGlobal();
+                std::vector<int> args;
+                args.push_back(symbol.index);
+                emit(opSetGlobal, 1, args);
+            } else {
+                OpSetLocal opSetLocal = OpSetLocal();
+                std::vector<int> args;
+                args.push_back(symbol.index);
+                emit(opSetLocal, 1, args);
+            }
+            break;
+        }
+        case AT_ASSIGN_STATEMENT: {
+            ASTAssignStatement *stmt = (ASTAssignStatement*) node;
+            Symbol symbol = symbolTable->define(((ASTIdentifier*)stmt->name)->value);
+            compile(stmt->value);
             if (symbol.scope.scope == globalScope.scope) {
                 OpSetGlobal opSetGlobal = OpSetGlobal();
                 std::vector<int> args;

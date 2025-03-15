@@ -31,6 +31,7 @@ Parser::Parser() {
     infixParseFns.insert(std::make_pair(TT_EQUALS, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_LBRACKET, &Parser::parseIndexExpression));
     infixParseFns.insert(std::make_pair(TT_LPAREN, &Parser::parseCallExpression));
+    infixParseFns.insert(std::make_pair(TT_ASSIGN, &Parser::parseAssignExpression));
 }
 
 PrecedenceType Parser::currentPrecedence() {
@@ -345,6 +346,17 @@ ASTNode* Parser::parseDefStatement() {
     ASTNode* body = parseBlockStatement();
     stmt->body = body;
     Ad_INCREF(stmt->body);
+    return stmt;
+}
+
+ASTNode* Parser::parseAssignExpression(ASTNode* left) {
+    ASTAssignStatement* stmt = new ASTAssignStatement(currentToken);
+    stmt->name = left;
+    nextToken();
+    stmt->value = parseExpression(PT_LOWEST);
+    if (currentTokenIs(TT_SEMICOLON)) {
+        nextToken();
+    }
     return stmt;
 }
 

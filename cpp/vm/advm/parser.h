@@ -97,6 +97,7 @@ public:
     ASTNode* parseFunctionLiteral();
     std::pair<std::vector<ASTNode*>, std::vector<ASTNode*>> parseFunctionParameters();
     ASTNode* parseDefStatement();
+    ASTNode* parseAssignExpression(ASTNode*);
 };
 
 #endif
