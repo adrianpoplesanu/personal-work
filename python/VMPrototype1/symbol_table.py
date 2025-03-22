@@ -28,7 +28,12 @@ class SymbolTable:
         self.num_definitions = num_definitions
 
     def define(self, name: str):
-        symbol = Symbol(name=name, index=self.num_definitions)
+        # TODO: am adaugat if-ul asta ca sa nu generez simboluri noi pentru acelasi identificator
+        # ca sa pot sa fac i = 5 i = i + 1, a doua atribuire creeaza un simbol nou cu index 1, si i + 1 nu stii ce e
+        if name in self.store:
+            symbol = self.resolve(name)
+        else:
+            symbol = Symbol(name=name, index=self.num_definitions)
         if self.outer is None:
             symbol.scope = GlobalScope
         else:
