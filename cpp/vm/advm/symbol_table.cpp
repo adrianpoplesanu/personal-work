@@ -38,7 +38,12 @@ SymbolTable::SymbolTable(std::map<std::string, Symbol> s, std::vector<Symbol> f_
 }
 
 Symbol SymbolTable::define(std::string name) {
-    Symbol symbol = Symbol(name, globalScope, numDefinitions);
+    Symbol symbol;
+    if (store.find(name) != store.end()) {
+        symbol = resolve(name);
+    } else {
+        symbol = Symbol(name, globalScope, numDefinitions);
+    }
     if (outer == nullptr) {
         symbol.scope = globalScope;
     } else {
