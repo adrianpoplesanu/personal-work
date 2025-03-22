@@ -1,0 +1,6 @@
+i = 5
+println(i)
+i = 6
+println(i)
+i = 7
+println(i)
