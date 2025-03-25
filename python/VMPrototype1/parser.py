@@ -3,7 +3,7 @@ from typing import Optional
 from ast import ASTProgram, ASTNode, ASTExpressionStatement, ASTInteger, ASTInfixExpression, ASTPrefixExpression, \
     ASTBoolean, ASTIfExpression, ASTBlockStatement, ASTNullExpression, ASTLetStatement, ASTIdentifier, ASTString, \
     ASTList, ASTIndexExpression, ASTHash, ASTFunctionLiteral, ASTCallExpression, StatementType, ASTReturnStatement, \
-    ASTClassStatement, ASTDefStatement, ASTAssignStatement
+    ASTClassStatement, ASTDefStatement, ASTAssignStatement, ASTWhileExpression
 from lexer import Lexer
 from precedence_type import PrecedenceType, precedences
 from token_type import TokenType
@@ -35,7 +35,8 @@ class Parser:
             TokenType.LBRACE: self.parse_hash_literal,
             TokenType.FUNC: self.parse_func_literal,
             TokenType.DEF: self.parse_def_statement,
-            TokenType.CLASS: self.parse_class_statement
+            TokenType.CLASS: self.parse_class_statement,
+            TokenType.WHILE: self.parse_while_expression
         }
 
         self.infix_parse_fns = {
@@ -174,6 +175,20 @@ class Parser:
         stmt = self.parse_statement()
         block.statements.append(stmt)
         return block
+
+    def parse_while_expression(self):
+        expr = ASTWhileExpression(token=self.current_token)
+        if not self.expect_peek(TokenType.LPAREN):
+            return None
+        self.next_token()
+        expr.condition = self.parse_expression(PrecedenceType.LOWEST)
+        if not self.expect_peek(TokenType.RPAREN):
+            return None
+        if not self.expect_peek(TokenType.LBRACE):
+            expr.block = self.parse_single_block_statement()
+        else:
+            expr.block = self.parse_block_statement()
+        return expr
 
     def parse_null_expression(self) -> ASTNode:
         expr = ASTNullExpression(token=self.current_token)

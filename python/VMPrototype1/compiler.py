@@ -51,6 +51,8 @@ class Compiler:
                     self.compile(node.expression)
                 elif node.expression.statement_type == StatementType.ASSIGN_STATEMENT:
                     self.compile(node.expression)
+                elif node.expression.statement_type == StatementType.WHILE_EXPRESSION:
+                    self.compile(node.expression)
                 else:
                     self.compile(node.expression)
                     self.emit(op_pop, 0, [])
@@ -261,6 +263,25 @@ class Compiler:
                 self.emit(op_set_global, 1, [symbol.index])
             else:
                 self.emit(op_set_local, 1, [symbol.index])
+        elif node.statement_type == StatementType.WHILE_EXPRESSION:
+            start_pos = self.current_instructions().size
+            self.compile(node.condition)
+            # bogus 9999 value
+            args = [9999]
+            jump_not_truthy_pos = self.emit(op_jump_not_truthy, 1, args)
+
+            self.compile(node.block)
+
+            if self.last_instruction_is(op_pop):
+                self.remove_last_pop()
+
+            #  op_jump with bogus 9999 value
+            args = [9999]
+            jump_pos = self.emit(op_jump, 1, args)
+            self.change_operand(jump_pos, start_pos)
+
+            after_consequence_pos = self.current_instructions().size
+            self.change_operand(jump_not_truthy_pos, after_consequence_pos)
         else:
             print("severe error: node type unknown " + statement_type_map[node.statement_type])
 

@@ -58,7 +58,8 @@ statement_type_map = {
     StatementType.FUNCTION_LITERAL: 'FUNCTION_LITERAL',
     StatementType.CALL_EXPRESSION: 'CALL_EXPRESSION',
     StatementType.ASSIGN_STATEMENT: 'ASSIGN_STATEMENT',
-    StatementType.RETURN_STATEMENT: 'RETURN_STATEMENT'
+    StatementType.RETURN_STATEMENT: 'RETURN_STATEMENT',
+    StatementType.WHILE_EXPRESSION: 'WHILE_EXPRESSION'
 }
 
 
@@ -409,3 +410,24 @@ class ASTAssignStatement(ASTNode):
 
     def __str__(self):
         return 'AssignStatement [' + str(self.token.literal) + '] <' + str(self.name.value) +'>: ' + (str(self.value) if self.value else '')
+
+
+class ASTWhileExpression(ASTNode):
+    statement_type = StatementType.WHILE_EXPRESSION
+
+    def __init__(self, token: Token = None, condition: ASTNode = None, block: ASTNode = None):
+        """
+        @param token: the node's token
+        @param condition: expression???
+        @param block: ASTBlockStatement
+        """
+        super().__init__()
+        self.token = token
+        self.condition = condition
+        self.block = block
+
+    def token_literal(self):
+        return self.token.literal
+
+    def __str__(self):
+        return 'TODO: implement __str__ in ASTWhileExpression'
