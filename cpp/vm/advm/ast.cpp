@@ -139,6 +139,10 @@ ASTWhileStatement::ASTWhileStatement(Token t) {
 
 }
 
+ASTWhileStatement::~ASTWhileStatement() {
+    // TODO: implement this
+}
+
 std::string ASTWhileStatement::inspect() {
     return "todo: implement this";
 }

@@ -246,9 +246,13 @@ public:
 
 class ASTWhileStatement : public ASTNode {
 public:
+    Token token;
+    ASTNode *condition;
+    ASTNode *block;
 
     ASTWhileStatement();
     ASTWhileStatement(Token);
+    ~ASTWhileStatement();
     virtual std::string inspect();
     virtual std::string toString();
 };

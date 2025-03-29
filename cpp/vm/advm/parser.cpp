@@ -360,6 +360,26 @@ ASTNode* Parser::parseAssignExpression(ASTNode* left) {
     return stmt;
 }
 
+ASTNode* Parser::parseWhileExpression() {
+    ASTWhileStatement* expr = new ASTWhileStatement(currentToken);
+    if (!expectPeek(TT_LPAREN)) {
+        free_memory_ASTNode(expr);
+        return NULL;
+    }
+    nextToken();
+    expr->condition = parseExpression(PT_LOWEST);
+    if (!expectPeek(TT_RPAREN)) {
+        free_memory_ASTNode(expr);
+        return NULL;
+    }
+    if (!expectPeek(TT_LBRACE)) {
+        expr->block = parseSingleBlockStatement();
+    } else {
+        expr->block = parseBlockStatement();
+    }
+    return expr;
+}
+
 std::pair<std::vector<ASTNode*>, std::vector<ASTNode*>> Parser::parseFunctionParameters() {
     std::vector<ASTNode*> identifiers;
     std::vector<ASTNode*> defaultParams;
