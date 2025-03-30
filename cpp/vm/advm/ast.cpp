@@ -132,23 +132,31 @@ std::string ASTIdentifier::inspect() {
 }
 
 ASTWhileStatement::ASTWhileStatement() {
-
+    type = AT_WHILE_STATEMENT;
+    ref_count = 0;
 }
 
 ASTWhileStatement::ASTWhileStatement(Token t) {
-
+    type = AT_WHILE_STATEMENT;
+    ref_count = 0;
+    token = t;
 }
 
 ASTWhileStatement::~ASTWhileStatement() {
-    // TODO: implement this
+    if (condition) {
+        free_memory_ASTNode(condition);
+    }
+    if (block) {
+        free_memory_ASTNode(block);
+    }
 }
 
 std::string ASTWhileStatement::inspect() {
-    return "todo: implement this";
+    return "todo: implement ASTWhileStatement.inspect()";
 }
 
 std::string ASTWhileStatement::toString() {
-    return "todo: implement this";
+    return "todo: implement ASTWhileStatement.toString()";
 }
 
 ASTInteger::ASTInteger() {
@@ -609,15 +617,18 @@ std::string ASTDefStatement::toString() {
 
 ASTCallExpression::ASTCallExpression() {
     type = AT_CALL_EXPRESSION;
+    ref_count = 0;
 }
 
 ASTCallExpression::ASTCallExpression(Token t) {
     type = AT_CALL_EXPRESSION;
+    ref_count = 0;
     token = t;
 }
 
 ASTCallExpression::ASTCallExpression(Token t, ASTNode* f) {
     type = AT_CALL_EXPRESSION;
+    ref_count = 0;
     token = t;
     function = f;
 }
