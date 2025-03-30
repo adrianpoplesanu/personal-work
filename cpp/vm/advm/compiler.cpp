@@ -45,6 +45,9 @@ void Compiler::compile(ASTNode* node) {
                 } else if (expressionStatement->expression->type == AT_ASSIGN_STATEMENT) {
                     // check-ul asta l-am gasit dupa multe incercari
                     compile(expressionStatement->expression);
+                } else if (expressionStatement->expression->type == AT_WHILE_STATEMENT) {
+                    // check-ul asta l-am gasit dupa multe incercari
+                    compile(expressionStatement->expression);
                 } else {
                     compile(expressionStatement->expression);
                     OpPop opPop = OpPop();
@@ -192,9 +195,6 @@ void Compiler::compile(ASTNode* node) {
             break;
         }
         case AT_FUNCTION_STATEMENT: {
-            break;
-        }
-        case AT_WHILE_STATEMENT: {
             break;
         }
         case AT_FOR_STATEMENT: {
@@ -418,6 +418,35 @@ void Compiler::compile(ASTNode* node) {
                 args.push_back(symbol.index);
                 emit(opSetLocal, 1, args);
             }
+            break;
+        }
+        case AT_WHILE_STATEMENT: {
+            int start_pos = currentInstructions().size;
+            ASTWhileStatement *stmt = (ASTWhileStatement*) node;
+            compile(stmt->condition);
+
+            OpJumpNotTruthy opJumpNotTruthy = OpJumpNotTruthy();
+            std::vector<int> jump_not_truthy_args;
+            // bogus 9999 value
+            jump_not_truthy_args.push_back(9999);
+            int jump_not_truthy_pos = emit(opJumpNotTruthy, 1, jump_not_truthy_args);
+
+            compile(stmt->block);
+
+            OpPop opPop = OpPop();
+            if (isLastInstruction(opPop)) {
+                removeLastPop();
+            }
+
+            OpJump opJump = OpJump();
+            std::vector<int> jump_args;
+            // bogus 9999 value
+            jump_args.push_back(9999);
+            int jump_pos = emit(opJump, 1, jump_args);
+            changeOperand(jump_pos, start_pos);
+
+            int after_consequence_pos = currentInstructions().size;
+            changeOperand(jump_not_truthy_pos, after_consequence_pos);
             break;
         }
         case AT_CALL_EXPRESSION: {

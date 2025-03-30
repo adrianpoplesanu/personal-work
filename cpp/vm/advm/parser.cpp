@@ -19,6 +19,7 @@ Parser::Parser() {
 
     prefixParseFns.insert(std::make_pair(TT_FUNC, &Parser::parseFunctionLiteral));
     prefixParseFns.insert(std::make_pair(TT_DEF, &Parser::parseDefStatement));
+    prefixParseFns.insert(std::make_pair(TT_WHILE, &Parser::parseWhileExpression));
 
     infixParseFns.insert(std::make_pair(TT_PLUS, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parseInfixExpression));
