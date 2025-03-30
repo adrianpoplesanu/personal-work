@@ -1,5 +1,5 @@
 // COMPILE:     gcc syntax122.c
-// USAGE:       ./a.out pattern
+// USAGE:       cat syntax122.c | ./a.out in
 // BOOKMARK:    pg 104
 // DESCRIPTION: find pattern
 
