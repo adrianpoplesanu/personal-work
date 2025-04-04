@@ -1,4 +1,4 @@
-package org.example;
+package ro.adrianus;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

@@ -1,4 +1,4 @@
-package org.example;
+package ro.adrianus;
 
 /**
  * Hello world!
