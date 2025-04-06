@@ -118,6 +118,9 @@ class Lexer:
         elif self.ch == "'":
             token.token_type = TokenType.STRING
             token.literal = self.read_double_quotes_string()
+        elif self.ch == '.':
+            token.token_type = TokenType.DOT
+            token.literal = '.'
         else:
             if self.is_letter():
                 token.literal = self.read_ident()

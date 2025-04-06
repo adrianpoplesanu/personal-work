@@ -3,7 +3,7 @@ from typing import Optional
 from ast import ASTProgram, ASTNode, ASTExpressionStatement, ASTInteger, ASTInfixExpression, ASTPrefixExpression, \
     ASTBoolean, ASTIfExpression, ASTBlockStatement, ASTNullExpression, ASTLetStatement, ASTIdentifier, ASTString, \
     ASTList, ASTIndexExpression, ASTHash, ASTFunctionLiteral, ASTCallExpression, StatementType, ASTReturnStatement, \
-    ASTClassStatement, ASTDefStatement, ASTAssignStatement, ASTWhileExpression
+    ASTClassStatement, ASTDefStatement, ASTAssignStatement, ASTWhileExpression, ASTMemberAccess
 from lexer import Lexer
 from precedence_type import PrecedenceType, precedences
 from token_type import TokenType
@@ -52,7 +52,8 @@ class Parser:
             TokenType.LTE: self.parse_infix_expression,
             TokenType.LBRACKET: self.parse_index_expression,
             TokenType.LPAREN: self.parse_call_expression,
-            TokenType.ASSIGN: self.parse_assign_expression
+            TokenType.ASSIGN: self.parse_assign_expression,
+            TokenType.DOT: self.parse_member_access
         }
 
     def load(self, source):
@@ -281,6 +282,25 @@ class Parser:
         if self.current_token_is(TokenType.SEMICOLON):
             self.next_token()
         return stmt
+
+    def parse_member_access(self, left: ASTNode) -> ASTNode:
+        member_access = ASTMemberAccess(token=self.current_token)
+        self.next_token()
+        right = ASTIdentifier(token=self.current_token, value=self.current_token.literal)
+        member_access.owner = left
+        member_access.member = right
+
+        if self.peek_token_is(TokenType.LPAREN):
+            self.next_token()
+            res = self.parse_call_arguments()
+            member_access.arguments = res[0]
+            member_access.kw_args = res[1]
+            member_access.is_method = True
+        else:
+            member_access.arguments = []
+            member_access.kw_args = []
+            member_access.is_method = False
+        return member_access
 
     def parse_let_expression(self):
         stmt = ASTLetStatement(token=self.current_token)

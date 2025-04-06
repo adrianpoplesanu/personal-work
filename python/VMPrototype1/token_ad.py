@@ -16,7 +16,8 @@ token_type_map = {
     TokenType.WHILE: "WHILE",
     TokenType.NULL: "NULL",
     TokenType.ASSIGN: 'ASSIGN',
-    TokenType.DEF: "DEF"
+    TokenType.DEF: "DEF",
+    TokenType.DOT: "DOT"
 }
 
 keywords_map = {
@@ -40,7 +41,8 @@ keywords_map = {
     "for": TokenType.FOR,
     "break": TokenType.BREAK,
     "continue": TokenType.CONTINUE,
-    "super": TokenType.SUPER
+    "super": TokenType.SUPER,
+    "dot": TokenType.DOT
 }
 
 

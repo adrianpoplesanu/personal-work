@@ -63,7 +63,7 @@ class Compiler:
             elif node.operator == "-":
                 self.emit(op_minus)
             else:
-                print("SEVERE ERROR: prefix experssion")
+                print("SEVERE ERROR: prefix expression")
         elif node.statement_type == StatementType.INFIX_EXPRESSION:
             if node.operator == '<':
                 self.compile(node.right)
@@ -282,6 +282,8 @@ class Compiler:
 
             after_consequence_pos = self.current_instructions().size
             self.change_operand(jump_not_truthy_pos, after_consequence_pos)
+        elif node.statement_type == StatementType.CLASS_STATEMENT:
+            print('i found a class, i need to emit the code')
         else:
             print("severe error: node type unknown " + statement_type_map[node.statement_type])
 

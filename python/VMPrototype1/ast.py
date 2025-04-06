@@ -371,6 +371,26 @@ class ASTClassStatement(ASTNode):
         self.token = token
 
 
+class ASTMemberAccess(ASTNode):
+    statement_type = StatementType.MEMBER_ACCESS
+
+    def __init__(self, token=None, arguments=None, kw_args=None, owner=None, member=None, is_method=False):
+        """
+        @param token: the node's token
+        @param arguments:
+        @param owner:
+        @param member:
+        @param is_method: boolean, indicates is this member access is a method call or an attribute access
+        """
+        super().__init__()
+        self.token = token
+        self.arguments = arguments
+        self.kw_args = kw_args
+        self.owner = owner
+        self.member = member
+        self.is_method = is_method
+
+
 class ASTDefStatement(ASTNode):
     statement_type = StatementType.DEF_STATEMENT
 

@@ -31,6 +31,16 @@ class OpCodeByte:
     OP_GET_FREE = 29
     OP_CURRENT_CLOSURE = 30
 
+    OP_CLASS = 31
+    OP_SET_METHOD = 32
+    OP_INSTANTIATE = 33
+
+    OP_GET_PROPERTY = 34
+    OP_SET_PROPERTY = 35
+
+    OP_GET_METHOD = 36
+    OP_INVOKE = 37
+
 
 class OpCode:
     byte_code = None
