@@ -170,6 +170,14 @@ class OpCurrentClosure(OpClosure):
     byte_code = OpCodeByte.OP_CURRENT_CLOSURE
 
 
+class OpClass(OpClosure):
+    byte_code = OpCodeByte.OP_CLASS
+
+
+class OpSetMethod(OpClosure):
+    byte_code = OpCodeByte.OP_SET_METHOD
+
+
 op_constant = OpConstant()
 op_add = OpAdd()
 op_sub = OpSub()
@@ -201,3 +209,5 @@ op_get_builtin = OpGetBuiltin()
 op_closure = OpClosure()
 op_get_free = OpGetFree()
 op_current_closure = OpCurrentClosure()
+op_class = OpClass()
+op_set_method = OpSetMethod()

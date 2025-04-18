@@ -17,6 +17,7 @@ token_type_map = {
     TokenType.NULL: "NULL",
     TokenType.ASSIGN: 'ASSIGN',
     TokenType.DEF: "DEF",
+    TokenType.CLASS: "CLASS",
     TokenType.DOT: "DOT"
 }
 
