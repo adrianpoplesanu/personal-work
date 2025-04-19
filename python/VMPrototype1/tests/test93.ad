@@ -1,0 +1,8 @@
+class Worker {
+    def test() {
+        println("worker.test()")
+    }
+}
+
+worker = Worker()
+worker.test()
