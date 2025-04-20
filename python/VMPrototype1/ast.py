@@ -363,14 +363,6 @@ class ASTNullExpression(ASTNode):
         return "ASTNullExpression"
 
 
-class ASTClassStatement(ASTNode):
-    statement_type = StatementType.CLASS_STATEMENT
-
-    def __init__(self, token: Token = None):
-        super().__init__()
-        self.token = token
-
-
 class ASTMemberAccess(ASTNode):
     statement_type = StatementType.MEMBER_ACCESS
 
@@ -389,6 +381,9 @@ class ASTMemberAccess(ASTNode):
         self.owner = owner
         self.member = member
         self.is_method = is_method
+
+    def __str__(self):
+        return "todo: implement __str__ in ASTMemberAccess"
 
 
 class ASTDefStatement(ASTNode):
@@ -430,6 +425,32 @@ class ASTAssignStatement(ASTNode):
 
     def __str__(self):
         return 'AssignStatement [' + str(self.token.literal) + '] <' + str(self.name.value) +'>: ' + (str(self.value) if self.value else '')
+
+
+class ASTClassStatement(ASTNode):
+    statement_type = StatementType.CLASS_STATEMENT
+
+    def __init__(self, token: Token = None, name: ASTNode = None, methods: List[ASTDefStatement] = None,
+                 attributes: List[ASTAssignStatement] = None, inherit_from: List[ASTNode] = None):
+        """
+        @param token: the node's token
+        @param name: ASTIdentifier, name of the class
+        @param methods: list of ASTDefStatement
+        @param attributes: list of ASTAssignStatement
+        @param inherit_from: list of parents the class inherits from, should this be a list of ASTNode(s)?
+        """
+        super().__init__()
+        self.token = token
+        self.name = name
+        self.methods = methods
+        self.attributes = attributes
+        self.inherit_from = inherit_from
+
+    def token_literal(self):
+        return self.token.literal
+
+    def __str__(self):
+        return 'Token: ' + str(self.token)
 
 
 class ASTWhileExpression(ASTNode):
