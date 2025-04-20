@@ -1,5 +1,6 @@
 from typing import List, Dict
 
+from ast import ASTNode, ASTIdentifier
 from hash_utils import HashKey
 from instructions import Instructions
 
@@ -14,6 +15,10 @@ class AdObjectType:
     COMPILED_FUNCTION = "COMPILED_FUNCTION"
     BUILTIN = "BUILTIN"
     CLOJURE_OBJECT = "CLOSURE"
+    CLASS = "CLASS"
+    COMPILED_CLASS = "COMPILED_CLASS"
+    INSTANCE = "INSTANCE"
+    COMPILED_INSTANCE = "COMPILED_INSTANCE"
 
 
 class AdObject:
@@ -138,3 +143,34 @@ class AdClosureObject(AdObject):
 
     def inspect(self) -> str:
         return "todo: implement AdClosureObject.inspect()"
+
+
+class AdClassObject(AdObject):
+    #type = ObjectType.CLASS
+
+    def __init__(self, name: ASTIdentifier = None, attributes: List[ASTNode] = None, methods: List[ASTNode] = None, inherit_from: List[ASTNode] = None):
+        """
+        @param: name
+        @param: attributes - after parsing
+        @param: methods - after parsing
+        @param: inherit_from - classes inherited after parsing
+        """
+        self.object_type = AdObjectType.CLASS
+        self.name = name
+        self.attributes = attributes
+        self.methods = methods
+        self.inherit_from = inherit_from
+
+    def inspect(self):
+        out = "<class object at memory address: " + str(hex(id(self))) + ">"
+        return out
+
+
+class AdCompiledClassObject(AdObject):
+    def __init__(self, name: ASTIdentifier = None):
+        self.object_type = AdObjectType.COMPILED_CLASS
+        self.name = name
+
+    def inspect(self) -> str:
+        out = "<class object at memory address: " + str(hex(id(self))) + ">"
+        return out
