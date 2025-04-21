@@ -83,7 +83,9 @@ class Code:
             OpCodeByte.OP_GET_FREE: Definition("OpGetFree", 1, [1]),
             OpCodeByte.OP_CURRENT_CLOSURE: Definition("OpCurrentClosure", 0, []),
             OpCodeByte.OP_CLASS: Definition("OpClass", 0, []),
-            OpCodeByte.OP_SET_METHOD: Definition("OpSetMethod", 0, [])
+            OpCodeByte.OP_SET_METHOD: Definition("OpSetMethod", 0, []),
+            OpCodeByte.OP_GET_PROPERTY: Definition("OpGetProperty", 0, []),
+            OpCodeByte.OP_SET_PROPERTY: Definition("OpSetProperty", 0, [])
         }
 
     def make(self, opcode: OpCode, n, args) -> Tuple[int, list]:

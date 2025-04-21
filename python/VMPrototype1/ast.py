@@ -383,7 +383,7 @@ class ASTMemberAccess(ASTNode):
         self.is_method = is_method
 
     def __str__(self):
-        return "todo: implement __str__ in ASTMemberAccess"
+        return "ASTMemberAccess{owner: " + str(self.owner) + ", member: " + str(self.member) + "}"
 
 
 class ASTDefStatement(ASTNode):
@@ -392,7 +392,7 @@ class ASTDefStatement(ASTNode):
     def __init__(self, token: Token = None, name=None, parameters=None, default_params=None, body=None):
         """
         @param name: AstNode - identifier that will store the function, it needs to be like a let statement in the eval
-        @param params: AstNode[] list of funtion arguments
+        @param parameters: AstNode[] list of funtion argumentss
         @:param default_params: default params when missing argument
         @param body: AstNode block statement that is the body of the function
         """

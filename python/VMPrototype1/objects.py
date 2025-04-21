@@ -108,7 +108,6 @@ class AdCompiledFunction(AdObject):
         self.num_locals = num_locals
         self.num_parameters = num_parameters
 
-
     def inspect(self) -> str:
         return "todo: implement AdCompiledFunction.inspect()"
 
@@ -146,9 +145,10 @@ class AdClosureObject(AdObject):
 
 
 class AdClassObject(AdObject):
-    #type = ObjectType.CLASS
+    # type = ObjectType.CLASS
 
-    def __init__(self, name: ASTIdentifier = None, attributes: List[ASTNode] = None, methods: List[ASTNode] = None, inherit_from: List[ASTNode] = None):
+    def __init__(self, name: ASTIdentifier = None, attributes: List[ASTNode] = None, methods: List[ASTNode] = None,
+                 inherit_from: List[ASTNode] = None):
         """
         @param: name
         @param: attributes - after parsing
@@ -167,10 +167,51 @@ class AdClassObject(AdObject):
 
 
 class AdCompiledClassObject(AdObject):
-    def __init__(self, name: ASTIdentifier = None):
+    def __init__(self, name: ASTIdentifier = None, methods: Dict[str, AdClosureObject] = None,
+                 field_initializers: List[AdClosureObject] = None,
+                 initializer_count: int = None,
+                 constructor: AdClosureObject = None, super_class = None):
+        """
+        :param name: ASTIdentifier - class name
+        :param methods: map of AdClosureObject - method name points to associated AdClosureObject method
+        :param field_initializers: list of AdClosureObject - if no constructor then these all need to be run
+        :param initializer_count: int - number of fields that are initialized withing the class body
+        :param constructor: AdClosureObject - method that gets called when instantiating, if it exists
+        :param super_class: AdCompiledClassObject - inherited class
+        """
         self.object_type = AdObjectType.COMPILED_CLASS
         self.name = name
+        if methods:
+            self.methods = methods
+        else:
+            self.methods = {}
+        self.field_initializers = field_initializers
+        self.initializer_count = initializer_count
+        self.constructor = constructor
+        self.super_class = super_class
 
     def inspect(self) -> str:
         out = "<class object at memory address: " + str(hex(id(self))) + ">"
         return out
+
+
+class AdCompiledInstance(AdObject):
+    def __init__(self, table=None, klass=None, definition_num_args=None):
+        self.object_type = AdObjectType.COMPILED_INSTANCE
+        if table:
+            self.table = table
+        else:
+            self.table = {}
+        self.klass = klass
+        self.definition_num_args = definition_num_args
+
+    def inspect(self) -> str:
+        return "todo: implement this in AdCompiledInstance"
+
+
+class AdField(AdObject):
+    pass
+
+
+class AdBoundMethod(AdObject):
+    pass
