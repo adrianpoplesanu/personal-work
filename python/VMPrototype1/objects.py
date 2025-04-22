@@ -19,6 +19,7 @@ class AdObjectType:
     COMPILED_CLASS = "COMPILED_CLASS"
     INSTANCE = "INSTANCE"
     COMPILED_INSTANCE = "COMPILED_INSTANCE"
+    BOUND_METHOD = "BOUND_METHOD"
 
 
 class AdObject:
@@ -214,4 +215,10 @@ class AdField(AdObject):
 
 
 class AdBoundMethod(AdObject):
-    pass
+    def __init__(self, owner=None, bound_method=None):
+        self.object_type = AdObjectType.BOUND_METHOD
+        self.owner = owner
+        self.bound_method = bound_method
+
+    def inspect(self) -> str:
+        return "todo: implement this in AdBoundMethod"
