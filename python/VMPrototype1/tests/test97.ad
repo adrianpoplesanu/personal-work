@@ -1,0 +1,13 @@
+class Person {
+    def init() {
+        name = "aaa"
+    }
+
+    def test() {
+        println(name)
+    }
+}
+
+person = Person()
+person.init()
+person.test()

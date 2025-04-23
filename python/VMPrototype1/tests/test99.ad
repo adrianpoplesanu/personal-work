@@ -1,0 +1,19 @@
+class Person {
+    name = "aaa"
+    age = 55
+
+    def test() {
+        print("start")
+        println(name)
+        println(age)
+        print("end")
+    }
+}
+
+person = Person()
+
+println(person.name)
+println(person.age)
+println(person.name + "bbb")
+println(person.age + 11)
+person.test()
