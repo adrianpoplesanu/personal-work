@@ -7,12 +7,12 @@ from code_ad import Code
 from compilation_scope import CompilationScope
 from emitted_instruction import EmittedInstruction
 from instructions import Instructions
-from objects import AdObjectInteger, AdObject, AdString, AdCompiledFunction
+from objects import AdObjectInteger, AdObject, AdString, AdCompiledFunction, AdClassObject, AdCompiledClassObject
 from opcode_ad import OpAdd, OpSub, OpMultiply, OpDivide, OpConstant, OpTrue, OpFalse, OpPop, op_equal, op_not_equal, \
     op_greater_than, op_greater_than_equal, op_add, op_sub, op_multiply, op_divide, op_pop, op_bang, op_minus, \
     op_jump_not_truthy, OpCode, op_jump, op_null, op_set_global, op_get_global, op_constant, op_array, op_hash, \
     op_index, op_return_value, op_return, op_call, op_set_local, op_get_local, op_get_builtin, op_closure, op_get_free, \
-    op_current_closure
+    op_current_closure, op_class, op_set_method, op_get_property
 from symbol_table import new_symbol_table, new_enclosed_symbol_table, GlobalScope, Symbol, LocalScope, BuiltinScope, \
     FreeScope, FunctionScope
 
@@ -283,7 +283,83 @@ class Compiler:
             after_consequence_pos = self.current_instructions().size
             self.change_operand(jump_not_truthy_pos, after_consequence_pos)
         elif node.statement_type == StatementType.CLASS_STATEMENT:
-            print('i found a class, i need to emit the code')
+            # combin let statement cu class
+            symbol = self.symbol_table.define(node.name.value)
+
+            ad_compiled_class_object = AdCompiledClassObject(name=node.name)
+            opcode = OpConstant()
+            args = []
+            args.append(self.add_constant(ad_compiled_class_object))
+            self.emit(opcode, 1, args)
+
+            self.emit(op_class, 0, [])
+
+            if symbol.scope == GlobalScope:
+                self.emit(op_set_global, 1, [symbol.index])
+            else:
+                self.emit(op_set_local, 1, [symbol.index])
+            # for each method emit get global, emit op constant for method, compile(method), emit(op_set_method)
+            self.load_symbol(symbol)
+
+            for method in node.methods:
+                # aici e compile de function
+                self.enter_scope()
+
+                if method.name:
+                    self.symbol_table.define_class_name(method.name.value)
+
+                for p in method.parameters:
+                    self.symbol_table.define(p.value)
+                self.compile(method.body)
+                if self.last_instruction_is(op_pop):
+                    self.replace_last_pop_with_return()
+                if not self.last_instruction_is(op_return_value):
+                    args = []
+                    self.emit(op_return, 0, args)
+                free_symbols = self.symbol_table.free_symbols
+                num_locals = self.symbol_table.num_definitions
+                instructions = self.leave_scope()
+
+                for s in free_symbols:
+                    self.load_symbol(s)
+
+                compiled_func = AdCompiledFunction()
+                compiled_func.instructions = instructions
+                compiled_func.num_locals = num_locals
+                compiled_func.num_parameters = len(method.parameters)
+                args = []
+                args.append(self.add_constant(compiled_func))
+                args.append(len(free_symbols))
+                self.emit(op_closure, 2, args)
+
+                # i don't like this, maybe i should be using the symbol table
+                method_name_constant = AdString(method.name.value)
+                args = []
+                args.append(self.add_constant(method_name_constant))
+                self.emit(op_constant, 1, args)
+
+                # END aici e compile de function
+
+                args = []
+                self.emit(op_set_method, 0, args)
+        elif node.statement_type == StatementType.MEMBER_ACCESS:
+            symbol = self.symbol_table.resolve(node.owner.value)
+            if symbol:
+                self.load_symbol(symbol)
+
+            field = AdString(node.member) # nu cred ca asta trebuie sa fie string, trebuie sa fie AdFieldAccess
+            args = []
+            args.append(self.add_constant(field))
+            self.emit(op_constant, 1, args)
+
+            self.emit(op_get_property, 0, [])
+
+            if node.is_method:
+                #self.compile(node.func)
+                for argument in node.arguments:
+                    self.compile(argument)
+                args = [len(node.arguments)]
+                self.emit(op_call, 1, args)
         else:
             print("severe error: node type unknown " + statement_type_map[node.statement_type])
 
