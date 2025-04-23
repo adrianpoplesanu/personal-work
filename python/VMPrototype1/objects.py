@@ -3,6 +3,7 @@ from typing import List, Dict
 from ast import ASTNode, ASTIdentifier
 from hash_utils import HashKey
 from instructions import Instructions
+from symbol_table import new_symbol_table, new_enclosed_symbol_table
 
 
 class AdObjectType:
@@ -134,6 +135,9 @@ class AdBuiltinObject(AdObject):
         else:
             self.accepted_parameters_size = []
 
+    def inspect(self) -> str:
+        return "AdBuiltinObject"
+
 
 class AdClosureObject(AdObject):
     def __init__(self, fn: AdCompiledFunction = None, free: List[AdObject] = None):
@@ -169,9 +173,9 @@ class AdClassObject(AdObject):
 
 class AdCompiledClassObject(AdObject):
     def __init__(self, name: ASTIdentifier = None, methods: Dict[str, AdClosureObject] = None,
-                 field_initializers: List[AdClosureObject] = None,
+                 field_initializers: List[AdCompiledFunction] = None,
                  initializer_count: int = None,
-                 constructor: AdClosureObject = None, super_class = None):
+                 constructor: AdClosureObject = None, super_class = None, outer_symbol_table = None):
         """
         :param name: ASTIdentifier - class name
         :param methods: map of AdClosureObject - method name points to associated AdClosureObject method
@@ -186,10 +190,15 @@ class AdCompiledClassObject(AdObject):
             self.methods = methods
         else:
             self.methods = {}
-        self.field_initializers = field_initializers
+        if field_initializers:
+            self.field_initializers = field_initializers
+        else:
+            self.field_initializers = []
         self.initializer_count = initializer_count
         self.constructor = constructor
         self.super_class = super_class
+        # TODO: aici s-ar putea sa am nevoie de un symbol table, pentru field-urile si metodele din clasa
+        self.symbol_table = new_enclosed_symbol_table(outer_symbol_table) # oare e corect asa?
 
     def inspect(self) -> str:
         out = "<class object at memory address: " + str(hex(id(self))) + ">"

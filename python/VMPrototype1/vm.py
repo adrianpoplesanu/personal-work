@@ -6,7 +6,8 @@ from code_ad import read_uint16, read_uint8
 from frame import Frame, new_frame
 from hash_utils import HashKey
 from objects import AdObject, AdObjectInteger, AdBoolean, AdObjectType, AdNullObject, AdString, AdList, HashPair, \
-    AdHash, AdCompiledFunction, AdBuiltinObject, AdClosureObject
+    AdHash, AdCompiledFunction, AdBuiltinObject, AdClosureObject, AdCompiledClassObject, AdCompiledInstance, \
+    AdBoundMethod
 from opcode_ad import OpCodeByte
 from settings import PRINT_LAST_ELEMENT_ON_STACK
 
@@ -162,6 +163,49 @@ class VM:
             elif opcode == OpCodeByte.OP_CURRENT_CLOSURE:
                 current_closure = self.current_frame().cl
                 self.push(current_closure)
+            elif opcode == OpCodeByte.OP_CLASS:
+                # print('TODO: need to vm.run() for OP_CLASS')
+                # skipping vm.run() for class
+                pass
+            elif opcode == OpCodeByte.OP_SET_METHOD:
+                method_name = self.pop()
+                method_closure = self.pop()
+                klass = self.pop()
+                # TODO: add checks here
+                klass.methods[method_name.value] = method_closure
+                self.push(klass)
+            elif opcode == OpCodeByte.OP_GET_PROPERTY:
+                field_name = self.pop()
+                owner = self.pop()
+
+                # todo: asta nu e bine, field_name.value poate? table are cheie str, field_name e un AdObject, deci sigur nu e bine
+                if owner.table.get(field_name.value.value) is not None:
+                    #self.pop()
+                    self.push(owner.table[field_name.value.value])
+                if owner.klass.methods.get(field_name.value.value) is not None:
+                    method_closure = owner.klass.methods[field_name.value.value]
+                    bound_method = AdBoundMethod(owner, method_closure)
+                    self.pop()
+                    self.push(bound_method)
+            elif opcode == OpCodeByte.OP_SET_PROPERTY:
+                field = self.pop()
+                value = self.pop()
+                instance = self.pop()
+                instance.table[field.value] = value
+                self.push(value)
+            elif opcode == OpCodeByte.OP_SET_PROPERTY_SYM:
+                field = self.pop()
+                value = self.pop()
+                instance = self.pop()
+
+                #if not isinstance(instance, InstanceObject):
+                #    raise RuntimeError("Expected class instance")
+
+                #instance.fields[symbolIndex] = value
+                #push(value)
+                instance.table[field.value] = value
+                self.pop_frame()
+                self.push(instance)
             else:
                 print('severe error: vm.run() error')
 
@@ -229,11 +273,39 @@ class VM:
             self.call_closure(callee, num_args)
         elif callee.object_type == AdObjectType.BUILTIN:
             self.call_builtin(callee, num_args)
+        elif callee.object_type == AdObjectType.COMPILED_CLASS:
+            self.call_class(callee, num_args)
+        elif callee.object_type == AdObjectType.BOUND_METHOD:
+            self.call_bound_method(callee, num_args)
         else:
             print('SEVERE ERROR: calling error')
 
+    def call_class(self, cl: AdCompiledClassObject, num_args):
+        instance = AdCompiledInstance()
+        instance.klass = cl
+        instance.definition_num_args = num_args
+        for field_initializer in instance.klass.field_initializers:
+            #self.push(field_initializer)
+            #self.call_function(0)
+            closure = AdClosureObject(field_initializer)
+            self.push(closure)
+            #self.call_initializer(closure, 0)
+            self.execute_call(0)
+            #self.pop_frame()
+        self.push(instance)
+
+    def call_bound_method(self, cl: AdBoundMethod, num_args):
+        if num_args != cl.bound_method.fn.num_parameters:
+            print("ERROR: wrong number of arguments expecting: {0} got: {1}".format(cl.fn.num_parameters, num_args))
+
+        frame = new_frame(cl.bound_method, self.sp - num_args)
+        self.push_frame(frame)
+        self.sp = frame.base_pointer + cl.bound_method.fn.num_locals
+
+        return None
+
     def call_closure(self, cl: AdClosureObject, num_args):
-        #fn: AdCompiledFunction = self.stack[self.sp - 1 - int(num_args)]
+        # fn: AdCompiledFunction = self.stack[self.sp - 1 - int(num_args)]
 
         if num_args != cl.fn.num_parameters:
             print("ERROR: wrong number of arguments expecting: {0} got: {1}".format(cl.fn.num_parameters, num_args))

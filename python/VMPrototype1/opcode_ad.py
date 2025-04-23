@@ -41,6 +41,8 @@ class OpCodeByte:
     OP_GET_METHOD = 36
     OP_INVOKE = 37
 
+    OP_SET_PROPERTY_SYM = 38
+
 
 class OpCode:
     byte_code = None
@@ -178,6 +180,18 @@ class OpSetMethod(OpClosure):
     byte_code = OpCodeByte.OP_SET_METHOD
 
 
+class OpGetProperty(OpCode):
+    byte_code = OpCodeByte.OP_GET_PROPERTY
+
+
+class OpSetProperty(OpCode):
+    byte_code = OpCodeByte.OP_SET_PROPERTY
+
+
+class OpSetPropertySym(OpCode):
+    byte_code = OpCodeByte.OP_SET_PROPERTY_SYM
+
+
 op_constant = OpConstant()
 op_add = OpAdd()
 op_sub = OpSub()
@@ -211,3 +225,6 @@ op_get_free = OpGetFree()
 op_current_closure = OpCurrentClosure()
 op_class = OpClass()
 op_set_method = OpSetMethod()
+op_get_property = OpGetProperty()
+op_set_property = OpSetProperty()
+op_set_property_sym = OpSetPropertySym()

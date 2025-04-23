@@ -424,6 +424,9 @@ class ASTAssignStatement(ASTNode):
         return self.token.literal
 
     def __str__(self):
+        if self.name.statement_type == StatementType.MEMBER_ACCESS:
+            return 'AssignStatement [' + str(self.token.literal) + '] <' + str(self.name) + '>: ' + (
+                str(self.value) if self.value else '')
         return 'AssignStatement [' + str(self.token.literal) + '] <' + str(self.name.value) +'>: ' + (str(self.value) if self.value else '')
 
 

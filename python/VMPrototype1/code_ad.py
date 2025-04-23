@@ -85,7 +85,8 @@ class Code:
             OpCodeByte.OP_CLASS: Definition("OpClass", 0, []),
             OpCodeByte.OP_SET_METHOD: Definition("OpSetMethod", 0, []),
             OpCodeByte.OP_GET_PROPERTY: Definition("OpGetProperty", 0, []),
-            OpCodeByte.OP_SET_PROPERTY: Definition("OpSetProperty", 0, [])
+            OpCodeByte.OP_SET_PROPERTY: Definition("OpSetProperty", 0, []), # cand o sa pasez symbol index, atunci va trebui size=1 si [2]
+            OpCodeByte.OP_SET_PROPERTY_SYM: Definition("OpSetPropertySym", 0, []) # ??? maibe 1 [2]???
         }
 
     def make(self, opcode: OpCode, n, args) -> Tuple[int, list]:

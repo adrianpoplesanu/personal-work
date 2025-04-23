@@ -12,7 +12,7 @@ from opcode_ad import OpAdd, OpSub, OpMultiply, OpDivide, OpConstant, OpTrue, Op
     op_greater_than, op_greater_than_equal, op_add, op_sub, op_multiply, op_divide, op_pop, op_bang, op_minus, \
     op_jump_not_truthy, OpCode, op_jump, op_null, op_set_global, op_get_global, op_constant, op_array, op_hash, \
     op_index, op_return_value, op_return, op_call, op_set_local, op_get_local, op_get_builtin, op_closure, op_get_free, \
-    op_current_closure, op_class, op_set_method, op_get_property
+    op_current_closure, op_class, op_set_method, op_get_property, op_set_property, op_set_property_sym
 from symbol_table import new_symbol_table, new_enclosed_symbol_table, GlobalScope, Symbol, LocalScope, BuiltinScope, \
     FreeScope, FunctionScope
 
@@ -257,12 +257,26 @@ class Compiler:
             else:
                 self.emit(op_set_local, 1, [symbol.index])
         elif node.statement_type == StatementType.ASSIGN_STATEMENT:
-            symbol = self.symbol_table.define(node.name.value)
-            self.compile(node.value)
-            if symbol.scope == GlobalScope:
-                self.emit(op_set_global, 1, [symbol.index])
+            if node.name.statement_type == StatementType.MEMBER_ACCESS:
+                #pass
+                self.compile(node.name.owner)
+                symbol = self.symbol_table.resolve(node.name.member.token_literal())
+                self.compile(node.value)
+
+                field = AdString(node.name.member.token_literal())  # nu cred ca asta trebuie sa fie string, trebuie sa fie AdFieldAccess
+                args = []
+                args.append(self.add_constant(field))
+                self.emit(op_constant, 1, args)
+
+                # self.emit(op_set_property, 1, [symbol.index]) # cand o sa reusesc sa mapez corect symbol-ul
+                self.emit(op_set_property, 0, [])
             else:
-                self.emit(op_set_local, 1, [symbol.index])
+                symbol = self.symbol_table.define(node.name.value)
+                self.compile(node.value)
+                if symbol.scope == GlobalScope:
+                    self.emit(op_set_global, 1, [symbol.index])
+                else:
+                    self.emit(op_set_local, 1, [symbol.index])
         elif node.statement_type == StatementType.WHILE_EXPRESSION:
             start_pos = self.current_instructions().size
             self.compile(node.condition)
@@ -286,7 +300,7 @@ class Compiler:
             # combin let statement cu class
             symbol = self.symbol_table.define(node.name.value)
 
-            ad_compiled_class_object = AdCompiledClassObject(name=node.name)
+            ad_compiled_class_object = AdCompiledClassObject(name=node.name, outer_symbol_table=self.symbol_table)
             opcode = OpConstant()
             args = []
             args.append(self.add_constant(ad_compiled_class_object))
@@ -301,12 +315,38 @@ class Compiler:
             # for each method emit get global, emit op constant for method, compile(method), emit(op_set_method)
             self.load_symbol(symbol)
 
+            previous_symbol_table = self.symbol_table
+            self.symbol_table = ad_compiled_class_object.symbol_table
+
+            for attribute in node.attributes:
+                # symbol = ad_compiled_class_object.symbol_table.define(attribute.expression.name.value)
+                self.enter_scope()
+
+                self.compile(attribute.expression.value)
+
+                field = AdString(attribute.expression.name.value)  # nu cred ca asta trebuie sa fie string, trebuie sa fie AdFieldAccess
+                args = []
+                args.append(self.add_constant(field))
+                self.emit(op_constant, 1, args)
+
+                #self.emit(op_set_property_sym, 1, [symbol.index]) # maybe like this?
+                self.emit(op_set_property_sym, 0, [])
+                #self.emit(op_return, 0, [])
+
+                instructions = self.leave_scope()
+                compiled_func = AdCompiledFunction()
+                compiled_func.instructions = instructions
+                compiled_func.num_locals = 0
+                compiled_func.num_parameters = 0
+
+                ad_compiled_class_object.field_initializers.append(compiled_func)
+
             for method in node.methods:
                 # aici e compile de function
                 self.enter_scope()
 
                 if method.name:
-                    self.symbol_table.define_class_name(method.name.value)
+                    self.symbol_table.define_class_name(method.name.value) # oare am nevoie de asta pentru recursivitate?
 
                 for p in method.parameters:
                     self.symbol_table.define(p.value)
@@ -342,6 +382,7 @@ class Compiler:
 
                 args = []
                 self.emit(op_set_method, 0, args)
+            self.symbol_table = previous_symbol_table
         elif node.statement_type == StatementType.MEMBER_ACCESS:
             symbol = self.symbol_table.resolve(node.owner.value)
             if symbol:

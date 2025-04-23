@@ -11,6 +11,7 @@ LocalScope = SymbolScope("LOCAL")
 BuiltinScope = SymbolScope("BUILTIN")
 FreeScope = SymbolScope("FREE")
 FunctionScope = SymbolScope("FUNCTION")
+ClassScope = SymbolScope("CLASS")
 
 
 class Symbol:
@@ -73,6 +74,12 @@ class SymbolTable:
         symbol = Symbol(name=name, index=0, scope=FunctionScope)
         self.store[name] = symbol
         return symbol
+
+    def define_class_name(self, name: str) -> Symbol:
+        symbol = Symbol(name=name, index=0, scope=ClassScope)
+        self.store[name] = symbol
+        return symbol
+
 
 def new_symbol_table():
     store: Dict[str, Symbol] = {}
