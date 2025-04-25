@@ -320,6 +320,8 @@ class Compiler:
 
             for attribute in node.attributes:
                 # symbol = ad_compiled_class_object.symbol_table.define(attribute.expression.name.value)
+                attribute_symbol = self.symbol_table.define(attribute.expression.name.value)
+
                 self.enter_scope()
 
                 self.compile(attribute.expression.value)
@@ -330,7 +332,7 @@ class Compiler:
                 self.emit(op_constant, 1, args)
 
                 #self.emit(op_set_property_sym, 1, [symbol.index]) # maybe like this?
-                self.emit(op_set_property_sym, 0, [])
+                self.emit(op_set_property_sym, 1, [attribute_symbol.index])
                 #self.emit(op_return, 0, [])
 
                 instructions = self.leave_scope()
