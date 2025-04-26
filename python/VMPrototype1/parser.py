@@ -3,7 +3,7 @@ from typing import Optional
 from ast import ASTProgram, ASTNode, ASTExpressionStatement, ASTInteger, ASTInfixExpression, ASTPrefixExpression, \
     ASTBoolean, ASTIfExpression, ASTBlockStatement, ASTNullExpression, ASTLetStatement, ASTIdentifier, ASTString, \
     ASTList, ASTIndexExpression, ASTHash, ASTFunctionLiteral, ASTCallExpression, StatementType, ASTReturnStatement, \
-    ASTClassStatement, ASTDefStatement, ASTAssignStatement, ASTWhileExpression, ASTMemberAccess
+    ASTClassStatement, ASTDefStatement, ASTAssignStatement, ASTWhileExpression, ASTMemberAccess, ASTThisExpression
 from lexer import Lexer
 from precedence_type import PrecedenceType, precedences
 from token_type import TokenType
@@ -36,7 +36,8 @@ class Parser:
             TokenType.FUNC: self.parse_func_literal,
             TokenType.DEF: self.parse_def_statement,
             TokenType.CLASS: self.parse_class_statement,
-            TokenType.WHILE: self.parse_while_expression
+            TokenType.WHILE: self.parse_while_expression,
+            TokenType.THIS: self.parse_this_expression
         }
 
         self.infix_parse_fns = {
@@ -194,6 +195,10 @@ class Parser:
     def parse_null_expression(self) -> ASTNode:
         expr = ASTNullExpression(token=self.current_token)
         self.next_token()
+        return expr
+
+    def parse_this_expression(self):
+        expr = ASTThisExpression(token=self.current_token)
         return expr
 
     def parse_string_literal(self) -> ASTNode:

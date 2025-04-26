@@ -363,6 +363,23 @@ class ASTNullExpression(ASTNode):
         return "ASTNullExpression"
 
 
+class ASTThisExpression(ASTNode):
+    statement_type = StatementType.THIS_EXPRESSION
+
+    def __init__(self, token=None):
+        """
+        @param token: the node's token
+        """
+        super().__init__()
+        self.token = token
+
+    def token_literal(self):
+        return self.token.literal
+
+    def __str__(self):
+        return 'Token: ' + str(self.token)
+
+
 class ASTMemberAccess(ASTNode):
     statement_type = StatementType.MEMBER_ACCESS
 
