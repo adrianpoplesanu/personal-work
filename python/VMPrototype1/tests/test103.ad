@@ -1,0 +1,8 @@
+class Person {
+    def greet(message) {
+        println(message)
+    }
+}
+
+person = Person()
+person.greet("vedus")

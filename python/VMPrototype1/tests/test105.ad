@@ -1,0 +1,10 @@
+class Person {
+    name = "dex"
+
+    def test() {
+        println(this.name)
+    }
+}
+
+person = Person()
+person.test()
