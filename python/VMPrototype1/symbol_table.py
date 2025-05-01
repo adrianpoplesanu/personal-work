@@ -15,17 +15,19 @@ ClassScope = SymbolScope("CLASS")
 
 
 class Symbol:
-    def __init__(self, name: str = None, scope: SymbolScope = None, index: int = None):
+    def __init__(self, name: str = None, scope: SymbolScope = None, index: int = None, class_index: int = None):
         self.name = name
         self.scope = scope
         self.index = index
+        self.class_index = class_index
 
 
 class SymbolTable:
-    def __init__(self, store: Dict[str, Symbol] = None, free_symbols: List[Symbol] = None, num_definitions: int = None):
+    def __init__(self, store: Dict[str, Symbol] = None, free_symbols: List[Symbol] = None, class_symbols: List[str] = None, num_definitions: int = None):
         self.outer: Optional[SymbolTable] = None
         self.store = store
         self.free_symbols = free_symbols
+        self.class_symbols = class_symbols
         self.num_definitions = num_definitions
 
     def define(self, name: str):
@@ -49,8 +51,10 @@ class SymbolTable:
             obj = self.outer.resolve(name)
             if obj and (obj.scope == GlobalScope or obj.scope == BuiltinScope):
                 return obj
+            if obj and (obj.scope == ClassScope):
+                return obj
             if obj is None:
-                print("ERROR: variable: {0} not found in scope".format(name))
+                #print("ERROR: variable: {0} not found in scope".format(name))
                 # TODO: is this correct? please check this
                 return None
             free = self.define_free(obj)
@@ -75,16 +79,36 @@ class SymbolTable:
         self.store[name] = symbol
         return symbol
 
-    def define_class_name(self, name: str) -> Symbol:
-        symbol = Symbol(name=name, index=0, scope=ClassScope)
+    def define_class_name(self, name: str, class_index: int) -> Symbol:
+        if name == "this":
+            if len(self.class_symbols) == 0:
+                self.class_symbols.append(name)
+            symbol = Symbol(name=name, index=0, scope=ClassScope)
+            symbol.class_index = class_index
+            self.store[name] = symbol
+            return symbol
+
+        self.class_symbols.append(name)
+        symbol = Symbol(name=name, index=len(self.class_symbols) - 1, scope=ClassScope)
+        symbol.class_index = class_index
         self.store[name] = symbol
         return symbol
+
+    def define_this(self, name: str, class_index) -> Symbol:
+        if len(self.class_symbols) == 0:
+            self.class_symbols.append(name)
+        symbol = Symbol(name=name, index=0, scope=ClassScope)
+        symbol.class_index = class_index
+        self.store[name] = symbol
+        return symbol
+
 
 
 def new_symbol_table():
     store: Dict[str, Symbol] = {}
     free = []
-    return SymbolTable(store=store, free_symbols=free, num_definitions=0)
+    class_symbols = []
+    return SymbolTable(store=store, free_symbols=free, class_symbols=class_symbols, num_definitions=0)
 
 
 def new_enclosed_symbol_table(outer: SymbolTable) -> SymbolTable:

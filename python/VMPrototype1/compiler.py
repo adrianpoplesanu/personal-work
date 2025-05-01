@@ -12,9 +12,10 @@ from opcode_ad import OpAdd, OpSub, OpMultiply, OpDivide, OpConstant, OpTrue, Op
     op_greater_than, op_greater_than_equal, op_add, op_sub, op_multiply, op_divide, op_pop, op_bang, op_minus, \
     op_jump_not_truthy, OpCode, op_jump, op_null, op_set_global, op_get_global, op_constant, op_array, op_hash, \
     op_index, op_return_value, op_return, op_call, op_set_local, op_get_local, op_get_builtin, op_closure, op_get_free, \
-    op_current_closure, op_class, op_set_method, op_get_property, op_set_property, op_set_property_sym
+    op_current_closure, op_class, op_set_method, op_get_property, op_set_property, op_set_property_sym, \
+    op_get_property_sym
 from symbol_table import new_symbol_table, new_enclosed_symbol_table, GlobalScope, Symbol, LocalScope, BuiltinScope, \
-    FreeScope, FunctionScope
+    FreeScope, FunctionScope, ClassScope
 
 
 class Compiler:
@@ -150,7 +151,14 @@ class Compiler:
         elif node.statement_type == StatementType.IDENTIFIER:
             symbol = self.symbol_table.resolve(node.value)
             if symbol:
-                self.load_symbol(symbol)
+                self.load_symbol(symbol, node.value)
+            else:
+                # aici trebuie sa incerc sa handle un get value cu this implicit
+                field = AdString(node.value)  # nu cred ca asta trebuie sa fie string, trebuie sa fie AdFieldAccess
+                args = []
+                args.append(self.add_constant(field))
+                self.emit(op_constant, 1, args)
+                self.emit(op_get_property_sym, 1, [0])
         elif node.statement_type == StatementType.STRING_LITERAL:
             string_obj = AdString(node.value)
             args = []
@@ -269,7 +277,10 @@ class Compiler:
                 self.emit(op_constant, 1, args)
 
                 # self.emit(op_set_property, 1, [symbol.index]) # cand o sa reusesc sa mapez corect symbol-ul
+                #if symbol:
                 self.emit(op_set_property, 0, [])
+                #else:
+                #    self.emit(op_set_property_implicit_this, 0, [])
             else:
                 symbol = self.symbol_table.define(node.name.value)
                 self.compile(node.value)
@@ -317,10 +328,14 @@ class Compiler:
 
             previous_symbol_table = self.symbol_table
             self.symbol_table = ad_compiled_class_object.symbol_table
+            #this_symbol = self.symbol_table.define("this")
+            #self.symbol_table.define_class_name("this", symbol.class_index)
 
             for attribute in node.attributes:
                 # symbol = ad_compiled_class_object.symbol_table.define(attribute.expression.name.value)
                 attribute_symbol = self.symbol_table.define(attribute.expression.name.value)
+                # previous_symbol_table.define_class_name(attribute.expression.name.value)
+                self.symbol_table.define_class_name(attribute.expression.name.value, symbol.class_index)
 
                 self.enter_scope()
 
@@ -347,8 +362,14 @@ class Compiler:
                 # aici e compile de function
                 self.enter_scope()
 
+                this_symbol = self.symbol_table.define("this")
+                self.symbol_table.define_class_name("this", symbol.class_index)
+
+                #self.symbol_table.define("this")
+                #self.symbol_table.define_class_name("this", symbol.class_index)
+
                 if method.name:
-                    self.symbol_table.define_class_name(method.name.value) # oare am nevoie de asta pentru recursivitate?
+                    self.symbol_table.define_class_name(method.name.value, symbol.class_index) # oare am nevoie de asta pentru recursivitate?
 
                 for p in method.parameters:
                     self.symbol_table.define(p.value)
@@ -361,6 +382,9 @@ class Compiler:
                 free_symbols = self.symbol_table.free_symbols
                 num_locals = self.symbol_table.num_definitions
                 instructions = self.leave_scope()
+
+                #self.symbol_table.define_this("this", symbol.index)
+                #self.symbol_table.define_class_name("this", symbol.class_index)
 
                 for s in free_symbols:
                     self.load_symbol(s)
@@ -386,9 +410,16 @@ class Compiler:
                 self.emit(op_set_method, 0, args)
             self.symbol_table = previous_symbol_table
         elif node.statement_type == StatementType.MEMBER_ACCESS:
-            symbol = self.symbol_table.resolve(node.owner.value)
-            if symbol:
-                self.load_symbol(symbol)
+            symbol = None
+            if node.owner.statement_type == StatementType.THIS_EXPRESSION:
+                symbol = self.symbol_table.resolve("this")
+                symbol.scope = LocalScope
+                if symbol:
+                    self.load_symbol(symbol)
+            else:
+                symbol = self.symbol_table.resolve(node.owner.value)
+                if symbol:
+                    self.load_symbol(symbol)
 
             field = AdString(node.member) # nu cred ca asta trebuie sa fie string, trebuie sa fie AdFieldAccess
             args = []
@@ -403,6 +434,13 @@ class Compiler:
                     self.compile(argument)
                 args = [len(node.arguments)]
                 self.emit(op_call, 1, args)
+        elif node.statement_type == StatementType.THIS_EXPRESSION:
+            symbol = self.symbol_table.resolve("this")
+            symbol.scope = LocalScope
+            if symbol:
+                self.load_symbol(symbol)
+            #self.load_symbol(symbol)
+            # print('i need to handle this this')
         else:
             print("severe error: node type unknown " + statement_type_map[node.statement_type])
 
@@ -497,7 +535,7 @@ class Compiler:
 
         return instructions
 
-    def load_symbol(self, symbol: Symbol):
+    def load_symbol(self, symbol: Symbol, field_name: str = None):
         if symbol.scope == GlobalScope:
             self.emit(op_get_global, 1, [symbol.index])
         elif symbol.scope == LocalScope:
@@ -506,5 +544,11 @@ class Compiler:
             self.emit(op_get_builtin, 1, [symbol.index])
         elif symbol.scope == FreeScope:
             self.emit(op_get_free, 1, [symbol.index])
+        elif symbol.scope == ClassScope:
+            field = AdString(field_name)
+            args = []
+            args.append(self.add_constant(field))
+            self.emit(op_constant, 1, args)
+            self.emit(op_get_property_sym, 1, [symbol.index])
         elif symbol.scope == FunctionScope:
             self.emit(op_current_closure, 0, [])

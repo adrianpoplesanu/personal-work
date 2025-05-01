@@ -25,6 +25,7 @@ class VM:
         self.globals = [None] * 65536  # GlobalsSize
         self.frames: List[Optional[Frame]] = [None] * 1024
         self.frames_index: int = 0
+        self.current_instance = None
 
     def load(self, bytecode: Bytecode):
         main_fn = AdCompiledFunction(instructions=bytecode.instructions)
@@ -178,6 +179,10 @@ class VM:
                 field_name = self.pop()
                 owner = self.pop()
 
+                if owner.object_type == AdObjectType.BOUND_METHOD:
+                    owner = owner.owner
+                    self.push(owner)
+
                 # todo: asta nu e bine, field_name.value poate? table are cheie str, field_name e un AdObject, deci sigur nu e bine
                 if owner.table.get(field_name.value.value) is not None:
                     #self.pop()
@@ -185,18 +190,22 @@ class VM:
                 if owner.klass.methods.get(field_name.value.value) is not None:
                     method_closure = owner.klass.methods[field_name.value.value]
                     bound_method = AdBoundMethod(owner, method_closure)
-                    self.pop()
+                    #self.pop()
                     self.push(bound_method)
             elif opcode == OpCodeByte.OP_SET_PROPERTY:
                 field = self.pop()
                 value = self.pop()
                 instance = self.pop()
+                self.current_instance = instance
                 instance.table[field.value] = value
                 self.push(value)
             elif opcode == OpCodeByte.OP_SET_PROPERTY_SYM:
+                property_index: int = read_uint16(ins, ip + 1)
+                self.current_frame().ip += 2
                 field = self.pop()
                 value = self.pop()
                 instance = self.pop()
+                self.current_instance = instance
 
                 #if not isinstance(instance, InstanceObject):
                 #    raise RuntimeError("Expected class instance")
@@ -206,6 +215,14 @@ class VM:
                 instance.table[field.value] = value
                 self.pop_frame()
                 self.push(instance)
+            elif opcode == OpCodeByte.OP_GET_PROPERTY_SYM:
+                property_index: int = read_uint16(ins, ip + 1)
+                self.current_frame().ip += 2
+                field = self.pop()
+                if self.current_instance.table[field.value]:
+                    self.push(instance.table[field.value])
+                #b = self.pop()
+                print('property_index: ' + str(property_index))
             else:
                 print('severe error: vm.run() error')
 
@@ -235,6 +252,8 @@ class VM:
             raise Exception("stack error: index out of bounds")
         self.stack[self.sp] = obj
         self.sp += 1
+        if obj.object_type == AdObjectType.INSTANCE:
+            self.current_instance = obj
         # self.stack.append(obj)
 
     def pop(self) -> AdObject:
@@ -297,6 +316,19 @@ class VM:
     def call_bound_method(self, cl: AdBoundMethod, num_args):
         if num_args != cl.bound_method.fn.num_parameters:
             print("ERROR: wrong number of arguments expecting: {0} got: {1}".format(cl.fn.num_parameters, num_args))
+
+        old_sp = self.sp
+        #self.push(cl.owner)
+        total = num_args
+        popped = []
+        while total > 0:
+            popped.append(self.pop())
+            total -= 1
+        self.push(cl.owner)
+        while popped:
+            self.push(popped.pop())
+
+        self.sp = old_sp
 
         frame = new_frame(cl.bound_method, self.sp - num_args)
         self.push_frame(frame)
