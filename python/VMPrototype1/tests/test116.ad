@@ -1,0 +1,13 @@
+class Worker {
+    def test() {
+        class Person {
+            name = "bedus"
+        }
+
+        person = Person()
+        println(person.name)
+    }
+}
+
+worker = Worker()
+worker.test()

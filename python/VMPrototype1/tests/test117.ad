@@ -1,0 +1,10 @@
+class Worker {
+    name = "default-worker"
+
+    def constructor() {
+        this.name = "worker-5"
+    }
+}
+
+worker = Worker()
+println(worker.name)
