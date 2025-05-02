@@ -205,6 +205,11 @@ class VM:
                 field = self.pop()
                 value = self.pop()
                 instance = self.pop()
+                if instance.object_type == AdObjectType.NULL:
+                    self.pop_frame()
+                    self.push(self.current_instance)
+                    continue
+                    #instance = self.current_instance
                 self.current_instance = instance
 
                 #if not isinstance(instance, InstanceObject):
@@ -302,15 +307,32 @@ class VM:
     def call_class(self, cl: AdCompiledClassObject, num_args):
         instance = AdCompiledInstance()
         instance.klass = cl
+        #instance.klass.symbol_table.define_class_name("this", 0)
         instance.definition_num_args = num_args
+        need_to_remove = False
         for field_initializer in instance.klass.field_initializers:
             #self.push(field_initializer)
             #self.call_function(0)
             closure = AdClosureObject(field_initializer)
             self.push(closure)
+            need_to_remove = True
             #self.call_initializer(closure, 0)
             self.execute_call(0)
             #self.pop_frame()
+
+        if cl.methods.get("constructor"):
+            constructor = cl.methods["constructor"]
+            #print(constructor)
+            bound_constructor = AdBoundMethod(owner=instance, bound_method=constructor)
+            #self.push(bound_constructor)
+            #self.execute_call(constructor.fn.num_parameters)
+            #closure = AdClosureObject(constructor.fn)
+            #self.push(bound_constructor)
+            #old_sp = self.sp
+            if need_to_remove:
+                self.pop()
+            self.call_bound_method(bound_constructor, num_args)
+            #self.stack[self.sp - 1] = instance
         self.push(instance)
 
     def call_bound_method(self, cl: AdBoundMethod, num_args):
@@ -331,6 +353,7 @@ class VM:
         self.sp = old_sp
 
         frame = new_frame(cl.bound_method, self.sp - num_args)
+        frame.bound_instance = cl.owner
         self.push_frame(frame)
         self.sp = frame.base_pointer + cl.bound_method.fn.num_locals
 

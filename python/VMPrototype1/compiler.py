@@ -330,6 +330,7 @@ class Compiler:
             self.symbol_table = ad_compiled_class_object.symbol_table
             #this_symbol = self.symbol_table.define("this")
             #self.symbol_table.define_class_name("this", symbol.class_index)
+            self.symbol_table.define_class_name("this", 0)
 
             for attribute in node.attributes:
                 # symbol = ad_compiled_class_object.symbol_table.define(attribute.expression.name.value)
