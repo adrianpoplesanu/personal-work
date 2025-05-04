@@ -25,7 +25,7 @@ class VM:
         self.globals = [None] * 65536  # GlobalsSize
         self.frames: List[Optional[Frame]] = [None] * 1024
         self.frames_index: int = 0
-        self.current_instance = None
+        #self.current_instance = None
 
     def load(self, bytecode: Bytecode):
         main_fn = AdCompiledFunction(instructions=bytecode.instructions)
@@ -141,6 +141,21 @@ class VM:
                 self.current_frame().ip += 1
                 frame = self.current_frame()
                 self.stack[frame.base_pointer + int(local_index)] = self.pop()
+                # local_index = read_uint8(ins, ip + 1)
+                # self.current_frame().ip += 1
+                # frame = self.current_frame()
+                # if (frame.bound_instance is not None
+                #         and self.sp >= 3
+                #         and self.stack[self.sp - 1] and self.stack[self.sp - 1].object_type == AdObjectType.STRING
+                #         and self.stack[self.sp - 2] and self.stack[self.sp - 2].object_type == AdObjectType.STRING
+                #         and self.stack[self.sp - 3] and self.stack[self.sp - 3].object_type == AdObjectType.COMPILED_INSTANCE):
+                #     instance = frame.bound_instance
+                #     # symbol = frame.bound_instance.klass.symbol_table.resolve('name')
+                #     value = self.pop()
+                #     field = self.pop()
+                #     instance.table[field.value] = value
+                # else:
+                #     self.stack[frame.base_pointer + int(local_index)] = self.pop()
             elif opcode == OpCodeByte.OP_GET_LOCAL:
                 local_index = read_uint8(ins, ip + 1)
                 self.current_frame().ip += 1
@@ -196,7 +211,7 @@ class VM:
                 field = self.pop()
                 value = self.pop()
                 instance = self.pop()
-                self.current_instance = instance
+                #self.current_instance = instance
                 instance.table[field.value] = value
                 self.push(value)
             elif opcode == OpCodeByte.OP_SET_PROPERTY_SYM:
@@ -206,11 +221,14 @@ class VM:
                 value = self.pop()
                 instance = self.pop()
                 if instance.object_type == AdObjectType.NULL:
+                    # instance e null doar pentru constructor - TODO: validateaza teoria asta
+                    instance = self.current_frame().bound_instance
                     self.pop_frame()
-                    self.push(self.current_instance)
+                    #self.push(self.current_instance)
+                    self.push(instance)
                     continue
                     #instance = self.current_instance
-                self.current_instance = instance
+                #self.current_instance = instance
 
                 #if not isinstance(instance, InstanceObject):
                 #    raise RuntimeError("Expected class instance")
@@ -224,8 +242,10 @@ class VM:
                 property_index: int = read_uint16(ins, ip + 1)
                 self.current_frame().ip += 2
                 field = self.pop()
-                if self.current_instance.table[field.value]:
-                    self.push(instance.table[field.value])
+                #if self.current_instance.table[field.value]:
+                #    self.push(instance.table[field.value])
+                if self.current_frame().bound_instance.table[field.value]:
+                    self.push(self.current_frame().bound_instance.table[field.value])
                 #b = self.pop()
                 print('property_index: ' + str(property_index))
             else:
@@ -257,8 +277,8 @@ class VM:
             raise Exception("stack error: index out of bounds")
         self.stack[self.sp] = obj
         self.sp += 1
-        if obj.object_type == AdObjectType.INSTANCE:
-            self.current_instance = obj
+        #if obj.object_type == AdObjectType.INSTANCE:
+        #    self.current_instance = obj
         # self.stack.append(obj)
 
     def pop(self) -> AdObject:
@@ -324,6 +344,8 @@ class VM:
             constructor = cl.methods["constructor"]
             #print(constructor)
             bound_constructor = AdBoundMethod(owner=instance, bound_method=constructor)
+            bound_constructor.owner = instance
+            self.current_frame().bound_instance = instance
             #self.push(bound_constructor)
             #self.execute_call(constructor.fn.num_parameters)
             #closure = AdClosureObject(constructor.fn)
