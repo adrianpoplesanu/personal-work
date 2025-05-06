@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>JSONP Test</title>
+</head>
+<body>
+  <h1>JSONP Test</h1>
+  <p id="output">Loading...</p>
+
+  <script>
+    // Define the callback function that the "server" will call
+    // asta e callback-ul de care serverul trebuie sa stie ca sa poata wrapa response-ul
+    function handleData(data) {
+      document.getElementById('output').textContent = 
+        `Name: ${data.name}, Age: ${data.age}`;
+    }
+
+    // Dynamically add the script tag to load the "JSONP" data
+    let script = document.createElement('script');
+    script.src = 'data.js'; // this simulates a JSONP request, exemplul din lumea reala script.src = get("localhost:8000/get_info.php?callback=handleData") ca serverul sa stie sa puna call-ul de handleData in response
+    document.body.appendChild(script);
+  </script>
+</body>
+</html>
+
