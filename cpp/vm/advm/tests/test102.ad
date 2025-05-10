@@ -1,0 +1,9 @@
+class Dog {
+    def test() {
+        name = "dex"
+        println(name)
+    }
+}
+
+dog = Dog()
+dog.test()

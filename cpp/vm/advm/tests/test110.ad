@@ -1,0 +1,13 @@
+class Worker {
+    def init() {
+        this.name = "worker-1"
+    }
+
+    def info() {
+        println(this.name)
+    }
+}
+
+worker = Worker()
+worker.init()
+worker.info()

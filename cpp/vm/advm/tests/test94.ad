@@ -2,9 +2,9 @@ class Worker {
     name = "worker-1"
 
     def test() {
-        println("worker.test()")
+        println(name)
     }
 }
 
 worker = Worker()
-println(worker.name)
+worker.test()

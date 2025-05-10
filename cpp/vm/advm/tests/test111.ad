@@ -1,0 +1,16 @@
+class Worker {
+    def info() {
+        return "executing worker-1 on port 8000"
+    }
+
+    def info2(port) {
+        return "executing worker-1 on port " + port
+    }
+}
+
+worker = Worker()
+result = worker.info()
+println(result)
+
+result2 = worker.info2("1111")
+println(result2)

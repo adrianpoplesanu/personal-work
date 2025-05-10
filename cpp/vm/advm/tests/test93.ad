@@ -1,0 +1,13 @@
+class Worker {
+    def test() {
+        println("SUCCESS: worker.test()")
+        a = 22
+        b = 33
+        println(22 + 33)
+        println(a + b + 1)
+    }
+}
+
+worker = Worker()
+worker.test()
+println(67)

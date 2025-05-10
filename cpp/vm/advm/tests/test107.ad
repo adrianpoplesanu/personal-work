@@ -1,0 +1,8 @@
+class Worker {
+    def test(message) {
+        println(message)
+    }
+}
+
+worker = Worker()
+worker.test("buna dimineata")

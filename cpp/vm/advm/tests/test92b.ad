@@ -1,0 +1,7 @@
+println("testing builtin string argument deallocation")
+i = 0
+while (i < 2) {
+    println(i)
+    i = i + 1
+}
+println("testing builtin string argument deallocation2")

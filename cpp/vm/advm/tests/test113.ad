@@ -1,0 +1,13 @@
+class A {
+    a = "aaa"
+}
+
+class B {
+    b = "bbb"
+}
+
+a = A()
+b = B()
+
+println(a.a)
+println(b.b)

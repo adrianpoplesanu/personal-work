@@ -1,0 +1,11 @@
+class Worker {
+    name = "soam"
+
+    def set() {
+        this.name = "worker-1"
+    }
+}
+
+worker = Worker()
+worker.set()
+println(worker.name)

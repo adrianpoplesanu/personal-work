@@ -1,0 +1,14 @@
+class Person {
+    name = "aaa"
+    age = 55
+}
+
+person = Person()
+println(person.name)
+println(person.age)
+
+person.name = "bbb"
+person.age = 66
+
+println(person.name)
+println(person.age)

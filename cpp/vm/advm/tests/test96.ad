@@ -1,0 +1,9 @@
+class Person {
+
+}
+
+person = Person()
+person.name = "Alice"
+println("aaa")
+println(person.name)
+println("bbb")

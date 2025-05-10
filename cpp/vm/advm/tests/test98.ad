@@ -1,0 +1,9 @@
+class Person {
+    def test() {
+        println(name)
+    }
+}
+
+person = Person()
+person.name = "aaa"
+person.test()
