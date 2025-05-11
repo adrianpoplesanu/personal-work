@@ -700,6 +700,123 @@ std::string ASTAssignStatement::toString() {
     return "todo: implement ASTAssignStatement.toString()";
 }
 
+ASTClass::ASTClass() {
+    type = AT_CLASS_STATEMENT;
+    ref_count = 0;
+}
+
+ASTClass::ASTClass(Token t) {
+    type = AT_CLASS_STATEMENT;
+    ref_count = 0;
+    token = t;
+}
+
+ASTClass::~ASTClass() {
+    // Class objects need a reference to this AST node that they will deallocate on object destruction
+    //std::cout << "deleting a class AST node " << this << "\n";
+    if (name) {
+        Ad_DECREF(name);
+        free_memory_ASTNode(name);
+    }
+    for (std::vector<ASTNode*>::iterator it = methods.begin() ; it != methods.end(); ++it) {
+        ASTNode *node = *it;
+        Ad_DECREF(node); // asta merge si e super cool
+        free_memory_ASTNode(node);
+    }
+    for (std::vector<ASTNode*>::iterator it = attributes.begin() ; it != attributes.end(); ++it) {
+        ASTNode *node = *it;
+        Ad_DECREF(node); // asta merge si e super cool
+        free_memory_ASTNode(node);
+    }
+    for (std::vector<ASTNode*>::iterator it = inheritFrom.begin() ; it != inheritFrom.end(); ++it) {
+        ASTNode *node = *it;
+        Ad_DECREF(node);
+        free_memory_ASTNode(node);
+    }
+}
+
+std::string ASTClass::inspect() {
+    return token.stringLiteral;
+}
+
+std::string ASTClass::toString() {
+    return "todo: implement ASTClass.toString()";
+}
+
+ASTMemberAccess::ASTMemberAccess() {
+    type = AT_MEMBER_ACCESS;
+    ref_count = 0;
+}
+
+ASTMemberAccess::ASTMemberAccess(Token t) {
+    type = AT_MEMBER_ACCESS;
+    ref_count = 0;
+    token = t;
+}
+
+ASTMemberAccess::ASTMemberAccess(Token t, ASTNode* o, ASTNode* m, std::vector<ASTNode*> a) {
+    type = AT_MEMBER_ACCESS;
+    ref_count = 0;
+    token = t;
+    owner = o;
+    member = m;
+    arguments = a;
+}
+
+ASTMemberAccess::ASTMemberAccess(Token t, ASTNode* o, ASTNode* m, std::vector<ASTNode*> a, std::vector<ASTNode*> k_a) {
+    type = AT_MEMBER_ACCESS;
+    ref_count = 0;
+    token = t;
+    owner = o;
+    member = m;
+    arguments = a;
+    kw_args = k_a;
+}
+
+ASTMemberAccess::~ASTMemberAccess() {
+    if (owner) {
+        Ad_DECREF(owner);
+        free_memory_ASTNode(owner);
+    }
+    if (member) {
+        Ad_DECREF(member);
+        free_memory_ASTNode(member);
+    }
+    for (std::vector<ASTNode*>::iterator it = arguments.begin() ; it != arguments.end(); ++it) {
+        ASTNode *node = *it;
+        Ad_DECREF(node); // asta merge si e super cool
+        free_memory_ASTNode(node);
+    }
+    for (std::vector<ASTNode*>::iterator it = kw_args.begin() ; it != kw_args.end(); ++it) {
+        ASTNode *node = *it;
+        Ad_DECREF(node); // asta merge si e super cool
+        free_memory_ASTNode(node);
+    }
+}
+
+std::string ASTMemberAccess::inspect() {
+    return token.stringLiteral;
+}
+
+std::string ASTMemberAccess::toString() {
+    return "todo: implement Ad_AST_MemberAccess ToString()";
+}
+
+ASTThisExpression::ASTThisExpression() {
+    type = AT_THIS_EXPRESSION;
+    ref_count = 0;
+}
+
+ASTThisExpression::ASTThisExpression(Token t) {
+    type = AT_THIS_EXPRESSION;
+    ref_count = 0;
+    token = t;
+}
+
+ASTThisExpression::~ASTThisExpression() {
+    // nothing to do here, type and ref_count are deallocated automatically(because they are not pointers)
+}
+
 void Ad_INCREF(ASTNode* node) {
     if (node) {
         node->ref_count++;

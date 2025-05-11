@@ -461,6 +461,18 @@ void Compiler::compile(ASTNode* node) {
             emit(opCall, 1, args);
             break;
         }
+        case AT_CLASS_STATEMENT: {
+            std::cout << "todo: implement class statement\n";
+            break;
+        }
+        case AT_MEMBER_ACCESS: {
+            std::cout << "todo: implement member access\n";
+            break;
+        }
+        case AT_THIS_EXPRESSION: {
+            std::cout << "todo: implement this expression\n";
+            break;
+        }
         default: {
             std::cout << "severe error: node type unknown " << ast_type_map[node->type] << "\n";
             break;

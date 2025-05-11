@@ -28,7 +28,10 @@ enum ASTType {
     AT_INDEX_EXPRESSION,
     AT_FUNCTION_LITERAL,
     AT_CALL_EXPRESSION,
-    AT_ASSIGN_STATEMENT
+    AT_ASSIGN_STATEMENT,
+    AT_CLASS_STATEMENT,
+    AT_MEMBER_ACCESS,
+    AT_THIS_EXPRESSION
 };
 
 std::unordered_map<ASTType, std::string> ast_type_map = {
@@ -54,7 +57,10 @@ std::unordered_map<ASTType, std::string> ast_type_map = {
     {AT_INDEX_EXPRESSION, "IndexExpression"},
     {AT_FUNCTION_LITERAL, "Function"},
     {AT_CALL_EXPRESSION, "CallExpression"},
-    {AT_ASSIGN_STATEMENT, "AssignStatement"}
+    {AT_ASSIGN_STATEMENT, "AssignStatement"},
+    {AT_CLASS_STATEMENT, "ClassStatement"},
+    {AT_MEMBER_ACCESS, "MemberAccess"},
+    {AT_THIS_EXPRESSION, "ThisExpression"}
 };
 
 class ASTNode {
@@ -334,6 +340,48 @@ public:
     ~ASTAssignStatement();
     virtual std::string inspect();
     virtual std::string toString();
+};
+
+class ASTClass : public ASTNode {
+public:
+    Token token;
+    ASTNode* name;
+    std::vector<ASTNode*> methods;
+    std::vector<ASTNode*> attributes;
+    std::vector<ASTNode*> inheritFrom;
+    
+    ASTClass();
+    ASTClass(Token);
+    ~ASTClass();
+    virtual std::string inspect();
+    virtual std::string toString();
+};
+
+class ASTMemberAccess : public ASTNode {
+public:
+    Token token;
+    ASTNode* owner;
+    ASTNode* member;
+    std::vector<ASTNode*> arguments;
+    std::vector<ASTNode*> kw_args;
+    bool is_method;
+    
+    ASTMemberAccess();
+    ASTMemberAccess(Token);
+    ASTMemberAccess(Token, ASTNode*, ASTNode*, std::vector<ASTNode*>);
+    ASTMemberAccess(Token, ASTNode*, ASTNode*, std::vector<ASTNode*>, std::vector<ASTNode*>);
+    ~ASTMemberAccess();
+    virtual std::string inspect();
+    virtual std::string toString();
+};
+
+class ASTThisExpression : public ASTNode {
+public:
+    Token token;
+    
+    ASTThisExpression();
+    ASTThisExpression(Token);
+    ~ASTThisExpression();
 };
 
 class ASTNullExpression : public ASTNode {

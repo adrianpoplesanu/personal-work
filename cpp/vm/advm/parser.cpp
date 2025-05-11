@@ -21,6 +21,8 @@ Parser::Parser() {
     prefixParseFns.insert(std::make_pair(TT_DEF, &Parser::parseDefStatement));
     prefixParseFns.insert(std::make_pair(TT_WHILE, &Parser::parseWhileExpression));
 
+    prefixParseFns.insert(std::make_pair(TT_CLASS, &Parser::parseClassStatement));
+
     infixParseFns.insert(std::make_pair(TT_PLUS, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_MINUS, &Parser::parseInfixExpression));
     infixParseFns.insert(std::make_pair(TT_MULTIPLY, &Parser::parseInfixExpression));
@@ -33,6 +35,7 @@ Parser::Parser() {
     infixParseFns.insert(std::make_pair(TT_LBRACKET, &Parser::parseIndexExpression));
     infixParseFns.insert(std::make_pair(TT_LPAREN, &Parser::parseCallExpression));
     infixParseFns.insert(std::make_pair(TT_ASSIGN, &Parser::parseAssignExpression));
+    infixParseFns.insert(std::make_pair(TT_DOT, &Parser::parseMemberAccess));
 }
 
 PrecedenceType Parser::currentPrecedence() {
@@ -512,6 +515,61 @@ ASTNode* Parser::parseIndexExpression(ASTNode* left) {
     }
 
     return expr;
+}
+
+ASTNode* Parser::parseClassStatement() {
+    ASTClass* expr = new ASTClass(currentToken);
+    nextToken();
+    ASTNode* name = parseIdent();
+    expr->name = name;
+    nextToken();
+    if (currentTokenIs(TT_COLON)) {
+        nextToken();
+        while (!currentTokenIs(TT_LBRACE)) {
+            ASTNode* parent = parseIdent();
+            expr->inheritFrom.push_back(parent);
+            nextToken();
+        }
+    }
+    while(!currentTokenIs(TT_RBRACE)) {
+        if (currentTokenIs(TT_DEF)) {
+            ASTNode* stmt = parseDefStatement();
+            Ad_INCREF(stmt);
+            expr->methods.push_back(stmt);
+        }
+        if (currentTokenIs(TT_FUN)) {
+            ASTNode* stmt = parseDefStatement();
+            Ad_INCREF(stmt);
+            expr->methods.push_back(stmt);
+        }
+        if (currentTokenIs(TT_IDENT)) {
+            ASTNode* stmt = parseExpressionStatement();
+            Ad_INCREF(stmt);
+            expr->attributes.push_back(stmt);
+        }
+        nextToken();
+    }
+    return expr;
+}
+
+ASTNode* Parser::parseMemberAccess(ASTNode* left) {
+    ASTMemberAccess* stmt = new ASTMemberAccess(currentToken);
+    nextToken();
+    ASTIdentifier* right = new ASTIdentifier(currentToken, currentToken.stringLiteral);
+    stmt->owner = left;
+    stmt->member = right;
+    if (peekTokenIs(TT_LPAREN)) {
+        nextToken();
+        std::pair<std::vector<ASTNode*>, std::vector<ASTNode*>> res = parseCallArguments();
+        stmt->arguments = res.first;
+        stmt->kw_args = res.second;
+        stmt->is_method = true;
+    } else {
+        stmt->arguments.clear();
+        stmt->kw_args.clear();
+        stmt->is_method = false;
+    }
+    return stmt;
 }
 
 ASTNode* Parser::parsePrefixExpression() {

@@ -99,6 +99,8 @@ public:
     ASTNode* parseDefStatement();
     ASTNode* parseAssignExpression(ASTNode*);
     ASTNode* parseWhileExpression();
+    ASTNode* parseClassStatement();
+    ASTNode* parseMemberAccess(ASTNode*);
 };
 
 #endif

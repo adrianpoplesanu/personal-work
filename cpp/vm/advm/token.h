@@ -18,6 +18,7 @@ enum TokenType {
     TT_RETURN,
     TT_FUNCTION,
     TT_DEF,
+    TT_FUN,
     TT_IF,
     TT_ELSE,
     TT_LPAREN,
@@ -58,7 +59,8 @@ enum TokenType {
     TT_MINUSMINUS,
     TT_PLUS_EQ,
     TT_MINUS_EQ,
-    TT_FUNC
+    TT_FUNC,
+    TT_CLASS,
 };
 
 std::map<TokenType, std::string> tokenTypeConverter = {
@@ -98,7 +100,10 @@ std::map<TokenType, std::string> tokenTypeConverter = {
     {TT_AND, "AND"},
     {TT_OR, "OR"},
     {TT_NULL, "NULL"},
-    {TT_FUNC, "FUNCTION_LITERAL"}
+    {TT_FUNC, "FUNCTION_LITERAL"},
+    {TT_CLASS, "CLASS"},
+    {TT_DOT, "DOT"},
+    {TT_COLON, "COLON"}
 };
 
 std::map<std::string, TokenType> keywords = {
@@ -114,7 +119,8 @@ std::map<std::string, TokenType> keywords = {
     {"while", TT_WHILE},
     {"for", TT_FOR},
     {"and", TT_AND},
-    {"null", TT_NULL}
+    {"null", TT_NULL},
+    {"class", TT_CLASS}
 };
 
 class Token {

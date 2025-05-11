@@ -152,6 +152,10 @@ Token Lexer::nextToken() {
             token.stringLiteral = ';';
             token.type = TT_SEMICOLON;
             break;
+        case '.':
+            token.stringLiteral = '.';
+            token.type = TT_DOT;
+            break;
         case '"':
             token.stringLiteral = readDoubleQuotesString();
             token.type = TT_STRING;
