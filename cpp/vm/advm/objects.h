@@ -7,6 +7,7 @@
 #include "hashpair.h"
 #include "instructions.h"
 #include "gc.h"
+#include "ast.h"
 
 enum ObjectType {
     OT_INT,
@@ -25,7 +26,8 @@ enum ObjectType {
     OT_FILE,
     OT_SOCKET,
     OT_COMPILED_FUNCTION,
-    OT_CLOSURE
+    OT_CLOSURE,
+    OT_COMPILED_CLASS
 };
 
 std::unordered_map<ObjectType, std::string> object_type_map = {
@@ -45,7 +47,8 @@ std::unordered_map<ObjectType, std::string> object_type_map = {
     {OT_FILE, "FILE"},
     {OT_SOCKET, "SOCKET"},
     {OT_COMPILED_FUNCTION, "COMPILED_FUNCTION"},
-    {OT_BUILTIN, "BUILTIN"}
+    {OT_BUILTIN, "BUILTIN"},
+    {OT_COMPILED_CLASS, "COMPILED_CLASS"}
 };
 
 class AdObject {
@@ -181,6 +184,28 @@ public:
     virtual std::string hash();
     virtual AdObject* copy();
 };
+
+class AdCompiledClass : public AdObject {
+    public:
+        ASTNode* class_ast_node;
+        ASTNode* name;
+        std::vector<ASTNode*> methods;
+        std::vector<ASTNode*> attributes;
+        std::vector<ASTNode*> inheritFrom;
+        bool attemptASTNodesDeletion;
+    
+        AdCompiledClass();
+        AdCompiledClass(std::vector<ASTNode*>, std::vector<ASTNode*>);
+        AdCompiledClass(ASTNode*, std::vector<ASTNode*>, std::vector<ASTNode*>);
+        AdCompiledClass(ASTNode*, std::vector<ASTNode*>, std::vector<ASTNode*>, ASTNode*);
+        ~AdCompiledClass();
+        virtual std::string inspect();
+        virtual std::string toString();
+        virtual std::string hash();
+        virtual AdObject* copy();
+        //virtual Ad_Object* copy(GarbageCollector*); // TODO: implement this
+    };
+    
 
 void Ad_INCREF(AdObject*);
 void Ad_DECREF(AdObject*);

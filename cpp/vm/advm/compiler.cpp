@@ -462,7 +462,8 @@ void Compiler::compile(ASTNode* node) {
             break;
         }
         case AT_CLASS_STATEMENT: {
-            std::cout << "todo: implement class statement\n";
+            ASTClass* classExpression = (ASTClass*) node;
+            Symbol symbol = symbolTable->define(((ASTIdentifier*)classExpression->name)->value);
             break;
         }
         case AT_MEMBER_ACCESS: {

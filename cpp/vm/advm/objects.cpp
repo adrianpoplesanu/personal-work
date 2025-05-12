@@ -1,4 +1,5 @@
 #include "objects.h"
+#include <sstream>
 
 std::string AdObject::inspect() {
     return "unimplemented in subclass";
@@ -299,6 +300,121 @@ std::string AdClosureObject::hash() {
 
 AdObject* AdClosureObject::copy() {
     return nullptr;
+}
+
+AdCompiledClass::AdCompiledClass() {
+    type = OT_COMPILED_CLASS;
+    ref_count = 0;
+    marked = false;
+    attemptASTNodesDeletion = false;
+}
+
+AdCompiledClass::AdCompiledClass(std::vector<ASTNode*> m, std::vector<ASTNode*> a) {
+    type = OT_COMPILED_CLASS;
+    ref_count = 0;
+    marked = false;
+    attemptASTNodesDeletion = false;
+    methods = m;
+    for (std::vector<ASTNode*>::iterator it = methods.begin() ; it != methods.end(); ++it) {
+        ASTNode *node = *it;
+        Ad_INCREF(node);
+    }
+    attributes = a;
+    for (std::vector<ASTNode*>::iterator it = attributes.begin() ; it != attributes.end(); ++it) {
+        ASTNode *node = *it;
+        Ad_INCREF(node);
+    }
+}
+
+AdCompiledClass::AdCompiledClass(ASTNode* n, std::vector<ASTNode*> m, std::vector<ASTNode*> a) {
+    type = OT_COMPILED_CLASS;
+    ref_count = 0;
+    marked = false;
+    attemptASTNodesDeletion = false;
+    name = n;
+    Ad_INCREF(name);
+    methods = m;
+    for (std::vector<ASTNode*>::iterator it = methods.begin(); it != methods.end(); ++it) {
+        ASTNode *node = *it;
+        Ad_INCREF(node);
+    }
+    attributes = a;
+    for (std::vector<ASTNode*>::iterator it = attributes.begin(); it != attributes.end(); ++it) {
+        ASTNode *node = *it;
+        Ad_INCREF(node);
+    }
+}
+
+AdCompiledClass::AdCompiledClass(ASTNode* n, std::vector<ASTNode*> m, std::vector<ASTNode*>a, ASTNode* c) {
+    type = OT_COMPILED_CLASS;
+    ref_count = 0;
+    marked = false;
+    attemptASTNodesDeletion = false;
+    class_ast_node = c;
+    Ad_INCREF(class_ast_node);
+
+    name = n;
+    Ad_INCREF(name);
+    methods = m;
+    for (std::vector<ASTNode*>::iterator it = methods.begin(); it != methods.end(); ++it) {
+        ASTNode *node = *it;
+        Ad_INCREF(node);
+    }
+    attributes = a;
+    for (std::vector<ASTNode*>::iterator it = attributes.begin(); it != attributes.end(); ++it) {
+        ASTNode *node = *it;
+        Ad_INCREF(node);
+    }
+}
+
+AdCompiledClass::~AdCompiledClass() {
+    //std::cout << "deleting class" << ((Ad_AST_Identifier*)name)->value << "\n";
+    //std::cout << is_console_run << "\n";
+    //attemptASTNodesDeletion = true;
+    Ad_DECREF(class_ast_node);
+    if (attemptASTNodesDeletion) {
+        free_memory_ASTNode(class_ast_node);
+    }
+
+    // if i deallocate the ast node that references all the methods and attributes ast, do i really need to try and manually free them again?
+    for (std::vector<ASTNode*>::iterator it = methods.begin() ; it != methods.end(); ++it) {
+        ASTNode *node = *it;
+        Ad_DECREF(node); // asta merge si e super cool
+        if (attemptASTNodesDeletion) {
+            free_memory_ASTNode(node);
+        }
+    }
+    for (std::vector<ASTNode*>::iterator it = attributes.begin() ; it != attributes.end(); ++it) {
+        ASTNode *node = *it;
+        Ad_DECREF(node); // asta merge si e super cool
+        if (attemptASTNodesDeletion) {
+            free_memory_ASTNode(node);
+        }
+    }
+}
+
+std::string AdCompiledClass::inspect() {
+    std::stringstream ss;
+    ss << std::hex << this;
+    return "<class object at memory address: " + ss.str() + ">";
+}
+
+std::string AdCompiledClass::toString() {
+    return "ClassObject";
+    //std::cout << methods.size();
+    //std::cout << attributes.size();
+}
+
+AdObject* AdCompiledClass::copy() {
+    AdCompiledClass *obj = new AdCompiledClass();
+    obj->attributes = attributes;
+    obj->methods = methods;
+    // TODO: copy all fields of an AdCompiledClass
+    return obj;
+}
+
+std::string AdCompiledClass::hash() {
+    return object_type_map[type] + inspect();
 }
 
 void AD_INCREF(AdObject* obj) {
