@@ -8,6 +8,7 @@
 #include "instructions.h"
 #include "gc.h"
 #include "ast.h"
+#include "symbol_table.h"
 
 enum ObjectType {
     OT_INT,
@@ -193,11 +194,13 @@ class AdCompiledClass : public AdObject {
         std::vector<ASTNode*> attributes;
         std::vector<ASTNode*> inheritFrom;
         bool attemptASTNodesDeletion;
+        SymbolTable *outerSymbolTable;
     
         AdCompiledClass();
         AdCompiledClass(std::vector<ASTNode*>, std::vector<ASTNode*>);
         AdCompiledClass(ASTNode*, std::vector<ASTNode*>, std::vector<ASTNode*>);
         AdCompiledClass(ASTNode*, std::vector<ASTNode*>, std::vector<ASTNode*>, ASTNode*);
+        AdCompiledClass(ASTNode*, SymbolTable*);
         ~AdCompiledClass();
         virtual std::string inspect();
         virtual std::string toString();

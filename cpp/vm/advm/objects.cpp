@@ -367,6 +367,16 @@ AdCompiledClass::AdCompiledClass(ASTNode* n, std::vector<ASTNode*> m, std::vecto
     }
 }
 
+AdCompiledClass::AdCompiledClass(ASTNode* n, SymbolTable* st) {
+    type = OT_COMPILED_CLASS;
+    ref_count = 0;
+    marked = false;
+    attemptASTNodesDeletion = false;
+
+    name = n;
+    outerSymbolTable = st;
+}
+
 AdCompiledClass::~AdCompiledClass() {
     //std::cout << "deleting class" << ((Ad_AST_Identifier*)name)->value << "\n";
     //std::cout << is_console_run << "\n";

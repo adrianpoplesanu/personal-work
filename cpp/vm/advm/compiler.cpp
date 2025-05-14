@@ -464,6 +464,8 @@ void Compiler::compile(ASTNode* node) {
         case AT_CLASS_STATEMENT: {
             ASTClass* classExpression = (ASTClass*) node;
             Symbol symbol = symbolTable->define(((ASTIdentifier*)classExpression->name)->value);
+
+            AdCompiledClass* compiledClass = new AdCompiledClass(classExpression->name, symbolTable);
             break;
         }
         case AT_MEMBER_ACCESS: {
