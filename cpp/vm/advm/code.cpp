@@ -33,6 +33,7 @@ Code::Code() {
     definitionsMap.insert(std::make_pair(OP_CLOSURE, new Definition("OpClosure", 2, new int[2] {2, 1})));
     definitionsMap.insert(std::make_pair(OP_GET_FREE, new Definition("OpGetFree", 1, new int[1] {1})));
     definitionsMap.insert(std::make_pair(OP_CURRENT_CLOSURE, new Definition("OpCurrentClosure", 0, new int)));
+    definitionsMap.insert(std::make_pair(OP_CLASS, new Definition("OpClass", 0, new int)));
 }
 
 Code::~Code() {

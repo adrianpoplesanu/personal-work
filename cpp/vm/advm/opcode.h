@@ -32,7 +32,20 @@ enum OpCodeByte {
     OP_GET_BUILTIN,
     OP_CLOSURE,
     OP_GET_FREE,
-    OP_CURRENT_CLOSURE
+    OP_CURRENT_CLOSURE,
+
+    OP_CLASS,
+    OP_SET_METHOD,
+    OP_INSTANTIATE,
+
+    OP_GET_PROPERTY,
+    OP_SET_PROPERTY,
+
+    OP_GET_METHOD,
+    OP_INVOKE,
+
+    OP_SET_PROPERTY_SYM,
+    OP_GET_PROPERTY_SYM
 };
 
 class OpCode {
@@ -254,6 +267,13 @@ class OpCurrentClosure : public OpCode {
 public:
     OpCurrentClosure() {
         byteCode = OP_CURRENT_CLOSURE;
+    }
+};
+
+class OpClass : public OpCode {
+public:
+    OpClass() {
+        byteCode = OP_CLASS;
     }
 };
 

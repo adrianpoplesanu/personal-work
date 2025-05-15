@@ -466,6 +466,14 @@ void Compiler::compile(ASTNode* node) {
             Symbol symbol = symbolTable->define(((ASTIdentifier*)classExpression->name)->value);
 
             AdCompiledClass* compiledClass = new AdCompiledClass(classExpression->name, symbolTable);
+            OpConstant opConstant = OpConstant();
+            std::vector<int> args;
+            args.push_back(addConstant(compiledClass));
+            emit(opConstant, 1, args);
+
+            OpClass opClass = OpClass();
+            std::vector<int> args2;
+            emit(opClass, 0, args2);
             break;
         }
         case AT_MEMBER_ACCESS: {
