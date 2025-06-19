@@ -31,6 +31,11 @@ static char peek() {
     return *scanner.current;
 }
 
+static char peekNext() {
+    if (isAtEnd()) return '\0';
+    return scanner.current[1];
+}
+
 static bool match(char expected) {
     if (isAtEnd()) return false;
     if (*scanner.current != expected) return false;
@@ -69,10 +74,27 @@ static void skipWhitespace() {
                 scanner.line++;
                 advance();
                 break;
+            case '/':
+                if (peekNext() == '/') {
+                    while (peek() != '\n' && !isAtEnd()) advance();
+                } else {
+                    return;
+                }
+                break;
             default:
                 return;
         }
     }
+}
+
+static Token string() {
+    while (peek() != '"' && !isAtEnd()) {
+        if (peek() == '\n') scanner.line++;
+        advance();
+    }
+    if (isAtEnd()) return errorToken("Unterminated string.");
+    advance();
+    return makeToken(TOKEN_STRING);
 }
 
 Token scanToken() {
@@ -99,6 +121,7 @@ Token scanToken() {
         case '=': return makeToken(match('=') ? TOKEN_EQUAL_EQUAL : TOKEN_EQUAL);
         case '<': return makeToken(match('=') ? TOKEN_LESS_EQUAL : TOKEN_LESS);
         case '>': return makeToken(match('=') ? TOKEN_GREATER_EQUAL : TOKEN_GREATER);
+        case '"': return string();
     }
 
     return errorToken("Unexpected character.");
