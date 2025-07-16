@@ -16,6 +16,7 @@ from opcode_ad import OpAdd, OpSub, OpMultiply, OpDivide, OpConstant, OpTrue, Op
     op_get_property_sym
 from symbol_table import new_symbol_table, new_enclosed_symbol_table, GlobalScope, Symbol, LocalScope, BuiltinScope, \
     FreeScope, FunctionScope, ClassScope
+from utils import disassemble_instructions
 
 
 class Compiler:
@@ -528,6 +529,10 @@ class Compiler:
 
     def leave_scope(self):
         instructions = self.current_instructions()
+
+        print(instructions.bytes)
+        disassembled = disassemble_instructions(instructions)
+        print(disassembled)
 
         self.scopes = self.scopes[:len(self.scopes) - 1]
         self.scope_index -= 1

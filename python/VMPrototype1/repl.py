@@ -17,6 +17,7 @@ class Repl:
         bytecode = self.compiler.get_bytecode()
         self.compiler.code.instructions = bytecode.instructions
         self.compiler.code.instructions.size = len(bytecode.instructions.bytes)
+        print(bytecode.instructions.bytes)
         print(self.compiler.code.to_string(), end='')
 
         self.vm.load(bytecode)
