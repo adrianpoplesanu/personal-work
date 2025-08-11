@@ -66,7 +66,17 @@ int readlines(char *lineptr[], int maxlines) {
 }
 
 int main(int argc, char *argv[]) {
-    printf("running...\n");
+    int nlines;
+    if ((nlines = readlines(lineptr, MAXLINES)) >= 0) {
+        printf("successfully read %d lines\n", nlines);
+        int i = 0;
+        while (i < nlines) {
+            printf("%s\n", lineptr[i++]);
+        }
+    } else {
+        printf("error: input too big\n");
+        return 1;
+    }
     return 0;
 }
 
