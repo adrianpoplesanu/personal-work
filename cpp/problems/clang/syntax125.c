@@ -66,6 +66,39 @@ int readlines(char *lineptr[], int maxlines) {
 }
 
 int main(int argc, char *argv[]) {
+    int c, except = 0, number = 0, found = 0;
+    while (--argc > 0 && (*++argv)[0] == '-') {
+        while ((c = *++argv[0])) {
+            switch(c) {
+                case 'x':
+                    except = 1;
+                    break;
+                //case 'n':
+                //    number = 1;
+                //    break;
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    printf("[ LOG ] c = %d\n", c - '0');
+                    number = number * 10 + c - '0';
+                    break;
+                default:
+                    printf("usage: illegal option %c\n", c);
+                    argc = 0;
+                    found = -1;
+                    break;
+            }
+        }
+    }
+    printf("[ LOG ] except=%d number=%d found=%d\n", except, number, found);
+
     int nlines;
     if ((nlines = readlines(lineptr, MAXLINES)) >= 0) {
         printf("successfully read %d lines\n", nlines);
