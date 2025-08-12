@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
     int nlines;
     if ((nlines = readlines(lineptr, MAXLINES)) >= 0) {
         printf("successfully read %d lines\n", nlines);
-        int i = 0;
+        int i = nlines - number >= 0 ? nlines-number : 0;
         while (i < nlines) {
             printf("%s\n", lineptr[i++]);
         }
