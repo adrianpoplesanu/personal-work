@@ -1,19 +1,17 @@
 // COMPILE:     gcc syntax125.c
-// USAGE:       cat input_syntax125.txt | ./a.out -xn pattern location
+// USAGE:       cat input_syntax125.txt | ./a.out -10
 // BOOKMARK:    pg 106
 // DESCRIPTION: ex 5-13
 
 #include <stdio.h>
 #include <string.h>
 
-#define MAXLEN 1000
+#define MAXLEN 		1000
 #define MAXLINES	5000
 char *lineptr[MAXLINES];
 
 int readlines(char *lineptr[], int nlines);
 
-void qsort(void *lineptr[], int left, int right,
-           int (*comp)(void *, void *));
 int numcmp(char *, char *);
 
 #define ALLOCSIZE   10000 /* size of available space */
