@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define MAXLEN 		1000
 #define MAXLINES	5000
@@ -13,8 +14,8 @@ int nlines;
 
 int readlines(char *lineptr[], int nlines);
 
-void qsort(void *lineptr[], int left, int right,
-           int (*comp)(void *, void *));
+void my_qsort(void *lineptr[], int left, int right,
+              int (*comp)(void *, void *));
 int numcmp(char *, char *);
 
 #define ALLOCSIZE   10000 /* size of available space */
@@ -73,6 +74,15 @@ int my_strcmp(char *s, char *t) {
     //printf("[ LOG ] result %d\n", result);
     if (result < 0) return -1;
     if (result > 0) return 1;
+    return 0;
+}
+
+int my_numcmp(char *s, char *t) {
+    double v1, v2;
+    v1 = atof(s);
+    v2 = atof(t);
+    if (v1 < v2) return -1;
+    if (v1 > v2) return 1;
     return 0;
 }
 
