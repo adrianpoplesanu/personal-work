@@ -112,17 +112,17 @@ int pivot(int left, int mid, int right) {
     return last;
 }
 
-void my_qsort(int left, int right) {
+void my_qsort(void *lineptr[], int left, int right, int (*comp)(void *, void *)) {
     if (left < right) {
         int mid = (left + right) / 2;
         int p = pivot(left, mid, right);
-        my_qsort(left, p - 1);
-        my_qsort(p + 1, right);
+        my_qsort(lineptr, left, p - 1, comp);
+        my_qsort(lineptr, p + 1, right, comp);
     }
 }
 
 void sort_lines() {
-    my_qsort(0, nlines - 1);
+    my_qsort(lineptr, 0, nlines - 1, (int (*)(void*,void*)) my_strcmp);
 }
 
 int main(int argc, char *argv[]) {
@@ -145,7 +145,7 @@ int main(int argc, char *argv[]) {
 
     if ((nlines = readlines(lineptr, MAXLINES)) >= 0) {
         printf("[ LOG ] successfully read %d lines\n", nlines);
-        my_qsort(0, nlines - 1);
+        my_qsort(lineptr, 0, nlines - 1, (int (*)(void*,void*)) my_strcmp);
         print_lines();
         /*int i = 0;
         while (i < nlines) {
