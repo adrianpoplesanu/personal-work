@@ -2,6 +2,11 @@ package syntax_fun
 
 class ResiliencyFeatureDsl {
     var name = "resiliency-name"
+
+    fun also2(block: (ResiliencyFeatureDsl) -> Unit): ResiliencyFeatureDsl {
+        block(this)
+        return this
+    }
 }
 
 fun resiliency(name: String, dsl: ResiliencyFeatureDsl.() -> Unit): ResiliencyFeatureDsl {
@@ -9,7 +14,7 @@ fun resiliency(name: String, dsl: ResiliencyFeatureDsl.() -> Unit): ResiliencyFe
 }
 
 fun resiliency(dsl: ResiliencyFeatureDsl.() -> Unit) {
-    ResiliencyFeatureDsl().also(dsl)
+    ResiliencyFeatureDsl().also2(dsl)
 }
 
 fun main() {
@@ -19,4 +24,11 @@ fun main() {
     }
     println(resiliencyFeatureDsl)
     println(resiliencyFeatureDsl.name)
+
+    val resiliencyFeatureDsl2 = resiliency("ala bala portocala") {
+        name = "resiliency-also2"
+    }
+
+    println(resiliencyFeatureDsl2)
+    println((resiliencyFeatureDsl2 as ResiliencyFeatureDsl).name)
 }
