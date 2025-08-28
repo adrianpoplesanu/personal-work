@@ -1,4 +1,4 @@
-package ro.adrianus.ReactiveResilieceTest
+package ro.adrianus
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
