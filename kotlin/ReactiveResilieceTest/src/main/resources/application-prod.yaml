@@ -1,0 +1,13 @@
+resilience4j:
+  circuitbreaker:
+    instances:
+      webClientCircuitBreaker:
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+  retry:
+    instances:
+      webClientRetry:
+        maxAttempts: 3
+        waitDuration: 500ms

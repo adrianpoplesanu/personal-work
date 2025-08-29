@@ -14,8 +14,8 @@ class AdrianusService(private val adrianusWebClient: WebClient,
                       retryRegistry: RetryRegistry
 ) {
     private val logger = LoggerFactory.getLogger(AdrianusService::class.java)
-    private val circuitBreaker = circuitBreakerRegistry.circuitBreaker("webClientCircuitBreaker")
-    private val retry = retryRegistry.retry("webClientRetry")
+    private val circuitBreaker = circuitBreakerRegistry.circuitBreaker("adrianusWebClientCircuitBreaker")
+    private val retry = retryRegistry.retry("adrianusWebClientRetry")
 
     fun fetchUrl(url: String): Mono<String> {
         return adrianusWebClient
