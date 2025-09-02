@@ -3,14 +3,6 @@ package ro.adrianus.rssreader2
 import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -18,8 +10,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
 import org.w3c.dom.Element
 import org.w3c.dom.Node
-import ro.adrianus.rssreader2.ui.theme.RssReader2Theme
-import java.net.URL
 import javax.xml.parsers.DocumentBuilderFactory
 
 class MainActivity : ComponentActivity() {
@@ -49,9 +39,19 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-    override fun onResume() {
-        super.onResume()
-        //Thread.sleep(5000)
+    private fun asyncFetchHeadlines(feed: String, dispatcher: CoroutineDispatcher) = GlobalScope.async(dispatcher) {
+        val builder = factory.newDocumentBuilder()
+        val xml = builder.parse(feed)
+        val news = xml.getElementsByTagName("channel").item(0)
+
+        (0 until news.childNodes.length)
+            .map { news.childNodes.item(it) }
+            .filter { Node.ELEMENT_NODE == it.nodeType }
+            .map { it as Element }
+            .filter { "item" == it.tagName }
+            .map {
+                it.getElementsByTagName("title").item(0).textContent
+            }
     }
 
     private fun fetchRssHeadlines(): List<String> {
