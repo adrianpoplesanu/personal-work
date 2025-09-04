@@ -49,10 +49,20 @@ class MainActivity : ComponentActivity() {
             .filter { !it.isCancelled }
             .flatMap { it.getCompleted() }
 
+        val failed = requests
+            .filter { it.isCancelled }
+            .size
+
         val newsCount = findViewById<TextView>(R.id.newsCount)
+        val warnings = findViewById<TextView>(R.id.warnings)
+        val obtained = requests.size - failed
 
         runOnUiThread {
-            newsCount.text = "Found ${headlines.size} News in ${requests.size} feeds"
+            newsCount.text = "Found ${headlines.size} News in $obtained feeds"
+
+            if (failed > 0) {
+                warnings.text = "Failed to fetch $failed feeds"
+            }
         }
     }
 
