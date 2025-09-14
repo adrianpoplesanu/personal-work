@@ -9,7 +9,13 @@ typedef enum {
     VAL_NUMBER
 } ValueType;
 
-typedef double Value;
+typedef struct {
+    ValueType  type;
+    union {
+        bool boolean;
+        double number;
+    } as;
+} Value;
 
 typedef struct {
     int count;
