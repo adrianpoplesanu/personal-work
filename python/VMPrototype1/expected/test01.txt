@@ -1,0 +1,8 @@
+ASTProgram
+ASTExpressionStatement\[ASTInfixExpression \[ASTInteger\[1\] <\+> ASTInteger\[2\]\]\]
+\[0, 0, 0, 0, 0, 1, 1, 5\]
+0000 OpConstant 0
+0003 OpConstant 1
+0006 OpAdd
+0007 OpPop
+3
