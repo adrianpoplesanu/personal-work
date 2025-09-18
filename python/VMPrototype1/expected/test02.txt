@@ -1,0 +1,18 @@
+ASTProgram
+ASTExpressionStatement\[ASTInfixExpression \[ASTInfixExpression \[ASTInfixExpression \[ASTInteger\[1\] <\+> ASTInfixExpression \[ASTInteger\[2\] <\*> ASTInteger\[3\]\]\] <\+> ASTInfixExpression \[ASTInteger\[4\] <\*> ASTInteger\[5\]\]\] <\+> ASTInfixExpression \[ASTInteger\[6\] <\*> ASTInteger\[7\]\]\]\]
+\[0, 0, 0, 0, 0, 1, 0, 0, 2, 3, 1, 0, 0, 3, 0, 0, 4, 3, 1, 0, 0, 5, 0, 0, 6, 3, 1, 5\]
+0000 OpConstant 0
+0003 OpConstant 1
+0006 OpConstant 2
+0009 OpMultiply
+0010 OpAdd
+0011 OpConstant 3
+0014 OpConstant 4
+0017 OpMultiply
+0018 OpAdd
+0019 OpConstant 5
+0022 OpConstant 6
+0025 OpMultiply
+0026 OpAdd
+0027 OpPop
+69

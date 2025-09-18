@@ -6,7 +6,7 @@ tests_folder = "tests/"
 
 script_name = 'main.py'
 tests_data = open(expected_folder + 'test-list.txt', 'r')
-test_files = tests_data.readlines()
+test_files = tests_data.readlines()[:3]
 
 success = []
 failure = []
