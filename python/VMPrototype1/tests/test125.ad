@@ -1,0 +1,14 @@
+class Dog {
+    def set2() {
+        println("aaa")
+        age = 16
+        println(age)
+        c = 55
+        println(c)
+        println(11+23)
+        println("bbb")
+    }
+}
+
+dog = Dog()
+dog.set2()
