@@ -43,6 +43,7 @@ class OpCodeByte:
 
     OP_SET_PROPERTY_SYM = 38
     OP_GET_PROPERTY_SYM = 39
+    OP_PATCH_PROPERTY_SYM = 40
 
 
 class OpCode:
@@ -197,6 +198,10 @@ class OpGetPropertySym(OpCode):
     byte_code = OpCodeByte.OP_GET_PROPERTY_SYM
 
 
+class OpPatchPropertySym(OpCode):
+    byte_code = OpCodeByte.OP_PATCH_PROPERTY_SYM
+
+
 op_constant = OpConstant()
 op_add = OpAdd()
 op_sub = OpSub()
@@ -234,3 +239,4 @@ op_get_property = OpGetProperty()
 op_set_property = OpSetProperty()
 op_get_property_sym = OpGetPropertySym()
 op_set_property_sym = OpSetPropertySym()
+op_patch_property_sym = OpPatchPropertySym()
