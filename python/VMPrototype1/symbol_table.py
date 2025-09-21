@@ -30,7 +30,7 @@ class SymbolTable:
         self.class_symbols = class_symbols
         self.num_definitions = num_definitions
 
-    def define(self, name: str):
+    def define(self, name: str, is_class_scope: bool = False):
         # TODO: am adaugat if-ul asta ca sa nu generez simboluri noi pentru acelasi identificator
         # ca sa pot sa fac i = 5 i = i + 1, a doua atribuire creeaza un simbol nou cu index 1, si i + 1 nu stii ce e
         if name in self.store:
@@ -40,7 +40,10 @@ class SymbolTable:
         if self.outer is None:
             symbol.scope = GlobalScope
         else:
-            symbol.scope = LocalScope
+            if is_class_scope:
+                symbol.scope = ClassScope
+            else:
+                symbol.scope = LocalScope
         self.store[name] = symbol
         self.num_definitions += 1
         return symbol

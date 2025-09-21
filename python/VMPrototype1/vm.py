@@ -238,6 +238,37 @@ class VM:
                 instance.table[field.value] = value
                 self.pop_frame()
                 self.push(instance)
+            elif opcode == OpCodeByte.OP_PATCH_PROPERTY_SYM:
+                # TODO IMPORTANT: daca nu exista deja variabila in instanta atunci ar trebui sa se execute bucata de cod de la OP_SET_LOCAL
+                property_index: int = read_uint16(ins, ip + 1)
+                self.current_frame().ip += 2
+                field = self.pop()
+                value = self.pop()
+                instance = self.pop()
+                if instance and instance.object_type == AdObjectType.NULL:
+                    # instance e null doar pentru constructor - TODO: validateaza teoria asta
+                    instance = self.current_frame().bound_instance
+                    self.pop_frame()
+                    self.push(instance)
+                    continue
+                if not instance or instance.object_type != AdObjectType.COMPILED_INSTANCE:
+                    #print("ERROR: this is a local assign")
+                    #local_index = read_uint8(ins, ip + 1)
+                    #self.current_frame().ip += 1
+                    frame = self.current_frame()
+
+                    ### 22-AUG-2025
+                    if (frame.bound_instance.table.get(field.value)):
+                        #print("trebuie sa fac ceva")
+                        frame.bound_instance.table[field.value] = value
+                    ### END 22-AUG-2025
+
+                    self.stack[frame.base_pointer + int(property_index)] = value
+                    self.push(value)
+                    continue
+                instance.table[field.value] = value
+                self.pop_frame()
+                self.push(instance)
             elif opcode == OpCodeByte.OP_GET_PROPERTY_SYM:
                 property_index: int = read_uint16(ins, ip + 1)
                 self.current_frame().ip += 2

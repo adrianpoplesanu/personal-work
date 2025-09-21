@@ -13,7 +13,7 @@ from opcode_ad import OpAdd, OpSub, OpMultiply, OpDivide, OpConstant, OpTrue, Op
     op_jump_not_truthy, OpCode, op_jump, op_null, op_set_global, op_get_global, op_constant, op_array, op_hash, \
     op_index, op_return_value, op_return, op_call, op_set_local, op_get_local, op_get_builtin, op_closure, op_get_free, \
     op_current_closure, op_class, op_set_method, op_get_property, op_set_property, op_set_property_sym, \
-    op_get_property_sym
+    op_get_property_sym, op_patch_property_sym
 from symbol_table import new_symbol_table, new_enclosed_symbol_table, GlobalScope, Symbol, LocalScope, BuiltinScope, \
     FreeScope, FunctionScope, ClassScope
 from utils import disassemble_instructions
@@ -288,7 +288,17 @@ class Compiler:
                 if symbol.scope == GlobalScope:
                     self.emit(op_set_global, 1, [symbol.index])
                 else:
-                    self.emit(op_set_local, 1, [symbol.index])
+                    #self.emit(op_set_local, 1, [symbol.index])
+                    if self.scopes[self.scope_index].compilation_type == 'class':
+                        #self.emit(op_set_local, 1, [symbol.index])
+                        field_name = AdString(node.name.value)
+                        args = []
+                        args.append(self.add_constant(field_name))
+                        self.emit(op_constant, 1, args)
+                        #self.emit(op_set_property_sym, 1, [symbol.index])
+                        self.emit(op_patch_property_sym, 1, [symbol.index])
+                    else:
+                        self.emit(op_set_local, 1, [symbol.index])
         elif node.statement_type == StatementType.WHILE_EXPRESSION:
             start_pos = self.current_instructions().size
             self.compile(node.condition)
@@ -335,11 +345,12 @@ class Compiler:
 
             for attribute in node.attributes:
                 # symbol = ad_compiled_class_object.symbol_table.define(attribute.expression.name.value)
-                attribute_symbol = self.symbol_table.define(attribute.expression.name.value)
+                attribute_symbol = self.symbol_table.define(attribute.expression.name.value, is_class_scope=True)
                 # previous_symbol_table.define_class_name(attribute.expression.name.value)
                 self.symbol_table.define_class_name(attribute.expression.name.value, symbol.class_index)
 
-                self.enter_scope()
+                #self.enter_scope()
+                self.enter_scope_class()
 
                 self.compile(attribute.expression.value)
 
@@ -362,7 +373,7 @@ class Compiler:
 
             for method in node.methods:
                 # aici e compile de function
-                self.enter_scope()
+                self.enter_scope_class()
 
                 this_symbol = self.symbol_table.define("this")
                 self.symbol_table.define_class_name("this", symbol.class_index)
@@ -523,6 +534,12 @@ class Compiler:
 
     def enter_scope(self):
         scope = CompilationScope(self.instructions, EmittedInstruction(), EmittedInstruction())
+        self.scopes.append(scope)
+        self.scope_index += 1
+        self.symbol_table = new_enclosed_symbol_table(self.symbol_table)
+
+    def enter_scope_class(self):
+        scope = CompilationScope(self.instructions, EmittedInstruction(), EmittedInstruction(), "class")
         self.scopes.append(scope)
         self.scope_index += 1
         self.symbol_table = new_enclosed_symbol_table(self.symbol_table)
