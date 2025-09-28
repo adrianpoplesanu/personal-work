@@ -1,0 +1,52 @@
+ASTProgram
+ASTExpressionStatement\[ASTInfixExpression \[ASTInteger\[1\] <\+> ASTInteger\[2\]\]\]
+ASTExpressionStatement\[ASTBoolean\[True\]\]
+ASTExpressionStatement\[ASTBoolean\[False\]\]
+ASTExpressionStatement\[ASTInfixExpression \[ASTInteger\[3\] <\+> ASTInteger\[4\]\]\]
+ASTExpressionStatement\[ASTInfixExpression \[ASTInteger\[5\] <\+> ASTInteger\[6\]\]\]
+ASTExpressionStatement\[ASTInfixExpression \[ASTInteger\[7\] <\+> ASTInteger\[8\]\]\]
+ASTExpressionStatement\[ASTInfixExpression \[ASTInteger\[2\] <\+> ASTInteger\[3\]\]\]
+ASTExpressionStatement\[ASTInfixExpression \[ASTInteger\[4\] <\+> ASTInteger\[5\]\]\]
+ASTExpressionStatement\[ASTInfixExpression \[ASTInteger\[6\] <\+> ASTInteger\[7\]\]\]
+ASTExpressionStatement\[ASTInfixExpression \[ASTInteger\[8\] <\+> ASTInteger\[9\]\]\]
+ASTExpressionStatement\[ASTBoolean\[True\]\]
+\[0, 0, 0, 0, 0, 1, 1, 5, 6, 5, 7, 5, 0, 0, 2, 0, 0, 3, 1, 5, 0, 0, 4, 0, 0, 5, 1, 5, 0, 0, 6, 0, 0, 7, 1, 5, 0, 0, 8, 0, 0, 9, 1, 5, 0, 0, 10, 0, 0, 11, 1, 5, 0, 0, 12, 0, 0, 13, 1, 5, 0, 0, 14, 0, 0, 15, 1, 5, 6, 5\]
+0000 OpConstant 0
+0003 OpConstant 1
+0006 OpAdd
+0007 OpPop
+0008 OpTrue
+0009 OpPop
+0010 OpFalse
+0011 OpPop
+0012 OpConstant 2
+0015 OpConstant 3
+0018 OpAdd
+0019 OpPop
+0020 OpConstant 4
+0023 OpConstant 5
+0026 OpAdd
+0027 OpPop
+0028 OpConstant 6
+0031 OpConstant 7
+0034 OpAdd
+0035 OpPop
+0036 OpConstant 8
+0039 OpConstant 9
+0042 OpAdd
+0043 OpPop
+0044 OpConstant 10
+0047 OpConstant 11
+0050 OpAdd
+0051 OpPop
+0052 OpConstant 12
+0055 OpConstant 13
+0058 OpAdd
+0059 OpPop
+0060 OpConstant 14
+0063 OpConstant 15
+0066 OpAdd
+0067 OpPop
+0068 OpTrue
+0069 OpPop
+true
