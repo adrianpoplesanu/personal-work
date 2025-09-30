@@ -1,0 +1,8 @@
+ASTProgram
+ASTExpressionStatement\[ASTInfixExpression \[ASTInteger\[4\] <>\=> ASTInteger\[6\]\]\]
+\[0, 0, 0, 0, 0, 1, 11, 5\]
+0000 OpConstant 0
+0003 OpConstant 1
+0006 OpGreaterThanEqual
+0007 OpPop
+false
