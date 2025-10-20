@@ -1,0 +1,58 @@
+ASTProgram
+ASTExpressionStatement\[ASTIfExpression\]
+ASTExpressionStatement\[ASTIfExpression\]
+ASTExpressionStatement\[ASTIfExpression\]
+ASTExpressionStatement\[ASTIfExpression\]
+ASTExpressionStatement\[ASTIfExpression\]
+ASTExpressionStatement\[ASTIfExpression\]
+ASTExpressionStatement\[ASTIfExpression\]
+\[6, 14, 0, 10, 0, 0, 0, 15, 0, 11, 16, 5, 6, 14, 0, 22, 0, 0, 1, 15, 0, 25, 0, 0, 2, 5, 7, 14, 0, 36, 0, 0, 3, 15, 0, 39, 0, 0, 4, 5, 0, 0, 5, 14, 0, 52, 0, 0, 6, 15, 0, 53, 16, 5, 0, 0, 7, 0, 0, 8, 10, 14, 0, 70, 0, 0, 9, 15, 0, 71, 16, 5, 0, 0, 10, 0, 0, 11, 10, 14, 0, 88, 0, 0, 12, 15, 0, 91, 0, 0, 13, 5, 0, 0, 14, 0, 0, 15, 10, 14, 0, 108, 0, 0, 16, 15, 0, 111, 0, 0, 17, 5\]
+0000 OpTrue
+0001 OpJumpNotTruthy 10
+0004 OpConstant 0
+0007 OpJump 11
+0010 OpNull
+0011 OpPop
+0012 OpTrue
+0013 OpJumpNotTruthy 22
+0016 OpConstant 1
+0019 OpJump 25
+0022 OpConstant 2
+0025 OpPop
+0026 OpFalse
+0027 OpJumpNotTruthy 36
+0030 OpConstant 3
+0033 OpJump 39
+0036 OpConstant 4
+0039 OpPop
+0040 OpConstant 5
+0043 OpJumpNotTruthy 52
+0046 OpConstant 6
+0049 OpJump 53
+0052 OpNull
+0053 OpPop
+0054 OpConstant 7
+0057 OpConstant 8
+0060 OpGreaterThan
+0061 OpJumpNotTruthy 70
+0064 OpConstant 9
+0067 OpJump 71
+0070 OpNull
+0071 OpPop
+0072 OpConstant 10
+0075 OpConstant 11
+0078 OpGreaterThan
+0079 OpJumpNotTruthy 88
+0082 OpConstant 12
+0085 OpJump 91
+0088 OpConstant 13
+0091 OpPop
+0092 OpConstant 14
+0095 OpConstant 15
+0098 OpGreaterThan
+0099 OpJumpNotTruthy 108
+0102 OpConstant 16
+0105 OpJump 111
+0108 OpConstant 17
+0111 OpPop
+20
