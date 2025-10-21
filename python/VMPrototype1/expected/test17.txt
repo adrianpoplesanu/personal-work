@@ -1,0 +1,10 @@
+ASTProgram
+ASTExpressionStatement\[ASTIfExpression\]
+\[7, 14, 0, 10, 0, 0, 0, 15, 0, 13, 0, 0, 1, 5\]
+0000 OpFalse
+0001 OpJumpNotTruthy 10
+0004 OpConstant 0
+0007 OpJump 13
+0010 OpConstant 1
+0013 OpPop
+20

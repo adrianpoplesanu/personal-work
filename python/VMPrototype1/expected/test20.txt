@@ -1,0 +1,6 @@
+ASTProgram
+ASTExpressionStatement\[ASTNullExpression\]
+\[16, 5\]
+0000 OpNull
+0001 OpPop
+null
