@@ -1,0 +1,20 @@
+ASTProgram
+ASTLetStatement<ASTIdentifier\[two\]> \[ASTInteger\[2\]\]
+ASTExpressionStatement\[None\]
+ASTLetStatement<ASTIdentifier\[five\]> \[ASTInteger\[5\]\]
+ASTExpressionStatement\[None\]
+ASTLetStatement<ASTIdentifier\[seven\]> \[ASTInfixExpression \[ASTIdentifier\[two\] <\+> ASTIdentifier\[five\]\]\]
+ASTExpressionStatement\[None\]
+ASTExpressionStatement\[ASTIdentifier\[seven\]\]
+\[0, 0, 0, 18, 0, 0, 0, 0, 1, 18, 0, 1, 17, 0, 0, 17, 0, 1, 1, 18, 0, 2, 17, 0, 2, 5\]
+0000 OpConstant 0
+0003 OpSetGlobal 0
+0006 OpConstant 1
+0009 OpSetGlobal 1
+0012 OpGetGlobal 0
+0015 OpGetGlobal 1
+0018 OpAdd
+0019 OpSetGlobal 2
+0022 OpGetGlobal 2
+0025 OpPop
+7

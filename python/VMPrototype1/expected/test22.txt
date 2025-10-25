@@ -1,0 +1,17 @@
+ASTProgram
+ASTLetStatement<ASTIdentifier\[x\]> \[ASTInteger\[33\]\]
+ASTExpressionStatement\[None\]
+ASTLetStatement<ASTIdentifier\[y\]> \[ASTInteger\[66\]\]
+ASTExpressionStatement\[None\]
+ASTLetStatement<ASTIdentifier\[z\]> \[ASTInfixExpression \[ASTIdentifier\[x\] <\+> ASTIdentifier\[y\]\]\]
+ASTExpressionStatement\[None\]
+\[0, 0, 0, 18, 0, 0, 0, 0, 1, 18, 0, 1, 17, 0, 0, 17, 0, 1, 1, 18, 0, 2\]
+0000 OpConstant 0
+0003 OpSetGlobal 0
+0006 OpConstant 1
+0009 OpSetGlobal 1
+0012 OpGetGlobal 0
+0015 OpGetGlobal 1
+0018 OpAdd
+0019 OpSetGlobal 2
+99

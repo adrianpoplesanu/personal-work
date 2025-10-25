@@ -1,0 +1,7 @@
+ASTProgram
+ASTExpressionStatement\[ASTPrefixExpression <!> \[ASTNullExpression\]\]
+\[16, 12, 5\]
+0000 OpNull
+0001 OpBang
+0002 OpPop
+true

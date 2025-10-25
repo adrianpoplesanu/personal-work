@@ -1,0 +1,11 @@
+ASTProgram
+ASTLetStatement<ASTIdentifier\[one\]> \[ASTInteger\[1\]\]
+ASTExpressionStatement\[None\]
+ASTLetStatement<ASTIdentifier\[two\]> \[ASTInteger\[2\]\]
+ASTExpressionStatement\[None\]
+\[0, 0, 0, 18, 0, 0, 0, 0, 1, 18, 0, 1\]
+0000 OpConstant 0
+0003 OpSetGlobal 0
+0006 OpConstant 1
+0009 OpSetGlobal 1
+2

@@ -1,0 +1,15 @@
+ASTProgram
+ASTExpressionStatement\[\[ASTInfixExpression \[ASTInteger\[1\] <\+> ASTInteger\[2\]\],ASTInfixExpression \[ASTInteger\[3\] <\-> ASTInteger\[4\]\],ASTInfixExpression \[ASTInteger\[5\] <\*> ASTInteger\[6\]\]\]\]
+\[0, 0, 0, 0, 0, 1, 1, 0, 0, 2, 0, 0, 3, 2, 0, 0, 4, 0, 0, 5, 3, 19, 0, 3, 5\]
+0000 OpConstant 0
+0003 OpConstant 1
+0006 OpAdd
+0007 OpConstant 2
+0010 OpConstant 3
+0013 OpSub
+0014 OpConstant 4
+0017 OpConstant 5
+0020 OpMultiply
+0021 OpArray 3
+0024 OpPop
+\[3, -1, 30\]
