@@ -1,0 +1,6 @@
+ASTProgram
+ASTExpressionStatement\[\[\]\]
+\[19, 0, 0, 5\]
+0000 OpArray 0
+0003 OpPop
+\[\]

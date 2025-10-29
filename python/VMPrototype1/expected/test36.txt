@@ -1,0 +1,12 @@
+ASTProgram
+ASTExpressionStatement\[ASTIndexExpression<ASTHashLiteral\[<ASTInteger\[1\]: ASTInteger\[2\]>\]>\[ASTInfixExpression \[ASTInteger\[2\] <\-> ASTInteger\[1\]\]\]\]
+\[0, 0, 0, 0, 0, 1, 20, 0, 2, 0, 0, 2, 0, 0, 3, 2, 21, 5\]
+0000 OpConstant 0
+0003 OpConstant 1
+0006 OpHash 2
+0009 OpConstant 2
+0012 OpConstant 3
+0015 OpSub
+0016 OpIndex
+0017 OpPop
+2

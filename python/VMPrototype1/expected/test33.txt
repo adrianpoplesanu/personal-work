@@ -1,0 +1,12 @@
+ASTProgram
+ASTExpressionStatement\[ASTHashLiteral\[<ASTInteger\[1\]: ASTInteger\[2\]><ASTInteger\[3\]: ASTInteger\[4\]><ASTInteger\[5\]: ASTInteger\[6\]>\]\]
+\[0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 5, 20, 0, 6, 5\]
+0000 OpConstant 0
+0003 OpConstant 1
+0006 OpConstant 2
+0009 OpConstant 3
+0012 OpConstant 4
+0015 OpConstant 5
+0018 OpHash 6
+0021 OpPop
+{1: 2, 3: 4, 5: 6}
