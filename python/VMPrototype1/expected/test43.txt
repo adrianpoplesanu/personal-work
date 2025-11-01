@@ -1,0 +1,11 @@
+ASTProgram
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+\[0, 0, 0, 23\]
+0000 OpConstant 0
+0003 OpReturnValue
+
+\[28, 0, 1, 0, 22, 0, 5\]
+0000 OpClosure 1 0
+0004 OpCall 0
+0006 OpPop
+24

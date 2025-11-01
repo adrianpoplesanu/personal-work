@@ -1,0 +1,12 @@
+ASTProgram
+ASTExpressionStatement\[ASTFunctionLiteral\]
+\[0, 0, 0, 5, 0, 0, 1, 23\]
+0000 OpConstant 0
+0003 OpPop
+0004 OpConstant 1
+0007 OpReturnValue
+
+\[28, 0, 2, 0, 5\]
+0000 OpClosure 2 0
+0004 OpPop
+todo: implement AdClosureObject\.inspect\(\)
