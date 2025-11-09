@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "ro.adrianus.rssreader2"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "ro.adrianus.rssreader2"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -50,7 +50,6 @@ android {
 }
 
 dependencies {
-
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
     implementation("androidx.activity:activity-compose:1.7.0")
@@ -59,10 +58,12 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    implementation("com.android.support.constraint:constraint-layout:1.1.3")
+    //implementation("com.android.support.constraint:constraint-layout:1.1.3")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.0")
     //implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:0.23.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:0.23.3")
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

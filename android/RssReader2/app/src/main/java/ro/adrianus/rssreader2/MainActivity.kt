@@ -12,18 +12,21 @@ import kotlinx.coroutines.newFixedThreadPoolContext
 import kotlinx.coroutines.newSingleThreadContext
 import org.w3c.dom.Element
 import org.w3c.dom.Node
+import ro.adrianus.rssreader2.model.Article
+import ro.adrianus.rssreader2.model.Feed
 import javax.xml.parsers.DocumentBuilderFactory
 
 class MainActivity : ComponentActivity() {
-    private val defDsp = newSingleThreadContext("ServiceCall")
+    //private val defDsp = newSingleThreadContext("ServiceCall")
     private val factory = DocumentBuilderFactory.newInstance()
     private val dispatcher = newFixedThreadPoolContext(2, "IO")
 
-    val feeds = listOf(
-        "https://www.npr.org/rss/rss.php?id=1001",
-        "http://rss.cnn.com/rss/cnn_topstories.rss",
-        "https://feeds.foxnews.com/foxnews/politics?format=xml",
-        "htt://adrianus.ro"
+    private val feeds = listOf(
+        Feed("npr", "https://www.npr.org/rss/rss.php?id=1001"),
+        Feed("cnn", "http://rss.cnn.com/rss/cnn_topstories.rss"),
+        //Feed("fox", "https://feeds.foxnews.com/foxnews/politics?format=xml"),
+        Feed("fox", "https://moxie.foxnews.com/google-publisher/politics.xml?format=xml"),
+        Feed("inv", "htt://adrianus.ro")
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,17 +38,17 @@ class MainActivity : ComponentActivity() {
 
 
     private fun asyncLoadNews() = GlobalScope.launch {
-        val requests = mutableListOf<Deferred<List<String>>>()
+        val requests = mutableListOf<Deferred<List<Article>>>()
 
         feeds.mapTo(requests) {
-            asyncFetchHeadlines(it, dispatcher)
+            asyncFetchArticles(it, dispatcher)
         }
 
         requests.forEach {
             it.join()
         }
 
-        val headlines = requests
+        val articles = requests
             .filter { !it.isCancelled }
             .flatMap { it.getCompleted() }
 
@@ -58,7 +61,7 @@ class MainActivity : ComponentActivity() {
         val obtained = requests.size - failed
 
         runOnUiThread {
-            newsCount.text = "Found ${headlines.size} News in $obtained feeds"
+            newsCount.text = "Found ${articles.size} News in $obtained feeds"
 
             if (failed > 0) {
                 warnings.text = "Failed to fetch $failed feeds"
@@ -66,9 +69,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun asyncFetchHeadlines(feed: String, dispatcher: CoroutineDispatcher) = GlobalScope.async(dispatcher) {
+    private fun asyncFetchArticles(feed: Feed, dispatcher: CoroutineDispatcher) = GlobalScope.async(dispatcher) {
         val builder = factory.newDocumentBuilder()
-        val xml = builder.parse(feed)
+        val xml = builder.parse(feed.url)
         val news = xml.getElementsByTagName("channel").item(0)
 
         (0 until news.childNodes.length)
@@ -77,8 +80,9 @@ class MainActivity : ComponentActivity() {
             .map { it as Element }
             .filter { "item" == it.tagName }
             .map {
-                it.getElementsByTagName("title").item(0).textContent
+                val title = it.getElementsByTagName("title").item(0).textContent
+                val summary = it.getElementsByTagName("description").item(0).textContent
+                Article(feed.name, title, summary)
             }
     }
-
 }
