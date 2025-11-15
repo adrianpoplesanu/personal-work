@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -52,20 +54,23 @@ class MainActivity : ComponentActivity() {
             .filter { !it.isCancelled }
             .flatMap { it.getCompleted() }
 
-        val failed = requests
+        val failedCount = requests
             .filter { it.isCancelled }
             .size
 
-        val newsCount = findViewById<TextView>(R.id.newsCount)
-        val warnings = findViewById<TextView>(R.id.warnings)
-        val obtained = requests.size - failed
+        //val newsCount = findViewById<TextView>(R.id.newsCount)
+        //val warnings = findViewById<TextView>(R.id.warnings)
+        val obtained = requests.size - failedCount
 
-        runOnUiThread {
+        /*runOnUiThread {
             newsCount.text = "Found ${articles.size} News in $obtained feeds"
 
-            if (failed > 0) {
-                warnings.text = "Failed to fetch $failed feeds"
+            if (failedCount > 0) {
+                warnings.text = "Failed to fetch $failedCount feeds"
             }
+        }*/
+        runOnUiThread {
+            // TODO: Refresh UI here
         }
     }
 
