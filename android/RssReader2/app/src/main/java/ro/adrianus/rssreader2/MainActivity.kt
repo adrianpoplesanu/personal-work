@@ -9,6 +9,7 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newFixedThreadPoolContext
 import kotlinx.coroutines.newSingleThreadContext
@@ -46,9 +47,7 @@ class MainActivity : ComponentActivity() {
             asyncFetchArticles(it, dispatcher)
         }
 
-        requests.forEach {
-            it.join()
-        }
+        requests.joinAll()
 
         val articles = requests
             .filter { !it.isCancelled }
