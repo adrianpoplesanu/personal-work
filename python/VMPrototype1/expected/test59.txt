@@ -1,0 +1,36 @@
+ASTProgram
+ASTLetStatement<ASTIdentifier\[globalSeed\]> \[ASTInteger\[50\]\]
+ASTExpressionStatement\[None\]
+ASTLetStatement<ASTIdentifier\[minusOne\]> \[ASTFunctionLiteral\]
+ASTLetStatement<ASTIdentifier\[minusTwo\]> \[ASTFunctionLiteral\]
+ASTExpressionStatement\[ASTInfixExpression \[ASTCallExpression\[some arguments here\] <\+> ASTCallExpression\[some arguments here\]\]\]
+\[0, 0, 1, 26, 0, 17, 0, 0, 25, 0, 2, 23\]
+0000 OpConstant 1
+0003 OpSetLocal 0
+0005 OpGetGlobal 0
+0008 OpGetLocal 0
+0010 OpSub
+0011 OpReturnValue
+
+\[0, 0, 3, 26, 0, 17, 0, 0, 25, 0, 2, 23\]
+0000 OpConstant 3
+0003 OpSetLocal 0
+0005 OpGetGlobal 0
+0008 OpGetLocal 0
+0010 OpSub
+0011 OpReturnValue
+
+\[0, 0, 0, 18, 0, 0, 28, 0, 2, 0, 18, 0, 1, 28, 0, 4, 0, 18, 0, 2, 17, 0, 1, 22, 0, 17, 0, 2, 22, 0, 1, 5\]
+0000 OpConstant 0
+0003 OpSetGlobal 0
+0006 OpClosure 2 0
+0010 OpSetGlobal 1
+0013 OpClosure 4 0
+0017 OpSetGlobal 2
+0020 OpGetGlobal 1
+0023 OpCall 0
+0025 OpGetGlobal 2
+0028 OpCall 0
+0030 OpAdd
+0031 OpPop
+97
