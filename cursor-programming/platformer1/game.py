@@ -28,7 +28,7 @@ PLAYER_SPEED = 5
 COMPANION_SPEED = 3
 MAX_DISTANCE = 200  # Maximum distance between player and companion
 COMPANION_CATCHUP_SPEED = 6  # Speed when catching up
-COMPANION_SPEED_MATCH_RATE = 0.25  # How quickly companion matches player speed (increased for faster acceleration)
+COMPANION_SPEED_MATCH_RATE = 0.7  # How quickly companion matches player speed (higher = faster matching)
 COMPANION_JUMP_MULTIPLIER = 1.1  # Companion jumps higher than player (1.1 = 10% higher)
 
 
@@ -171,22 +171,29 @@ class Companion:
         # Calculate desired speed based on distance and player state
         desired_speed = 0
         
+        # Define a threshold for when to start catching up aggressively (80% of max distance)
+        CATCHUP_THRESHOLD = MAX_DISTANCE * 0.2
+        
         if distance > MAX_DISTANCE:
             # Too far - catch up quickly
             if abs(dx) > 0:
                 desired_speed = (dx / abs(dx)) * COMPANION_CATCHUP_SPEED
                 self.current_speed = desired_speed
-        elif not player_is_moving and distance > 50:
+        elif distance > CATCHUP_THRESHOLD:
+            # Approaching max distance - catch up aggressively to prevent falling back too far
+            if abs(dx) > 0:
+                desired_speed = (dx / abs(dx)) * COMPANION_CATCHUP_SPEED
+                self.current_speed = desired_speed
+        elif not player_is_moving and distance > 20:
             # Player stopped - catch up to player
             if abs(dx) > 0:
                 desired_speed = (dx / abs(dx)) * COMPANION_CATCHUP_SPEED
                 self.current_speed = desired_speed
-        elif distance > 50:
+        elif distance > 20:
             # Far enough - match player speed gradually
             if abs(player_vel_x) > 0.1:
-                # Gradually match player speed (scale companion speed to player speed ratio)
-                target_speed = player_vel_x * (COMPANION_SPEED / PLAYER_SPEED)
-                self.current_speed += (target_speed - self.current_speed) * COMPANION_SPEED_MATCH_RATE
+                target_speed = player_vel_x
+                self.current_speed = target_speed
                 desired_speed = self.current_speed
             else:
                 # Player moving slowly or stopped, use normal follow speed
