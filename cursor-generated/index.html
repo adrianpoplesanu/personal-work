@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Platformer Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>Simple Platformer</h1>
+        <div class="controls-info">
+            <p>Use <strong>A/D</strong> or <strong>Arrow Keys</strong> to move, <strong>Space</strong> or <strong>W</strong> to jump</p>
+            <p>Reach the green flag to win!</p>
+        </div>
+        <canvas id="gameCanvas"></canvas>
+        <div class="game-info">
+            <div id="score">Score: 0</div>
+            <div id="lives">Lives: 3</div>
+        </div>
+        <div id="gameOver" class="game-over hidden">
+            <h2 id="gameOverText">Game Over!</h2>
+            <button id="restartBtn">Restart</button>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,2079 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!129 &1
+PlayerSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 28
+  productGUID: 68e29a4212b5440b59215e63545ed5f0
+  AndroidProfiler: 0
+  AndroidFilterTouchesWhenObscured: 0
+  AndroidEnableSustainedPerformanceMode: 0
+  defaultScreenOrientation: 4
+  targetDevice: 2
+  useOnDemandResources: 0
+  accelerometerFrequency: 60
+  companyName: DefaultCompany
+  productName: Simple Platformer
+  defaultCursor: {fileID: 0}
+  cursorHotspot: {x: 0, y: 0}
+  m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
+  m_ShowUnitySplashScreen: 1
+  m_ShowUnitySplashLogo: 1
+  m_SplashScreenOverlayOpacity: 1
+  m_SplashScreenAnimation: 1
+  m_SplashScreenLogoStyle: 1
+  m_SplashScreenDrawMode: 0
+  m_SplashScreenBackgroundAnimationZoom: 1
+  m_SplashScreenLogoAnimationZoom: 1
+  m_SplashScreenBackgroundLandscapeAspect: 1
+  m_SplashScreenBackgroundPortraitAspect: 1
+  m_SplashScreenBackgroundLandscapeUvs:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  m_SplashScreenBackgroundPortraitUvs:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  m_SplashScreenLogos: []
+  m_VirtualRealitySplashScreen: {fileID: 0}
+  m_HolographicTrackingLossScreen: {fileID: 0}
+  defaultScreenWidth: 1920
+  defaultScreenHeight: 1080
+  defaultScreenWidthWeb: 960
+  defaultScreenHeightWeb: 600
+  m_StereoRenderingPath: 0
+  m_ActiveColorSpace: 0
+  unsupportedMSAAFallback: 0
+  m_SpriteBatchMaxVertexCount: 65535
+  m_SpriteBatchVertexThreshold: 300
+  m_MTRendering: 1
+  mipStripping: 0
+  numberOfMipsStripped: 0
+  numberOfMipsStrippedPerMipmapLimitGroup: {}
+  m_StackTraceTypes: 010000000100000001000000010000000100000001000000
+  iosShowActivityIndicatorOnLoading: -1
+  androidShowActivityIndicatorOnLoading: -1
+  iosUseCustomAppBackgroundBehavior: 0
+  allowedAutorotateToPortrait: 1
+  allowedAutorotateToPortraitUpsideDown: 1
+  allowedAutorotateToLandscapeRight: 1
+  allowedAutorotateToLandscapeLeft: 1
+  useOSAutorotation: 1
+  use32BitDisplayBuffer: 1
+  preserveFramebufferAlpha: 0
+  disableDepthAndStencilBuffers: 0
+  androidStartInFullscreen: 1
+  androidRenderOutsideSafeArea: 1
+  androidUseSwappy: 1
+  androidDisplayOptions: 1
+  androidBlitType: 0
+  androidResizeableActivity: 1
+  androidDefaultWindowWidth: 1920
+  androidDefaultWindowHeight: 1080
+  androidMinimumWindowWidth: 400
+  androidMinimumWindowHeight: 300
+  androidFullscreenMode: 1
+  androidAutoRotationBehavior: 1
+  androidPredictiveBackSupport: 1
+  androidApplicationEntry: 1
+  defaultIsNativeResolution: 1
+  macRetinaSupport: 1
+  runInBackground: 0
+  muteOtherAudioSources: 0
+  Prepare IOS For Recording: 0
+  Force IOS Speakers When Recording: 0
+  audioSpatialExperience: 0
+  deferSystemGesturesMode: 0
+  hideHomeButton: 0
+  submitAnalytics: 1
+  usePlayerLog: 1
+  dedicatedServerOptimizations: 1
+  bakeCollisionMeshes: 0
+  forceSingleInstance: 0
+  useFlipModelSwapchain: 1
+  resizableWindow: 0
+  useMacAppStoreValidation: 0
+  macAppStoreCategory: public.app-category.games
+  gpuSkinning: 0
+  meshDeformation: 0
+  xboxPIXTextureCapture: 0
+  xboxEnableAvatar: 0
+  xboxEnableKinect: 0
+  xboxEnableKinectAutoTracking: 0
+  xboxEnableFitness: 0
+  visibleInBackground: 1
+  allowFullscreenSwitch: 1
+  fullscreenMode: 1
+  xboxSpeechDB: 0
+  xboxEnableHeadOrientation: 0
+  xboxEnableGuest: 0
+  xboxEnablePIXSampling: 0
+  metalFramebufferOnly: 0
+  xboxOneResolution: 0
+  xboxOneSResolution: 0
+  xboxOneXResolution: 3
+  xboxOneMonoLoggingLevel: 0
+  xboxOneLoggingLevel: 1
+  xboxOneDisableEsram: 0
+  xboxOneEnableTypeOptimization: 0
+  xboxOnePresentImmediateThreshold: 0
+  switchQueueCommandMemory: 1048576
+  switchQueueControlMemory: 16384
+  switchQueueComputeMemory: 262144
+  switchNVNShaderPoolsGranularity: 33554432
+  switchNVNDefaultPoolsGranularity: 16777216
+  switchNVNOtherPoolsGranularity: 16777216
+  switchGpuScratchPoolGranularity: 2097152
+  switchAllowGpuScratchShrinking: 0
+  switchNVNMaxPublicTextureIDCount: 0
+  switchNVNMaxPublicSamplerIDCount: 0
+  switchMaxWorkerMultiple: 8
+  switchNVNGraphicsFirmwareMemory: 32
+  switchGraphicsJobsSyncAfterKick: 1
+  vulkanNumSwapchainBuffers: 3
+  vulkanEnableSetSRGBWrite: 0
+  vulkanEnablePreTransform: 0
+  vulkanEnableLateAcquireNextImage: 0
+  vulkanEnableCommandBufferRecycling: 1
+  loadStoreDebugModeEnabled: 0
+  visionOSBundleVersion: 1.0
+  tvOSBundleVersion: 1.0
+  bundleVersion: 1.0
+  preloadedAssets: []
+  metroInputSource: 0
+  wsaTransparentSwapchain: 0
+  m_HolographicPauseOnTrackingLoss: 1
+  xboxOneDisableKinectGpuReservation: 1
+  xboxOneEnable7thCore: 1
+  vrSettings:
+    enable360StereoCapture: 0
+  isWsaHolographicRemotingEnabled: 0
+  enableFrameTimingStats: 0
+  enableOpenGLProfilerGPURecorders: 1
+  allowHDRDisplaySupport: 0
+  useHDRDisplay: 0
+  hdrBitDepth: 0
+  m_ColorGamuts: 00000000
+  targetPixelDensity: 30
+  resolutionScalingMode: 0
+  resetResolutionOnWindowResize: 0
+  androidSupportedAspectRatio: 1
+  androidMaxAspectRatio: 2.4
+  androidMinAspectRatio: 1
+  applicationIdentifier: {}
+  buildNumber:
+    Standalone: 0
+    VisionOS: 0
+    iPhone: 0
+    tvOS: 0
+  overrideDefaultApplicationIdentifier: 0
+  AndroidBundleVersionCode: 1
+  AndroidMinSdkVersion: 23
+  AndroidTargetSdkVersion: 0
+  AndroidPreferredInstallLocation: 1
+  aotOptions: 
+  stripEngineCode: 1
+  iPhoneStrippingLevel: 0
+  iPhoneScriptCallOptimization: 0
+  ForceInternetPermission: 0
+  ForceSDCardPermission: 0
+  CreateWallpaper: 0
+  androidSplitApplicationBinary: 0
+  keepLoadedShadersAlive: 0
+  StripUnusedMeshComponents: 0
+  strictShaderVariantMatching: 0
+  VertexChannelCompressionMask: 4054
+  iPhoneSdkVersion: 988
+  iOSSimulatorArchitecture: 0
+  iOSTargetOSVersionString: 13.0
+  tvOSSdkVersion: 0
+  tvOSSimulatorArchitecture: 0
+  tvOSRequireExtendedGameController: 0
+  tvOSTargetOSVersionString: 13.0
+  VisionOSSdkVersion: 0
+  VisionOSTargetOSVersionString: 1.0
+  uIPrerenderedIcon: 0
+  uIRequiresPersistentWiFi: 0
+  uIRequiresFullScreen: 1
+  uIStatusBarHidden: 1
+  uIExitOnSuspend: 0
+  uIStatusBarStyle: 0
+  appleTVSplashScreen: {fileID: 0}
+  appleTVSplashScreen2x: {fileID: 0}
+  tvOSSmallIconLayers: []
+  tvOSSmallIconLayers2x: []
+  tvOSLargeIconLayers: []
+  tvOSLargeIconLayers2x: []
+  tvOSTopShelfImageLayers: []
+  tvOSTopShelfImageLayers2x: []
+  tvOSTopShelfImageWideLayers: []
+  tvOSTopShelfImageWideLayers2x: []
+  iOSLaunchScreenType: 0
+  iOSLaunchScreenPortrait: {fileID: 0}
+  iOSLaunchScreenLandscape: {fileID: 0}
+  iOSLaunchScreenBackgroundColor:
+    serializedVersion: 2
+    rgba: 0
+  iOSLaunchScreenFillPct: 100
+  iOSLaunchScreenSize: 100
+  iOSLaunchScreeniPadType: 0
+  iOSLaunchScreeniPadImage: {fileID: 0}
+  iOSLaunchScreeniPadBackgroundColor:
+    serializedVersion: 2
+    rgba: 0
+  iOSLaunchScreeniPadFillPct: 100
+  iOSLaunchScreeniPadSize: 100
+  iOSLaunchScreenCustomStoryboardPath: 
+  iOSLaunchScreeniPadCustomStoryboardPath: 
+  iOSDeviceRequirements: []
+  iOSURLSchemes: []
+  macOSURLSchemes: []
+  iOSBackgroundModes: 0
+  iOSMetalForceHardShadows: 0
+  metalEditorSupport: 1
+  metalAPIValidation: 1
+  metalCompileShaderBinary: 0
+  iOSRenderExtraFrameOnPause: 1
+  iosCopyPluginsCodeInsteadOfSymlink: 0
+  appleDeveloperTeamID: 
+  iOSManualSigningProvisioningProfileID: 
+  tvOSManualSigningProvisioningProfileID: 
+  VisionOSManualSigningProvisioningProfileID: 
+  iOSManualSigningProvisioningProfileType: 0
+  tvOSManualSigningProvisioningProfileType: 0
+  VisionOSManualSigningProvisioningProfileType: 0
+  appleEnableAutomaticSigning: 0
+  iOSRequireARKit: 0
+  iOSAutomaticallyDetectAndAddCapabilities: 1
+  appleEnableProMotion: 0
+  shaderPrecisionModel: 0
+  clonedFromGUID: 00000000000000000000000000000000
+  templatePackageId: 
+  templateDefaultScene: 
+  useCustomMainManifest: 0
+  useCustomLauncherManifest: 0
+  useCustomMainGradleTemplate: 0
+  useCustomLauncherGradleManifest: 0
+  useCustomBaseGradleTemplate: 0
+  useCustomGradlePropertiesTemplate: 0
+  useCustomGradleSettingsTemplate: 0
+  useCustomProguardFile: 0
+  AndroidTargetArchitectures: 1
+  AndroidSplashScreenScale: 0
+  androidSplashScreen: {fileID: 0}
+  AndroidKeystoreName: 
+  AndroidKeyaliasName: 
+  AndroidEnableArmv9SecurityFeatures: 0
+  AndroidEnableArm64MTE: 0
+  AndroidBuildApkPerCpuArchitecture: 0
+  AndroidTVCompatibility: 0
+  AndroidIsGame: 1
+  androidAppCategory: 3
+  useAndroidAppCategory: 1
+  androidAppCategoryOther: 
+  AndroidEnableTango: 0
+  androidEnableBanner: 1
+  androidUseLowAccuracyLocation: 0
+  androidUseCustomKeystore: 0
+  m_AndroidBanners:
+  - width: 320
+    height: 180
+    banner: {fileID: 0}
+  androidGamepadSupportLevel: 0
+  AndroidMinifyRelease: 0
+  AndroidMinifyDebug: 0
+  AndroidValidateAppBundleSize: 1
+  AndroidAppBundleSizeToValidate: 150
+  AndroidReportGooglePlayAppDependencies: 1
+  androidSymbolsSizeThreshold: 800
+  m_BuildTargetIcons: []
+  m_BuildTargetPlatformIcons:
+  - m_BuildTarget: Android
+    m_Icons:
+    - m_Textures: []
+      m_Width: 432
+      m_Height: 432
+      m_Kind: 2
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 324
+      m_Height: 324
+      m_Kind: 2
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 216
+      m_Height: 216
+      m_Kind: 2
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 162
+      m_Height: 162
+      m_Kind: 2
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 108
+      m_Height: 108
+      m_Kind: 2
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 81
+      m_Height: 81
+      m_Kind: 2
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 192
+      m_Height: 192
+      m_Kind: 1
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 144
+      m_Height: 144
+      m_Kind: 1
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 96
+      m_Height: 96
+      m_Kind: 1
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 72
+      m_Height: 72
+      m_Kind: 1
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 48
+      m_Height: 48
+      m_Kind: 1
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 36
+      m_Height: 36
+      m_Kind: 1
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 192
+      m_Height: 192
+      m_Kind: 0
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 144
+      m_Height: 144
+      m_Kind: 0
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 96
+      m_Height: 96
+      m_Kind: 0
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 72
+      m_Height: 72
+      m_Kind: 0
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 48
+      m_Height: 48
+      m_Kind: 0
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 36
+      m_Height: 36
+      m_Kind: 0
+      m_SubKind: 
+  m_BuildTargetBatching: []
+  m_BuildTargetShaderSettings: []
+  m_BuildTargetGraphicsJobs:
+  - m_BuildTarget: MacStandaloneSupport
+    m_GraphicsJobs: 0
+  - m_BuildTarget: Switch
+    m_GraphicsJobs: 1
+  - m_BuildTarget: MetroSupport
+    m_GraphicsJobs: 0
+  - m_BuildTarget: AppleTVSupport
+    m_GraphicsJobs: 0
+  - m_BuildTarget: BJMSupport
+    m_GraphicsJobs: 1
+  - m_BuildTarget: LinuxStandaloneSupport
+    m_GraphicsJobs: 1
+  - m_BuildTarget: PS4Player
+    m_GraphicsJobs: 1
+  - m_BuildTarget: iOSSupport
+    m_GraphicsJobs: 0
+  - m_BuildTarget: WindowsStandaloneSupport
+    m_GraphicsJobs: 1
+  - m_BuildTarget: XboxOnePlayer
+    m_GraphicsJobs: 1
+  - m_BuildTarget: LuminSupport
+    m_GraphicsJobs: 0
+  - m_BuildTarget: AndroidPlayer
+    m_GraphicsJobs: 0
+  - m_BuildTarget: WebGLSupport
+    m_GraphicsJobs: 0
+  m_BuildTargetGraphicsJobMode: []
+  m_BuildTargetGraphicsAPIs:
+  - m_BuildTarget: AndroidPlayer
+    m_APIs: 150000000b000000
+    m_Automatic: 0
+  - m_BuildTarget: iOSSupport
+    m_APIs: 10000000
+    m_Automatic: 1
+  - m_BuildTarget: AppleTVSupport
+    m_APIs: 10000000
+    m_Automatic: 1
+  - m_BuildTarget: WebGLSupport
+    m_APIs: 0b000000
+    m_Automatic: 1
+  m_BuildTargetVRSettings: []
+  m_DefaultShaderChunkSizeInMB: 16
+  m_DefaultShaderChunkCount: 0
+  openGLRequireES31: 0
+  openGLRequireES31AEP: 0
+  openGLRequireES32: 0
+  m_TemplateCustomTags: {}
+  mobileMTRendering:
+    Android: 1
+    iPhone: 1
+    tvOS: 1
+  m_BuildTargetGroupLightmapEncodingQuality: []
+  m_BuildTargetGroupHDRCubemapEncodingQuality: []
+  m_BuildTargetGroupLightmapSettings: []
+  m_BuildTargetGroupLoadStoreDebugModeSettings: []
+  m_BuildTargetNormalMapEncoding: []
+  m_BuildTargetDefaultTextureCompressionFormat: []
+  playModeTestRunnerEnabled: 0
+  runPlayModeTestAsEditModeTest: 0
+  actionOnDotNetUnhandledException: 1
+  editorGfxJobOverride: 1
+  enableInternalProfiler: 0
+  logObjCUncaughtExceptions: 1
+  enableCrashReportAPI: 0
+  cameraUsageDescription: 
+  locationUsageDescription: 
+  microphoneUsageDescription: 
+  bluetoothUsageDescription: 
+  macOSTargetOSVersion: 11.0
+  switchNMETAOverride: 0
+  switchNetLibKey: 
+  switchSocketMemoryPoolSize: 6144
+  switchSocketAllocatorPoolSize: 128
+  switchSocketConcurrencyLimit: 14
+  switchScreenResolutionBehavior: 2
+  switchUseCPUProfiler: 0
+  switchEnableFileSystemTrace: 0
+  switchLTOSetting: 0
+  switchApplicationID: 0x01004b9000490000
+  switchNSODependencies: 
+  switchCompilerFlags: 
+  switchTitleNames_0: 
+  switchTitleNames_1: 
+  switchTitleNames_2: 
+  switchTitleNames_3: 
+  switchTitleNames_4: 
+  switchTitleNames_5: 
+  switchTitleNames_6: 
+  switchTitleNames_7: 
+  switchTitleNames_8: 
+  switchTitleNames_9: 
+  switchTitleNames_10: 
+  switchTitleNames_11: 
+  switchTitleNames_12: 
+  switchTitleNames_13: 
+  switchTitleNames_14: 
+  switchTitleNames_15: 
+  switchPublisherNames_0: 
+  switchPublisherNames_1: 
+  switchPublisherNames_2: 
+  switchPublisherNames_3: 
+  switchPublisherNames_4: 
+  switchPublisherNames_5: 
+  switchPublisherNames_6: 
+  switchPublisherNames_7: 
+  switchPublisherNames_8: 
+  switchPublisherNames_9: 
+  switchPublisherNames_10: 
+  switchPublisherNames_11: 
+  switchPublisherNames_12: 
+  switchPublisherNames_13: 
+  switchPublisherNames_14: 
+  switchPublisherNames_15: 
+  switchIcons_0: {fileID: 0}
+  switchIcons_1: {fileID: 0}
+  switchIcons_2: {fileID: 0}
+  switchIcons_3: {fileID: 0}
+  switchIcons_4: {fileID: 0}
+  switchIcons_5: {fileID: 0}
+  switchIcons_6: {fileID: 0}
+  switchIcons_7: {fileID: 0}
+  switchIcons_8: {fileID: 0}
+  switchIcons_9: {fileID: 0}
+  switchIcons_10: {fileID: 0}
+  switchIcons_11: {fileID: 0}
+  switchIcons_12: {fileID: 0}
+  switchIcons_13: {fileID: 0}
+  switchIcons_14: {fileID: 0}
+  switchIcons_15: {fileID: 0}
+  switchSmallIcons_0: {fileID: 0}
+  switchSmallIcons_1: {fileID: 0}
+  switchSmallIcons_2: {fileID: 0}
+  switchSmallIcons_3: {fileID: 0}
+  switchSmallIcons_4: {fileID: 0}
+  switchSmallIcons_5: {fileID: 0}
+  switchSmallIcons_6: {fileID: 0}
+  switchSmallIcons_7: {fileID: 0}
+  switchSmallIcons_8: {fileID: 0}
+  switchSmallIcons_9: {fileID: 0}
+  switchSmallIcons_10: {fileID: 0}
+  switchSmallIcons_11: {fileID: 0}
+  switchSmallIcons_12: {fileID: 0}
+  switchSmallIcons_13: {fileID: 0}
+  switchSmallIcons_14: {fileID: 0}
+  switchSmallIcons_15: {fileID: 0}
+  switchManualHTML: 
+  switchAccessibleURLs: 
+  switchLegalInformation: 
+  switchMainThreadStackSize: 1048576
+  switchPresenceGroupId: 
+  switchLogoHandling: 0
+  switchReleaseVersion: 0
+  switchDisplayVersion: 1.0.0
+  switchStartupUserAccount: 0
+  switchSupportedLanguagesMask: 0
+  switchLogoType: 0
+  switchApplicationErrorCodeCategory: 
+  switchUserAccountSaveDataSize: 0
+  switchUserAccountSaveDataJournalSize: 0
+  switchApplicationAttribute: 0
+  switchCardSpecSize: -1
+  switchCardSpecClock: -1
+  switchRatingsMask: 0
+  switchRatingsInt_0: 0
+  switchRatingsInt_1: 0
+  switchRatingsInt_2: 0
+  switchRatingsInt_3: 0
+  switchRatingsInt_4: 0
+  switchRatingsInt_5: 0
+  switchRatingsInt_6: 0
+  switchRatingsInt_7: 0
+  switchRatingsInt_8: 0
+  switchRatingsInt_9: 0
+  switchRatingsInt_10: 0
+  switchRatingsInt_11: 0
+  switchRatingsInt_12: 0
+  switchLocalCommunicationIds_0: 
+  switchLocalCommunicationIds_1: 
+  switchLocalCommunicationIds_2: 
+  switchLocalCommunicationIds_3: 
+  switchLocalCommunicationIds_4: 
+  switchLocalCommunicationIds_5: 
+  switchLocalCommunicationIds_6: 
+  switchLocalCommunicationIds_7: 
+  switchParentalControl: 0
+  switchAllowsScreenshot: 1
+  switchAllowsVideoCapturing: 1
+  switchAllowsRuntimeAddOnContentInstall: 0
+  switchDataLossConfirmation: 0
+  switchUserAccountLockEnabled: 0
+  switchSystemResourceMemory: 16777216
+  switchSupportedNpadStyles: 22
+  switchNativeFsCacheSize: 32
+  switchIsHoldTypeHorizontal: 0
+  switchSupportedNpadCount: 8
+  switchEnableTouchScreen: 1
+  switchSocketConfigEnabled: 0
+  switchTcpInitialSendBufferSize: 32
+  switchTcpInitialReceiveBufferSize: 64
+  switchTcpAutoSendBufferSizeMax: 256
+  switchTcpAutoReceiveBufferSizeMax: 256
+  switchUdpSendBufferSize: 9
+  switchUdpReceiveBufferSize: 42
+  switchSocketBufferEfficiency: 4
+  switchSocketInitializeEnabled: 1
+  switchNetworkInterfaceManagerInitializeEnabled: 1
+  switchDisableHTCSPlayerConnection: 0
+  switchUseNewStyleFilepaths: 1
+  switchUseLegacyFmodPriorities: 0
+  switchUseMicroSleepForYield: 1
+  switchEnableRamDiskSupport: 0
+  switchMicroSleepForYieldTime: 25
+  switchRamDiskSpaceSize: 12
+  switchUpgradedPlayerSettingsToNMETA: 0
+  ps4NPAgeRating: 0
+  ps4NPTitleSecret: 
+  ps4NPTrophyPackPath: 
+  ps4ParentalLevel: 11
+  ps4ContentID: ED1633-NPXX51362_00-0000000000000000
+  ps4Category: 0
+  ps4MasterVersion: 01.00
+  ps4AppVersion: 01.00
+  ps4AppType: 0
+  ps4ParamSfxPath: 
+  ps4VideoOutPixelFormat: 0
+  ps4VideoOutInitialWidth: 1920
+  ps4VideoOutBaseModeInitialWidth: 1920
+  ps4VideoOutReprojectionRate: 60
+  ps4PronunciationXMLPath: 
+  ps4PronunciationSIGPath: 
+  ps4BackgroundImagePath: 
+  ps4StartupImagePath: 
+  ps4StartupImagesFolder: 
+  ps4IconImagesFolder: 
+  ps4SaveDataImagePath: 
+  ps4SdkOverride: 
+  ps4BGMPath: 
+  ps4ShareFilePath: 
+  ps4ShareOverlayImagePath: 
+  ps4PrivacyGuardImagePath: 
+  ps4ExtraSceSysFile: 
+  ps4NPtitleDatPath: 
+  ps4RemotePlayKeyAssignment: -1
+  ps4RemotePlayKeyMappingDir: 
+  ps4PlayTogetherPlayerCount: 0
+  ps4EnterButtonAssignment: 1
+  ps4ApplicationParam1: 0
+  ps4ApplicationParam2: 0
+  ps4ApplicationParam3: 0
+  ps4ApplicationParam4: 0
+  ps4DownloadDataSize: 0
+  ps4GarlicHeapSize: 2048
+  ps4ProGarlicHeapSize: 2560
+  playerPrefsMaxSize: 32768
+  ps4Passcode: frAQBc8Wsa1xVPfvJcrgRYwTiizs2trQ
+  ps4pnSessions: 1
+  ps4pnPresence: 1
+  ps4pnFriends: 1
+  ps4pnGameCustomData: 1
+  playerPrefsSupport: 0
+  enableApplicationExit: 0
+  resetTempFolder: 1
+  restrictedAudioUsageRights: 0
+  ps4UseResolutionFallback: 0
+  ps4ReprojectionSupport: 0
+  ps4UseAudio3dBackend: 0
+  ps4UseLowGarlicFragmentationMode: 0
+  ps4SocialScreenEnabled: 0
+  ps4ScriptOptimizationLevel: 0
+  ps4Audio3dVirtualSpeakerCount: 14
+  ps4attribCpuUsage: 0
+  ps4PatchPkgPath: 
+  ps4PatchLatestPkgPath: 
+  ps4PatchChangeinfoPath: 
+  ps4PatchDayOne: 0
+  ps4attribUserManagement: 0
+  ps4attribMoveSupport: 0
+  ps4attrib3DSupport: 0
+  ps4attribShareSupport: 0
+  ps4attribExclusiveVR: 0
+  ps4disableAutoHideSplash: 0
+  ps4videoRecordingFeaturesUsed: 0
+  ps4contentSearchFeaturesUsed: 0
+  ps4CompatibilityPS5: 0
+  ps4AllowPS5Detection: 0
+  ps4GPU800MHz: 1
+  ps4attribEyeToEyeDistanceSettingVR: 0
+  ps4IncludedModules: []
+  ps4attribVROutputEnabled: 0
+  monoEnv: 
+  splashScreenBackgroundSourceLandscape: {fileID: 0}
+  splashScreenBackgroundSourcePortrait: {fileID: 0}
+  blurSplashScreenBackground: 1
+  spritePackerPolicy: 
+  webGLMemorySize: 16
+  webGLExceptionSupport: 1
+  webGLNameFilesAsHashes: 0
+  webGLShowDiagnostics: 0
+  webGLDataCaching: 1
+  webGLDebugSymbols: 0
+  webGLEmscriptenArgs: 
+  webGLModulesDirectory: 
+  webGLTemplate: APPLICATION:Default
+  webGLAnalyzeBuildSize: 0
+  webGLUseEmbeddedResources: 0
+  webGLCompressionFormat: 1
+  webGLWasmArithmeticExceptions: 0
+  webGLLinkerTarget: 1
+  webGLThreadsSupport: 0
+  webGLDecompressionFallback: 0
+  webGLInitialMemorySize: 32
+  webGLMaximumMemorySize: 2048
+  webGLMemoryGrowthMode: 2
+  webGLMemoryLinearGrowthStep: 16
+  webGLMemoryGeometricGrowthStep: 0.2
+  webGLMemoryGeometricGrowthCap: 96
+  webGLPowerPreference: 2
+  webGLWebAssemblyTable: 0
+  webGLWebAssemblyBigInt: 0
+  webGLCloseOnQuit: 0
+  webWasm2023: 0
+  webEnableSubmoduleStrippingCompatibility: 0
+  scriptingDefineSymbols:
+    1: 
+    100: 
+    1000: 
+    1001: 
+    1002: 
+    1003: 
+    1004: 
+    1005: 
+    1006: 
+    1007: 
+    1008: 
+    1009: 
+    101: 
+    1010: 
+    1011: 
+    1012: 
+    1013: 
+    1014: 
+    1015: 
+    1016: 
+    1017: 
+    1018: 
+    1019: 
+    102: 
+    1020: 
+    1021: 
+    1022: 
+    1023: 
+    1024: 
+    1025: 
+    1026: 
+    1027: 
+    1028: 
+    1029: 
+    103: 
+    1030: 
+    1031: 
+    1032: 
+    1033: 
+    1034: 
+    1035: 
+    1036: 
+    1037: 
+    1038: 
+    1039: 
+    104: 
+    1040: 
+    1041: 
+    1042: 
+    1043: 
+    1044: 
+    1045: 
+    1046: 
+    1047: 
+    1048: 
+    1049: 
+    105: 
+    1050: 
+    1051: 
+    1052: 
+    1053: 
+    1054: 
+    1055: 
+    1056: 
+    1057: 
+    1058: 
+    1059: 
+    106: 
+    1060: 
+    1061: 
+    1062: 
+    1063: 
+    1064: 
+    1065: 
+    1066: 
+    1067: 
+    1068: 
+    1069: 
+    107: 
+    1070: 
+    1071: 
+    1072: 
+    1073: 
+    1074: 
+    1075: 
+    1076: 
+    1077: 
+    1078: 
+    1079: 
+    108: 
+    1080: 
+    1081: 
+    1082: 
+    1083: 
+    1084: 
+    1085: 
+    1086: 
+    1087: 
+    1088: 
+    1089: 
+    109: 
+    1090: 
+    1091: 
+    1092: 
+    1093: 
+    1094: 
+    1095: 
+    1096: 
+    1097: 
+    1098: 
+    1099: 
+    110: 
+    1100: 
+    1101: 
+    1102: 
+    1103: 
+    1104: 
+    1105: 
+    1106: 
+    1108: 
+    1109: 
+    111: 
+    1110: 
+    1111: 
+    1112: 
+    1113: 
+    1114: 
+    1115: 
+    1116: 
+    1117: 
+    1118: 
+    1119: 
+    112: 
+    1120: 
+    1121: 
+    1122: 
+    1123: 
+    1124: 
+    1125: 
+    1126: 
+    1127: 
+    1128: 
+    1129: 
+    113: 
+    1130: 
+    1131: 
+    1132: 
+    1133: 
+    1134: 
+    1135: 
+    1136: 
+    1137: 
+    1138: 
+    1139: 
+    114: 
+    1140: 
+    1141: 
+    1142: 
+    1143: 
+    1144: 
+    1145: 
+    1146: 
+    1147: 
+    1148: 
+    1149: 
+    115: 
+    1150: 
+    1151: 
+    1152: 
+    1153: 
+    1154: 
+    1155: 
+    1156: 
+    1157: 
+    1158: 
+    1159: 
+    116: 
+    1160: 
+    1161: 
+    1162: 
+    1163: 
+    1164: 
+    1165: 
+    1166: 
+    1167: 
+    1168: 
+    1169: 
+    117: 
+    1170: 
+    1171: 
+    1172: 
+    1173: 
+    1174: 
+    1175: 
+    1176: 
+    1177: 
+    1178: 
+    1179: 
+    118: 
+    1180: 
+    1181: 
+    1182: 
+    1183: 
+    1184: 
+    1185: 
+    1186: 
+    1187: 
+    1188: 
+    119: 
+    1190: 
+    1191: 
+    1192: 
+    1193: 
+    1194: 
+    1195: 
+    1196: 
+    1197: 
+    1198: 
+    1199: 
+    120: 
+    1200: 
+    1201: 
+    1202: 
+    1203: 
+    1204: 
+    1205: 
+    1206: 
+    1207: 
+    1208: 
+    1209: 
+    121: 
+    1210: 
+    1211: 
+    1212: 
+    1213: 
+    1214: 
+    1215: 
+    1216: 
+    1217: 
+    1218: 
+    1219: 
+    122: 
+    1220: 
+    1221: 
+    1222: 
+    1223: 
+    1224: 
+    1225: 
+    1226: 
+    1227: 
+    1228: 
+    1229: 
+    123: 
+    1230: 
+    1231: 
+    1232: 
+    1233: 
+    1234: 
+    1235: 
+    1236: 
+    1237: 
+    1239: 
+    124: 
+    1240: 
+    1241: 
+    1242: 
+    125: 
+    126: 
+    127: 
+    128: 
+    129: 
+    13: 
+    130: 
+    131: 
+    132: 
+    133: 
+    134: 
+    135: 
+    136: 
+    137: 
+    138: 
+    139: 
+    140: 
+    141: 
+    142: 
+    143: 
+    144: 
+    145: 
+    146: 
+    147: 
+    148: 
+    149: 
+    150: 
+    151: 
+    152: 
+    153: 
+    154: 
+    155: 
+    156: 
+    157: 
+    158: 
+    159: 
+    160: 
+    161: 
+    162: 
+    163: 
+    164: 
+    165: 
+    166: 
+    167: 
+    168: 
+    169: 
+    170: 
+    171: 
+    172: 
+    173: 
+    174: 
+    175: 
+    176: 
+    177: 
+    178: 
+    179: 
+    180: 
+    181: 
+    182: 
+    183: 
+    184: 
+    185: 
+    186: 
+    187: 
+    188: 
+    189: 
+    19: 
+    190: 
+    191: 
+    192: 
+    193: 
+    194: 
+    195: 
+    196: 
+    197: 
+    198: 
+    199: 
+    200: 
+    201: 
+    202: 
+    203: 
+    204: 
+    205: 
+    206: 
+    207: 
+    208: 
+    209: 
+    21: 
+    210: 
+    211: 
+    212: 
+    213: 
+    214: 
+    215: 
+    216: 
+    217: 
+    218: 
+    219: 
+    220: 
+    221: 
+    222: 
+    223: 
+    224: 
+    225: 
+    226: 
+    227: 
+    228: 
+    229: 
+    230: 
+    231: 
+    232: 
+    233: 
+    234: 
+    235: 
+    236: 
+    237: 
+    238: 
+    239: 
+    240: 
+    241: 
+    242: 
+    243: 
+    244: 
+    245: 
+    246: 
+    247: 
+    248: 
+    249: 
+    25: 
+    250: 
+    251: 
+    252: 
+    253: 
+    254: 
+    255: 
+    256: 
+    257: 
+    258: 
+    259: 
+    260: 
+    261: 
+    262: 
+    263: 
+    264: 
+    265: 
+    266: 
+    267: 
+    268: 
+    269: 
+    27: 
+    270: 
+    271: 
+    272: 
+    273: 
+    274: 
+    275: 
+    276: 
+    277: 
+    278: 
+    279: 
+    280: 
+    281: 
+    282: 
+    283: 
+    284: 
+    285: 
+    286: 
+    287: 
+    288: 
+    289: 
+    29: 
+    290: 
+    291: 
+    292: 
+    293: 
+    294: 
+    295: 
+    296: 
+    297: 
+    298: 
+    299: 
+    30: 
+    300: 
+    301: 
+    302: 
+    303: 
+    304: 
+    305: 
+    306: 
+    307: 
+    308: 
+    309: 
+    31: 
+    310: 
+    311: 
+    312: 
+    313: 
+    314: 
+    315: 
+    316: 
+    317: 
+    318: 
+    319: 
+    32: 
+    320: 
+    321: 
+    322: 
+    323: 
+    324: 
+    325: 
+    326: 
+    327: 
+    328: 
+    329: 
+    33: 
+    330: 
+    331: 
+    332: 
+    333: 
+    334: 
+    335: 
+    336: 
+    337: 
+    338: 
+    339: 
+    34: 
+    340: 
+    341: 
+    342: 
+    343: 
+    344: 
+    345: 
+    346: 
+    347: 
+    348: 
+    349: 
+    35: 
+    350: 
+    351: 
+    352: 
+    353: 
+    354: 
+    355: 
+    356: 
+    357: 
+    358: 
+    359: 
+    36: 
+    360: 
+    361: 
+    362: 
+    363: 
+    364: 
+    365: 
+    366: 
+    367: 
+    368: 
+    369: 
+    37: 
+    370: 
+    371: 
+    372: 
+    373: 
+    374: 
+    375: 
+    376: 
+    377: 
+    378: 
+    379: 
+    38: 
+    380: 
+    381: 
+    382: 
+    383: 
+    384: 
+    385: 
+    386: 
+    387: 
+    388: 
+    389: 
+    39: 
+    390: 
+    391: 
+    392: 
+    393: 
+    394: 
+    395: 
+    396: 
+    397: 
+    398: 
+    399: 
+    40: 
+    400: 
+    401: 
+    402: 
+    403: 
+    404: 
+    405: 
+    406: 
+    407: 
+    408: 
+    409: 
+    41: 
+    410: 
+    411: 
+    412: 
+    413: 
+    414: 
+    415: 
+    416: 
+    417: 
+    418: 
+    419: 
+    42: 
+    420: 
+    421: 
+    422: 
+    423: 
+    424: 
+    425: 
+    426: 
+    427: 
+    428: 
+    429: 
+    43: 
+    430: 
+    431: 
+    432: 
+    433: 
+    434: 
+    435: 
+    436: 
+    437: 
+    438: 
+    439: 
+    44: 
+    440: 
+    441: 
+    442: 
+    443: 
+    444: 
+    445: 
+    446: 
+    447: 
+    448: 
+    449: 
+    45: 
+    450: 
+    451: 
+    452: 
+    453: 
+    454: 
+    455: 
+    456: 
+    457: 
+    458: 
+    459: 
+    46: 
+    460: 
+    461: 
+    462: 
+    463: 
+    464: 
+    465: 
+    466: 
+    467: 
+    468: 
+    469: 
+    47: 
+    470: 
+    471: 
+    472: 
+    473: 
+    474: 
+    475: 
+    476: 
+    477: 
+    478: 
+    479: 
+    48: 
+    480: 
+    481: 
+    482: 
+    483: 
+    484: 
+    485: 
+    486: 
+    487: 
+    488: 
+    489: 
+    49: 
+    490: 
+    491: 
+    492: 
+    493: 
+    494: 
+    495: 
+    496: 
+    497: 
+    498: 
+    499: 
+    50: 
+    500: 
+    501: 
+    502: 
+    503: 
+    504: 
+    505: 
+    506: 
+    507: 
+    508: 
+    509: 
+    51: 
+    510: 
+    511: 
+    512: 
+    513: 
+    514: 
+    515: 
+    516: 
+    517: 
+    518: 
+    519: 
+    52: 
+    520: 
+    521: 
+    522: 
+    523: 
+    524: 
+    525: 
+    526: 
+    527: 
+    528: 
+    529: 
+    53: 
+    530: 
+    531: 
+    532: 
+    533: 
+    534: 
+    535: 
+    536: 
+    537: 
+    538: 
+    539: 
+    54: 
+    540: 
+    541: 
+    542: 
+    543: 
+    544: 
+    545: 
+    546: 
+    547: 
+    548: 
+    549: 
+    55: 
+    550: 
+    551: 
+    552: 
+    553: 
+    554: 
+    555: 
+    556: 
+    557: 
+    558: 
+    559: 
+    56: 
+    560: 
+    561: 
+    562: 
+    563: 
+    564: 
+    565: 
+    566: 
+    567: 
+    568: 
+    569: 
+    57: 
+    570: 
+    571: 
+    572: 
+    573: 
+    574: 
+    575: 
+    576: 
+    577: 
+    578: 
+    579: 
+    58: 
+    580: 
+    581: 
+    582: 
+    583: 
+    584: 
+    585: 
+    586: 
+    587: 
+    588: 
+    589: 
+    59: 
+    590: 
+    591: 
+    592: 
+    593: 
+    594: 
+    595: 
+    596: 
+    597: 
+    598: 
+    599: 
+    60: 
+    600: 
+    601: 
+    602: 
+    603: 
+    604: 
+    605: 
+    606: 
+    607: 
+    608: 
+    609: 
+    61: 
+    610: 
+    611: 
+    612: 
+    613: 
+    614: 
+    615: 
+    616: 
+    617: 
+    618: 
+    619: 
+    62: 
+    620: 
+    621: 
+    622: 
+    623: 
+    624: 
+    625: 
+    626: 
+    627: 
+    628: 
+    629: 
+    63: 
+    630: 
+    631: 
+    632: 
+    633: 
+    634: 
+    635: 
+    636: 
+    637: 
+    638: 
+    639: 
+    64: 
+    640: 
+    641: 
+    642: 
+    643: 
+    644: 
+    645: 
+    646: 
+    647: 
+    648: 
+    649: 
+    65: 
+    650: 
+    651: 
+    652: 
+    653: 
+    654: 
+    655: 
+    656: 
+    657: 
+    658: 
+    659: 
+    66: 
+    660: 
+    661: 
+    662: 
+    663: 
+    664: 
+    665: 
+    666: 
+    667: 
+    668: 
+    669: 
+    67: 
+    670: 
+    671: 
+    672: 
+    673: 
+    674: 
+    675: 
+    676: 
+    677: 
+    678: 
+    679: 
+    68: 
+    680: 
+    681: 
+    682: 
+    683: 
+    684: 
+    685: 
+    686: 
+    687: 
+    688: 
+    689: 
+    69: 
+    690: 
+    691: 
+    692: 
+    693: 
+    694: 
+    695: 
+    696: 
+    697: 
+    698: 
+    699: 
+    7: 
+    70: 
+    700: 
+    701: 
+    702: 
+    703: 
+    704: 
+    705: 
+    706: 
+    707: 
+    708: 
+    709: 
+    71: 
+    710: 
+    711: 
+    712: 
+    713: 
+    714: 
+    715: 
+    716: 
+    717: 
+    718: 
+    719: 
+    72: 
+    720: 
+    721: 
+    722: 
+    723: 
+    724: 
+    725: 
+    726: 
+    727: 
+    728: 
+    729: 
+    73: 
+    730: 
+    731: 
+    732: 
+    733: 
+    734: 
+    735: 
+    736: 
+    737: 
+    738: 
+    739: 
+    74: 
+    740: 
+    741: 
+    742: 
+    743: 
+    744: 
+    745: 
+    746: 
+    747: 
+    748: 
+    749: 
+    75: 
+    750: 
+    751: 
+    752: 
+    753: 
+    754: 
+    755: 
+    756: 
+    757: 
+    758: 
+    759: 
+    76: 
+    760: 
+    761: 
+    762: 
+    763: 
+    764: 
+    765: 
+    766: 
+    767: 
+    768: 
+    769: 
+    77: 
+    770: 
+    771: 
+    772: 
+    773: 
+    774: 
+    775: 
+    776: 
+    777: 
+    778: 
+    779: 
+    78: 
+    780: 
+    781: 
+    782: 
+    783: 
+    784: 
+    785: 
+    786: 
+    787: 
+    788: 
+    789: 
+    79: 
+    790: 
+    791: 
+    792: 
+    793: 
+    794: 
+    795: 
+    796: 
+    797: 
+    798: 
+    799: 
+    80: 
+    800: 
+    801: 
+    802: 
+    803: 
+    804: 
+    805: 
+    806: 
+    807: 
+    808: 
+    809: 
+    81: 
+    810: 
+    811: 
+    812: 
+    813: 
+    814: 
+    815: 
+    816: 
+    817: 
+    818: 
+    819: 
+    82: 
+    820: 
+    821: 
+    822: 
+    823: 
+    824: 
+    825: 
+    826: 
+    827: 
+    828: 
+    829: 
+    83: 
+    830: 
+    831: 
+    832: 
+    833: 
+    834: 
+    835: 
+    836: 
+    837: 
+    838: 
+    839: 
+    84: 
+    840: 
+    841: 
+    842: 
+    843: 
+    844: 
+    845: 
+    846: 
+    847: 
+    848: 
+    849: 
+    85: 
+    850: 
+    851: 
+    852: 
+    853: 
+    854: 
+    855: 
+    856: 
+    857: 
+    858: 
+    859: 
+    86: 
+    860: 
+    861: 
+    862: 
+    863: 
+    864: 
+    865: 
+    866: 
+    867: 
+    868: 
+    869: 
+    87: 
+    870: 
+    871: 
+    872: 
+    873: 
+    874: 
+    875: 
+    876: 
+    877: 
+    878: 
+    879: 
+    88: 
+    880: 
+    881: 
+    882: 
+    883: 
+    884: 
+    885: 
+    886: 
+    887: 
+    888: 
+    889: 
+    89: 
+    890: 
+    891: 
+    892: 
+    893: 
+    894: 
+    895: 
+    896: 
+    897: 
+    898: 
+    899: 
+    90: 
+    900: 
+    901: 
+    902: 
+    903: 
+    904: 
+    905: 
+    906: 
+    907: 
+    908: 
+    909: 
+    91: 
+    910: 
+    911: 
+    912: 
+    913: 
+    914: 
+    915: 
+    916: 
+    917: 
+    918: 
+    919: 
+    92: 
+    920: 
+    921: 
+    922: 
+    923: 
+    924: 
+    925: 
+    926: 
+    927: 
+    928: 
+    929: 
+    93: 
+    930: 
+    931: 
+    932: 
+    933: 
+    934: 
+    935: 
+    936: 
+    937: 
+    938: 
+    939: 
+    94: 
+    940: 
+    941: 
+    942: 
+    943: 
+    944: 
+    945: 
+    946: 
+    947: 
+    948: 
+    949: 
+    95: 
+    950: 
+    951: 
+    952: 
+    953: 
+    954: 
+    955: 
+    956: 
+    957: 
+    958: 
+    959: 
+    96: 
+    960: 
+    961: 
+    962: 
+    963: 
+    964: 
+    965: 
+    966: 
+    967: 
+    968: 
+    969: 
+    97: 
+    970: 
+    971: 
+    972: 
+    973: 
+    974: 
+    975: 
+    976: 
+    977: 
+    978: 
+    979: 
+    98: 
+    980: 
+    981: 
+    982: 
+    983: 
+    984: 
+    985: 
+    986: 
+    987: 
+    988: 
+    989: 
+    99: 
+    990: 
+    991: 
+    992: 
+    993: 
+    994: 
+    995: 
+    996: 
+    997: 
+    998: 
+    999: 
+    Controller: 0
+  additionalCompilerArguments: {}
+  platformArchitecture: {}
+  scriptingBackend:
+    Android: 0
+  il2cppCompilerConfiguration: {}
+  il2cppCodeGeneration: {}
+  il2cppStacktraceInformation: {}
+  managedStrippingLevel:
+    Android: 1
+    EmbeddedLinux: 1
+    GameCoreScarlett: 1
+    GameCoreXboxOne: 1
+    Kepler: 1
+    Nintendo Switch: 1
+    PS4: 1
+    PS5: 1
+    QNX: 1
+    ReservedCFE: 1
+    VisionOS: 1
+    WebGL: 1
+    Windows Store Apps: 1
+    XboxOne: 1
+    iPhone: 1
+    tvOS: 1
+  incrementalIl2cppBuild: {}
+  suppressCommonWarnings: 1
+  allowUnsafeCode: 0
+  useDeterministicCompilation: 1
+  additionalIl2CppArgs: 
+  scriptingRuntimeVersion: 1
+  gcIncremental: 1
+  gcWBarrierValidation: 0
+  apiCompatibilityLevelPerPlatform:
+    Android: 3
+    CloudRendering: 3
+    EmbeddedLinux: 3
+    GameCoreScarlett: 3
+    GameCoreXboxOne: 3
+    Lumin: 3
+    PS4: 6
+    PS5: 3
+    QNX: 3
+    Stadia: 3
+    Standalone: 3
+    Switch: 3
+    WebGL: 6
+    Windows Store Apps: 3
+    XboxOne: 3
+    iOS: 3
+    tvOS: 3
+  editorAssembliesCompatibilityLevel: 2
+  m_RenderingPath: 1
+  m_MobileRenderingPath: 1
+  metroPackageName: 
+  metroPackageVersion: 
+  metroCertificatePath: 
+  metroCertificatePassword: 
+  metroCertificateSubject: 
+  metroCertificateIssuer: 
+  metroCertificateNotAfter: 0000000000000000
+  metroApplicationDescription: 
+  wsaImages: {}
+  metroTileShortName: 
+  metroTileShowName: 0
+  metroMediumTileShowName: 0
+  metroLargeTileShowName: 0
+  metroWideTileShowName: 0
+  metroSupportStreamingInstall: 0
+  metroLastRequiredScene: 0
+  metroDefaultTileSize: 1
+  metroTileForegroundText: 2
+  metroTileBackgroundColor: {r: 0.13333334, g: 0.17254902, b: 0.21176471, a: 1}
+  metroSplashScreenBackgroundColor: {r: 0.12941177, g: 0.17254902, b: 0.21176471, a: 1}
+  metroSplashScreenUseBackgroundColor: 0
+  syncCapabilities: 0
+  platformCapabilities: {}
+  metroTargetDeviceFamilies: {}
+  metroFTAName: 
+  metroFTAFileTypes: []
+  metroProtocolName: 
+  vcxProjDefaultLanguage: 
+  XboxOneProductId: 
+  XboxOneUpdateKey: 
+  XboxOneSandboxId: 
+  XboxOneContentId: 
+  XboxOneTitleId: 
+  XboxOneSCId: 
+  XboxOneGameOsOverridePath: 
+  XboxOnePackagingOverridePath: 
+  XboxOneAppManifestOverridePath: 
+  XboxOneVersion: 1.0.0.0
+  XboxOnePackageEncryption: 0
+  XboxOnePackageUpdateGranularity: 2
+  XboxOneDescription: 
+  XboxOneLanguage:
+  - enus
+  XboxOneCapability: []
+  XboxOneGameRating: {}
+  XboxOneIsContentPackage: 0
+  XboxOneEnhancedXboxCompatibilityMode: 0
+  XboxOneEnableGPUVariability: 1
+  XboxOneSockets: {}
+  XboxOneSplashScreen: {fileID: 0}
+  XboxOneAllowedProductIds: []
+  XboxOnePersistentLocalStorageSize: 0
+  XboxOneXTitleMemory: 8
+  XboxOneOverrideIdentityName: 
+  XboxOneOverrideIdentityPublisher: 
+  vrEditorSettings: {}
+  cloudServicesEnabled:
+    UNet: 1
+  luminIcon:
+    m_Name: 
+    m_ModelFolderPath: 
+    m_PortalFolderPath: 
+  luminCert:
+    m_CertPath: 
+    m_SignPackage: 1
+  luminIsChannelApp: 0
+  luminVersion:
+    m_VersionCode: 1
+    m_VersionName: 
+  hmiPlayerDataPath: 
+  hmiForceSRGBBlit: 0
+  embeddedLinuxEnableGamepadInput: 0
+  hmiCpuConfiguration: 
+  hmiLogStartupTiming: 0
+  qnxGraphicConfPath: 
+  apiCompatibilityLevel: 3
+  captureStartupLogs: {}
+  activeInputHandler: -1
+  windowsGamepadBackendHint: 0
+  cloudProjectId: 
+  framebufferDepthMemorylessMode: 0
+  qualitySettingsNames: []
+  projectName: 
+  organizationId: 
+  cloudEnabled: 0
+  legacyClampBlendShapeWeights: 0
+  hmiLoadingImage: {fileID: 0}
+  platformRequiresReadableAssets: 0
+  virtualTexturingSupportEnabled: 0
+  insecureHttpOption: 0
+  androidVulkanDenyFilterList: []
+  androidVulkanAllowFilterList: []
+  androidVulkanDeviceFilterListAsset: {fileID: 0}
+  d3d12DeviceFilterListAsset: {fileID: 0}
