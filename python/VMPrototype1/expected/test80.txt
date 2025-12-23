@@ -1,0 +1,34 @@
+ASTProgram
+ASTLetStatement<ASTIdentifier\[wrapper\]> \[ASTFunctionLiteral\]
+ASTExpressionStatement\[None\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+\[25, 0, 0, 0, 0, 13, 10, 14, 0, 22, 30, 25, 0, 0, 0, 1, 2, 22, 1, 15, 0, 23, 16, 23\]
+0000 OpGetLocal 0
+0002 OpConstant 0
+0005 OpMinus
+0006 OpGreaterThan
+0007 OpJumpNotTruthy 22
+0010 OpCurrentClosure
+0011 OpGetLocal 0
+0013 OpConstant 1
+0016 OpSub
+0017 OpCall 1
+0019 OpJump 23
+0022 OpNull
+0023 OpReturnValue
+
+\[28, 0, 2, 0, 26, 0, 25, 0, 0, 0, 3, 22, 1, 23\]
+0000 OpClosure 2 0
+0004 OpSetLocal 0
+0006 OpGetLocal 0
+0008 OpConstant 3
+0011 OpCall 1
+0013 OpReturnValue
+
+\[28, 0, 4, 0, 18, 0, 0, 17, 0, 0, 22, 0, 5\]
+0000 OpClosure 4 0
+0004 OpSetGlobal 0
+0007 OpGetGlobal 0
+0010 OpCall 0
+0012 OpPop
+null
