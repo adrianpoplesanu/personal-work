@@ -1,0 +1,12 @@
+ASTProgram
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+\[27, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 19, 0, 4, 22, 1, 5\]
+0000 OpGetBuiltin 0
+0002 OpConstant 0
+0005 OpConstant 1
+0008 OpConstant 2
+0011 OpConstant 3
+0014 OpArray 4
+0017 OpCall 1
+0019 OpPop
+4
