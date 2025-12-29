@@ -1,0 +1,17 @@
+ASTProgram
+ASTExpressionStatement\[Token: Token \[type: DEF, literal: def\]<name: ASTIdentifier\[test\], params:\[\], body: ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]>\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+\[27, 2, 0, 0, 0, 22, 1, 23\]
+0000 OpGetBuiltin 2
+0002 OpConstant 0
+0005 OpCall 1
+0007 OpReturnValue
+
+\[28, 0, 1, 0, 18, 0, 0, 17, 0, 0, 22, 0, 5\]
+0000 OpClosure 1 0
+0004 OpSetGlobal 0
+0007 OpGetGlobal 0
+0010 OpCall 0
+0012 OpPop
+'buna dimineata'
+null
