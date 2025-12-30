@@ -1,0 +1,30 @@
+ASTProgram
+ASTExpressionStatement\[AssignStatement \[=\] <i>: ASTInteger\[5\]\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[AssignStatement \[=\] <i>: ASTInteger\[6\]\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[AssignStatement \[=\] <i>: ASTInteger\[7\]\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+\[0, 0, 0, 18, 0, 0, 27, 2, 17, 0, 0, 22, 1, 5, 0, 0, 1, 18, 0, 0, 27, 2, 17, 0, 0, 22, 1, 5, 0, 0, 2, 18, 0, 0, 27, 2, 17, 0, 0, 22, 1, 5\]
+0000 OpConstant 0
+0003 OpSetGlobal 0
+0006 OpGetBuiltin 2
+0008 OpGetGlobal 0
+0011 OpCall 1
+0013 OpPop
+0014 OpConstant 1
+0017 OpSetGlobal 0
+0020 OpGetBuiltin 2
+0022 OpGetGlobal 0
+0025 OpCall 1
+0027 OpPop
+0028 OpConstant 2
+0031 OpSetGlobal 0
+0034 OpGetBuiltin 2
+0036 OpGetGlobal 0
+0039 OpCall 1
+0041 OpPop
+5
+6
+7
+null

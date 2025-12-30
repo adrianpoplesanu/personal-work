@@ -1,0 +1,42 @@
+ASTProgram
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[AssignStatement \[=\] <i>: ASTInteger\[0\]\]
+ASTExpressionStatement\[TODO: implement __str__ in ASTWhileExpression\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+\[27, 2, 0, 0, 0, 22, 1, 5, 0, 0, 1, 18, 0, 0, 0, 0, 2, 17, 0, 0, 10, 14, 0, 45, 27, 2, 17, 0, 0, 22, 1, 5, 17, 0, 0, 0, 0, 3, 1, 18, 0, 0, 15, 0, 14, 27, 2, 0, 0, 4, 22, 1, 5\]
+0000 OpGetBuiltin 2
+0002 OpConstant 0
+0005 OpCall 1
+0007 OpPop
+0008 OpConstant 1
+0011 OpSetGlobal 0
+0014 OpConstant 2
+0017 OpGetGlobal 0
+0020 OpGreaterThan
+0021 OpJumpNotTruthy 45
+0024 OpGetBuiltin 2
+0026 OpGetGlobal 0
+0029 OpCall 1
+0031 OpPop
+0032 OpGetGlobal 0
+0035 OpConstant 3
+0038 OpAdd
+0039 OpSetGlobal 0
+0042 OpJump 14
+0045 OpGetBuiltin 2
+0047 OpConstant 4
+0050 OpCall 1
+0052 OpPop
+'testing while expression'
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+'finished while expression testing'
+null
