@@ -1,0 +1,11 @@
+//$: s("[bd <hh oh>]*2").bank("tr909").dec(.4)
+setcpm(170/4)
+$drums: stack (
+  s("bd:1").beat("0, 7?, 10", 16),
+  s("bd:4").beat("14?", 16),
+  s("sd:2").beat("4, 12", 16),
+  s("hh:1!8")
+).orbit(2).scope()
+
+$bass: s("supersaw!8")
+    .note("<c# f d# c c# f d# [d# g# a#2]>/2".sub(12))
