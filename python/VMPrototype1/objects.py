@@ -1,6 +1,6 @@
 from typing import List, Dict
 
-from ast import ASTNode, ASTIdentifier
+from ad_ast import ASTNode, ASTIdentifier
 from hash_utils import HashKey
 from instructions import Instructions
 from symbol_table import new_symbol_table, new_enclosed_symbol_table

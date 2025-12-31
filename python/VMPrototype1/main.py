@@ -3,7 +3,7 @@ import sys
 from compiler import Compiler
 from opcode_ad import OpCodeByte, op_get_local, op_add, op_constant
 from parser import Parser
-from ast import ASTProgram
+from ad_ast import ASTProgram
 from repl import Repl
 from vm import VM
 

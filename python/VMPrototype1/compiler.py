@@ -1,6 +1,6 @@
 from typing import List
 
-from ast import ASTNode, StatementType, statement_type_map
+from ad_ast import ASTNode, StatementType, statement_type_map
 from builtins_ad import builtins
 from bytecode import Bytecode
 from code_ad import Code
