@@ -1,0 +1,54 @@
+ASTProgram
+ASTExpressionStatement\[Token: Token \[type: CLASS, literal: class\]\]
+ASTExpressionStatement\[AssignStatement \[=\] <person>: ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+\[0, 0, 1, 0, 0, 2, 38, 0, 0\]
+0000 OpConstant 1
+0003 OpConstant 2
+0006 OpSetPropertySym 0
+
+\[0, 0, 0, 31, 18, 0, 0, 17, 0, 0, 5, 17, 0, 0, 22, 0, 18, 0, 1, 27, 2, 17, 0, 1, 0, 0, 3, 34, 22, 1, 5, 27, 2, 0, 0, 4, 22, 1, 5, 27, 2, 17, 0, 1, 0, 0, 5, 34, 22, 1, 5, 27, 2, 0, 0, 6, 22, 1, 5, 27, 2, 17, 0, 1, 0, 0, 7, 34, 22, 1, 5\]
+0000 OpConstant 0
+0003 OpClass
+0004 OpSetGlobal 0
+0007 OpGetGlobal 0
+0010 OpPop
+0011 OpGetGlobal 0
+0014 OpCall 0
+0016 OpSetGlobal 1
+0019 OpGetBuiltin 2
+0021 OpGetGlobal 1
+0024 OpConstant 3
+0027 OpGetProperty
+0028 OpCall 1
+0030 OpPop
+0031 OpGetBuiltin 2
+0033 OpConstant 4
+0036 OpCall 1
+0038 OpPop
+0039 OpGetBuiltin 2
+0041 OpGetGlobal 1
+0044 OpConstant 5
+0047 OpGetProperty
+0048 OpCall 1
+0050 OpPop
+0051 OpGetBuiltin 2
+0053 OpConstant 6
+0056 OpCall 1
+0058 OpPop
+0059 OpGetBuiltin 2
+0061 OpGetGlobal 1
+0064 OpConstant 7
+0067 OpGetProperty
+0068 OpCall 1
+0070 OpPop
+'aaa'
+'bbb'
+'aaa'
+'ccc'
+'aaa'
+null

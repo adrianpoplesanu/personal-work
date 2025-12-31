@@ -1,0 +1,65 @@
+ASTProgram
+ASTExpressionStatement\[Token: Token \[type: CLASS, literal: class\]\]
+ASTExpressionStatement\[AssignStatement \[=\] <person>: ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[AssignStatement \[=\] <ASTMemberAccess{owner: ASTIdentifier\[person\], member: ASTIdentifier\[name\]}>: ASTString\[bbb\]\]
+ASTExpressionStatement\[AssignStatement \[=\] <ASTMemberAccess{owner: ASTIdentifier\[person\], member: ASTIdentifier\[age\]}>: ASTInteger\[66\]\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+\[0, 0, 1, 0, 0, 2, 38, 0, 0\]
+0000 OpConstant 1
+0003 OpConstant 2
+0006 OpSetPropertySym 0
+
+\[0, 0, 3, 0, 0, 4, 38, 0, 1\]
+0000 OpConstant 3
+0003 OpConstant 4
+0006 OpSetPropertySym 1
+
+\[0, 0, 0, 31, 18, 0, 0, 17, 0, 0, 5, 17, 0, 0, 22, 0, 18, 0, 1, 27, 2, 17, 0, 1, 0, 0, 5, 34, 22, 1, 5, 27, 2, 17, 0, 1, 0, 0, 6, 34, 22, 1, 5, 17, 0, 1, 0, 0, 7, 0, 0, 8, 35, 17, 0, 1, 0, 0, 9, 0, 0, 10, 35, 27, 2, 17, 0, 1, 0, 0, 11, 34, 22, 1, 5, 27, 2, 17, 0, 1, 0, 0, 12, 34, 22, 1, 5\]
+0000 OpConstant 0
+0003 OpClass
+0004 OpSetGlobal 0
+0007 OpGetGlobal 0
+0010 OpPop
+0011 OpGetGlobal 0
+0014 OpCall 0
+0016 OpSetGlobal 1
+0019 OpGetBuiltin 2
+0021 OpGetGlobal 1
+0024 OpConstant 5
+0027 OpGetProperty
+0028 OpCall 1
+0030 OpPop
+0031 OpGetBuiltin 2
+0033 OpGetGlobal 1
+0036 OpConstant 6
+0039 OpGetProperty
+0040 OpCall 1
+0042 OpPop
+0043 OpGetGlobal 1
+0046 OpConstant 7
+0049 OpConstant 8
+0052 OpSetProperty
+0053 OpGetGlobal 1
+0056 OpConstant 9
+0059 OpConstant 10
+0062 OpSetProperty
+0063 OpGetBuiltin 2
+0065 OpGetGlobal 1
+0068 OpConstant 11
+0071 OpGetProperty
+0072 OpCall 1
+0074 OpPop
+0075 OpGetBuiltin 2
+0077 OpGetGlobal 1
+0080 OpConstant 12
+0083 OpGetProperty
+0084 OpCall 1
+0086 OpPop
+'aaa'
+55
+'bbb'
+66
+null

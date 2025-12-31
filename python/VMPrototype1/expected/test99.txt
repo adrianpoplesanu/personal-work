@@ -1,0 +1,92 @@
+ASTProgram
+ASTExpressionStatement\[Token: Token \[type: CLASS, literal: class\]\]
+ASTExpressionStatement\[AssignStatement \[=\] <person>: ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTMemberAccess{owner: ASTIdentifier\[person\], member: ASTIdentifier\[test\]}\]
+\[0, 0, 1, 0, 0, 2, 38, 0, 0\]
+0000 OpConstant 1
+0003 OpConstant 2
+0006 OpSetPropertySym 0
+
+\[0, 0, 3, 0, 0, 4, 38, 0, 1\]
+0000 OpConstant 3
+0003 OpConstant 4
+0006 OpSetPropertySym 1
+
+\[27, 1, 0, 0, 5, 22, 1, 5, 27, 2, 0, 0, 6, 39, 0, 1, 22, 1, 5, 27, 2, 0, 0, 7, 39, 0, 2, 22, 1, 5, 27, 1, 0, 0, 8, 22, 1, 23\]
+0000 OpGetBuiltin 1
+0002 OpConstant 5
+0005 OpCall 1
+0007 OpPop
+0008 OpGetBuiltin 2
+0010 OpConstant 6
+0013 OpGetPropertySym 1
+0016 OpCall 1
+0018 OpPop
+0019 OpGetBuiltin 2
+0021 OpConstant 7
+0024 OpGetPropertySym 2
+0027 OpCall 1
+0029 OpPop
+0030 OpGetBuiltin 1
+0032 OpConstant 8
+0035 OpCall 1
+0037 OpReturnValue
+
+\[0, 0, 0, 31, 18, 0, 0, 17, 0, 0, 28, 0, 9, 0, 0, 0, 10, 32, 5, 17, 0, 0, 22, 0, 18, 0, 1, 27, 2, 17, 0, 1, 0, 0, 11, 34, 22, 1, 5, 27, 2, 17, 0, 1, 0, 0, 12, 34, 22, 1, 5, 27, 2, 17, 0, 1, 0, 0, 13, 34, 0, 0, 14, 1, 22, 1, 5, 27, 2, 17, 0, 1, 0, 0, 15, 34, 0, 0, 16, 1, 22, 1, 5, 17, 0, 1, 0, 0, 17, 34, 22, 0, 5\]
+0000 OpConstant 0
+0003 OpClass
+0004 OpSetGlobal 0
+0007 OpGetGlobal 0
+0010 OpClosure 9 0
+0014 OpConstant 10
+0017 OpSetMethod
+0018 OpPop
+0019 OpGetGlobal 0
+0022 OpCall 0
+0024 OpSetGlobal 1
+0027 OpGetBuiltin 2
+0029 OpGetGlobal 1
+0032 OpConstant 11
+0035 OpGetProperty
+0036 OpCall 1
+0038 OpPop
+0039 OpGetBuiltin 2
+0041 OpGetGlobal 1
+0044 OpConstant 12
+0047 OpGetProperty
+0048 OpCall 1
+0050 OpPop
+0051 OpGetBuiltin 2
+0053 OpGetGlobal 1
+0056 OpConstant 13
+0059 OpGetProperty
+0060 OpConstant 14
+0063 OpAdd
+0064 OpCall 1
+0066 OpPop
+0067 OpGetBuiltin 2
+0069 OpGetGlobal 1
+0072 OpConstant 15
+0075 OpGetProperty
+0076 OpConstant 16
+0079 OpAdd
+0080 OpCall 1
+0082 OpPop
+0083 OpGetGlobal 1
+0086 OpConstant 17
+0089 OpGetProperty
+0090 OpCall 0
+0092 OpPop
+'aaa'
+55
+'aaabbb'
+66
+'start'property_index: 1
+'aaa'
+property_index: 2
+55
+'end'null
