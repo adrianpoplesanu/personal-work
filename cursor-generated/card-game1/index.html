@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hearthstone-like Card Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Opponent Area -->
+        <div class="player-area opponent-area">
+            <div class="player-info">
+                <div class="hero-portrait opponent-portrait">
+                    <div class="hero-image">👹</div>
+                </div>
+                <div class="player-stats">
+                    <div class="health-bar">
+                        <span class="health-label">Health:</span>
+                        <span class="health-value" id="opponent-health">30</span>
+                    </div>
+                    <div class="mana-bar">
+                        <span class="mana-label">Mana:</span>
+                        <span class="mana-value" id="opponent-mana">0</span>
+                        <span class="mana-slash">/</span>
+                        <span class="mana-max" id="opponent-mana-max">0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="board opponent-board" id="opponent-board">
+                <!-- Opponent minions will appear here -->
+            </div>
+        </div>
+
+        <!-- Game Info -->
+        <div class="game-info">
+            <div class="turn-indicator" id="turn-indicator">Your Turn</div>
+            <div class="turn-counter">Turn: <span id="turn-number">1</span></div>
+        </div>
+
+        <!-- Player Area -->
+        <div class="player-area player-area-bottom">
+            <div class="board player-board" id="player-board">
+                <!-- Player minions will appear here -->
+            </div>
+            <div class="player-info">
+                <div class="hero-portrait player-portrait">
+                    <div class="hero-image">🛡️</div>
+                </div>
+                <div class="player-stats">
+                    <div class="health-bar">
+                        <span class="health-label">Health:</span>
+                        <span class="health-value" id="player-health">30</span>
+                    </div>
+                    <div class="mana-bar">
+                        <span class="mana-label">Mana:</span>
+                        <span class="mana-value" id="player-mana">1</span>
+                        <span class="mana-slash">/</span>
+                        <span class="mana-max" id="player-mana-max">1</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hand Area -->
+        <div class="hand-area" id="hand-area">
+            <!-- Cards will appear here -->
+        </div>
+
+        <!-- End Turn Button -->
+        <button class="end-turn-btn" id="end-turn-btn">End Turn</button>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
+
