@@ -6,6 +6,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.node.ViewAdapter
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineDispatcher
@@ -22,11 +23,13 @@ import kotlinx.coroutines.newSingleThreadContext
 import org.w3c.dom.Element
 import org.w3c.dom.Node
 import ro.adrianus.rssreader2.adapter.ArticleAdapter
+import ro.adrianus.rssreader2.adapter.ArticleLoader
 import ro.adrianus.rssreader2.model.Article
 import ro.adrianus.rssreader2.model.Feed
+import ro.adrianus.rssreader2.producer.ArticleProducer
 import javax.xml.parsers.DocumentBuilderFactory
 
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(), ArticleLoader {
     private val factory = DocumentBuilderFactory.newInstance()
     private val dispatcher = newFixedThreadPoolContext(2, "IO")
 
@@ -46,13 +49,14 @@ class MainActivity : ComponentActivity() {
         setContentView(R.layout.activity_main)
 
         viewManager = LinearLayoutManager(this)
-        viewAdapter = ArticleAdapter()
+        viewAdapter = ArticleAdapter(this)
         articles = findViewById<RecyclerView>(R.id.articles).apply {
             layoutManager = viewManager
             adapter = viewAdapter
         }
-
-        asyncLoadNews()
+        lifecycleScope.launch {
+            loadMore()
+        }
     }
 
 
@@ -118,5 +122,16 @@ class MainActivity : ComponentActivity() {
 
                 Article(feed.name, title, summary)
             }
+    }
+
+    override suspend fun loadMore() {
+        val producer = ArticleProducer.producer
+        if (!producer.isClosedForReceive) {
+            val articles = producer.receive()
+            runOnUiThread {
+                findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE
+                viewAdapter.add(articles)
+            }
+        }
     }
 }
