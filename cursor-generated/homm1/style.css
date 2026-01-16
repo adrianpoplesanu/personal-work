@@ -1,0 +1,216 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: #1a1a2e;
+    color: #eee;
+    overflow: hidden;
+}
+
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.menu-overlay.hidden {
+    display: none;
+}
+
+.menu-container {
+    background: rgba(0, 0, 0, 0.8);
+    border: 3px solid #8b7355;
+    border-radius: 10px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(139, 115, 85, 0.5);
+}
+
+.menu-container h1 {
+    font-size: 3em;
+    color: #d4af37;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    margin-bottom: 30px;
+    font-family: 'Times New Roman', serif;
+}
+
+.menu-container h2 {
+    font-size: 2em;
+    color: #d4af37;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    margin-bottom: 30px;
+}
+
+.menu-btn {
+    display: block;
+    width: 200px;
+    padding: 15px 30px;
+    margin: 15px auto;
+    font-size: 1.2em;
+    background: linear-gradient(135deg, #8b7355 0%, #6b5d4f 100%);
+    color: #fff;
+    border: 2px solid #d4af37;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.menu-btn:hover {
+    background: linear-gradient(135deg, #a0826b 0%, #8b7355 100%);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+}
+
+.menu-btn:active {
+    transform: scale(0.98);
+}
+
+#gameContainer {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    background: #1a1a2e;
+    overflow: auto; /* Enable scrolling */
+}
+
+#gameContainer.hidden {
+    display: none;
+}
+
+#gameCanvas {
+    display: block;
+    background: #2a2a3e;
+    cursor: pointer;
+    /* Canvas will be larger than viewport, allowing scrolling */
+}
+
+#gameUI {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid #8b7355;
+    border-radius: 5px;
+    padding: 15px;
+    min-width: 200px;
+}
+
+#playerInfo {
+    color: #d4af37;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#playerInfo div {
+    margin: 5px 0;
+}
+
+#unitInfo {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #8b7355;
+}
+
+#unitInfo.hidden {
+    display: none;
+}
+
+#unitName {
+    font-size: 1.2em;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+#unitStats {
+    font-size: 0.9em;
+    color: #ccc;
+    margin-bottom: 10px;
+}
+
+.ui-btn {
+    padding: 8px 15px;
+    background: #8b7355;
+    color: #fff;
+    border: 1px solid #d4af37;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.ui-btn:hover {
+    background: #a0826b;
+}
+
+#combatScreen {
+    background: rgba(0, 0, 0, 0.95);
+}
+
+.combat-container {
+    display: flex;
+    width: 90%;
+    height: 90%;
+    max-width: 1200px;
+    gap: 20px;
+}
+
+#combatCanvas {
+    flex: 1;
+    background: #2a2a3e;
+    border: 3px solid #8b7355;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+}
+
+#combatUI {
+    width: 400px;
+    min-width: 400px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #8b7355;
+    border-radius: 5px;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+#combatInfo {
+    color: #d4af37;
+    font-weight: bold;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+}
+
+#combatLog {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #8b7355;
+    border-radius: 3px;
+    padding: 15px;
+    min-height: 250px;
+    max-height: 500px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    font-size: 1em;
+    color: #ccc;
+    word-wrap: break-word;
+    line-height: 1.5;
+}
+
+.combat-log-entry {
+    margin: 5px 0;
+    padding: 5px;
+    border-left: 2px solid #8b7355;
+    padding-left: 10px;
+}
+

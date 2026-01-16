@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heroes of Might and Magic 2 - Clone</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Main Menu -->
+    <div id="mainMenu" class="menu-overlay">
+        <div class="menu-container">
+            <h1>Heroes of Might and Magic</h1>
+            <button id="startGameBtn" class="menu-btn">Start Game</button>
+            <button id="instructionsBtn" class="menu-btn">Instructions</button>
+        </div>
+    </div>
+
+    <!-- Pause Menu -->
+    <div id="pauseMenu" class="menu-overlay hidden">
+        <div class="menu-container">
+            <h2>Game Paused</h2>
+            <button id="resumeBtn" class="menu-btn">Resume</button>
+            <button id="mainMenuBtn" class="menu-btn">Main Menu</button>
+        </div>
+    </div>
+
+    <!-- Game Container -->
+    <div id="gameContainer" class="hidden">
+        <canvas id="gameCanvas"></canvas>
+        <div id="gameUI">
+            <div id="playerInfo">
+                <div>Player Turn</div>
+                <div>Movement Points: <span id="movementPoints">0</span></div>
+                <div>Gold: <span id="gold">1000</span></div>
+                <button id="endTurnBtn" class="ui-btn" style="margin-top: 10px; width: 100%;">End Turn (E)</button>
+            </div>
+            <div id="unitInfo" class="hidden">
+                <div id="unitName"></div>
+                <div id="unitStats"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Combat Screen -->
+    <div id="combatScreen" class="menu-overlay hidden">
+        <div class="combat-container">
+            <div id="combatUI">
+                <div id="combatInfo">
+                    <div>Combat Turn: <span id="combatTurn">Player</span></div>
+                </div>
+                <div id="combatLog"></div>
+                <button id="combatEndTurn" class="menu-btn">End Turn</button>
+            </div>
+            <canvas id="combatCanvas"></canvas>
+        </div>
+    </div>
+
+    <script src="units.js"></script>
+    <script src="map.js"></script>
+    <script src="combat.js"></script>
+    <script src="game.js"></script>
+    <script src="menu.js"></script>
+</body>
+</html>
+
