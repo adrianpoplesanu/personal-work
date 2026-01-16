@@ -21,7 +21,7 @@ const cardDatabase = [
     { id: 1, name: "Fireball", cost: 4, attack: 0, health: 0, description: "Deal 6 damage", type: "spell", effect: "damage", value: 6 },
     { id: 2, name: "Lightning Bolt", cost: 1, attack: 0, health: 0, description: "Deal 3 damage", type: "spell", effect: "damage", value: 3 },
     { id: 3, name: "Heal", cost: 2, attack: 0, health: 0, description: "Restore 5 health", type: "spell", effect: "heal", value: 5 },
-    { id: 4, name: "Chicken", cost: 1, attack: 1, health: 1, description: "A weak minion", type: "minion" },
+    { id: 4, name: "Peasant", cost: 1, attack: 1, health: 1, description: "A weak minion", type: "minion" },
     { id: 5, name: "Orc Warrior", cost: 3, attack: 3, health: 2, description: "A fierce fighter", type: "minion" },
     { id: 6, name: "Dragon", cost: 8, attack: 8, health: 8, description: "A powerful beast", type: "minion" },
     { id: 7, name: "Knight", cost: 4, attack: 3, health: 5, description: "A sturdy defender", type: "minion" },
