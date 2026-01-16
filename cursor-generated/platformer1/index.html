@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Platformer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="menu" class="menu-container">
+        <div class="menu-content">
+            <h1 class="neon-title">NEON PLATFORMER</h1>
+            <div class="menu-buttons">
+                <button class="neon-button" onclick="startGame()">START GAME</button>
+                <button class="neon-button" onclick="showLevelSelect()">SELECT LEVEL</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="levelSelect" class="menu-container hidden">
+        <div class="menu-content">
+            <h2 class="neon-title">SELECT LEVEL</h2>
+            <div class="level-buttons">
+                <button class="neon-button" onclick="loadLevel(1)">LEVEL 1</button>
+                <button class="neon-button" onclick="loadLevel(2)">LEVEL 2</button>
+                <button class="neon-button" onclick="loadLevel(3)">LEVEL 3</button>
+            </div>
+            <button class="neon-button back-button" onclick="showMainMenu()">BACK</button>
+        </div>
+    </div>
+
+    <div id="gameContainer" class="game-container hidden">
+        <canvas id="gameCanvas"></canvas>
+        <div class="game-ui">
+            <div class="ui-text">Level: <span id="levelDisplay">1</span></div>
+            <button class="neon-button small-button" onclick="showMainMenu()">MENU</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
+

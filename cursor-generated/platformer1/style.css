@@ -1,0 +1,179 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: #0a0a0a;
+    color: #00ffff;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle, #1a0a2e 0%, #0a0a0a 100%);
+    z-index: 100;
+}
+
+.menu-container.hidden {
+    display: none;
+}
+
+.menu-content {
+    text-align: center;
+    padding: 40px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 20px;
+    border: 2px solid #00ffff;
+    box-shadow: 0 0 20px #00ffff, inset 0 0 20px rgba(0, 255, 255, 0.1);
+}
+
+.neon-title {
+    font-size: 3.5em;
+    font-weight: bold;
+    color: #00ffff;
+    text-shadow: 
+        0 0 10px #00ffff,
+        0 0 20px #00ffff,
+        0 0 30px #00ffff,
+        0 0 40px #00ffff;
+    margin-bottom: 30px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        text-shadow: 
+            0 0 10px #00ffff,
+            0 0 20px #00ffff,
+            0 0 30px #00ffff,
+            0 0 40px #00ffff;
+    }
+    50% {
+        opacity: 0.8;
+        text-shadow: 
+            0 0 5px #00ffff,
+            0 0 10px #00ffff,
+            0 0 15px #00ffff,
+            0 0 20px #00ffff;
+    }
+}
+
+.menu-buttons, .level-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.neon-button {
+    padding: 15px 40px;
+    font-size: 1.2em;
+    background: transparent;
+    color: #00ffff;
+    border: 2px solid #00ffff;
+    border-radius: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.neon-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.neon-button:hover::before {
+    left: 100%;
+}
+
+.neon-button:hover {
+    background: rgba(0, 255, 255, 0.1);
+    box-shadow: 
+        0 0 20px #00ffff,
+        0 0 30px #00ffff,
+        inset 0 0 20px rgba(0, 255, 255, 0.1);
+    transform: scale(1.05);
+}
+
+.neon-button:active {
+    transform: scale(0.98);
+}
+
+.back-button {
+    margin-top: 20px;
+}
+
+.small-button {
+    padding: 10px 20px;
+    font-size: 0.9em;
+}
+
+.game-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #0a0a0a;
+}
+
+.game-container.hidden {
+    display: none;
+}
+
+#gameCanvas {
+    border: 3px solid #00ffff;
+    box-shadow: 
+        0 0 20px #00ffff,
+        inset 0 0 20px rgba(0, 255, 255, 0.1);
+    background: #0a0a0a;
+    display: block;
+}
+
+.game-ui {
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.ui-text {
+    font-size: 1.5em;
+    color: #00ffff;
+    text-shadow: 
+        0 0 10px #00ffff,
+        0 0 20px #00ffff;
+    font-weight: bold;
+}
+
+#levelDisplay {
+    color: #ff00ff;
+    text-shadow: 
+        0 0 10px #ff00ff,
+        0 0 20px #ff00ff;
+}
+
