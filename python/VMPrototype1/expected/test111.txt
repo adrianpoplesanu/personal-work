@@ -1,0 +1,54 @@
+ASTProgram
+ASTExpressionStatement\[Token: Token \[type: CLASS, literal: class\]\]
+ASTExpressionStatement\[AssignStatement \[=\] <worker>: ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[AssignStatement \[=\] <result>: ASTMemberAccess{owner: ASTIdentifier\[worker\], member: ASTIdentifier\[info\]}\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[AssignStatement \[=\] <result2>: ASTMemberAccess{owner: ASTIdentifier\[worker\], member: ASTIdentifier\[info2\]}\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+\[0, 0, 1, 23\]
+0000 OpConstant 1
+0003 OpReturnValue
+
+\[0, 0, 4, 25, 1, 1, 23\]
+0000 OpConstant 4
+0003 OpGetLocal 1
+0005 OpAdd
+0006 OpReturnValue
+
+\[0, 0, 0, 31, 18, 0, 0, 17, 0, 0, 28, 0, 2, 0, 0, 0, 3, 32, 28, 0, 5, 0, 0, 0, 6, 32, 5, 17, 0, 0, 22, 0, 18, 0, 1, 17, 0, 1, 0, 0, 7, 34, 22, 0, 18, 0, 2, 27, 2, 17, 0, 2, 22, 1, 5, 17, 0, 1, 0, 0, 8, 34, 0, 0, 9, 22, 1, 18, 0, 3, 27, 2, 17, 0, 3, 22, 1, 5\]
+0000 OpConstant 0
+0003 OpClass
+0004 OpSetGlobal 0
+0007 OpGetGlobal 0
+0010 OpClosure 2 0
+0014 OpConstant 3
+0017 OpSetMethod
+0018 OpClosure 5 0
+0022 OpConstant 6
+0025 OpSetMethod
+0026 OpPop
+0027 OpGetGlobal 0
+0030 OpCall 0
+0032 OpSetGlobal 1
+0035 OpGetGlobal 1
+0038 OpConstant 7
+0041 OpGetProperty
+0042 OpCall 0
+0044 OpSetGlobal 2
+0047 OpGetBuiltin 2
+0049 OpGetGlobal 2
+0052 OpCall 1
+0054 OpPop
+0055 OpGetGlobal 1
+0058 OpConstant 8
+0061 OpGetProperty
+0062 OpConstant 9
+0065 OpCall 1
+0067 OpSetGlobal 3
+0070 OpGetBuiltin 2
+0072 OpGetGlobal 3
+0075 OpCall 1
+0077 OpPop
+'executing worker-1 on port 8000'
+'executing worker-1 on port 1111'
+null

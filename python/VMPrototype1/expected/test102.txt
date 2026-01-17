@@ -1,0 +1,32 @@
+ASTProgram
+ASTExpressionStatement\[Token: Token \[type: CLASS, literal: class\]\]
+ASTExpressionStatement\[AssignStatement \[=\] <dog>: ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTMemberAccess{owner: ASTIdentifier\[dog\], member: ASTIdentifier\[test\]}\]
+\[0, 0, 1, 0, 0, 2, 40, 0, 1, 27, 2, 25, 1, 22, 1, 23\]
+0000 OpConstant 1
+0003 OpConstant 2
+0006 OpPatchPropertySym 1
+0009 OpGetBuiltin 2
+0011 OpGetLocal 1
+0013 OpCall 1
+0015 OpReturnValue
+
+\[0, 0, 0, 31, 18, 0, 0, 17, 0, 0, 28, 0, 3, 0, 0, 0, 4, 32, 5, 17, 0, 0, 22, 0, 18, 0, 1, 17, 0, 1, 0, 0, 5, 34, 22, 0, 5\]
+0000 OpConstant 0
+0003 OpClass
+0004 OpSetGlobal 0
+0007 OpGetGlobal 0
+0010 OpClosure 3 0
+0014 OpConstant 4
+0017 OpSetMethod
+0018 OpPop
+0019 OpGetGlobal 0
+0022 OpCall 0
+0024 OpSetGlobal 1
+0027 OpGetGlobal 1
+0030 OpConstant 5
+0033 OpGetProperty
+0034 OpCall 0
+0036 OpPop
+'dex'
+null

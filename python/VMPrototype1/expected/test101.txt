@@ -1,0 +1,48 @@
+ASTProgram
+ASTExpressionStatement\[Token: Token \[type: CLASS, literal: class\]\]
+ASTExpressionStatement\[AssignStatement \[=\] <person>: ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTMemberAccess{owner: ASTIdentifier\[person\], member: ASTIdentifier\[test\]}\]
+\[0, 0, 1, 0, 0, 2, 38, 0, 0\]
+0000 OpConstant 1
+0003 OpConstant 2
+0006 OpSetPropertySym 0
+
+\[0, 0, 3, 0, 0, 4, 38, 0, 1\]
+0000 OpConstant 3
+0003 OpConstant 4
+0006 OpSetPropertySym 1
+
+\[27, 2, 25, 0, 0, 0, 5, 34, 22, 1, 5, 27, 2, 25, 0, 0, 0, 6, 34, 22, 1, 23\]
+0000 OpGetBuiltin 2
+0002 OpGetLocal 0
+0004 OpConstant 5
+0007 OpGetProperty
+0008 OpCall 1
+0010 OpPop
+0011 OpGetBuiltin 2
+0013 OpGetLocal 0
+0015 OpConstant 6
+0018 OpGetProperty
+0019 OpCall 1
+0021 OpReturnValue
+
+\[0, 0, 0, 31, 18, 0, 0, 17, 0, 0, 28, 0, 7, 0, 0, 0, 8, 32, 5, 17, 0, 0, 22, 0, 18, 0, 1, 17, 0, 1, 0, 0, 9, 34, 22, 0, 5\]
+0000 OpConstant 0
+0003 OpClass
+0004 OpSetGlobal 0
+0007 OpGetGlobal 0
+0010 OpClosure 7 0
+0014 OpConstant 8
+0017 OpSetMethod
+0018 OpPop
+0019 OpGetGlobal 0
+0022 OpCall 0
+0024 OpSetGlobal 1
+0027 OpGetGlobal 1
+0030 OpConstant 9
+0033 OpGetProperty
+0034 OpCall 0
+0036 OpPop
+'aaa'
+55
+null

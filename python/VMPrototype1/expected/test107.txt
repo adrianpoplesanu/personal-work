@@ -1,0 +1,30 @@
+ASTProgram
+ASTExpressionStatement\[Token: Token \[type: CLASS, literal: class\]\]
+ASTExpressionStatement\[AssignStatement \[=\] <worker>: ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTMemberAccess{owner: ASTIdentifier\[worker\], member: ASTIdentifier\[test\]}\]
+\[27, 2, 25, 1, 22, 1, 23\]
+0000 OpGetBuiltin 2
+0002 OpGetLocal 1
+0004 OpCall 1
+0006 OpReturnValue
+
+\[0, 0, 0, 31, 18, 0, 0, 17, 0, 0, 28, 0, 1, 0, 0, 0, 2, 32, 5, 17, 0, 0, 22, 0, 18, 0, 1, 17, 0, 1, 0, 0, 3, 34, 0, 0, 4, 22, 1, 5\]
+0000 OpConstant 0
+0003 OpClass
+0004 OpSetGlobal 0
+0007 OpGetGlobal 0
+0010 OpClosure 1 0
+0014 OpConstant 2
+0017 OpSetMethod
+0018 OpPop
+0019 OpGetGlobal 0
+0022 OpCall 0
+0024 OpSetGlobal 1
+0027 OpGetGlobal 1
+0030 OpConstant 3
+0033 OpGetProperty
+0034 OpConstant 4
+0037 OpCall 1
+0039 OpPop
+'buna dimineata'
+null

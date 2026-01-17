@@ -1,0 +1,18 @@
+ASTProgram
+ASTExpressionStatement\[Token: Token \[type: DEF, literal: def\]<name: ASTIdentifier\[greet\], params:\[<ad_ast.ASTIdentifier object at 0x(.*)>\], body: ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]>\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+\[27, 2, 25, 0, 22, 1, 23\]
+0000 OpGetBuiltin 2
+0002 OpGetLocal 0
+0004 OpCall 1
+0006 OpReturnValue
+
+\[28, 0, 0, 0, 18, 0, 0, 17, 0, 0, 0, 0, 1, 22, 1, 5\]
+0000 OpClosure 0 0
+0004 OpSetGlobal 0
+0007 OpGetGlobal 0
+0010 OpConstant 1
+0013 OpCall 1
+0015 OpPop
+'vedus'
+null
