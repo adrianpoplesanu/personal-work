@@ -1,0 +1,57 @@
+ASTProgram
+ASTExpressionStatement\[Token: Token \[type: CLASS, literal: class\]\]
+ASTExpressionStatement\[AssignStatement \[=\] <dog>: ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTMemberAccess{owner: ASTIdentifier\[dog\], member: ASTIdentifier\[set2\]}\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+\[0, 0, 1, 0, 0, 2, 38, 0, 0\]
+0000 OpConstant 1
+0003 OpConstant 2
+0006 OpSetPropertySym 0
+
+\[0, 0, 3, 0, 0, 4, 38, 0, 1\]
+0000 OpConstant 3
+0003 OpConstant 4
+0006 OpSetPropertySym 1
+
+\[0, 0, 5, 0, 0, 6, 40, 0, 1, 0, 0, 7, 0, 0, 8, 40, 0, 2, 24\]
+0000 OpConstant 5
+0003 OpConstant 6
+0006 OpPatchPropertySym 1
+0009 OpConstant 7
+0012 OpConstant 8
+0015 OpPatchPropertySym 2
+0018 OpReturn
+
+\[0, 0, 0, 31, 18, 0, 0, 17, 0, 0, 28, 0, 9, 0, 0, 0, 10, 32, 5, 17, 0, 0, 22, 0, 18, 0, 1, 17, 0, 1, 0, 0, 11, 34, 22, 0, 5, 27, 2, 17, 0, 1, 0, 0, 12, 34, 22, 1, 5, 27, 2, 17, 0, 1, 0, 0, 13, 34, 22, 1, 5\]
+0000 OpConstant 0
+0003 OpClass
+0004 OpSetGlobal 0
+0007 OpGetGlobal 0
+0010 OpClosure 9 0
+0014 OpConstant 10
+0017 OpSetMethod
+0018 OpPop
+0019 OpGetGlobal 0
+0022 OpCall 0
+0024 OpSetGlobal 1
+0027 OpGetGlobal 1
+0030 OpConstant 11
+0033 OpGetProperty
+0034 OpCall 0
+0036 OpPop
+0037 OpGetBuiltin 2
+0039 OpGetGlobal 1
+0042 OpConstant 12
+0045 OpGetProperty
+0046 OpCall 1
+0048 OpPop
+0049 OpGetBuiltin 2
+0051 OpGetGlobal 1
+0054 OpConstant 13
+0057 OpGetProperty
+0058 OpCall 1
+0060 OpPop
+'dex'
+'berceni'
+null

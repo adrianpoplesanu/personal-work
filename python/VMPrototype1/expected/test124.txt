@@ -1,0 +1,19 @@
+ASTProgram
+ASTExpressionStatement\[Token: Token \[type: DEF, literal: def\]<name: ASTIdentifier\[test\], params:\[\], body: ASTExpressionStatement\[AssignStatement \[=\] <a>: ASTInteger\[16\]\]ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]>\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+\[0, 0, 0, 26, 0, 27, 2, 25, 0, 22, 1, 23\]
+0000 OpConstant 0
+0003 OpSetLocal 0
+0005 OpGetBuiltin 2
+0007 OpGetLocal 0
+0009 OpCall 1
+0011 OpReturnValue
+
+\[28, 0, 1, 0, 18, 0, 0, 17, 0, 0, 22, 0, 5\]
+0000 OpClosure 1 0
+0004 OpSetGlobal 0
+0007 OpGetGlobal 0
+0010 OpCall 0
+0012 OpPop
+16
+null
