@@ -1,0 +1,98 @@
+ASTProgram
+ASTExpressionStatement\[Token: Token \[type: CLASS, literal: class\]\]
+ASTExpressionStatement\[AssignStatement \[=\] <dog>: ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTMemberAccess{owner: ASTIdentifier\[dog\], member: ASTIdentifier\[set\]}\]
+ASTExpressionStatement\[ASTMemberAccess{owner: ASTIdentifier\[dog\], member: ASTIdentifier\[set2\]}\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+\[0, 0, 1, 0, 0, 2, 38, 0, 0\]
+0000 OpConstant 1
+0003 OpConstant 2
+0006 OpSetPropertySym 0
+
+\[0, 0, 3, 0, 0, 4, 40, 0, 1, 24\]
+0000 OpConstant 3
+0003 OpConstant 4
+0006 OpPatchPropertySym 1
+0009 OpReturn
+
+\[27, 2, 0, 0, 7, 22, 1, 5, 0, 0, 8, 0, 0, 9, 40, 0, 1, 27, 2, 25, 1, 22, 1, 5, 27, 2, 0, 0, 10, 22, 1, 23\]
+0000 OpGetBuiltin 2
+0002 OpConstant 7
+0005 OpCall 1
+0007 OpPop
+0008 OpConstant 8
+0011 OpConstant 9
+0014 OpPatchPropertySym 1
+0017 OpGetBuiltin 2
+0019 OpGetLocal 1
+0021 OpCall 1
+0023 OpPop
+0024 OpGetBuiltin 2
+0026 OpConstant 10
+0029 OpCall 1
+0031 OpReturnValue
+
+\[0, 0, 13, 39, 0, 1, 23\]
+0000 OpConstant 13
+0003 OpGetPropertySym 1
+0006 OpReturnValue
+
+\[0, 0, 0, 31, 18, 0, 0, 17, 0, 0, 28, 0, 5, 0, 0, 0, 6, 32, 28, 0, 11, 0, 0, 0, 12, 32, 28, 0, 14, 0, 0, 0, 15, 32, 5, 17, 0, 0, 22, 0, 18, 0, 1, 27, 2, 17, 0, 1, 0, 0, 16, 34, 22, 0, 22, 1, 5, 17, 0, 1, 0, 0, 17, 34, 22, 0, 5, 17, 0, 1, 0, 0, 18, 34, 22, 0, 5, 27, 2, 17, 0, 1, 0, 0, 19, 34, 22, 0, 22, 1, 5, 27, 2, 17, 0, 1, 0, 0, 20, 34, 22, 1, 5\]
+0000 OpConstant 0
+0003 OpClass
+0004 OpSetGlobal 0
+0007 OpGetGlobal 0
+0010 OpClosure 5 0
+0014 OpConstant 6
+0017 OpSetMethod
+0018 OpClosure 11 0
+0022 OpConstant 12
+0025 OpSetMethod
+0026 OpClosure 14 0
+0030 OpConstant 15
+0033 OpSetMethod
+0034 OpPop
+0035 OpGetGlobal 0
+0038 OpCall 0
+0040 OpSetGlobal 1
+0043 OpGetBuiltin 2
+0045 OpGetGlobal 1
+0048 OpConstant 16
+0051 OpGetProperty
+0052 OpCall 0
+0054 OpCall 1
+0056 OpPop
+0057 OpGetGlobal 1
+0060 OpConstant 17
+0063 OpGetProperty
+0064 OpCall 0
+0066 OpPop
+0067 OpGetGlobal 1
+0070 OpConstant 18
+0073 OpGetProperty
+0074 OpCall 0
+0076 OpPop
+0077 OpGetBuiltin 2
+0079 OpGetGlobal 1
+0082 OpConstant 19
+0085 OpGetProperty
+0086 OpCall 0
+0088 OpCall 1
+0090 OpPop
+0091 OpGetBuiltin 2
+0093 OpGetGlobal 1
+0096 OpConstant 20
+0099 OpGetProperty
+0100 OpCall 1
+0102 OpPop
+property_index: 1
+'cezar'
+'aaa'
+16
+'bbb'
+property_index: 1
+'dex'
+SEVERE ERROR: calling error
+AdBuiltinObject

@@ -1,0 +1,59 @@
+ASTProgram
+ASTExpressionStatement\[Token: Token \[type: CLASS, literal: class\]\]
+ASTExpressionStatement\[AssignStatement \[=\] <worker>: ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTMemberAccess{owner: ASTIdentifier\[worker\], member: ASTIdentifier\[change\]}\]
+ASTExpressionStatement\[ASTCallExpression\[some arguments here\]\]
+\[0, 0, 1, 0, 0, 2, 38, 0, 0\]
+0000 OpConstant 1
+0003 OpConstant 2
+0006 OpSetPropertySym 0
+
+\[0, 0, 3, 0, 0, 4, 40, 0, 2, 25, 0, 25, 1, 0, 0, 5, 1, 0, 0, 6, 35, 27, 2, 25, 2, 22, 1, 5, 27, 2, 0, 0, 7, 39, 0, 1, 22, 1, 23\]
+0000 OpConstant 3
+0003 OpConstant 4
+0006 OpPatchPropertySym 2
+0009 OpGetLocal 0
+0011 OpGetLocal 1
+0013 OpConstant 5
+0016 OpAdd
+0017 OpConstant 6
+0020 OpSetProperty
+0021 OpGetBuiltin 2
+0023 OpGetLocal 2
+0025 OpCall 1
+0027 OpPop
+0028 OpGetBuiltin 2
+0030 OpConstant 7
+0033 OpGetPropertySym 1
+0036 OpCall 1
+0038 OpReturnValue
+
+\[0, 0, 0, 31, 18, 0, 0, 17, 0, 0, 28, 0, 8, 0, 0, 0, 9, 32, 5, 17, 0, 0, 22, 0, 18, 0, 1, 17, 0, 1, 0, 0, 10, 34, 0, 0, 11, 22, 1, 5, 27, 2, 17, 0, 1, 0, 0, 12, 34, 22, 1, 5\]
+0000 OpConstant 0
+0003 OpClass
+0004 OpSetGlobal 0
+0007 OpGetGlobal 0
+0010 OpClosure 8 0
+0014 OpConstant 9
+0017 OpSetMethod
+0018 OpPop
+0019 OpGetGlobal 0
+0022 OpCall 0
+0024 OpSetGlobal 1
+0027 OpGetGlobal 1
+0030 OpConstant 10
+0033 OpGetProperty
+0034 OpConstant 11
+0037 OpCall 1
+0039 OpPop
+0040 OpGetBuiltin 2
+0042 OpGetGlobal 1
+0045 OpConstant 12
+0048 OpGetProperty
+0049 OpCall 1
+0051 OpPop
+'ala bala'
+property_index: 1
+'buna dimineata!'
+'buna dimineata!'
+null

@@ -1,0 +1,81 @@
+ASTProgram
+ASTExpressionStatement\[Token: Token \[type: CLASS, literal: class\]\]
+ASTExpressionStatement\[AssignStatement \[=\] <dog>: ASTCallExpression\[some arguments here\]\]
+ASTExpressionStatement\[ASTMemberAccess{owner: ASTIdentifier\[dog\], member: ASTIdentifier\[test\]}\]
+ASTExpressionStatement\[ASTMemberAccess{owner: ASTIdentifier\[dog\], member: ASTIdentifier\[test2\]}\]
+ASTExpressionStatement\[ASTMemberAccess{owner: ASTIdentifier\[dog\], member: ASTIdentifier\[test3\]}\]
+\[0, 0, 1, 0, 0, 2, 38, 0, 0\]
+0000 OpConstant 1
+0003 OpConstant 2
+0006 OpSetPropertySym 0
+
+\[25, 0, 25, 1, 0, 0, 3, 35, 24\]
+0000 OpGetLocal 0
+0002 OpGetLocal 1
+0004 OpConstant 3
+0007 OpSetProperty
+0008 OpReturn
+
+\[27, 2, 0, 0, 6, 39, 0, 1, 22, 1, 23\]
+0000 OpGetBuiltin 2
+0002 OpConstant 6
+0005 OpGetPropertySym 1
+0008 OpCall 1
+0010 OpReturnValue
+
+\[25, 1, 0, 0, 9, 40, 0, 2, 24\]
+0000 OpGetLocal 1
+0002 OpConstant 9
+0005 OpPatchPropertySym 2
+0008 OpReturn
+
+\[27, 2, 0, 0, 12, 39, 0, 1, 22, 1, 23\]
+0000 OpGetBuiltin 2
+0002 OpConstant 12
+0005 OpGetPropertySym 1
+0008 OpCall 1
+0010 OpReturnValue
+
+\[0, 0, 0, 31, 18, 0, 0, 17, 0, 0, 28, 0, 4, 0, 0, 0, 5, 32, 28, 0, 7, 0, 0, 0, 8, 32, 28, 0, 10, 0, 0, 0, 11, 32, 28, 0, 13, 0, 0, 0, 14, 32, 5, 17, 0, 0, 0, 0, 15, 22, 1, 18, 0, 1, 17, 0, 1, 0, 0, 16, 34, 22, 0, 5, 17, 0, 1, 0, 0, 17, 34, 0, 0, 18, 22, 1, 5, 17, 0, 1, 0, 0, 19, 34, 22, 0, 5\]
+0000 OpConstant 0
+0003 OpClass
+0004 OpSetGlobal 0
+0007 OpGetGlobal 0
+0010 OpClosure 4 0
+0014 OpConstant 5
+0017 OpSetMethod
+0018 OpClosure 7 0
+0022 OpConstant 8
+0025 OpSetMethod
+0026 OpClosure 10 0
+0030 OpConstant 11
+0033 OpSetMethod
+0034 OpClosure 13 0
+0038 OpConstant 14
+0041 OpSetMethod
+0042 OpPop
+0043 OpGetGlobal 0
+0046 OpConstant 15
+0049 OpCall 1
+0051 OpSetGlobal 1
+0054 OpGetGlobal 1
+0057 OpConstant 16
+0060 OpGetProperty
+0061 OpCall 0
+0063 OpPop
+0064 OpGetGlobal 1
+0067 OpConstant 17
+0070 OpGetProperty
+0071 OpConstant 18
+0074 OpCall 1
+0076 OpPop
+0077 OpGetGlobal 1
+0080 OpConstant 19
+0083 OpGetProperty
+0084 OpCall 0
+0086 OpPop
+property_index: 1
+'dex'
+property_index: 1
+'dexiciut'
+null
