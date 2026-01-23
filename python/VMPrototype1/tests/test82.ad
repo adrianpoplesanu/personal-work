@@ -5,4 +5,4 @@ class Elev {
 }
 
 elev = Elev(23)
-print(elev.age)
+println(elev.age)
