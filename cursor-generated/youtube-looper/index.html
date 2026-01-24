@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Looper</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>YouTube Looper</h1>
+        <div class="input-section">
+            <input 
+                type="text" 
+                id="youtubeUrl" 
+                placeholder="Enter YouTube URL (e.g., https://www.youtube.com/watch?v=VIDEO_ID)"
+                class="url-input"
+            >
+            <div class="button-group">
+                <button id="playBtn" class="btn btn-play">Play</button>
+                <button id="loopBtn" class="btn btn-loop">Loop: OFF</button>
+            </div>
+        </div>
+        <div id="videoContainer" class="video-container">
+            <p class="placeholder">Enter a YouTube URL and click Play to start</p>
+        </div>
+    </div>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="index.js"></script>
+</body>
+</html>
+
