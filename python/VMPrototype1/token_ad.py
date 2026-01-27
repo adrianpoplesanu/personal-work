@@ -18,7 +18,8 @@ token_type_map = {
     TokenType.ASSIGN: 'ASSIGN',
     TokenType.DEF: "DEF",
     TokenType.CLASS: "CLASS",
-    TokenType.DOT: "DOT"
+    TokenType.DOT: "DOT",
+    TokenType.THIS: "THIS"
 }
 
 keywords_map = {
