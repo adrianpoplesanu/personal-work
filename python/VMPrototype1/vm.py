@@ -135,6 +135,19 @@ class VM:
             elif opcode == OpCodeByte.OP_RETURN:
                 frame = self.pop_frame()
                 self.sp = frame.base_pointer - 1
+                # Ensure sp is not negative
+                if self.sp < 0:
+                    self.sp = 0
+                # TODO: fix pentru a nu mai pune null pe stiva cand se apeleaza un constructor, ci a pune instanta
+                # TODO: asta fixeaza testul test82.ad dar strica altele
+                #if self.frames_index > 0:
+                #    if frame.bound_instance:
+                #        self.push(frame.bound_instance)
+                #    else:
+                #        self.push(NULL_OBJECT)
+                #else:
+                #    self.push(NULL_OBJECT)
+                # vvv asta am inlocuit cu if-ul de mai sus
                 self.push(NULL_OBJECT)
             elif opcode == OpCodeByte.OP_SET_LOCAL:
                 local_index = read_uint8(ins, ip + 1)
@@ -196,30 +209,44 @@ class VM:
 
                 if owner.object_type == AdObjectType.BOUND_METHOD:
                     owner = owner.owner
-                    self.push(owner)
 
-                # todo: asta nu e bine, field_name.value poate? table are cheie str, field_name e un AdObject, deci sigur nu e bine
-                if owner.table.get(field_name.value.value) is not None:
-                    #self.pop()
-                    self.push(owner.table[field_name.value.value])
-                if owner.klass.methods.get(field_name.value.value) is not None:
-                    method_closure = owner.klass.methods[field_name.value.value]
-                    bound_method = AdBoundMethod(owner, method_closure)
-                    #self.pop()
-                    self.push(bound_method)
+                # Check if owner has a table (not NULL or other non-instance types)
+                if owner and hasattr(owner, 'table'):
+                    field_name_str = field_name.value.value if hasattr(field_name, 'value') and hasattr(field_name.value, 'value') else (field_name.value if hasattr(field_name, 'value') else str(field_name))
+                    # Check table first (for fields)
+                    if owner.table and owner.table.get(field_name_str) is not None:
+                        self.push(owner.table[field_name_str])
+                    # Check methods
+                    elif hasattr(owner, 'klass') and owner.klass and owner.klass.methods and owner.klass.methods.get(field_name_str) is not None:
+                        method_closure = owner.klass.methods[field_name_str]
+                        bound_method = AdBoundMethod(owner, method_closure)
+                        self.push(bound_method)
+                    else:
+                        self.push(NULL_OBJECT)
+                else:
+                    self.push(NULL_OBJECT)
             elif opcode == OpCodeByte.OP_SET_PROPERTY:
                 field = self.pop()
                 value = self.pop()
                 instance = self.pop()
-                #self.current_instance = instance
-                instance.table[field.value] = value
-                self.push(value)
+                # If instance is null (common in constructors), use bound_instance
+                if instance and instance.object_type == AdObjectType.NULL:
+                    instance = self.current_frame().bound_instance
+                field_name = field.value if hasattr(field, 'value') else str(field)
+                if instance:
+                    if instance.table is None:
+                        instance.table = {}
+                    instance.table[field_name] = value
+                    self.push(value)
+                else:
+                    self.push(NULL_OBJECT)
             elif opcode == OpCodeByte.OP_SET_PROPERTY_SYM:
                 property_index: int = read_uint16(ins, ip + 1)
                 self.current_frame().ip += 2
                 field = self.pop()
                 value = self.pop()
                 instance = self.pop()
+                field_name = field.value if hasattr(field, 'value') else str(field)
                 if instance.object_type == AdObjectType.NULL:
                     # instance e null doar pentru constructor - TODO: validateaza teoria asta
                     instance = self.current_frame().bound_instance
@@ -235,7 +262,13 @@ class VM:
 
                 #instance.fields[symbolIndex] = value
                 #push(value)
-                instance.table[field.value] = value
+                if instance.table is None:
+                    instance.table = {}
+                # Field initializers use OP_SET_PROPERTY_SYM and should only set defaults
+                # Constructors use OP_SET_PROPERTY and can overwrite defaults
+                # So only set if property doesn't exist (allows constructors to override)
+                if field_name not in instance.table:
+                    instance.table[field_name] = value
                 self.pop_frame()
                 self.push(instance)
             elif opcode == OpCodeByte.OP_PATCH_PROPERTY_SYM:
@@ -273,12 +306,35 @@ class VM:
                 property_index: int = read_uint16(ins, ip + 1)
                 self.current_frame().ip += 2
                 field = self.pop()
-                #if self.current_instance.table[field.value]:
-                #    self.push(instance.table[field.value])
-                if self.current_frame().bound_instance.table[field.value]:
-                    self.push(self.current_frame().bound_instance.table[field.value])
-                #b = self.pop()
+                owner = self.current_frame().bound_instance
                 print('property_index: ' + str(property_index))
+                
+                # Get the field name string - handle both AdString objects and direct strings
+                if hasattr(field, 'value') and isinstance(field.value, str):
+                    field_name_str = field.value
+                elif isinstance(field, str):
+                    field_name_str = field
+                else:
+                    # Fallback - try to get string representation
+                    field_name_str = str(field.value) if hasattr(field, 'value') else str(field)
+                
+                
+                # Check if it's a field in the instance
+                if owner and hasattr(owner, 'table') and owner.table:
+                    field_value = owner.table.get(field_name_str)
+                    if field_value is not None:
+                        self.push(field_value)
+                    # Check if it's a method
+                    elif hasattr(owner, 'klass') and owner.klass and owner.klass.methods and owner.klass.methods.get(field_name_str) is not None:
+                        method_closure = owner.klass.methods[field_name_str]
+                        bound_method = AdBoundMethod(owner, method_closure)
+                        self.push(bound_method)
+                    else:
+                        # Property doesn't exist
+                        self.push(NULL_OBJECT)
+                else:
+                    # No owner or table - push null
+                    self.push(NULL_OBJECT)
             else:
                 print('severe error: vm.run() error')
 
@@ -344,6 +400,9 @@ class VM:
 
     def execute_call(self, num_args: int):
         callee = self.stack[self.sp - 1 - num_args]
+        if callee is None:
+            print('SEVERE ERROR: calling error - callee is None')
+            return
         if callee.object_type == AdObjectType.CLOJURE_OBJECT:
             self.call_closure(callee, num_args)
         elif callee.object_type == AdObjectType.BUILTIN:
@@ -362,16 +421,26 @@ class VM:
         instance.definition_num_args = num_args
         need_to_remove = False
         for field_initializer in instance.klass.field_initializers:
-            #self.push(field_initializer)
-            #self.call_function(0)
+            # Field initializers need access to the instance
             closure = AdClosureObject(field_initializer)
             self.push(closure)
             need_to_remove = True
-            #self.call_initializer(closure, 0)
-            self.execute_call(0)
-            #self.pop_frame()
-
+            # Create a temporary bound method for the initializer
+            bound_initializer = AdBoundMethod(owner=instance, bound_method=closure)
+            self.call_bound_method(bound_initializer, 0)
+            # Clean up the return value left on the stack by the field initializer
+            if self.sp > 0 and self.stack[self.sp - 1]:
+                self.pop()
+        
         if cl.methods.get("constructor"):
+            # Pop the class object from the stack (it's still there from execute_call)
+            # But only if we haven't already popped it or if field initializers didn't run
+            # Actually, after field initializers, the stack should have [class, args...]
+            # So we need to pop the class before calling the constructor
+            if not need_to_remove:
+                # No field initializers ran, so class is still on stack
+                self.pop()
+            # If need_to_remove is True, field initializers cleaned up, so stack should just have args
             constructor = cl.methods["constructor"]
             #print(constructor)
             bound_constructor = AdBoundMethod(owner=instance, bound_method=constructor)
@@ -382,8 +451,6 @@ class VM:
             #closure = AdClosureObject(constructor.fn)
             #self.push(bound_constructor)
             #old_sp = self.sp
-            if need_to_remove:
-                self.pop()
             self.call_bound_method(bound_constructor, num_args)
             #self.stack[self.sp - 1] = instance
         self.push(instance)
@@ -403,9 +470,9 @@ class VM:
         while popped:
             self.push(popped.pop())
 
-        self.sp = old_sp
-
-        frame = new_frame(cl.bound_method, self.sp - num_args)
+        # base_pointer should point to where owner is (which is at old_sp - num_args)
+        # because arguments were at [old_sp - num_args, old_sp - 1], and owner is at old_sp - num_args
+        frame = new_frame(cl.bound_method, old_sp - num_args)
         frame.bound_instance = cl.owner
         self.push_frame(frame)
         self.sp = frame.base_pointer + cl.bound_method.fn.num_locals
