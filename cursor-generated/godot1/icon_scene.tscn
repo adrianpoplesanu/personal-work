@@ -1,0 +1,190 @@
+[gd_scene load_steps=3 format=3 uid="uid://bqj8k7x3n4m5p"]
+
+[ext_resource type="Texture2D" uid="uid://icon_texture" path="res://icon.svg" id="1_icon"]
+[ext_resource type="Script" path="res://icon_mover.gd" id="2_mover"]
+
+[node name="IconScene" type="Node2D"]
+
+[node name="TileGrid" type="Node2D" parent="."]
+
+[node name="IconSprite1" type="Sprite2D" parent="TileGrid"]
+script = ExtResource("2_mover")
+texture = ExtResource("1_icon")
+position = Vector2(50, 64)
+
+[node name="IconSprite2" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(192, 64)
+
+[node name="IconSprite3" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(320, 64)
+
+[node name="IconSprite4" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(448, 64)
+
+[node name="IconSprite5" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(576, 64)
+
+[node name="IconSprite6" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(704, 64)
+
+[node name="IconSprite7" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(832, 64)
+
+[node name="IconSprite8" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(960, 64)
+
+[node name="IconSprite9" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(1088, 64)
+
+[node name="IconSprite10" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(64, 192)
+
+[node name="IconSprite11" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(192, 192)
+
+[node name="IconSprite12" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(320, 192)
+
+[node name="IconSprite13" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(448, 192)
+
+[node name="IconSprite14" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(576, 192)
+
+[node name="IconSprite15" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(704, 192)
+
+[node name="IconSprite16" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(832, 192)
+
+[node name="IconSprite17" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(960, 192)
+
+[node name="IconSprite18" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(1088, 192)
+
+[node name="IconSprite19" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(64, 320)
+
+[node name="IconSprite20" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(192, 320)
+
+[node name="IconSprite21" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(320, 320)
+
+[node name="IconSprite22" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(448, 320)
+
+[node name="IconSprite23" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(576, 320)
+
+[node name="IconSprite24" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(704, 320)
+
+[node name="IconSprite25" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(832, 320)
+
+[node name="IconSprite26" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(960, 320)
+
+[node name="IconSprite27" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(1088, 320)
+
+[node name="IconSprite28" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(64, 448)
+
+[node name="IconSprite29" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(192, 448)
+
+[node name="IconSprite30" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(320, 448)
+
+[node name="IconSprite31" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(448, 448)
+
+[node name="IconSprite32" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(576, 448)
+
+[node name="IconSprite33" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(704, 448)
+
+[node name="IconSprite34" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(832, 448)
+
+[node name="IconSprite35" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(960, 448)
+
+[node name="IconSprite36" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(1088, 448)
+
+[node name="IconSprite37" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(64, 576)
+
+[node name="IconSprite38" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(192, 576)
+
+[node name="IconSprite39" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(320, 576)
+
+[node name="IconSprite40" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(448, 576)
+
+[node name="IconSprite41" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(576, 576)
+
+[node name="IconSprite42" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(704, 576)
+
+[node name="IconSprite43" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(832, 576)
+
+[node name="IconSprite44" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(960, 576)
+
+[node name="IconSprite45" type="Sprite2D" parent="TileGrid"]
+texture = ExtResource("1_icon")
+position = Vector2(1088, 576)
+
