@@ -13,7 +13,8 @@ const gameState = {
     playerBoard: [],
     opponentBoard: [],
     selectedCard: null,
-    selectedTarget: null
+    selectedTarget: null,
+    gameOver: false
 };
 
 // Card Database
@@ -533,6 +534,9 @@ function opponentAttack(minionsAtStartOfTurn) {
     const attackers = [...gameState.opponentBoard].filter(m => m.canAttack);
     
     for (const attacker of attackers) {
+        // Stop if game is over
+        if (gameState.gameOver) break;
+        
         if (gameState.playerBoard.length > 0) {
             // Attack a random player minion
             const target = gameState.playerBoard[Math.floor(Math.random() * gameState.playerBoard.length)];
@@ -599,12 +603,17 @@ function updateUI() {
 
 // Check Game Over
 function checkGameOver() {
+    // Only check if game is not already over
+    if (gameState.gameOver) return;
+    
     if (gameState.playerHealth <= 0) {
+        gameState.gameOver = true;
         setTimeout(() => {
             alert('You Lose!');
             location.reload();
         }, 500);
     } else if (gameState.opponentHealth <= 0) {
+        gameState.gameOver = true;
         setTimeout(() => {
             alert('You Win!');
             location.reload();
