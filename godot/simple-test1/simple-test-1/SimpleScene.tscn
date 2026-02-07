@@ -5,6 +5,6 @@
 
 [node name="Node2D" type="Node2D"]
 
-[node name="Tile" type="Sprite2D" parent="."]
+[node name="RedTile" type="Sprite2D" parent="."]
 texture = ExtResource("1_trqkb")
 script = ExtResource("1_b3atb")
