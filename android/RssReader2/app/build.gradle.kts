@@ -64,6 +64,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:0.23.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:0.23.3")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("androidx.appcompat:appcompat:1.7.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
