@@ -10,4 +10,9 @@ class UefaMatchesApplicationTests {
 	fun contextLoads() {
 	}
 
+	@Test
+	fun testSomething() {
+		val a = 2 + 3
+		assert(5 == a)
+	}
 }
