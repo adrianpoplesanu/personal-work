@@ -1,7 +1,10 @@
+# PostgreSQL for UEFA Matches. Run: docker compose -f docker-compose.postgres.yml up -d
+name: uefa-matches-postgres
+
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: uefa-matches-db
+    container_name: uefa-matches-postgres
     environment:
       POSTGRES_DB: uefa_matches
       POSTGRES_USER: postgres
