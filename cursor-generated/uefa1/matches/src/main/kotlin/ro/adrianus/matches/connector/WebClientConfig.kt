@@ -10,8 +10,13 @@ class WebClientConfig {
 
     @Bean
     fun webClient(
-        @Value("\${football-data.base-url:https://api.football-data.org}") baseUrl: String
-    ): WebClient = WebClient.builder()
-        .baseUrl(baseUrl)
-        .build()
+        @Value("\${football-data.base-url:https://api.football-data.org}") baseUrl: String,
+        @Value("\${football-data.auth-token:}") authToken: String
+    ): WebClient {
+        val builder = WebClient.builder().baseUrl(baseUrl)
+        if (authToken.isNotBlank()) {
+            builder.defaultHeader("X-Auth-Token", authToken)
+        }
+        return builder.build()
+    }
 }
