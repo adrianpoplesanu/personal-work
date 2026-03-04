@@ -11,6 +11,11 @@ config_version=5
 [application]
 
 config/name="simple-controller-handling1"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 run/main_scene="res://main.tscn"

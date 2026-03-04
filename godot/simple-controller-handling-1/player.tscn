@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://bplayer001"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_script"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
+size = Vector2(36, 36)
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_script")
+position = Vector2(200, 300)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 0)
+shape = SubResource("RectangleShape2D_ground")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Visual" type="Polygon2D" parent="."]
+color = Color(0.25, 0.55, 0.95, 1)
+polygon = PackedVector2Array(-18, -18, 18, -18, 18, 18, -18, 18)
