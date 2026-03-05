@@ -359,13 +359,17 @@
 
         for (let col = 0; col < columnCount; col++) {
             const colCenterX = 200 + col * columnWidth + columnWidth / 2;
-            const platsInCol = 2 + Math.floor(Math.random() * 2);
+            const platsInCol = 4 + Math.floor(Math.random() * 2);
             const colPlats = [];
             const prevCol = columns[columns.length - 1];
 
             const slotH = (MAX_PLAT_Y - MIN_PLAT_Y) / platsInCol;
             for (let p = 0; p < platsInCol; p++) {
-                const pw = PLAT_MIN_W + Math.random() * (PLAT_MAX_W - PLAT_MIN_W);
+                if (colPlats.length > 0 && Math.random() < 0.1) continue;
+                const depthRatio = platsInCol > 1 ? p / (platsInCol - 1) : 0.5;
+                const minW = PLAT_MIN_W * (0.5 + depthRatio * 0.5);
+                const maxW = PLAT_MAX_W * (0.6 + depthRatio * 0.4);
+                const pw = minW + Math.random() * (maxW - minW);
                 const px = colCenterX - pw / 2 + (Math.random() - 0.5) * columnSpread;
                 const py = MIN_PLAT_Y + p * slotH + Math.random() * slotH * 0.7;
 
