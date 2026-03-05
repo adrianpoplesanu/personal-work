@@ -1,0 +1,3 @@
+create a 2d platformer game, that has a player, enemies, platforms. the player has a small melle attack witch deals damage to enemies, the platforms are generated randomly and an exit zone        
+  exist at the end of the level, when the player reaches the exit zone a new level is being created, again with dynamically placed platforms. the player needs to be able to double jump and          
+  have coyote time. create the appropriate index.html, style.css and game.js in this folder  
