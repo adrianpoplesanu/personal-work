@@ -5,7 +5,7 @@ signal card_clicked(index: int, card_data: CardData)
 const CardUIScene = preload("res://scenes/card_ui.tscn")
 const MAX_HAND_SIZE := 10
 
-func add_card(data: CardData) -> PanelContainer:
+func add_card(data: CardData, playable: bool = false) -> PanelContainer:
 	if get_card_count() >= MAX_HAND_SIZE:
 		return null
 	var slot = Control.new()
@@ -14,13 +14,12 @@ func add_card(data: CardData) -> PanelContainer:
 	var card = CardUIScene.instantiate()
 	slot.add_child(card)
 	card.position = Vector2(0, 30)
-	card.setup(data)
+	add_child(slot)
+	card.setup(data, playable)
 
 	card.mouse_entered.connect(_on_card_hover.bind(card, true))
 	card.mouse_exited.connect(_on_card_hover.bind(card, false))
-	card.gui_input.connect(_on_card_input.bind(get_child_count(), card))
-
-	add_child(slot)
+	card.gui_input.connect(_on_card_input.bind(get_child_count() - 1, card))
 	return card
 
 func remove_card_at(index: int) -> void:

@@ -101,8 +101,9 @@ func _refresh_status() -> void:
 
 func _refresh_hand() -> void:
 	hand_area.clear_hand()
+	var can_play_cards: bool = GameState.player_turn and not GameState.is_game_over and GameState.selected_minion.is_empty()
 	for card in GameState.player_hand:
-		hand_area.add_card(card)
+		hand_area.add_card(card, can_play_cards and card.cost <= GameState.player_mana)
 
 
 func _refresh_board() -> void:
@@ -110,10 +111,13 @@ func _refresh_board() -> void:
 	player_board.clear_board()
 	for entry in GameState.player_board:
 		var minion_ui = player_board.add_minion(entry["card"], entry["instance_id"])
-		if minion_ui and "set_can_attack" in minion_ui:
-			minion_ui.set_can_attack(entry["can_attack"])
-		if minion_ui and "set_attackable" in minion_ui:
-			minion_ui.set_attackable(false)
+		if minion_ui:
+			if "set_can_attack" in minion_ui:
+				minion_ui.set_can_attack(entry["can_attack"])
+			if "set_selected" in minion_ui:
+				minion_ui.set_selected(GameState.is_minion_selected(entry["instance_id"]))
+			if "set_attackable" in minion_ui:
+				minion_ui.set_attackable(false)
 
 	# Opponent board
 	opponent_board.clear_board()
