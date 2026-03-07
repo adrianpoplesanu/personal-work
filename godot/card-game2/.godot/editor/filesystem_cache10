@@ -1,0 +1,10 @@
+63f7b34db8d8cdea90c76aacccf841ec
+::res://::1772915313
+main.tscn::PackedScene::-1::1772915224::0::1::::<><><>0<>0<><>::res://scripts/main.gd
+::res://scenes/::1772915214
+card_ui.tscn::PackedScene::-1::1772915214::0::1::::<><><>0<>0<><>::res://scripts/card_ui.gd
+::res://scripts/::1772915223
+card_data.gd::GDScript::4349579572679415982::1772914974::0::1::::CardData<>Resource<><>0<>0<><>::
+card_database.gd::GDScript::5492483991880226298::1772914980::0::1::::CardDatabase<>Node<><>0<>0<><>::
+card_ui.gd::GDScript::5916817123898690762::1772915217::0::1::::<>PanelContainer<><>0<>0<><>::
+main.gd::GDScript::4983105961020316344::1772915223::0::1::::<>Node2D<><>0<>0<><>::
