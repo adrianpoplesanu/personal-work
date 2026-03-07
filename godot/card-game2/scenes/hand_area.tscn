@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://hand_area_scene"]
+
+[ext_resource type="Script" path="res://scripts/hand_area.gd" id="1"]
+
+[node name="HandArea" type="HBoxContainer"]
+custom_minimum_size = Vector2(0, 230)
+alignment = 1
+theme_override_constants/separation = 8
+script = ExtResource("1")
