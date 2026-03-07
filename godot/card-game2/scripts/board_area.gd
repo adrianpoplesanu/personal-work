@@ -18,14 +18,14 @@ func add_minion(data: CardData, uid: float) -> PanelContainer:
 
 func remove_minion_by_uid(uid: float) -> void:
 	for child in minion_row.get_children():
-		if child.instance_id == uid:
+		if "instance_id" in child and is_equal_approx(child.instance_id, uid):
 			minion_row.remove_child(child)
 			child.queue_free()
 			return
 
 func get_minion_by_uid(uid: float) -> PanelContainer:
 	for child in minion_row.get_children():
-		if child.instance_id == uid:
+		if "instance_id" in child and is_equal_approx(child.instance_id, uid):
 			return child
 	return null
 
@@ -45,6 +45,7 @@ func is_full() -> bool:
 
 func clear_board() -> void:
 	for child in minion_row.get_children():
+		minion_row.remove_child(child)
 		child.queue_free()
 
 func _on_minion_input(event: InputEvent, minion: PanelContainer) -> void:

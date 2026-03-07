@@ -47,6 +47,7 @@ func get_card_count() -> int:
 
 func clear_hand() -> void:
 	for child in get_children():
+		remove_child(child)
 		child.queue_free()
 
 func _on_card_hover(card: PanelContainer, entered: bool) -> void:

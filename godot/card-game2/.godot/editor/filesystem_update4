@@ -1,1 +1,5 @@
 res://scripts/main.gd
+res://scripts/board_area.gd
+res://scripts/card_data.gd
+res://scripts/hand_area.gd
+res://scripts/game_state.gd
