@@ -1,0 +1,67 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  font-family: "Segoe UI", system-ui, sans-serif;
+  color: #e8e8e8;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 20px rgba(255, 100, 100, 0.3);
+}
+
+#gameCanvas3 {
+  display: block;
+  background: #0d1117;
+  border: 2px solid #30363d;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.legend {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.875rem;
+  opacity: 0.9;
+}
+
+.legend-blocked {
+  color: #f87171;
+}
+
+.legend-maze {
+  color: #94a3b8;
+}
+
+.hint {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+kbd {
+  padding: 0.2em 0.5em;
+  background: #30363d;
+  border-radius: 4px;
+  font-family: inherit;
+}
