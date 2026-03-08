@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maze World</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="game-container">
+    <h1>Maze World</h1>
+    <canvas id="gameCanvas" width="600" height="600"></canvas>
+    <p class="legend">
+      <span class="legend-blocked">■ Blocked</span>
+      <span class="legend-maze">■ Maze cell (red = blocked edge)</span>
+    </p>
+    <p class="hint">Press <kbd>R</kbd> to regenerate the world</p>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>
