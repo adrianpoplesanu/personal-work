@@ -5,7 +5,8 @@
  * - Same drawing: blocked = red fill, traversable = dark fill + red blocked edges
  */
 
-const BOARD_SIZE = 40;
+const BOARD_SIZE_HEIGHT = 80;
+const BOARD_SIZE_WIDTH = 80;
 const TILE_SIZE = 30;
 
 const N = 1;
@@ -41,8 +42,8 @@ function generateWorld() {
   const traversable = new Set();
 
   // --- 1. Room parameters and placement ---
-  const minRooms = 15;
-  const maxRooms = 21;
+  const minRooms = 30;
+  const maxRooms = 45;
   const numRooms = minRooms + Math.floor(Math.random() * (maxRooms - minRooms + 1));
   const padding = 2;
   const margin = 1;
@@ -51,8 +52,8 @@ function generateWorld() {
   for (let i = 0; i < numRooms; i++) {
     const w = 2 + Math.floor(Math.random() * 2); // 2 or 3
     const h = 2 + Math.floor(Math.random() * 2);
-    const maxR = BOARD_SIZE - padding - h;
-    const maxC = BOARD_SIZE - padding - w;
+    const maxR = BOARD_SIZE_HEIGHT - padding - h;
+    const maxC = BOARD_SIZE_WIDTH - padding - w;
     const r = padding + Math.floor(Math.random() * Math.max(1, maxR - padding));
     const c = padding + Math.floor(Math.random() * Math.max(1, maxC - padding));
     rooms.push({ r, c, w, h });
@@ -80,7 +81,7 @@ function generateWorld() {
   }
 
   // Optional extra edges for more loops (branching paths)
-  const extraEdges = 6;
+  const extraEdges = 10;
   for (let i = 0; i < extraEdges; i++) {
     const a = Math.floor(Math.random() * numRooms);
     let b = Math.floor(Math.random() * numRooms);
@@ -130,19 +131,19 @@ function generateWorld() {
     carveCorridor(A.r, A.c, B.r, B.c);
   }
 
-  // --- 4. Build 20x20 board: tile = 0 blocked, else bitmask of open directions ---
+  // --- 4. Build board: tile = 0 blocked, else bitmask of open directions ---
   const grid = [];
-  for (let row = 0; row < BOARD_SIZE; row++) {
+  for (let row = 0; row < BOARD_SIZE_HEIGHT; row++) {
     grid[row] = [];
-    for (let col = 0; col < BOARD_SIZE; col++) {
+    for (let col = 0; col < BOARD_SIZE_WIDTH; col++) {
       if (!traversable.has(key(row, col))) {
         grid[row][col] = 0;
         continue;
       }
       let openings = 0;
       if (row > 0 && traversable.has(key(row - 1, col))) openings |= N;
-      if (col < BOARD_SIZE - 1 && traversable.has(key(row, col + 1))) openings |= E;
-      if (row < BOARD_SIZE - 1 && traversable.has(key(row + 1, col))) openings |= S;
+      if (col < BOARD_SIZE_WIDTH - 1 && traversable.has(key(row, col + 1))) openings |= E;
+      if (row < BOARD_SIZE_HEIGHT - 1 && traversable.has(key(row + 1, col))) openings |= S;
       if (col > 0 && traversable.has(key(row, col - 1))) openings |= W;
       grid[row][col] = openings;
     }
@@ -154,8 +155,8 @@ function draw() {
   ctx.fillStyle = "#0d1117";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  for (let row = 0; row < BOARD_SIZE; row++) {
-    for (let col = 0; col < BOARD_SIZE; col++) {
+  for (let row = 0; row < BOARD_SIZE_HEIGHT; row++) {
+    for (let col = 0; col < BOARD_SIZE_WIDTH; col++) {
       const x = col * TILE_SIZE;
       const y = row * TILE_SIZE;
       const tile = board[row][col];
