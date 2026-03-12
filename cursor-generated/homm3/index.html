@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heroes of Might & Magic — Mini</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <header id="top-bar">
+            <div id="resources">
+                <span class="resource" title="Gold">&#x1FA99; <span id="res-gold">500</span></span>
+                <span class="resource" title="Wood">&#x1FAB5; <span id="res-wood">10</span></span>
+                <span class="resource" title="Ore">&#x26CF;&#xFE0F; <span id="res-ore">10</span></span>
+                <span class="resource" title="Gems">&#x1F48E; <span id="res-gems">5</span></span>
+            </div>
+            <div id="turn-info">
+                <span>Day <span id="day-counter">1</span></span>
+                <span>Move: <span id="move-points">20</span>/<span id="move-max">20</span></span>
+                <button id="btn-end-turn">End Turn</button>
+            </div>
+        </header>
+
+        <main id="game-area">
+            <canvas id="map-canvas"></canvas>
+
+            <div id="combat-overlay" class="hidden">
+                <div id="combat-panel">
+                    <h2>Combat</h2>
+                    <div id="combat-field">
+                        <div id="attacker-side">
+                            <h3>Your Army</h3>
+                            <div id="attacker-units"></div>
+                        </div>
+                        <div id="combat-log-wrapper">
+                            <div id="combat-log"></div>
+                        </div>
+                        <div id="defender-side">
+                            <h3>Enemy</h3>
+                            <div id="defender-units"></div>
+                        </div>
+                    </div>
+                    <div id="combat-buttons">
+                        <button id="btn-attack">Attack</button>
+                        <button id="btn-flee">Flee</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="town-overlay" class="hidden">
+                <div id="town-panel">
+                    <h2>Castle</h2>
+                    <div id="town-buildings">
+                        <div class="building" data-building="barracks">
+                            <span class="building-icon">&#x2694;&#xFE0F;</span>
+                            <span class="building-name">Barracks</span>
+                            <button class="btn-recruit" data-unit="swordsman">Recruit Swordsman (50g)</button>
+                        </div>
+                        <div class="building" data-building="archery">
+                            <span class="building-icon">&#x1F3F9;</span>
+                            <span class="building-name">Archery Range</span>
+                            <button class="btn-recruit" data-unit="archer">Recruit Archer (75g)</button>
+                        </div>
+                        <div class="building" data-building="stable">
+                            <span class="building-icon">&#x1F40E;</span>
+                            <span class="building-name">Stable</span>
+                            <button class="btn-recruit" data-unit="knight">Recruit Knight (150g)</button>
+                        </div>
+                        <div class="building" data-building="aviary">
+                            <span class="building-icon">&#x1F985;</span>
+                            <span class="building-name">Griffin Tower</span>
+                            <button class="btn-recruit" data-unit="griffin">Recruit Griffin (200g)</button>
+                        </div>
+                    </div>
+                    <div id="town-army">
+                        <h3>Your Army</h3>
+                        <div id="town-army-list"></div>
+                    </div>
+                    <button id="btn-leave-town">Leave Castle</button>
+                </div>
+            </div>
+
+            <div id="message-overlay" class="hidden">
+                <div id="message-panel">
+                    <p id="message-text"></p>
+                    <button id="btn-message-ok">OK</button>
+                </div>
+            </div>
+        </main>
+
+        <footer id="bottom-bar">
+            <div id="hero-info">
+                <span>&#x1F9D9; Hero: <strong id="hero-name">Adrianus</strong></span>
+                <span>Level <span id="hero-level">1</span></span>
+                <span>ATK <span id="hero-atk">2</span></span>
+                <span>DEF <span id="hero-def">2</span></span>
+            </div>
+            <div id="army-preview"></div>
+        </footer>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
