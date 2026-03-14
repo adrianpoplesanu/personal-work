@@ -16,8 +16,11 @@ var end_turn_btn: Button
 var attack_hero_btn: Button
 
 
+const UI_SCALE := 0.9
+
 func _ready() -> void:
 	_build_ui()
+	scale = Vector2(UI_SCALE, UI_SCALE)
 	GameState.init_game()
 	_refresh_ui()
 
@@ -68,17 +71,17 @@ func _build_ui() -> void:
 
 	# Opponent board (top)
 	opponent_board = BoardAreaScene.instantiate()
-	opponent_board.position = Vector2(190, 80)
+	opponent_board.position = Vector2(190, 60)
 	add_child(opponent_board)
 
 	# Player board (middle)
 	player_board = BoardAreaScene.instantiate()
-	player_board.position = Vector2(190, 260)
+	player_board.position = Vector2(190, 320)
 	add_child(player_board)
 
 	# Hand (bottom)
 	hand_area = HandAreaScene.instantiate()
-	hand_area.position = Vector2(190, 440)
+	hand_area.position = Vector2(190, 500)
 	add_child(hand_area)
 
 
