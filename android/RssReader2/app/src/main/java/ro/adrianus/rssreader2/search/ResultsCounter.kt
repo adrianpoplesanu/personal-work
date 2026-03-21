@@ -11,13 +11,22 @@ object ResultsCounter {
     private var counter = 0
     private val notifications = Channel<Int>(Channel.CONFLATED)
 
-    private val actor = GlobalScope.actor<Void?>(context) {
+    enum class Action {
+        INCREMENT,
+        RESET
+    }
+
+    private val actor = GlobalScope.actor<Action>(context) {
         for (msg in channel) {
-            counter++
+            when(msg) {
+                Action.RESET -> counter = 0
+                Action.INCREMENT -> counter++
+            }
             notifications.send(counter)
         }
     }
 
-    suspend fun increment() = actor.send(null)
+    suspend fun increment() = actor.send(Action.INCREMENT)
+    suspend fun reset() = actor.send(Action.RESET)
     fun getNotificationChannel() : ReceiveChannel<Int> = notifications
 }

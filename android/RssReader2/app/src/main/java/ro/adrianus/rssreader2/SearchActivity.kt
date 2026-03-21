@@ -34,6 +34,7 @@ class SearchActivity : AppCompatActivity() {
         findViewById<Button>(R.id.searchButton).setOnClickListener {
             viewAdapter.clear()
             GlobalScope.launch {
+                ResultsCounter.reset()
                 search()
             }
         }
