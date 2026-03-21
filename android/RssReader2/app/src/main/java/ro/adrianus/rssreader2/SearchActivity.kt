@@ -3,12 +3,14 @@ package ro.adrianus.rssreader2
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import ro.adrianus.rssreader2.adapter.SearchArticleAdapter
+import ro.adrianus.rssreader2.search.ResultsCounter
 import ro.adrianus.rssreader2.search.Searcher
 
 class SearchActivity : AppCompatActivity() {
@@ -35,6 +37,10 @@ class SearchActivity : AppCompatActivity() {
                 search()
             }
         }
+
+        GlobalScope.launch {
+            updateCounter()
+        }
     }
 
     private suspend fun search() {
@@ -45,6 +51,18 @@ class SearchActivity : AppCompatActivity() {
             val article = channel.receive()
             runOnUiThread {
                 viewAdapter.add(article)
+            }
+        }
+    }
+
+    private suspend fun updateCounter() {
+        val notifications = ResultsCounter.getNotificationChannel()
+        val results = findViewById<TextView>(R.id.results)
+
+        while(!notifications.isClosedForReceive) {
+            val count = notifications.receive()
+            runOnUiThread {
+                results.text = "Results: $count"
             }
         }
     }
