@@ -33,6 +33,7 @@ class TokenType(Enum):
     RBRACE = auto()
     LBRACKET = auto()
     RBRACKET = auto()
+    DOT = auto()
 
     LET = auto()
     FN = auto()
@@ -41,6 +42,9 @@ class TokenType(Enum):
     IF = auto()
     ELSE = auto()
     RETURN = auto()
+    CLASS = auto()
+    NEW = auto()
+    THIS = auto()
 
 
 KEYWORDS = {
@@ -51,6 +55,9 @@ KEYWORDS = {
     "if": TokenType.IF,
     "else": TokenType.ELSE,
     "return": TokenType.RETURN,
+    "class": TokenType.CLASS,
+    "new": TokenType.NEW,
+    "this": TokenType.THIS,
 }
 
 

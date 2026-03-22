@@ -3,6 +3,8 @@ from ast_nodes import (
     PrefixExpression, InfixExpression, IfExpression, FunctionLiteral,
     CallExpression, ArrayLiteral, IndexExpression,
     LetStatement, ReturnStatement, ExpressionStatement, BlockStatement,
+    ThisExpression, MemberExpression, NewExpression,
+    ClassStatement, AssignStatement,
 )
 
 
@@ -90,6 +92,36 @@ class ArrayObj(MonkeyObject):
 
     def __repr__(self):
         return "[" + ", ".join(str(e) for e in self.elements) + "]"
+
+
+class ClassObj(MonkeyObject):
+    __slots__ = ("name", "methods", "env")
+
+    def __init__(self, name: str, methods: dict, env):
+        self.name = name
+        self.methods = methods  # {name: (parameters, body)}
+        self.env = env
+
+    def __repr__(self):
+        return f"<class {self.name}>"
+
+
+class InstanceObj(MonkeyObject):
+    __slots__ = ("klass", "properties")
+
+    def __init__(self, klass: ClassObj):
+        self.klass = klass
+        self.properties: dict[str, MonkeyObject] = {}
+
+    def get(self, name: str):
+        return self.properties.get(name)
+
+    def set(self, name: str, value):
+        self.properties[name] = value
+
+    def __repr__(self):
+        props = ", ".join(f"{k}: {v}" for k, v in self.properties.items())
+        return f"<{self.klass.name} instance{' {' + props + '}' if props else ''}>"
 
 
 class BuiltinObj(MonkeyObject):
@@ -247,6 +279,19 @@ def monkey_eval(node, env: Environment) -> MonkeyObject:
         if isinstance(index, ErrorObj):
             return index
         return _eval_index(left, index)
+    elif isinstance(node, ClassStatement):
+        return _eval_class_statement(node, env)
+    elif isinstance(node, NewExpression):
+        return _eval_new_expression(node, env)
+    elif isinstance(node, ThisExpression):
+        val = env.get("this")
+        if val is None:
+            return ErrorObj("'this' used outside of a method")
+        return val
+    elif isinstance(node, MemberExpression):
+        return _eval_member_expression(node, env)
+    elif isinstance(node, AssignStatement):
+        return _eval_assign_statement(node, env)
 
     return NULL
 
@@ -410,3 +455,79 @@ def _eval_index(left, index):
             return NULL
         return left.elements[idx]
     return ErrorObj(f"index operator not supported: {type(left).__name__}")
+
+
+def _eval_class_statement(node, env):
+    methods = {}
+    for m in node.methods:
+        methods[m.name.value] = (m.parameters, m.body)
+    cls = ClassObj(node.name.value, methods, env)
+    env.set(node.name.value, cls)
+    return cls
+
+
+def _eval_new_expression(node, env):
+    cls = monkey_eval(node.class_name, env)
+    if isinstance(cls, ErrorObj):
+        return cls
+    if not isinstance(cls, ClassObj):
+        return ErrorObj(f"not a class: {type(cls).__name__}")
+
+    instance = InstanceObj(cls)
+
+    init = cls.methods.get("init")
+    if init is not None:
+        params, body = init
+        if len(node.arguments) != len(params):
+            return ErrorObj(
+                f"wrong number of arguments to {cls.name}.init: "
+                f"want={len(params)}, got={len(node.arguments)}"
+            )
+        args = _eval_expressions(node.arguments, env)
+        if len(args) == 1 and isinstance(args[0], ErrorObj):
+            return args[0]
+        method_env = Environment(outer=cls.env)
+        method_env.set("this", instance)
+        for param, arg in zip(params, args):
+            method_env.set(param.value, arg)
+        result = monkey_eval(body, method_env)
+        if isinstance(result, ErrorObj):
+            return result
+
+    return instance
+
+
+def _eval_member_expression(node, env):
+    obj = monkey_eval(node.object, env)
+    if isinstance(obj, ErrorObj):
+        return obj
+    if not isinstance(obj, InstanceObj):
+        return ErrorObj(f"member access not supported on {type(obj).__name__}")
+
+    prop_name = node.property.value
+
+    val = obj.get(prop_name)
+    if val is not None:
+        return val
+
+    method = obj.klass.methods.get(prop_name)
+    if method is not None:
+        params, body = method
+        bound_env = Environment(outer=obj.klass.env)
+        bound_env.set("this", obj)
+        return FunctionObj(params, body, bound_env)
+
+    return NULL
+
+
+def _eval_assign_statement(node, env):
+    obj = monkey_eval(node.target.object, env)
+    if isinstance(obj, ErrorObj):
+        return obj
+    if not isinstance(obj, InstanceObj):
+        return ErrorObj(f"cannot assign property on {type(obj).__name__}")
+    val = monkey_eval(node.value, env)
+    if isinstance(val, ErrorObj):
+        return val
+    obj.set(node.target.property.value, val)
+    return val

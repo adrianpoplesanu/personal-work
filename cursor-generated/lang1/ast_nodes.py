@@ -101,3 +101,39 @@ class ExpressionStatement(Statement):
 @dataclass
 class BlockStatement(Statement):
     statements: List[Statement] = field(default_factory=list)
+
+
+@dataclass
+class ThisExpression(Expression):
+    pass
+
+
+@dataclass
+class MemberExpression(Expression):
+    object: Optional[Expression] = None
+    property: Optional[Identifier] = None
+
+
+@dataclass
+class NewExpression(Expression):
+    class_name: Optional[Expression] = None
+    arguments: List[Expression] = field(default_factory=list)
+
+
+@dataclass
+class MethodDef(Node):
+    name: Optional[Identifier] = None
+    parameters: List[Identifier] = field(default_factory=list)
+    body: Optional[BlockStatement] = None
+
+
+@dataclass
+class ClassStatement(Statement):
+    name: Optional[Identifier] = None
+    methods: List[MethodDef] = field(default_factory=list)
+
+
+@dataclass
+class AssignStatement(Statement):
+    target: Optional[MemberExpression] = None
+    value: Optional[Expression] = None

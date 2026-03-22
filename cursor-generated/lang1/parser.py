@@ -5,6 +5,8 @@ from ast_nodes import (
     PrefixExpression, InfixExpression, IfExpression, FunctionLiteral,
     CallExpression, ArrayLiteral, IndexExpression,
     LetStatement, ReturnStatement, ExpressionStatement, BlockStatement,
+    ThisExpression, MemberExpression, NewExpression,
+    MethodDef, ClassStatement, AssignStatement,
 )
 
 LOWEST = 1
@@ -15,6 +17,7 @@ PRODUCT = 5
 PREFIX = 6
 CALL = 7
 INDEX = 8
+MEMBER = 9
 
 PRECEDENCES = {
     TokenType.EQ: EQUALS,
@@ -30,6 +33,7 @@ PRECEDENCES = {
     TokenType.PERCENT: PRODUCT,
     TokenType.LPAREN: CALL,
     TokenType.LBRACKET: INDEX,
+    TokenType.DOT: MEMBER,
 }
 
 
@@ -73,6 +77,8 @@ class Parser:
             return self._parse_let_statement()
         elif self.cur_token.type == TokenType.RETURN:
             return self._parse_return_statement()
+        elif self.cur_token.type == TokenType.CLASS:
+            return self._parse_class_statement()
         else:
             return self._parse_expression_statement()
 
@@ -98,8 +104,15 @@ class Parser:
         return stmt
 
     def _parse_expression_statement(self):
-        stmt = ExpressionStatement()
-        stmt.expression = self._parse_expression(LOWEST)
+        expr = self._parse_expression(LOWEST)
+        if isinstance(expr, MemberExpression) and self.peek_token.type == TokenType.ASSIGN:
+            self._next_token()  # consume =
+            self._next_token()  # move to value expression
+            value = self._parse_expression(LOWEST)
+            if self.peek_token.type == TokenType.SEMICOLON:
+                self._next_token()
+            return AssignStatement(target=expr, value=value)
+        stmt = ExpressionStatement(expression=expr)
         if self.peek_token.type == TokenType.SEMICOLON:
             self._next_token()
         return stmt
@@ -117,7 +130,7 @@ class Parser:
                 TokenType.ASTERISK, TokenType.PERCENT,
                 TokenType.EQ, TokenType.NOT_EQ,
                 TokenType.LT, TokenType.GT, TokenType.LT_EQ, TokenType.GT_EQ,
-                TokenType.LPAREN, TokenType.LBRACKET,
+                TokenType.LPAREN, TokenType.LBRACKET, TokenType.DOT,
             ):
                 return left
             self._next_token()
@@ -125,6 +138,8 @@ class Parser:
                 left = self._parse_call_expression(left)
             elif self.cur_token.type == TokenType.LBRACKET:
                 left = self._parse_index_expression(left)
+            elif self.cur_token.type == TokenType.DOT:
+                left = self._parse_member_expression(left)
             else:
                 left = self._parse_infix_expression(left)
         return left
@@ -149,6 +164,10 @@ class Parser:
             return self._parse_function_literal()
         elif tt == TokenType.LBRACKET:
             return self._parse_array_literal()
+        elif tt == TokenType.THIS:
+            return ThisExpression()
+        elif tt == TokenType.NEW:
+            return self._parse_new_expression()
         return None
 
     def _parse_prefix_expression(self):
@@ -256,3 +275,45 @@ class Parser:
         if not self._expect_peek(TokenType.RBRACKET):
             return None
         return expr
+
+    def _parse_member_expression(self, left):
+        if not self._expect_peek(TokenType.IDENT):
+            return None
+        prop = Identifier(value=self.cur_token.literal)
+        return MemberExpression(object=left, property=prop)
+
+    def _parse_new_expression(self):
+        self._next_token()
+        class_expr = Identifier(value=self.cur_token.literal)
+        if not self._expect_peek(TokenType.LPAREN):
+            return None
+        arguments = self._parse_expression_list(TokenType.RPAREN)
+        return NewExpression(class_name=class_expr, arguments=arguments)
+
+    def _parse_class_statement(self):
+        if not self._expect_peek(TokenType.IDENT):
+            return None
+        name = Identifier(value=self.cur_token.literal)
+        if not self._expect_peek(TokenType.LBRACE):
+            return None
+        methods = []
+        self._next_token()
+        while self.cur_token.type != TokenType.RBRACE and self.cur_token.type != TokenType.EOF:
+            if self.cur_token.type == TokenType.FN:
+                method = self._parse_method_def()
+                if method is not None:
+                    methods.append(method)
+            self._next_token()
+        return ClassStatement(name=name, methods=methods)
+
+    def _parse_method_def(self):
+        if not self._expect_peek(TokenType.IDENT):
+            return None
+        name = Identifier(value=self.cur_token.literal)
+        if not self._expect_peek(TokenType.LPAREN):
+            return None
+        params = self._parse_function_parameters()
+        if not self._expect_peek(TokenType.LBRACE):
+            return None
+        body = self._parse_block_statement()
+        return MethodDef(name=name, parameters=params, body=body)

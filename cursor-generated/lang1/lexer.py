@@ -116,6 +116,9 @@ class Lexer:
         elif ch == "]":
             self._read_char()
             return Token(TokenType.RBRACKET, "]")
+        elif ch == ".":
+            self._read_char()
+            return Token(TokenType.DOT, ".")
         elif ch == '"':
             return Token(TokenType.STRING, self._read_string())
         elif ch == "\0":

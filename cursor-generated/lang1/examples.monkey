@@ -20,3 +20,21 @@ puts(map(nums, double));
 let adder = fn(x) { fn(y) { x + y } };
 let addFive = adder(5);
 puts(addFive(10));
+
+class Dog {
+    fn init(name, age) {
+        this.name = name;
+        this.age = age;
+    }
+    fn bark() {
+        puts("Woof! My name is " + this.name);
+    }
+    fn describe() {
+        puts(this.name + " is a good dog");
+    }
+}
+
+let rex = new Dog("Rex", 5);
+rex.bark();
+rex.describe();
+puts(rex.name);
