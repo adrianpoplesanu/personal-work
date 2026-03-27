@@ -4,6 +4,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
+import ro.adrianus.matches.model.connector.MatchesResponse
 import ro.adrianus.matches.service.FootballDataService
 
 @RestController
@@ -20,9 +21,10 @@ class HelloController(
     }
 
     @GetMapping("/matches")
-    fun matches(): ResponseEntity<String> {
+    fun matches(): ResponseEntity<MatchesResponse> {
         log.info("GET /matches requested")
         val result = footballDataService.retrieveMatches()
-        return ResponseEntity.ok(result ?: "No matches found")
+            ?: return ResponseEntity.notFound().build()
+        return ResponseEntity.ok(result)
     }
 }
