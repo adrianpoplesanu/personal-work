@@ -4,6 +4,8 @@ project(monkeycpp LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+find_package(Threads REQUIRED)
+
 add_executable(monkeycpp
   src/main.cpp
   src/token.cpp
@@ -16,3 +18,4 @@ add_executable(monkeycpp
 )
 
 target_include_directories(monkeycpp PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_link_libraries(monkeycpp PRIVATE Threads::Threads)
