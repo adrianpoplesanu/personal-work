@@ -26,6 +26,7 @@ class Evaluator {
   Value applyFunction(const std::shared_ptr<FunctionObject>& fn, const std::vector<Value>& args,
                       const std::shared_ptr<InstanceObject>& this_binding);
   Value callValue(const Value& callee, const std::vector<Value>& args);
+  Value spawnCall(const Value& callee, const std::vector<Value>& args);
 
   Program* program_;
 };

@@ -2,13 +2,17 @@
 
 #include "ast.h"
 
+#include <atomic>
+#include <future>
 #include <memory>
 #include <ostream>
 #include <string>
+#include <thread>
 #include <unordered_map>
 #include <vector>
 
 struct Environment;
+struct ThreadObject;
 
 struct FunctionObject {
   std::vector<std::string> parameters;
@@ -39,6 +43,7 @@ struct Value {
     Class,
     Instance,
     BoundMethod,
+    Thread,
   } kind{Kind::Null};
 
   int64_t integer{0};
@@ -50,6 +55,7 @@ struct Value {
   std::shared_ptr<ClassObject> klass;
   std::shared_ptr<InstanceObject> instance;
   std::shared_ptr<BoundMethodObject> bound_method;
+  std::shared_ptr<ThreadObject> thread_handle;
 
   static Value null();
   static Value makeInt(int64_t n);
@@ -61,8 +67,15 @@ struct Value {
   static Value makeClass(std::shared_ptr<ClassObject> c);
   static Value makeInstance(std::shared_ptr<InstanceObject> i);
   static Value makeBoundMethod(std::shared_ptr<BoundMethodObject> b);
+  static Value makeThread(std::shared_ptr<ThreadObject> t);
 
   std::string inspect() const;
+};
+
+struct ThreadObject {
+  std::future<Value> future;
+  std::unique_ptr<std::thread> thread;
+  std::atomic<bool> joined{false};
 };
 
 struct InstanceObject {

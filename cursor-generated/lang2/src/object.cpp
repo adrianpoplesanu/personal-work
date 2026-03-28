@@ -71,6 +71,13 @@ Value Value::makeBoundMethod(std::shared_ptr<BoundMethodObject> b) {
   return v;
 }
 
+Value Value::makeThread(std::shared_ptr<ThreadObject> t) {
+  Value v;
+  v.kind = Kind::Thread;
+  v.thread_handle = std::move(t);
+  return v;
+}
+
 std::string Value::inspect() const {
   switch (kind) {
     case Kind::Null:
@@ -101,6 +108,8 @@ std::string Value::inspect() const {
       return "instance of " + instance->klass->name;
     case Kind::BoundMethod:
       return "bound " + bound_method->method->name;
+    case Kind::Thread:
+      return "thread";
   }
   return "?";
 }
@@ -116,6 +125,8 @@ bool isTruthy(const Value& v) {
     case Value::Kind::String:
       return !v.string_val.empty();
     case Value::Kind::Array:
+      return true;
+    case Value::Kind::Thread:
       return true;
     default:
       return true;
@@ -139,6 +150,8 @@ bool valueEquals(const Value& a, const Value& b) {
         if (!valueEquals((*a.elements)[i], (*b.elements)[i])) return false;
       }
       return true;
+    case Value::Kind::Thread:
+      return a.thread_handle.get() == b.thread_handle.get();
     default:
       return false;
   }

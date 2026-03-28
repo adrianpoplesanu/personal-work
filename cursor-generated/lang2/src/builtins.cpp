@@ -74,6 +74,31 @@ Value builtin_push(const std::vector<Value>& args) {
   return Value::makeArray(copy);
 }
 
+Value builtin_join(const std::vector<Value>& args) {
+  if (args.size() != 1) {
+    throw std::runtime_error("join() expects 1 argument, got " + std::to_string(args.size()));
+  }
+  if (args[0].kind != Value::Kind::Thread) {
+    throw std::runtime_error("join() requires a thread");
+  }
+  auto handle = args[0].thread_handle;
+  if (handle->joined.exchange(true)) {
+    throw std::runtime_error("join() on already joined thread");
+  }
+  try {
+    Value result = handle->future.get();
+    if (handle->thread && handle->thread->joinable()) {
+      handle->thread->join();
+    }
+    return result;
+  } catch (...) {
+    if (handle->thread && handle->thread->joinable()) {
+      handle->thread->join();
+    }
+    throw;
+  }
+}
+
 void add(std::unordered_map<std::string, std::shared_ptr<BuiltinObject>>& m, const char* name,
          Value (*fn)(const std::vector<Value>&)) {
   auto b = std::make_shared<BuiltinObject>();
@@ -95,6 +120,7 @@ const std::unordered_map<std::string, std::shared_ptr<BuiltinObject>>& builtinMa
     add(m, "last", builtin_last);
     add(m, "rest", builtin_rest);
     add(m, "push", builtin_push);
+    add(m, "join", builtin_join);
   }
   return m;
 }

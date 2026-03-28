@@ -57,6 +57,7 @@ class Parser {
   std::unique_ptr<Expression> parseNewExpression();
   std::unique_ptr<Expression> parseArrayLiteral();
   std::unique_ptr<Expression> parseThisExpression();
+  std::unique_ptr<Expression> parseSpawnExpression();
 
   std::vector<Identifier> parseFunctionParameters();
   MethodDefinition parseMethodDefinition();

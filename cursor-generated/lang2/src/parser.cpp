@@ -360,6 +360,8 @@ std::unique_ptr<Expression> Parser::parsePrefixExpression() {
       return parseFunctionLiteral();
     case TokenType::NEW:
       return parseNewExpression();
+    case TokenType::SPAWN:
+      return parseSpawnExpression();
     default: {
       std::ostringstream os;
       os << "no prefix parse function for " << Token::typeName(cur_token_.type);
@@ -439,6 +441,29 @@ std::unique_ptr<Expression> Parser::parseFunctionLiteral() {
   }
   lit->body = parseBlockStatement();
   return lit;
+}
+
+std::unique_ptr<Expression> Parser::parseSpawnExpression() {
+  auto expr = std::make_unique<SpawnExpressionExpr>();
+  expr->token = cur_token_;
+  if (!expectPeek(TokenType::LPAREN)) {
+    return nullptr;
+  }
+  nextToken();
+  if (curTokenIs(TokenType::RPAREN)) {
+    errors_.push_back("spawn() requires a function");
+    return nullptr;
+  }
+  expr->function = parseExpression(Precedence::LOWEST);
+  while (peekTokenIs(TokenType::COMMA)) {
+    nextToken();
+    nextToken();
+    expr->arguments.push_back(parseExpression(Precedence::LOWEST));
+  }
+  if (!expectPeek(TokenType::RPAREN)) {
+    return nullptr;
+  }
+  return expr;
 }
 
 std::unique_ptr<Expression> Parser::parseNewExpression() {

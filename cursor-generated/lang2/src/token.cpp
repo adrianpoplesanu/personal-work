@@ -80,6 +80,8 @@ std::string Token::typeName(TokenType t) {
       return "NEW";
     case TokenType::THIS:
       return "THIS";
+    case TokenType::SPAWN:
+      return "SPAWN";
   }
   return "?";
 }

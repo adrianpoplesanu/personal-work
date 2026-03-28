@@ -2,8 +2,9 @@
 
 #include "builtins.h"
 
-#include <sstream>
+#include <future>
 #include <stdexcept>
+#include <thread>
 
 namespace {
 
@@ -237,6 +238,14 @@ Value Evaluator::evalExpression(Expression* expr, const std::shared_ptr<Environm
     fn->env = env;
     return Value::makeFunction(fn);
   }
+  if (auto* se = dynamic_cast<SpawnExpressionExpr*>(expr)) {
+    Value callee = evalExpression(se->function.get(), env);
+    std::vector<Value> args;
+    for (auto& a : se->arguments) {
+      args.push_back(evalExpression(a.get(), env));
+    }
+    return spawnCall(callee, args);
+  }
   if (auto* ce = dynamic_cast<CallExpressionExpr*>(expr)) {
     Value callee = evalExpression(ce->function.get(), env);
     std::vector<Value> args;
@@ -335,6 +344,28 @@ Value Evaluator::applyFunction(const std::shared_ptr<FunctionObject>& fn, const 
   Evaluator inner(program_);
   EvalResult r = inner.evalBlockStatement(fn->body, fnEnv);
   return r.value;
+}
+
+Value Evaluator::spawnCall(const Value& callee, const std::vector<Value>& args) {
+  auto handle = std::make_shared<ThreadObject>();
+  auto prom = std::make_shared<std::promise<Value>>();
+  handle->future = prom->get_future();
+  Program* prog = program_;
+  Value callee_copy = callee;
+  std::vector<Value> args_copy = args;
+  handle->thread = std::make_unique<std::thread>([prog, prom, callee_copy, args_copy]() {
+    try {
+      Evaluator eval(prog);
+      Value v = eval.callValue(callee_copy, args_copy);
+      prom->set_value(std::move(v));
+    } catch (...) {
+      try {
+        prom->set_exception(std::current_exception());
+      } catch (...) {
+      }
+    }
+  });
+  return Value::makeThread(handle);
 }
 
 Value Evaluator::callValue(const Value& callee, const std::vector<Value>& args) {

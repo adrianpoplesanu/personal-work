@@ -68,6 +68,12 @@ struct CallExpression {
   std::vector<std::unique_ptr<Expression>> arguments;
 };
 
+struct SpawnExpression {
+  Token token;
+  std::unique_ptr<Expression> function;
+  std::vector<std::unique_ptr<Expression>> arguments;
+};
+
 struct NewExpression {
   Token token;
   Identifier class_name;
@@ -143,6 +149,7 @@ struct InfixExpressionExpr : Expression, InfixExpression {};
 struct IfExpressionExpr : Expression, IfExpression {};
 struct FunctionLiteralExpr : Expression, FunctionLiteral {};
 struct CallExpressionExpr : Expression, CallExpression {};
+struct SpawnExpressionExpr : Expression, SpawnExpression {};
 struct NewExpressionExpr : Expression, NewExpression {};
 struct MemberExpressionExpr : Expression, MemberExpression {};
 struct AssignExpressionExpr : Expression, AssignExpression {};

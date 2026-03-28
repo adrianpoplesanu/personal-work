@@ -48,6 +48,7 @@ enum class TokenType {
   CLASS,
   NEW,
   THIS,
+  SPAWN,
 };
 
 struct Token {

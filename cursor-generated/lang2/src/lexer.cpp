@@ -75,6 +75,7 @@ TokenType Lexer::lookupIdent(const std::string& ident) {
       {"class", TokenType::CLASS},
       {"new", TokenType::NEW},
       {"this", TokenType::THIS},
+      {"spawn", TokenType::SPAWN},
   };
   auto it = kws.find(ident);
   if (it != kws.end()) return it->second;
