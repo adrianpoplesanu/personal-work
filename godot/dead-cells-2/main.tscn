@@ -1,0 +1,70 @@
+[gd_scene load_steps=3 format=3 uid="uid://ccvn3fdlg5x7v"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_main"]
+[ext_resource type="Script" path="res://maze_view.gd" id="2_maze"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_main")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.102, 0.102, 0.18, 1)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Center"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Center/VBox"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(1, 0.39, 0.39, 0.3)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_font_sizes/font_size = 22
+text = "Maze World — Graph / Path"
+horizontal_alignment = 1
+
+[node name="MazeView" type="Control" parent="Center/VBox"]
+custom_minimum_size = Vector2(600, 600)
+layout_mode = 2
+script = ExtResource("2_maze")
+
+[node name="Legend" type="HBoxContainer" parent="Center/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 24
+
+[node name="Blocked" type="Label" parent="Center/VBox/Legend"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.973, 0.443, 0.443, 1)
+text = "■ Blocked"
+
+[node name="Maze" type="Label" parent="Center/VBox/Legend"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.58, 0.639, 0.722, 1)
+text = "■ Traversable (red = blocked edge)"
+
+[node name="Hint" type="Label" parent="Center/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.91, 0.91, 0.91, 0.7)
+theme_override_font_sizes/font_size = 13
+text = "Press R to regenerate the world"
+horizontal_alignment = 1
