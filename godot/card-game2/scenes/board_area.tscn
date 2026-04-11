@@ -26,7 +26,19 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="MinionRow" type="HBoxContainer" parent="Margin"]
+[node name="MainRow" type="HBoxContainer" parent="Margin"]
 layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="HeroIcon" type="Button" parent="Margin/MainRow"]
+custom_minimum_size = Vector2(88, 170)
+layout_mode = 2
+focus_mode = 0
+flat = true
+text = "♔"
+
+[node name="MinionRow" type="HBoxContainer" parent="Margin/MainRow"]
+layout_mode = 2
+size_flags_horizontal = 3
 alignment = 1
 theme_override_constants/separation = 10

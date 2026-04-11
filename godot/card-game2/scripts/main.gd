@@ -30,6 +30,7 @@ func _ready() -> void:
 	hand_area.card_clicked.connect(_on_hand_card_clicked)
 	player_board.minion_clicked.connect(_on_player_minion_clicked)
 	opponent_board.minion_clicked.connect(_on_opponent_minion_clicked)
+	opponent_board.hero_icon_clicked.connect(_on_attack_hero_pressed)
 	end_turn_btn.pressed.connect(_on_end_turn_pressed)
 	attack_hero_btn.pressed.connect(_on_attack_hero_pressed)
 
@@ -71,6 +72,7 @@ func _build_ui() -> void:
 
 	# Opponent board (top)
 	opponent_board = BoardAreaScene.instantiate()
+	opponent_board.is_opponent_side = true
 	opponent_board.position = Vector2(190, 60)
 	add_child(opponent_board)
 
@@ -99,7 +101,9 @@ func _refresh_status() -> void:
 	turn_label.text = "Turn %d - %s" % [GameState.turn, "Your Turn" if GameState.player_turn else "Opponent Turn"]
 	end_turn_btn.disabled = not GameState.player_turn or GameState.is_game_over
 	var can_attack_hero: bool = not GameState.selected_minion.is_empty() and bool(GameState.selected_minion.get("can_attack", false))
-	attack_hero_btn.disabled = not can_attack_hero or not GameState.player_turn or GameState.is_game_over
+	var hero_attack_usable: bool = can_attack_hero and GameState.player_turn and not GameState.is_game_over
+	attack_hero_btn.disabled = not hero_attack_usable
+	opponent_board.set_hero_attack_enabled(hero_attack_usable)
 
 
 func _refresh_hand() -> void:
