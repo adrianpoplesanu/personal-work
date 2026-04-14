@@ -1,4 +1,4 @@
-let name = "Monkey";
+let name = "AdLang";
 puts("Hello from " + name + "!");
 
 let factorial = fn(n) {

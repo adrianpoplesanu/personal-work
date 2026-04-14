@@ -1,22 +1,22 @@
 ---
-name: monkeycpp-interpreter
+name: main-interpreter
 description: >-
-  Guides implementation of the Monkey-style C++ interpreter in lang2 (lexer,
+  Guides implementation of the AdLang-style C++ interpreter in lang2 (lexer,
   parser, AST, objects, environment, evaluator, REPL). Use when adding language
   features, fixing parser/eval bugs, or changing the REPL; use when the user
-  mentions monkeycpp, lang2, or this interpreter codebase.
+  mentions main, lang2, or this interpreter codebase.
 ---
 
-# Monkey-style C++ interpreter (lang2)
+# AdLang-style C++ interpreter (lang2)
 
 ## Architecture
 
-Data flow: **Lexer** (`token.h`, `lexer.*`) → **Parser** (`parser.*`, `ast.h`) → **Evaluator** (`evaluator.*`) using **Environment** (`environment.*`) and **Value** (`object.*`). Builtins: **`builtins.*`**. Entry: **`main.cpp`** (REPL or `argv[1]` file).
+Data flow: **Lexer** (`token.h`, `lexer.*`) -> **Parser** (`parser.*`, `ast.h`) -> **Evaluator** (`evaluator.*`) using **Environment** (`environment.*`) and **Value** (`object.*`). Builtins: **`builtins.*`**. Entry: **`main.cpp`** (REPL or `argv[1]` file).
 
 | Layer | Responsibility |
 |--------|----------------|
 | `Token` / `Lexer` | Keywords, literals, `[` `]` `%` `<=` `>=`, etc. |
-| `ast.h` | Arrays (`ArrayLiteralExpr`), index (`IndexExpressionExpr`), `ThisExpressionExpr`, … |
+| `ast.h` | Arrays (`ArrayLiteralExpr`), index (`IndexExpressionExpr`), `ThisExpressionExpr`, ... |
 | `Parser` | Pratt loop: calls `(`, index `[`, member `.`, assign `=`; precedence **INDEX** before **MEMBER**. |
 | `Value` (`object.*`) | `Kind` includes **Array**, **Builtin**; arrays use `shared_ptr<vector<Value>>`. |
 | `Environment` | `tryGet` (optional), `get` (throws), `set`, `assign`. |
@@ -38,7 +38,7 @@ Data flow: **Lexer** (`token.h`, `lexer.*`) → **Parser** (`parser.*`, `ast.h`)
    `applyFunction(..., this_binding)` sets **`this`** on the function env. Member access requires **`Value::Kind::Instance`**.
 
 3. **Parser pitfalls (already fixed once; preserve behavior)**  
-   - **`new Name(arg)`**: After `(`, decide empty vs args using **`curTokenIs(RPAREN)`**, not `peekTokenIs` only—otherwise a single arg is skipped when `peek` is already `)`.  
+   - **`new Name(arg)`**: After `(`, decide empty vs args using **`curTokenIs(RPAREN)`**, not `peekTokenIs` only-otherwise a single arg is skipped when `peek` is already `)`.  
    - **Empty `()`** in `parseFunctionParameters`: do not advance past `)` twice; parent uses **`expectPeek(LBRACE)`** for method body.  
    - **Class body**: parse methods while **`curTokenIs(FUNCTION)`**, then expect closing **`}`**; stray `;` after `}` is handled by **`parseProgram`** skipping leading `;`.
 
@@ -72,7 +72,7 @@ Work in order; compile after each step.
 ## Build
 
 ```bash
-c++ -std=c++17 -Wall -Wextra -o monkeycpp src/main.cpp src/token.cpp src/lexer.cpp src/parser.cpp src/object.cpp src/environment.cpp src/builtins.cpp src/evaluator.cpp -I src
+c++ -std=c++17 -Wall -Wextra -o main src/main.cpp src/token.cpp src/lexer.cpp src/parser.cpp src/object.cpp src/environment.cpp src/builtins.cpp src/evaluator.cpp -I src
 ```
 
 Or CMake: `cmake -B build -S . && cmake --build build` (add new `.cpp` files to `CMakeLists.txt`).

@@ -21,21 +21,21 @@ $(TARGET): $(SRCS)
 	$(CXX) $(CXXFLAGS) -o $@ $(SRCS)
 
 test: $(TARGET)
-	./$(TARGET) tests/parallel_threads.monkey
+	./$(TARGET) tests/parallel_threads.ad
 
 test-parallel: $(TARGET)
-	./$(TARGET) tests/parallel_threads.monkey
+	./$(TARGET) tests/parallel_threads.ad
 
 test-sequential: $(TARGET)
-	./$(TARGET) tests/sequential_fib.monkey
+	./$(TARGET) tests/sequential_fib.ad
 
 # Same fib(24)+fib(24) work; compare wall-clock (real) — parallel should be ~faster on multi-core.
 test-compare: $(TARGET)
 	@echo "=== parallel (spawn + join) ==="
-	@/usr/bin/time -p ./$(TARGET) tests/parallel_threads.monkey
+	@/usr/bin/time -p ./$(TARGET) tests/parallel_threads.ad
 	@echo ""
 	@echo "=== sequential (let t1 = fib(24); let t2 = fib(24);) ==="
-	@/usr/bin/time -p ./$(TARGET) tests/sequential_fib.monkey
+	@/usr/bin/time -p ./$(TARGET) tests/sequential_fib.ad
 
 clean:
 	rm -f $(TARGET)

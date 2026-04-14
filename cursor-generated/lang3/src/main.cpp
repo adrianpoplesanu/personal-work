@@ -63,7 +63,7 @@ int main(int argc, char** argv) {
     return 0;
   }
 
-  std::cout << "Monkey-style REPL (cpp). Try: let add = fn(a,b) { return a + b; }; add(3, 4);\n";
+  std::cout << "AdLang-style REPL (cpp). Try: let add = fn(a,b) { return a + b; }; add(3, 4);\n";
   std::cout << "Arrays/builtins: let a = [1,2,3]; puts(len(a));\n";
   std::cout << "Threads: let t = spawn(fn() { return 42; }); join(t);\n";
   std::cout << "Classes: class Counter { fn init(n) { this.count = n; } fn bump() { this.count = this.count + 1; } }; let c = new Counter(0); c.bump(); c.count;\n";
