@@ -1,0 +1,87 @@
+#include "token.h"
+
+#include <sstream>
+
+std::string Token::typeName(TokenType t) {
+  switch (t) {
+    case TokenType::ILLEGAL:
+      return "ILLEGAL";
+    case TokenType::END:
+      return "END";
+    case TokenType::IDENT:
+      return "IDENT";
+    case TokenType::INT:
+      return "INT";
+    case TokenType::STRING:
+      return "STRING";
+    case TokenType::ASSIGN:
+      return "ASSIGN";
+    case TokenType::PLUS:
+      return "PLUS";
+    case TokenType::MINUS:
+      return "MINUS";
+    case TokenType::BANG:
+      return "BANG";
+    case TokenType::ASTERISK:
+      return "ASTERISK";
+    case TokenType::SLASH:
+      return "SLASH";
+    case TokenType::PERCENT:
+      return "PERCENT";
+    case TokenType::LT:
+      return "LT";
+    case TokenType::GT:
+      return "GT";
+    case TokenType::LT_EQ:
+      return "LT_EQ";
+    case TokenType::GT_EQ:
+      return "GT_EQ";
+    case TokenType::EQ:
+      return "EQ";
+    case TokenType::NOT_EQ:
+      return "NOT_EQ";
+    case TokenType::COMMA:
+      return "COMMA";
+    case TokenType::SEMICOLON:
+      return "SEMICOLON";
+    case TokenType::COLON:
+      return "COLON";
+    case TokenType::DOT:
+      return "DOT";
+    case TokenType::LPAREN:
+      return "LPAREN";
+    case TokenType::RPAREN:
+      return "RPAREN";
+    case TokenType::LBRACE:
+      return "LBRACE";
+    case TokenType::RBRACE:
+      return "RBRACE";
+    case TokenType::LBRACKET:
+      return "LBRACKET";
+    case TokenType::RBRACKET:
+      return "RBRACKET";
+    case TokenType::FUNCTION:
+      return "FUNCTION";
+    case TokenType::LET:
+      return "LET";
+    case TokenType::RETURN:
+      return "RETURN";
+    case TokenType::TRUE:
+      return "TRUE";
+    case TokenType::FALSE:
+      return "FALSE";
+    case TokenType::IF:
+      return "IF";
+    case TokenType::ELSE:
+      return "ELSE";
+    case TokenType::CLASS:
+      return "CLASS";
+    case TokenType::NEW:
+      return "NEW";
+    case TokenType::THIS:
+      return "THIS";
+    case TokenType::SPAWN:
+      return "SPAWN";
+  }
+  return "?";
+}
