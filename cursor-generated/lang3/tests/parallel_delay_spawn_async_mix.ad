@@ -1,0 +1,8 @@
+let async_sum = async fn(a, b) {
+    delay(20);
+    return a + b;
+};
+
+let t1 = spawn(fn() { delay(10); return 3; });
+let t2 = spawn(fn() { return await async_sum(7, 8); });
+puts(join(t1) + join(t2));

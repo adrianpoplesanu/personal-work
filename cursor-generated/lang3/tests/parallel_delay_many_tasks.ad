@@ -1,0 +1,9 @@
+let t1 = spawn(fn() { delay(10); return 1; });
+let t2 = spawn(fn() { delay(10); return 2; });
+let t3 = spawn(fn() { delay(10); return 3; });
+let t4 = spawn(fn() { delay(10); return 4; });
+let t5 = spawn(fn() { delay(10); return 5; });
+let t6 = spawn(fn() { delay(10); return 6; });
+let t7 = spawn(fn() { delay(10); return 7; });
+let t8 = spawn(fn() { delay(10); return 8; });
+puts(join(t1) + join(t2) + join(t3) + join(t4) + join(t5) + join(t6) + join(t7) + join(t8));

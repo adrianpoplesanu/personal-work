@@ -1,0 +1,4 @@
+let t1 = spawn(fn() { delay(60); return 1; });
+let t2 = spawn(fn() { delay(20); return 2; });
+let t3 = spawn(fn() { delay(40); return 3; });
+puts(join(t1) + join(t2) + join(t3));

@@ -1,0 +1,5 @@
+let t1 = spawn(fn() { delay(200); return 1; });
+let t2 = spawn(fn() { delay(200); return 2; });
+puts(task_cancel(t1));
+puts(task_cancel(t2));
+join(t1);
