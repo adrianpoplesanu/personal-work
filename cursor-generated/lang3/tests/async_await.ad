@@ -1,0 +1,8 @@
+let f = async fn() { return 7; };
+puts(await f());
+
+let add1 = async fn(x) { return x + 1; };
+puts(await add1(41));
+
+let t = spawn(fn() { return 100; });
+puts(join(t));

@@ -7,18 +7,20 @@
 #include <memory>
 #include <ostream>
 #include <string>
+#include <pthread.h>
 #include <thread>
 #include <unordered_map>
 #include <vector>
 
 struct Environment;
-struct ThreadObject;
+struct TaskObject;
 
 struct FunctionObject {
   std::vector<std::string> parameters;
   BlockStatement* body{nullptr};
   std::shared_ptr<Environment> env;
   std::string name;
+  bool is_async{false};
 };
 
 struct BuiltinObject;
@@ -43,7 +45,7 @@ struct Value {
     Class,
     Instance,
     BoundMethod,
-    Thread,
+    Task,
   } kind{Kind::Null};
 
   int64_t integer{0};
@@ -55,7 +57,7 @@ struct Value {
   std::shared_ptr<ClassObject> klass;
   std::shared_ptr<InstanceObject> instance;
   std::shared_ptr<BoundMethodObject> bound_method;
-  std::shared_ptr<ThreadObject> thread_handle;
+  std::shared_ptr<TaskObject> task_handle;
 
   static Value null();
   static Value makeInt(int64_t n);
@@ -67,14 +69,15 @@ struct Value {
   static Value makeClass(std::shared_ptr<ClassObject> c);
   static Value makeInstance(std::shared_ptr<InstanceObject> i);
   static Value makeBoundMethod(std::shared_ptr<BoundMethodObject> b);
-  static Value makeThread(std::shared_ptr<ThreadObject> t);
+  static Value makeTask(std::shared_ptr<TaskObject> t);
 
   std::string inspect() const;
 };
 
-struct ThreadObject {
+struct TaskObject {
   std::future<Value> future;
-  std::unique_ptr<std::thread> thread;
+  pthread_t overflow_pthread{};
+  bool has_overflow_pthread{false};
   std::atomic<bool> joined{false};
 };
 

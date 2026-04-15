@@ -3,11 +3,13 @@
 #include "object.h"
 
 #include <memory>
+#include <mutex>
 #include <optional>
 #include <string>
 #include <unordered_map>
 
 struct Environment {
+  mutable std::mutex mu;
   std::unordered_map<std::string, Value> store;
   std::shared_ptr<Environment> outer;
 

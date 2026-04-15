@@ -3,6 +3,7 @@
 #include "lexer.h"
 #include "object.h"
 #include "parser.h"
+#include "scheduler.h"
 
 #include <fstream>
 #include <iostream>
@@ -19,14 +20,14 @@ static void printErrors(const Parser& p) {
 
 static void evalProgram(std::shared_ptr<Environment> env,
                         std::vector<std::unique_ptr<Program>>& program_storage, std::unique_ptr<Program> program,
-                        bool printExprResult) {
+                        bool printExprResult, const std::shared_ptr<TaskScheduler>& scheduler) {
   if (!program) {
     return;
   }
   program_storage.push_back(std::move(program));
   Program* prog = program_storage.back().get();
   try {
-    Evaluator eval(prog);
+    Evaluator eval(prog, scheduler);
     Value v = eval.eval(env);
     if (printExprResult && prog->statements.size() == 1 &&
         dynamic_cast<ExpressionStatementStmt*>(prog->statements[0].get())) {
@@ -42,6 +43,7 @@ static void evalProgram(std::shared_ptr<Environment> env,
 int main(int argc, char** argv) {
   auto env = std::make_shared<Environment>();
   std::vector<std::unique_ptr<Program>> program_storage;
+  auto scheduler = std::make_shared<TaskScheduler>(0);
 
   if (argc > 1) {
     std::ifstream f(argv[1]);
@@ -59,13 +61,14 @@ int main(int argc, char** argv) {
       printErrors(parser);
       return 1;
     }
-    evalProgram(env, program_storage, std::move(program), true);
+    evalProgram(env, program_storage, std::move(program), true, scheduler);
     return 0;
   }
 
   std::cout << "AdLang-style REPL (cpp). Try: let add = fn(a,b) { return a + b; }; add(3, 4);\n";
   std::cout << "Arrays/builtins: let a = [1,2,3]; puts(len(a));\n";
-  std::cout << "Threads: let t = spawn(fn() { return 42; }); join(t);\n";
+  std::cout << "Tasks: let t = spawn(fn() { return 42; }); join(t);\n";
+  std::cout << "Async: let f = async fn() { return 1; }; await f();\n";
   std::cout << "Classes: class Counter { fn init(n) { this.count = n; } fn bump() { this.count = this.count + 1; } }; let c = new Counter(0); c.bump(); c.count;\n";
   std::cout << "Type :quit to exit.\n";
 
@@ -89,7 +92,7 @@ int main(int argc, char** argv) {
       printErrors(parser);
       continue;
     }
-    evalProgram(env, program_storage, std::move(program), true);
+    evalProgram(env, program_storage, std::move(program), true, scheduler);
   }
 
   return 0;

@@ -356,8 +356,15 @@ std::unique_ptr<Expression> Parser::parsePrefixExpression() {
     }
     case TokenType::IF:
       return parseIfExpression();
+    case TokenType::ASYNC:
+      if (!expectPeek(TokenType::FUNCTION)) {
+        return nullptr;
+      }
+      return parseFunctionLiteral(true);
     case TokenType::FUNCTION:
-      return parseFunctionLiteral();
+      return parseFunctionLiteral(false);
+    case TokenType::AWAIT:
+      return parseAwaitExpression();
     case TokenType::NEW:
       return parseNewExpression();
     case TokenType::SPAWN:
@@ -429,9 +436,10 @@ std::unique_ptr<Expression> Parser::parseIfExpression() {
   return expr;
 }
 
-std::unique_ptr<Expression> Parser::parseFunctionLiteral() {
+std::unique_ptr<Expression> Parser::parseFunctionLiteral(bool is_async) {
   auto lit = std::make_unique<FunctionLiteralExpr>();
   lit->token = cur_token_;
+  lit->is_async = is_async;
   if (!expectPeek(TokenType::LPAREN)) {
     return nullptr;
   }
@@ -441,6 +449,14 @@ std::unique_ptr<Expression> Parser::parseFunctionLiteral() {
   }
   lit->body = parseBlockStatement();
   return lit;
+}
+
+std::unique_ptr<Expression> Parser::parseAwaitExpression() {
+  auto expr = std::make_unique<AwaitExpressionExpr>();
+  expr->token = cur_token_;
+  nextToken();
+  expr->operand = parseExpression(Precedence::LOWEST);
+  return expr;
 }
 
 std::unique_ptr<Expression> Parser::parseSpawnExpression() {

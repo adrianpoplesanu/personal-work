@@ -53,7 +53,8 @@ class Parser {
   std::unique_ptr<Expression> parseBooleanLiteral();
   std::unique_ptr<Expression> parseGroupedExpression();
   std::unique_ptr<Expression> parseIfExpression();
-  std::unique_ptr<Expression> parseFunctionLiteral();
+  std::unique_ptr<Expression> parseFunctionLiteral(bool is_async = false);
+  std::unique_ptr<Expression> parseAwaitExpression();
   std::unique_ptr<Expression> parseNewExpression();
   std::unique_ptr<Expression> parseArrayLiteral();
   std::unique_ptr<Expression> parseThisExpression();

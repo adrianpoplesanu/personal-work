@@ -11,11 +11,15 @@ struct EvalResult {
   bool returned{false};
 };
 
+class TaskScheduler;
+
 class Evaluator {
  public:
-  explicit Evaluator(Program* program);
+  explicit Evaluator(Program* program, std::shared_ptr<TaskScheduler> scheduler = nullptr);
 
   Value eval(std::shared_ptr<Environment> env);
+
+  Value callValue(const Value& callee, const std::vector<Value>& args);
 
  private:
   EvalResult evalStatement(Statement* stmt, const std::shared_ptr<Environment>& env);
@@ -25,8 +29,8 @@ class Evaluator {
 
   Value applyFunction(const std::shared_ptr<FunctionObject>& fn, const std::vector<Value>& args,
                       const std::shared_ptr<InstanceObject>& this_binding);
-  Value callValue(const Value& callee, const std::vector<Value>& args);
   Value spawnCall(const Value& callee, const std::vector<Value>& args);
 
   Program* program_;
+  std::shared_ptr<TaskScheduler> scheduler_;
 };

@@ -7,3 +7,5 @@
 #include <unordered_map>
 
 const std::unordered_map<std::string, std::shared_ptr<BuiltinObject>>& builtinMap();
+
+Value joinTaskValue(const Value& taskVal);

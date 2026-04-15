@@ -60,6 +60,7 @@ struct FunctionLiteral {
   Token token;
   std::vector<Identifier> parameters;
   std::unique_ptr<BlockStatement> body;
+  bool is_async{false};
 };
 
 struct CallExpression {
@@ -72,6 +73,11 @@ struct SpawnExpression {
   Token token;
   std::unique_ptr<Expression> function;
   std::vector<std::unique_ptr<Expression>> arguments;
+};
+
+struct AwaitExpression {
+  Token token;
+  std::unique_ptr<Expression> operand;
 };
 
 struct NewExpression {
@@ -150,6 +156,7 @@ struct IfExpressionExpr : Expression, IfExpression {};
 struct FunctionLiteralExpr : Expression, FunctionLiteral {};
 struct CallExpressionExpr : Expression, CallExpression {};
 struct SpawnExpressionExpr : Expression, SpawnExpression {};
+struct AwaitExpressionExpr : Expression, AwaitExpression {};
 struct NewExpressionExpr : Expression, NewExpression {};
 struct MemberExpressionExpr : Expression, MemberExpression {};
 struct AssignExpressionExpr : Expression, AssignExpression {};

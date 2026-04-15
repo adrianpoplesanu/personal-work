@@ -1,6 +1,8 @@
 #include "evaluator.h"
 
 #include "builtins.h"
+#include "scheduler.h"
+#include "stack_thread.h"
 
 #include <future>
 #include <stdexcept>
@@ -15,7 +17,8 @@ std::string toString(const Value& v) {
 
 }  // namespace
 
-Evaluator::Evaluator(Program* program) : program_(program) {}
+Evaluator::Evaluator(Program* program, std::shared_ptr<TaskScheduler> scheduler)
+    : program_(program), scheduler_(std::move(scheduler)) {}
 
 Value Evaluator::eval(std::shared_ptr<Environment> env) { return evalProgramBlock(env); }
 
@@ -236,7 +239,12 @@ Value Evaluator::evalExpression(Expression* expr, const std::shared_ptr<Environm
     }
     fn->body = fl->body.get();
     fn->env = env;
+    fn->is_async = fl->is_async;
     return Value::makeFunction(fn);
+  }
+  if (auto* aw = dynamic_cast<AwaitExpressionExpr*>(expr)) {
+    Value inner = evalExpression(aw->operand.get(), env);
+    return joinTaskValue(inner);
   }
   if (auto* se = dynamic_cast<SpawnExpressionExpr*>(expr)) {
     Value callee = evalExpression(se->function.get(), env);
@@ -341,31 +349,64 @@ Value Evaluator::applyFunction(const std::shared_ptr<FunctionObject>& fn, const 
   if (this_binding) {
     fnEnv->set("this", Value::makeInstance(this_binding));
   }
-  Evaluator inner(program_);
+  Evaluator inner(program_, scheduler_);
   EvalResult r = inner.evalBlockStatement(fn->body, fnEnv);
   return r.value;
 }
 
+namespace {
+
+struct SpawnPayload {
+  Program* prog{nullptr};
+  std::shared_ptr<std::promise<Value>> prom;
+  Value callee;
+  std::vector<Value> args;
+};
+
+void* spawn_thread_main(void* p) {
+  auto* pl = static_cast<SpawnPayload*>(p);
+  try {
+    Evaluator eval(pl->prog, nullptr);
+    Value v = eval.callValue(pl->callee, pl->args);
+    pl->prom->set_value(std::move(v));
+  } catch (...) {
+    try {
+      pl->prom->set_exception(std::current_exception());
+    } catch (...) {
+    }
+  }
+  delete pl;
+  return nullptr;
+}
+
+}  // namespace
+
 Value Evaluator::spawnCall(const Value& callee, const std::vector<Value>& args) {
-  auto handle = std::make_shared<ThreadObject>();
-  auto prom = std::make_shared<std::promise<Value>>();
-  handle->future = prom->get_future();
   Program* prog = program_;
   Value callee_copy = callee;
   std::vector<Value> args_copy = args;
-  handle->thread = std::make_unique<std::thread>([prog, prom, callee_copy, args_copy]() {
-    try {
-      Evaluator eval(prog);
-      Value v = eval.callValue(callee_copy, args_copy);
-      prom->set_value(std::move(v));
-    } catch (...) {
-      try {
-        prom->set_exception(std::current_exception());
-      } catch (...) {
-      }
-    }
-  });
-  return Value::makeThread(handle);
+  auto sched = scheduler_;
+
+  if (sched) {
+    return sched->submit([prog, sched, callee_copy, args_copy]() {
+      Evaluator eval(prog, sched);
+      return eval.callValue(callee_copy, args_copy);
+    });
+  }
+
+  auto handle = std::make_shared<TaskObject>();
+  auto prom = std::make_shared<std::promise<Value>>();
+  handle->future = prom->get_future();
+  auto pl = new SpawnPayload{prog, std::move(prom), std::move(callee_copy), std::move(args_copy)};
+  pthread_t tid{};
+  constexpr size_t kStack = 8u * 1024u * 1024u;
+  if (!start_pthread_with_stack(kStack, spawn_thread_main, pl, &tid)) {
+    delete pl;
+    throw std::runtime_error("failed to spawn thread");
+  }
+  handle->overflow_pthread = tid;
+  handle->has_overflow_pthread = true;
+  return Value::makeTask(handle);
 }
 
 Value Evaluator::callValue(const Value& callee, const std::vector<Value>& args) {
@@ -373,9 +414,29 @@ Value Evaluator::callValue(const Value& callee, const std::vector<Value>& args) 
     return callee.builtin->fn(args);
   }
   if (callee.kind == Value::Kind::Function) {
+    if (callee.fn->is_async) {
+      if (!scheduler_) {
+        throw std::runtime_error("async function requires a scheduler (pass TaskScheduler from main)");
+      }
+      auto fn = callee.fn;
+      return scheduler_->submit([this, fn, args]() {
+        Evaluator eval(program_, scheduler_);
+        return eval.applyFunction(fn, args, nullptr);
+      });
+    }
     return applyFunction(callee.fn, args, nullptr);
   }
   if (callee.kind == Value::Kind::BoundMethod) {
+    if (callee.bound_method->method->is_async) {
+      if (!scheduler_) {
+        throw std::runtime_error("async method requires a scheduler (pass TaskScheduler from main)");
+      }
+      auto bm = callee.bound_method;
+      return scheduler_->submit([this, bm, args]() {
+        Evaluator eval(program_, scheduler_);
+        return eval.applyFunction(bm->method, args, bm->instance);
+      });
+    }
     return applyFunction(callee.bound_method->method, args, callee.bound_method->instance);
   }
   if (callee.kind == Value::Kind::Class) {

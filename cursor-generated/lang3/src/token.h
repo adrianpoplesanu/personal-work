@@ -49,6 +49,8 @@ enum class TokenType {
   NEW,
   THIS,
   SPAWN,
+  ASYNC,
+  AWAIT,
 };
 
 struct Token {

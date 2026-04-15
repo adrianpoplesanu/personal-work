@@ -82,6 +82,10 @@ std::string Token::typeName(TokenType t) {
       return "THIS";
     case TokenType::SPAWN:
       return "SPAWN";
+    case TokenType::ASYNC:
+      return "ASYNC";
+    case TokenType::AWAIT:
+      return "AWAIT";
   }
   return "?";
 }
