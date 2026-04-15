@@ -160,3 +160,21 @@ bool valueEquals(const Value& a, const Value& b) {
 std::ostream& operator<<(std::ostream& os, const Value& v) {
   return os << v.inspect();
 }
+
+const char* taskStatusName(TaskStatus status) {
+  switch (status) {
+    case TaskStatus::Ready:
+      return "ready";
+    case TaskStatus::Running:
+      return "running";
+    case TaskStatus::Yielded:
+      return "yielded";
+    case TaskStatus::Completed:
+      return "completed";
+    case TaskStatus::Failed:
+      return "failed";
+    case TaskStatus::Cancelled:
+      return "cancelled";
+  }
+  return "unknown";
+}

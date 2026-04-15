@@ -11,6 +11,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <cstdlib>
 
 static void printErrors(const Parser& p) {
   for (const auto& e : p.errors()) {
@@ -44,6 +45,16 @@ int main(int argc, char** argv) {
   auto env = std::make_shared<Environment>();
   std::vector<std::unique_ptr<Program>> program_storage;
   auto scheduler = std::make_shared<TaskScheduler>(0);
+  if (const char* q = std::getenv("ADLANG_QUANTUM_BUDGET")) {
+    try {
+      size_t budget = static_cast<size_t>(std::stoull(q));
+      if (budget > 0) {
+        scheduler->set_quantum_budget(budget);
+      }
+    } catch (...) {
+      std::cerr << "warning: invalid ADLANG_QUANTUM_BUDGET, using default\n";
+    }
+  }
 
   if (argc > 1) {
     std::ifstream f(argv[1]);

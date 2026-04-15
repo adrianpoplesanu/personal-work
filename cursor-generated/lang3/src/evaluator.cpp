@@ -15,10 +15,34 @@ std::string toString(const Value& v) {
   return v.inspect();
 }
 
+thread_local TaskExecutionContext* tls_task_ctx = nullptr;
+
 }  // namespace
 
 Evaluator::Evaluator(Program* program, std::shared_ptr<TaskScheduler> scheduler)
     : program_(program), scheduler_(std::move(scheduler)) {}
+
+void Evaluator::checkpoint(TaskExecutionContext* ctx) {
+  if (ctx == nullptr) {
+    ctx = tls_task_ctx;
+  }
+  if (ctx == nullptr) {
+    return;
+  }
+  ctx->checkpoints++;
+  if (ctx->task && ctx->task->cancel_requested.load()) {
+    throw std::runtime_error("task cancelled");
+  }
+  if (ctx->remaining_budget > 0) {
+    ctx->remaining_budget--;
+  }
+  if (ctx->remaining_budget == 0) {
+    ctx->yield_requested = true;
+    ctx->remaining_budget = ctx->checkpoint_budget;
+    // Cooperative safe-point: let OS schedule other runnable workers/tasks.
+    std::this_thread::yield();
+  }
+}
 
 Value Evaluator::eval(std::shared_ptr<Environment> env) { return evalProgramBlock(env); }
 
@@ -34,6 +58,7 @@ Value Evaluator::evalProgramBlock(const std::shared_ptr<Environment>& env) {
 }
 
 EvalResult Evaluator::evalStatement(Statement* stmt, const std::shared_ptr<Environment>& env) {
+  checkpoint(nullptr);
   if (auto* ls = dynamic_cast<LetStatementStmt*>(stmt)) {
     Value v = Value::null();
     if (ls->value) {
@@ -87,6 +112,7 @@ EvalResult Evaluator::evalBlockStatement(BlockStatement* block, const std::share
 }
 
 Value Evaluator::evalExpression(Expression* expr, const std::shared_ptr<Environment>& env) {
+  checkpoint(nullptr);
   if (auto* ie = dynamic_cast<IntegerLiteralExpr*>(expr)) {
     return Value::makeInt(ie->value);
   }
@@ -341,6 +367,7 @@ Value Evaluator::evalExpression(Expression* expr, const std::shared_ptr<Environm
 
 Value Evaluator::applyFunction(const std::shared_ptr<FunctionObject>& fn, const std::vector<Value>& args,
                                const std::shared_ptr<InstanceObject>& this_binding) {
+  checkpoint(nullptr);
   auto fnEnv = std::make_shared<Environment>(fn->env);
   for (size_t i = 0; i < fn->parameters.size(); ++i) {
     Value arg = i < args.size() ? args[i] : Value::null();
@@ -352,6 +379,45 @@ Value Evaluator::applyFunction(const std::shared_ptr<FunctionObject>& fn, const 
   Evaluator inner(program_, scheduler_);
   EvalResult r = inner.evalBlockStatement(fn->body, fnEnv);
   return r.value;
+}
+
+RunSliceResult Evaluator::runCallableSlice(TaskExecutionContext& ctx, const Value& callee,
+                                           const std::vector<Value>& args) {
+  return runWorkSlice(ctx, [this, callee, args]() { return callValue(callee, args); });
+}
+
+RunSliceResult Evaluator::runWorkSlice(TaskExecutionContext& ctx, const std::function<Value()>& work) {
+  if (ctx.checkpoint_budget == 0) {
+    ctx.checkpoint_budget = 1;
+  }
+  if (ctx.remaining_budget == 0) {
+    ctx.remaining_budget = ctx.checkpoint_budget;
+  }
+
+  TaskExecutionContext* prev = tls_task_ctx;
+  tls_task_ctx = &ctx;
+  RunSliceResult result;
+  try {
+    Value computed = work();
+    if (ctx.yield_requested) {
+      result.status = RunSliceResult::Status::Yielded;
+      result.continuation = [computed](const std::shared_ptr<TaskObject>&, size_t) mutable {
+        RunSliceResult resumed;
+        resumed.status = RunSliceResult::Status::Completed;
+        resumed.value = computed;
+        return resumed;
+      };
+    } else {
+      result.status = RunSliceResult::Status::Completed;
+      result.value = computed;
+    }
+    result.checkpoints = ctx.checkpoints;
+  } catch (...) {
+    tls_task_ctx = prev;
+    throw;
+  }
+  tls_task_ctx = prev;
+  return result;
 }
 
 namespace {
@@ -388,10 +454,16 @@ Value Evaluator::spawnCall(const Value& callee, const std::vector<Value>& args) 
   auto sched = scheduler_;
 
   if (sched) {
-    return sched->submit([prog, sched, callee_copy, args_copy]() {
+    auto task = sched->submitPreemptible(
+        [prog, sched, callee_copy, args_copy](const std::shared_ptr<TaskObject>& handle, size_t budget) mutable {
+      TaskExecutionContext ctx;
+      ctx.task = handle;
+      ctx.checkpoint_budget = budget;
+      ctx.remaining_budget = budget;
       Evaluator eval(prog, sched);
-      return eval.callValue(callee_copy, args_copy);
+      return eval.runCallableSlice(ctx, callee_copy, args_copy);
     });
+    return task;
   }
 
   auto handle = std::make_shared<TaskObject>();
@@ -419,9 +491,14 @@ Value Evaluator::callValue(const Value& callee, const std::vector<Value>& args) 
         throw std::runtime_error("async function requires a scheduler (pass TaskScheduler from main)");
       }
       auto fn = callee.fn;
-      return scheduler_->submit([this, fn, args]() {
+      return scheduler_->submitPreemptible(
+          [this, fn, args](const std::shared_ptr<TaskObject>& handle, size_t budget) mutable {
+        TaskExecutionContext ctx;
+        ctx.task = handle;
+        ctx.checkpoint_budget = budget;
+        ctx.remaining_budget = budget;
         Evaluator eval(program_, scheduler_);
-        return eval.applyFunction(fn, args, nullptr);
+        return eval.runWorkSlice(ctx, [&eval, fn, args]() { return eval.applyFunction(fn, args, nullptr); });
       });
     }
     return applyFunction(callee.fn, args, nullptr);
@@ -432,9 +509,14 @@ Value Evaluator::callValue(const Value& callee, const std::vector<Value>& args) 
         throw std::runtime_error("async method requires a scheduler (pass TaskScheduler from main)");
       }
       auto bm = callee.bound_method;
-      return scheduler_->submit([this, bm, args]() {
+      return scheduler_->submitPreemptible(
+          [this, bm, args](const std::shared_ptr<TaskObject>& handle, size_t budget) mutable {
+        TaskExecutionContext ctx;
+        ctx.task = handle;
+        ctx.checkpoint_budget = budget;
+        ctx.remaining_budget = budget;
         Evaluator eval(program_, scheduler_);
-        return eval.applyFunction(bm->method, args, bm->instance);
+        return eval.runWorkSlice(ctx, [&eval, bm, args]() { return eval.applyFunction(bm->method, args, bm->instance); });
       });
     }
     return applyFunction(callee.bound_method->method, args, callee.bound_method->instance);
