@@ -9,7 +9,9 @@ SRCS := \
 	src/object.cpp \
 	src/environment.cpp \
 	src/builtins.cpp \
-	src/evaluator.cpp
+	src/evaluator.cpp \
+	src/scheduler.cpp \
+	src/stack_thread.cpp
 
 TARGET := main
 

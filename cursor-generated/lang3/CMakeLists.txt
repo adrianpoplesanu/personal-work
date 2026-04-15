@@ -15,6 +15,8 @@ add_executable(main
   src/environment.cpp
   src/builtins.cpp
   src/evaluator.cpp
+  src/scheduler.cpp
+  src/stack_thread.cpp
 )
 
 target_include_directories(main PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
