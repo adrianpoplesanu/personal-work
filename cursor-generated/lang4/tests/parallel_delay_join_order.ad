@@ -1,0 +1,7 @@
+let slow = spawn(fn() { delay(70); return 10; });
+let fast = spawn(fn() { delay(10); return 20; });
+let mid = spawn(fn() { delay(30); return 30; });
+
+puts(join(mid));
+puts(join(slow));
+puts(join(fast));

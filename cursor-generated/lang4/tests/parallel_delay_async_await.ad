@@ -1,0 +1,6 @@
+let f = async fn(n) {
+    delay(30);
+    return n + 1;
+};
+puts(await f(10));
+puts(await f(41));

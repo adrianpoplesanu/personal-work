@@ -1,0 +1,6 @@
+let t = spawn(fn() { return 5; });
+puts(task_status(t));
+let m = task_metrics(t);
+puts(len(m));
+puts(join(t));
+puts(task_status(t));

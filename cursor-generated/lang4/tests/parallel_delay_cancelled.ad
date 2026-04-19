@@ -1,0 +1,6 @@
+let t = spawn(fn() {
+    delay(200);
+    return 123;
+});
+puts(task_cancel(t));
+join(t);

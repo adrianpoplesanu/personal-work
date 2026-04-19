@@ -1,0 +1,5 @@
+let t = spawn(fn() {
+    delay(20);
+    return 11;
+});
+puts(join(t));

@@ -1,0 +1,5 @@
+let sleeper1 = spawn(fn() { delay(80); return 4; });
+let sleeper2 = spawn(fn() { delay(80); return 5; });
+let quick = spawn(fn() { return 1; });
+puts(join(quick));
+puts(join(sleeper1) + join(sleeper2));

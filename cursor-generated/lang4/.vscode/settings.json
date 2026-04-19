@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "*.h": "cpp"
+  },
+  "clangd.fallbackFlags": ["-xc++", "-std=c++17", "-Isrc"],
+  "C_Cpp.intelliSenseEngine": "disabled"
+}

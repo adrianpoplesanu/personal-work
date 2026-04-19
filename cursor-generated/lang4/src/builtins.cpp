@@ -1,0 +1,195 @@
+#include "builtins.h"
+
+#include <iostream>
+#include <pthread.h>
+#include <stdexcept>
+#include <chrono>
+#include <thread>
+
+namespace {
+
+Value builtin_len(const std::vector<Value>& args) {
+  if (args.size() != 1) {
+    throw std::runtime_error("len() expects 1 argument, got " + std::to_string(args.size()));
+  }
+  if (args[0].kind == Value::Kind::String) {
+    return Value::makeInt(static_cast<int64_t>(args[0].string_val.size()));
+  }
+  if (args[0].kind == Value::Kind::Array) {
+    return Value::makeInt(static_cast<int64_t>(args[0].elements->size()));
+  }
+  throw std::runtime_error("len() argument must be string or array");
+}
+
+Value builtin_puts(const std::vector<Value>& args) {
+  for (const auto& a : args) {
+    std::cout << a.inspect() << "\n";
+  }
+  return Value::null();
+}
+
+Value builtin_first(const std::vector<Value>& args) {
+  if (args.size() != 1) {
+    throw std::runtime_error("first() expects 1 argument");
+  }
+  if (args[0].kind != Value::Kind::Array) {
+    throw std::runtime_error("first() requires an array");
+  }
+  const auto& el = *args[0].elements;
+  if (el.empty()) return Value::null();
+  return el[0];
+}
+
+Value builtin_last(const std::vector<Value>& args) {
+  if (args.size() != 1) {
+    throw std::runtime_error("last() expects 1 argument");
+  }
+  if (args[0].kind != Value::Kind::Array) {
+    throw std::runtime_error("last() requires an array");
+  }
+  const auto& el = *args[0].elements;
+  if (el.empty()) return Value::null();
+  return el.back();
+}
+
+Value builtin_rest(const std::vector<Value>& args) {
+  if (args.size() != 1) {
+    throw std::runtime_error("rest() expects 1 argument");
+  }
+  if (args[0].kind != Value::Kind::Array) {
+    throw std::runtime_error("rest() requires an array");
+  }
+  const auto& el = *args[0].elements;
+  if (el.empty()) return Value::null();
+  auto out = std::make_shared<std::vector<Value>>(el.begin() + 1, el.end());
+  return Value::makeArray(out);
+}
+
+Value builtin_push(const std::vector<Value>& args) {
+  if (args.size() != 2) {
+    throw std::runtime_error("push() expects 2 arguments");
+  }
+  if (args[0].kind != Value::Kind::Array) {
+    throw std::runtime_error("push() first argument must be an array");
+  }
+  auto copy = std::make_shared<std::vector<Value>>(*args[0].elements);
+  copy->push_back(args[1]);
+  return Value::makeArray(copy);
+}
+
+void add(std::unordered_map<std::string, std::shared_ptr<BuiltinObject>>& m, const char* name,
+         Value (*fn)(const std::vector<Value>&)) {
+  auto b = std::make_shared<BuiltinObject>();
+  b->name = name;
+  b->fn = fn;
+  m[name] = b;
+}
+
+Value builtin_join(const std::vector<Value>& args) {
+  if (args.size() != 1) {
+    throw std::runtime_error("join() expects 1 argument, got " + std::to_string(args.size()));
+  }
+  return joinTaskValue(args[0]);
+}
+
+Value builtin_task_status(const std::vector<Value>& args) {
+  if (args.size() != 1) {
+    throw std::runtime_error("task_status() expects 1 argument");
+  }
+  if (args[0].kind != Value::Kind::Task) {
+    throw std::runtime_error("task_status() requires a task");
+  }
+  return Value::makeString(taskStatusName(args[0].task_handle->status.load()));
+}
+
+Value builtin_task_cancel(const std::vector<Value>& args) {
+  if (args.size() != 1) {
+    throw std::runtime_error("task_cancel() expects 1 argument");
+  }
+  if (args[0].kind != Value::Kind::Task) {
+    throw std::runtime_error("task_cancel() requires a task");
+  }
+  args[0].task_handle->cancel_requested.store(true);
+  return Value::makeBool(true);
+}
+
+Value builtin_task_metrics(const std::vector<Value>& args) {
+  if (args.size() != 1) {
+    throw std::runtime_error("task_metrics() expects 1 argument");
+  }
+  if (args[0].kind != Value::Kind::Task) {
+    throw std::runtime_error("task_metrics() requires a task");
+  }
+  auto h = args[0].task_handle;
+  auto out = std::make_shared<std::vector<Value>>();
+  out->push_back(Value::makeInt(static_cast<int64_t>(h->metrics.run_slices)));
+  out->push_back(Value::makeInt(static_cast<int64_t>(h->metrics.yield_count)));
+  out->push_back(Value::makeInt(static_cast<int64_t>(h->metrics.checkpoint_count)));
+  auto now = std::chrono::steady_clock::now();
+  auto queued_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+                       h->metrics.first_started_at == std::chrono::steady_clock::time_point{}
+                           ? now - h->metrics.submitted_at
+                           : h->metrics.first_started_at - h->metrics.submitted_at)
+                       .count();
+  out->push_back(Value::makeInt(static_cast<int64_t>(queued_ms)));
+  return Value::makeArray(out);
+}
+
+Value builtin_delay(const std::vector<Value>& args) {
+  if (args.size() != 1) {
+    throw std::runtime_error("delay() expects 1 argument");
+  }
+  if (args[0].kind != Value::Kind::Integer) {
+    throw std::runtime_error("delay() requires an integer number of milliseconds");
+  }
+  if (args[0].integer < 0) {
+    throw std::runtime_error("delay() requires a non-negative number of milliseconds");
+  }
+  std::this_thread::sleep_for(std::chrono::milliseconds(args[0].integer));
+  return Value::null();
+}
+
+}  // namespace
+
+Value joinTaskValue(const Value& taskVal) {
+  if (taskVal.kind != Value::Kind::Task) {
+    throw std::runtime_error("expected a task (use join() or await on a task value)");
+  }
+  auto handle = taskVal.task_handle;
+  if (handle->joined.exchange(true)) {
+    throw std::runtime_error("join() on already joined task");
+  }
+  try {
+    Value result = handle->future.get();
+    if (handle->has_overflow_pthread) {
+      pthread_join(handle->overflow_pthread, nullptr);
+      handle->has_overflow_pthread = false;
+    }
+    return result;
+  } catch (...) {
+    if (handle->has_overflow_pthread) {
+      pthread_join(handle->overflow_pthread, nullptr);
+      handle->has_overflow_pthread = false;
+    }
+    throw;
+  }
+}
+
+const std::unordered_map<std::string, std::shared_ptr<BuiltinObject>>& builtinMap() {
+  static const auto m = [] {
+    std::unordered_map<std::string, std::shared_ptr<BuiltinObject>> builtins;
+    add(builtins, "len", builtin_len);
+    add(builtins, "puts", builtin_puts);
+    add(builtins, "first", builtin_first);
+    add(builtins, "last", builtin_last);
+    add(builtins, "rest", builtin_rest);
+    add(builtins, "push", builtin_push);
+    add(builtins, "join", builtin_join);
+    add(builtins, "delay", builtin_delay);
+    add(builtins, "task_status", builtin_task_status);
+    add(builtins, "task_cancel", builtin_task_cancel);
+    add(builtins, "task_metrics", builtin_task_metrics);
+    return builtins;
+  }();
+  return m;
+}
