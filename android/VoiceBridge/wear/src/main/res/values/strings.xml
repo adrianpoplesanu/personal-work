@@ -1,8 +1,15 @@
 <resources>
     <string name="app_name">VoiceBridge</string>
-    <!--
-    This string is used for square devices and overridden by hello_world in
-    values-round/strings.xml for round devices.
-    -->
-    <string name="hello_world">From the Square world,\nHello, %1$s!</string>
+    <string name="stt_prompt">Speak your question</string>
+    <string name="action_speak_english">Speak (English)</string>
+    <string name="action_speak_romanian">Speak (Romanian)</string>
+    <string name="status_idle">Ready</string>
+    <string name="status_waiting_phone">Waiting for phone…</string>
+    <string name="status_speaking">Speaking…</string>
+    <string name="status_error">Error: %1$s</string>
+    <string name="error_mic_denied">Microphone permission denied</string>
+    <string name="error_no_phone">No paired phone reachable</string>
+    <string name="error_send_failed">Could not send to phone</string>
+    <string name="error_stt_launch">Voice input unavailable</string>
+    <string name="error_unknown">Unknown error</string>
 </resources>

@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "VoiceBridge"
 include(":mobile")
 include(":wear")
+include(":shared")
