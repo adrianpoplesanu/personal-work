@@ -1,7 +1,7 @@
 /*
-   exercise: 000
-   page: 00
-   description: testing template
+   exercise: 007
+   page: 123
+   description: 0.1 + 0.2 + ... + 0.9
 */
 
 #include <iostream>
@@ -14,7 +14,13 @@ int main(int argc, char *argv[]) {
 
     //... start code here
 
+    float sum = 0;
 
+    for(float i = 0.1; i < 1; i += 0.1) {
+        sum += i;
+    }
+
+    std::cout << "[ result ] sum = " << sum << '\n';
 
     //... end code here
 
@@ -22,7 +28,7 @@ int main(int argc, char *argv[]) {
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
     if (PRINT_EXECUTION_DURATION) {
-        std::cout << "Execution time: " << duration.count() << " ms\n";
+        std::cout << "[ log ] Execution time: " << duration.count() << " ms\n";
     }
     return 0;
 }

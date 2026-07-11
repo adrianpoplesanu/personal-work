@@ -1,7 +1,7 @@
 /*
-   exercise: 000
-   page: 00
-   description: testing template
+   exercise: 004
+   page: 121
+   description: multi-step addition for multiplication
 */
 
 #include <iostream>
@@ -14,7 +14,16 @@ int main(int argc, char *argv[]) {
 
     //... start code here
 
+    int n1, n2;
+    std::cin >> n1;
+    std::cin >> n2;
 
+    int sum = 0;
+    while(n2-- > 0) {
+        sum += n1;
+    }
+
+    std::cout << "[ result ] " << sum << '\n';
 
     //... end code here
 
@@ -22,7 +31,7 @@ int main(int argc, char *argv[]) {
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
     if (PRINT_EXECUTION_DURATION) {
-        std::cout << "Execution time: " << duration.count() << " ms\n";
+        std::cout << "[ log ] Execution time: " << duration.count() << " ms\n";
     }
     return 0;
 }

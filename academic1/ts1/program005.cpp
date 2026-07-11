@@ -1,24 +1,32 @@
 /*
-   exercise: 001
-   page: 00
-   description: testing template
+   exercise: 005
+   page: 122
+   description: remainder calculation without divide
 */
 
 #include <iostream>
 #include <chrono>
 
-#define PRINT_EXECUTION_DURATION 1
+#define PRINT_EXECUTION_DURATION 0
 
 int main(int argc, char *argv[]) {
     auto start = std::chrono::high_resolution_clock::now();
 
     //... start code here
 
-    int s = 0;
-    for (int i = 0; i < 1000000; i++) {
-        s += i;
+    int n1, n2, cat = 0, rest;
+    std::cout << "[ input ] n1 = ";
+    std::cin >> n1;
+    std::cout << "[ input ] n2 = ";
+    std::cin >> n2;
+
+    while(n1 >= n2) {
+        n1 -= n2;
+        cat += 1;
     }
-    std::cout << "[ result ] " << s << '\n';
+    rest = n1;
+
+    std::cout << "[ result ] cat = " << cat << ", rest = " << rest << '\n';
 
     //... end code here
 

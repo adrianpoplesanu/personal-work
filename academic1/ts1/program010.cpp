@@ -1,7 +1,7 @@
 /*
-   exercise: 000
-   page: 00
-   description: testing template
+   exercise: 007
+   page: 125
+   description: biggest read number
 */
 
 #include <iostream>
@@ -14,7 +14,16 @@ int main(int argc, char *argv[]) {
 
     //... start code here
 
+    int n, sum = 0, prod = 1;
+    std::cout << "[ input ] n = ";
+    std::cin >> n;
 
+    for(int i = 1; i <= n; i++) {
+        prod *= i;
+        sum += prod;
+    }
+
+    std::cout << "[ result ] sum = " << sum << '\n';
 
     //... end code here
 
@@ -22,7 +31,7 @@ int main(int argc, char *argv[]) {
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
     if (PRINT_EXECUTION_DURATION) {
-        std::cout << "Execution time: " << duration.count() << " ms\n";
+        std::cout << "[ log ] Execution time: " << duration.count() << " ms\n";
     }
     return 0;
 }
