@@ -1,7 +1,8 @@
 /*
-   exercise: 010
-   page: 126
-   description: biggest read number
+   exercise: 018
+   page: 132
+   description: expressions
+   command: echo 1 2 3 | ./program018
 */
 
 #include <iostream>
@@ -14,20 +15,9 @@ int main(int argc, char *argv[]) {
 
     //... start code here
 
-    int n, max = INT_MIN;
-    std::cout << "[ input ] n = ";
-    std::cin >> n;
-
-    for(int i = 0; i < n; i++) {
-        int current;
-        std::cout << "[ " << i << " ] = ";
-        std::cin >> current;
-        if (current > max) {
-            max = current;
-        }
-    }
-
-    std::cout << "[ result ] max = " << max << '\n';
+    float x, y, z;
+    std::cin >> x >> y >> z;
+    std::cout << "[ RESULT ] " << x << " " << y << " " << z << "\n";
 
     //... end code here
 

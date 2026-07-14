@@ -1,7 +1,8 @@
 /*
-   exercise: 010
-   page: 126
-   description: biggest read number
+   exercise: 013
+   page: 127
+   description: prime test
+   command: echo 13 | ./program013
 */
 
 #include <iostream>
@@ -14,20 +15,16 @@ int main(int argc, char *argv[]) {
 
     //... start code here
 
-    int n, max = INT_MIN;
+    int n;
     std::cout << "[ input ] n = ";
     std::cin >> n;
 
-    for(int i = 0; i < n; i++) {
-        int current;
-        std::cout << "[ " << i << " ] = ";
-        std::cin >> current;
-        if (current > max) {
-            max = current;
-        }
+    bool is_prime = true;
+    for (int i = 2; i < n; i++) {
+        if (n % i == 0) is_prime = false;
     }
 
-    std::cout << "[ result ] max = " << max << '\n';
+    std::cout << "[ RESULT ] " << is_prime << '\n';
 
     //... end code here
 

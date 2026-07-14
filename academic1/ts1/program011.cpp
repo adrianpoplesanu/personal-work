@@ -1,7 +1,7 @@
 /*
-   exercise: 010
+   exercise: 011
    page: 126
-   description: biggest read number
+   description: ecuatia gradul I
 */
 
 #include <iostream>
@@ -14,20 +14,21 @@ int main(int argc, char *argv[]) {
 
     //... start code here
 
-    int n, max = INT_MIN;
-    std::cout << "[ input ] n = ";
-    std::cin >> n;
+    float a, b;
+    std::cout << "[ input ] a = ";
+    std::cin >> a;
+    std::cout << "[ input ] b = ";
+    std::cin >> b;
 
-    for(int i = 0; i < n; i++) {
-        int current;
-        std::cout << "[ " << i << " ] = ";
-        std::cin >> current;
-        if (current > max) {
-            max = current;
+    if (a != 0) {
+        std::cout << "[ result ] max = " << -b/a << '\n';
+    } else {
+        if (b == 0) {
+            std::cout << "[ undetermined ]";
+        } else {
+            std::cout << "[ no solutions ]";
         }
     }
-
-    std::cout << "[ result ] max = " << max << '\n';
 
     //... end code here
 
