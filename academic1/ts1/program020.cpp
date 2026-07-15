@@ -1,8 +1,8 @@
 /*
-   exercise: 000
-   page: 00
-   description: testing template
-   command: echo 123 | ./program020
+   exercise: 020
+   page: 132
+   description: produsul cifrelor
+   command: echo 123 | ./program20
 */
 
 #include <iostream>
@@ -15,7 +15,13 @@ int main(int argc, char *argv[]) {
 
     //... start code here
 
-
+    int n, produs = 1;
+    std::cin >> n;
+    while(n > 0) {
+        produs *= n % 10;
+        n /= 10;
+    }
+    std::cout << "[ RESULT ] " << produs << " \n";
 
     //... end code here
 

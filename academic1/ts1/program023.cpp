@@ -1,8 +1,8 @@
 /*
-   exercise: 000
-   page: 00
-   description: testing template
-   command: echo 123 | ./program020
+   exercise: 023
+   page: 132
+   description: expressions
+   command: echo 123 | ./program023
 */
 
 #include <iostream>
@@ -15,7 +15,18 @@ int main(int argc, char *argv[]) {
 
     //... start code here
 
+    float x, result = 0;
+    std::cin >> x;
 
+    if (x <= 10) {
+        result = x * x + x - 2;
+    } else if (x <= 20) {
+        result = 1 / x;
+    } else {
+        result = (x - 1) / (x + 1);
+    }
+
+    std::cout << "[ RESULT ] " << result << " \n";
 
     //... end code here
 

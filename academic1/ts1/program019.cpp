@@ -1,8 +1,8 @@
 /*
-   exercise: 000
-   page: 00
-   description: testing template
-   command: echo 123 | ./program020
+   exercise: 018
+   page: 132
+   description: expressions
+   command: echo 2 3 4 | ./program018
 */
 
 #include <iostream>
@@ -15,7 +15,11 @@ int main(int argc, char *argv[]) {
 
     //... start code here
 
-
+    float x, y, z;
+    std::cin >> x >> y >> z;
+    std::cout << "[ RESULT ] " << 1 / x + 1 / y + 1 / z << "\n";
+    std::cout << "[ RESULT ] " << (x - y + z) / (x + y - z) << "\n";
+    std::cout << "[ RESULT ] " << (x + 1/y) * z / ((x + z) / (y + 1)) << "\n";
 
     //... end code here
 
@@ -23,7 +27,7 @@ int main(int argc, char *argv[]) {
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
     if (PRINT_EXECUTION_DURATION) {
-        std::cout << "Execution time: " << duration.count() << " ms\n";
+        std::cout << "[ log ] Execution time: " << duration.count() << " ms\n";
     }
     return 0;
 }

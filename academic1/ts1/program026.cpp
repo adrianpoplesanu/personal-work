@@ -1,8 +1,8 @@
 /*
-   exercise: 000
-   page: 00
-   description: testing template
-   command: echo 123 | ./program020
+   exercise: 026
+   page: 132
+   description: square sum
+   command: echo 13 | ./program026
 */
 
 #include <iostream>
@@ -15,7 +15,20 @@ int main(int argc, char *argv[]) {
 
     //... start code here
 
-
+    int n;
+    bool is_sum = 0;
+    std::cin >> n;
+    for (int i = 1; i < n; i++) {
+        for (int j = i; j < n; j++) {
+            if (n == i * i + j * j) {
+                is_sum = 1;
+                std::cout << "[ RESULT ] yes, " << n << " = " << i << "^2 + " << j << "^2 \n";
+            }
+        }
+    }
+    if (!is_sum) {
+        std::cout << "[ RESULT ] no dice \n";
+    }
 
     //... end code here
 

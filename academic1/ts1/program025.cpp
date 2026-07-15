@@ -1,8 +1,8 @@
 /*
-   exercise: 000
-   page: 00
-   description: testing template
-   command: echo 123 | ./program020
+   exercise: 025
+   page: 132
+   description: interest calculator
+   command: echo 100 2 3 | ./program025
 */
 
 #include <iostream>
@@ -15,7 +15,15 @@ int main(int argc, char *argv[]) {
 
     //... start code here
 
+    float s, p;
+    int k;
 
+    std::cin >> s >> p >> k;
+    while (k--) {
+        s += s * p / 100;
+    }
+
+    std::cout << "[ RESULT ] " << s << " \n";
 
     //... end code here
 

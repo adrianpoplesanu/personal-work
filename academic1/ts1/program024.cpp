@@ -1,8 +1,8 @@
 /*
-   exercise: 000
-   page: 00
-   description: testing template
-   command: echo 123 | ./program020
+   exercise: 024
+   page: 132
+   description: cat si rest
+   command: echo 14 3 | ./program024
 */
 
 #include <iostream>
@@ -15,7 +15,9 @@ int main(int argc, char *argv[]) {
 
     //... start code here
 
-
+    int a, b;
+    std::cin >> a >> b;
+    std::cout << "[ RESULT ] " << a / b << " " << a % b << " \n";
 
     //... end code here
 
