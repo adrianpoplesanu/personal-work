@@ -9,9 +9,14 @@ if __name__ == '__main__':
     nonce = os.urandom(12)
     print("nonce:", nonce.hex())
 
-    message = """bebe dex"""
+    filename = "resources/alice_in_wonderland.txt"
+    file_content = ""
 
-    ciphertext = aes.encrypt(nonce, message.encode("utf-8"), None)
+    with open(filename, "r") as f:
+        while chunk := f.read(4096):
+            file_content += chunk
+
+    ciphertext = aes.encrypt(nonce, file_content.encode("utf-8"), None)
 
     print("Ciphertext:", ciphertext.hex())
 
