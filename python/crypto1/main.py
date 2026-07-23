@@ -1,16 +1,12 @@
-# This is a sample Python script.
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+import crypto
 
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    crypto = crypto.Crypto()
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    crypto.sha256("buna dimineata!")
+
+    public_key, private_key = crypto.generate_rsa_keys()
+
+    ciphertext = crypto.encode_rsa("bebe dex")
+    message = crypto.decode_rsa(ciphertext)

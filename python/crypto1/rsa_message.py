@@ -1,5 +1,5 @@
-from cryptography.hazmat.primitives.asymmetric import rsa
-from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import rsa, padding
+from cryptography.hazmat.primitives import hashes, serialization
 
 
 def public_der_decode(key):
@@ -52,3 +52,27 @@ if __name__ == '__main__':
     print(public_pem_decode(public_key))
     print("Private key:")
     print(private_pem_decode(private_key))
+
+    message = "Hello bebe Dex!"
+
+    ciphertext = public_key.encrypt(
+        message.encode('UTF-8'),
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None,
+        ),
+    )
+
+    print(ciphertext.hex())
+
+    plaintext = private_key.decrypt(
+        ciphertext,
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None,
+        ),
+    )
+
+    print(plaintext.decode())
