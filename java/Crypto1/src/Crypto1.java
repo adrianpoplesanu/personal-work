@@ -6,6 +6,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.util.Base64;
+import java.util.HexFormat;
 
 public class Crypto1 {
 
@@ -17,6 +18,9 @@ public class Crypto1 {
         keyGenerator.init(256);
 
         SecretKey aesKey = keyGenerator.generateKey();
+
+        String aesKeyHex = HexFormat.of().formatHex(aesKey.getEncoded());
+        System.out.println(aesKeyHex);
 
         // Generate IV (12 bytes recommended for GCM)
         byte[] iv = new byte[12];
