@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">CameraWatch</string>
+    <string name="hello_world">From the Square world,\nHello, %1$s!</string>
+    <string name="start_stream">Start</string>
+    <string name="stop_stream">Stop</string>
+    <string name="refresh_phone">Refresh</string>
+</resources>
