@@ -4,7 +4,9 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -33,10 +35,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -89,6 +91,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onStop() {
+        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        super.onStop()
+    }
+
     override fun onDestroy() {
         cameraController.setFrameCallback(null)
         wearBridge.stop()
@@ -103,6 +110,7 @@ private fun PhoneCameraScreen(
     wearBridge: PhoneWearBridge,
 ) {
     val context = LocalContext.current
+    val activity = LocalActivity.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val status by wearBridge.status.collectAsState()
     val statusMessage by wearBridge.statusMessage.collectAsState()
@@ -120,6 +128,18 @@ private fun PhoneCameraScreen(
         ActivityResultContracts.RequestPermission(),
     ) { granted ->
         hasCameraPermission = granted
+    }
+
+    DisposableEffect(status) {
+        val window = activity?.window
+        if (status == PhoneStreamStatus.Streaming) {
+            window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        } else {
+            window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+        onDispose {
+            window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
     }
 
     LaunchedEffect(hasCameraPermission, previewView) {
