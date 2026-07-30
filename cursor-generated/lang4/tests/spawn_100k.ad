@@ -1,0 +1,23 @@
+let make = fn(n) {
+    if (n == 1) {
+        return spawn(fn() { return 1; });
+    } else {
+        let a = n / 2;
+        let b = n - a;
+        return [make(a), make(b)];
+    }
+};
+
+let join_tree = fn(n, node) {
+    if (n == 1) {
+        return join(node);
+    } else {
+        let a = n / 2;
+        let b = n - a;
+        return join_tree(a, node[0]) + join_tree(b, node[1]);
+    }
+};
+
+let n = 100000;
+let tree = make(n);
+puts(join_tree(n, tree));
