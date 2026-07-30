@@ -1,8 +1,8 @@
 /*
-   exercise: 060
-   page: 203
-   description: min sorting
-   command: echo 8 1 9 2 8 3 4 7 5 1 | ./program060
+   exercise: 062
+   page: 206
+   description: insertion sort
+   command: echo 8 1 9 2 8 3 4 7 5 1 | ./program062
 */
 
 #include <iostream>
@@ -15,32 +15,27 @@ int main(int argc, char *argv[]) {
 
     //... start code here
 
-    int a[50], n, i, j, min, pos, tmp;
+    int a[50], b[50], n, i, j, k;
     std::cin >> n;
     for (i = 0; i < n; i++) {
         std::cin >> a[i];
     }
 
-    for (i = 0; i < n; i++) {
-        min = a[i];
-        pos = i;
-        for (j = i; j < n; j++) {
-            if (a[j] < min) {
-                min = a[j];
-                pos = j;
-            }
+    b[0] = a[0];
+    for (i = 1; i < n; i++) {
+        j = i - 1;
+        while (j >= 0 && a[i] < b[j]) {
+            j--;
         }
-
-        if (i != pos) {
-            tmp = a[i];
-            a[i] = a[pos];
-            a[pos] = tmp;
+        for (k = i - 1; k > j; k--) {
+            b[k + 1] = b[k];
         }
+        b[j + 1] = a[i];
     }
 
     std::cout << "[ RESULT ] ";
     for (i = 0; i < n; i++) {
-        std::cout << a[i] << " ";
+        std::cout << b[i] << " ";
     }
     std::cout << "\n";
 

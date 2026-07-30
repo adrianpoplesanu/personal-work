@@ -1,8 +1,8 @@
 /*
-   exercise: 060
-   page: 203
-   description: min sorting
-   command: echo 8 1 9 2 8 3 4 7 5 1 | ./program060
+   exercise: 063
+   page: 208
+   description: interclasare
+   command: echo 4 1 4 7 9 4 2 3 5 8 | ./program063
 */
 
 #include <iostream>
@@ -15,32 +15,37 @@ int main(int argc, char *argv[]) {
 
     //... start code here
 
-    int a[50], n, i, j, min, pos, tmp;
+    int a[50], b[50], c[50], n, m, i, j, k;
     std::cin >> n;
     for (i = 0; i < n; i++) {
         std::cin >> a[i];
     }
 
-    for (i = 0; i < n; i++) {
-        min = a[i];
-        pos = i;
-        for (j = i; j < n; j++) {
-            if (a[j] < min) {
-                min = a[j];
-                pos = j;
-            }
-        }
+    std::cin >> m;
+    for(i = 0; i < m; i++) {
+        std::cin >> b[i];
+    }
 
-        if (i != pos) {
-            tmp = a[i];
-            a[i] = a[pos];
-            a[pos] = tmp;
+    i = 0;
+    j = 0;
+    k = 0;
+    while(i < n && j < m) {
+        if (a[i] < b[j]) {
+            c[k++] = a[i++];
+        } else {
+            c[k++] = b[j++];
         }
+    }
+    while(i < n) {
+        c[k++] = a[i++];
+    }
+    while(j < m) {
+        c[k++] = b[j++];
     }
 
     std::cout << "[ RESULT ] ";
-    for (i = 0; i < n; i++) {
-        std::cout << a[i] << " ";
+    for (i = 0; i < k; i++) {
+        std::cout << c[i] << " ";
     }
     std::cout << "\n";
 

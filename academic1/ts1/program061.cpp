@@ -1,8 +1,8 @@
 /*
-   exercise: 060
-   page: 203
-   description: min sorting
-   command: echo 8 1 9 2 8 3 4 7 5 1 | ./program060
+   exercise: 061
+   page: 204
+   description: interchange sorting
+   command: echo 8 1 9 2 8 3 4 7 5 1 | ./program061
 */
 
 #include <iostream>
@@ -15,26 +15,22 @@ int main(int argc, char *argv[]) {
 
     //... start code here
 
-    int a[50], n, i, j, min, pos, tmp;
+    int a[50], n, i, tmp;
     std::cin >> n;
     for (i = 0; i < n; i++) {
         std::cin >> a[i];
     }
 
-    for (i = 0; i < n; i++) {
-        min = a[i];
-        pos = i;
-        for (j = i; j < n; j++) {
-            if (a[j] < min) {
-                min = a[j];
-                pos = j;
+    bool sorted = 0;
+    while(!sorted) {
+        sorted = 1;
+        for (i = 0; i < n - 1; i++) {
+            if (a[i] > a[i + 1]) {
+                tmp = a[i];
+                a[i] = a[i + 1];
+                a[i + 1] = tmp;
+                sorted = 0;
             }
-        }
-
-        if (i != pos) {
-            tmp = a[i];
-            a[i] = a[pos];
-            a[pos] = tmp;
         }
     }
 
