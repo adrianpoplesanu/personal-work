@@ -43,6 +43,7 @@ class Parser {
   std::unique_ptr<ExpressionStatementStmt> parseExpressionStatement();
   std::unique_ptr<BlockStatement> parseBlockStatement();
   std::unique_ptr<ClassStatementStmt> parseClassStatement();
+  std::unique_ptr<ForStatementStmt> parseForStatement();
 
   std::unique_ptr<Expression> parseExpression(Precedence prec);
   std::unique_ptr<Expression> parsePrefixExpression();

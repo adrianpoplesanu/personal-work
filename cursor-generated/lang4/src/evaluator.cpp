@@ -81,6 +81,31 @@ EvalResult Evaluator::evalStatement(Statement* stmt, const std::shared_ptr<Envir
   if (auto* bs = dynamic_cast<BlockStatementStmt*>(stmt)) {
     return evalBlockStatement(static_cast<BlockStatement*>(bs), env);
   }
+  if (auto* fs = dynamic_cast<ForStatementStmt*>(stmt)) {
+    auto loop_env = std::make_shared<Environment>(env);
+    if (fs->init) {
+      EvalResult init_res = evalStatement(fs->init.get(), loop_env);
+      if (init_res.returned) {
+        return init_res;
+      }
+    }
+    while (true) {
+      checkpoint(nullptr);
+      if (fs->condition) {
+        if (!isTruthy(evalExpression(fs->condition.get(), loop_env))) {
+          break;
+        }
+      }
+      EvalResult body_res = evalBlockStatement(fs->body.get(), loop_env);
+      if (body_res.returned) {
+        return body_res;
+      }
+      if (fs->update) {
+        evalExpression(fs->update.get(), loop_env);
+      }
+    }
+    return {Value::null(), false};
+  }
   if (auto* cs = dynamic_cast<ClassStatementStmt*>(stmt)) {
     auto klass = std::make_shared<ClassObject>();
     klass->name = cs->name.value;

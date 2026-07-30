@@ -44,6 +44,7 @@ enum class TokenType {
   FALSE,
   IF,
   ELSE,
+  FOR,
 
   CLASS,
   NEW,

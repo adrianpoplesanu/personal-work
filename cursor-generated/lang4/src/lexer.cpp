@@ -72,6 +72,7 @@ TokenType Lexer::lookupIdent(const std::string& ident) {
       {"false", TokenType::FALSE},
       {"if", TokenType::IF},
       {"else", TokenType::ELSE},
+      {"for", TokenType::FOR},
       {"class", TokenType::CLASS},
       {"new", TokenType::NEW},
       {"this", TokenType::THIS},

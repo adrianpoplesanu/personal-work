@@ -115,6 +115,8 @@ std::unique_ptr<Statement> Parser::parseStatement() {
       return parseReturnStatement();
     case TokenType::CLASS:
       return parseClassStatement();
+    case TokenType::FOR:
+      return parseForStatement();
     case TokenType::LBRACE: {
       auto block = parseBlockStatement();
       auto stmt = std::make_unique<BlockStatementStmt>();
@@ -165,6 +167,48 @@ std::unique_ptr<ExpressionStatementStmt> Parser::parseExpressionStatement() {
   if (peekTokenIs(TokenType::SEMICOLON)) {
     nextToken();
   }
+  return stmt;
+}
+
+std::unique_ptr<ForStatementStmt> Parser::parseForStatement() {
+  auto stmt = std::make_unique<ForStatementStmt>();
+  stmt->token = cur_token_;
+  if (!expectPeek(TokenType::LPAREN)) {
+    return nullptr;
+  }
+  nextToken();
+
+  if (!curTokenIs(TokenType::SEMICOLON)) {
+    if (curTokenIs(TokenType::LET)) {
+      stmt->init = parseLetStatement();
+    } else {
+      stmt->init = parseExpressionStatement();
+    }
+  }
+  if (!curTokenIs(TokenType::SEMICOLON)) {
+    errors_.push_back("expected ; after for-loop initializer");
+    return nullptr;
+  }
+  nextToken();
+
+  if (!curTokenIs(TokenType::SEMICOLON)) {
+    stmt->condition = parseExpression(Precedence::LOWEST);
+    if (!expectPeek(TokenType::SEMICOLON)) {
+      return nullptr;
+    }
+  }
+  nextToken();
+
+  if (!curTokenIs(TokenType::RPAREN)) {
+    stmt->update = parseExpression(Precedence::LOWEST);
+    if (!expectPeek(TokenType::RPAREN)) {
+      return nullptr;
+    }
+  }
+  if (!expectPeek(TokenType::LBRACE)) {
+    return nullptr;
+  }
+  stmt->body = parseBlockStatement();
   return stmt;
 }
 

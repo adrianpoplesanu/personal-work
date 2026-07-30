@@ -142,6 +142,14 @@ struct ClassStatement {
   std::vector<MethodDefinition> methods;
 };
 
+struct ForStatement {
+  Token token;
+  std::unique_ptr<Statement> init;
+  std::unique_ptr<Expression> condition;
+  std::unique_ptr<Expression> update;
+  std::unique_ptr<BlockStatement> body;
+};
+
 struct Expression {
   virtual ~Expression() = default;
 };
@@ -173,3 +181,4 @@ struct LetStatementStmt : Statement, LetStatement {};
 struct ReturnStatementStmt : Statement, ReturnStatement {};
 struct BlockStatementStmt : Statement, BlockStatement {};
 struct ClassStatementStmt : Statement, ClassStatement {};
+struct ForStatementStmt : Statement, ForStatement {};

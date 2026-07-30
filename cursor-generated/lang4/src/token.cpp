@@ -74,6 +74,8 @@ std::string Token::typeName(TokenType t) {
       return "IF";
     case TokenType::ELSE:
       return "ELSE";
+    case TokenType::FOR:
+      return "FOR";
     case TokenType::CLASS:
       return "CLASS";
     case TokenType::NEW:
