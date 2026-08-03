@@ -1,8 +1,8 @@
 /*
    exercise: 012
    page: 68
-   description: the maximum subarray problem
-   command: echo 16 13 -3 -25 20 -3 -16 -23 18 20 -7 12 -5 -22 15 -4 7 | ./program012
+   description: the maximum subarray problem, cormen version
+   command: echo 16 13 -3 -25 20 -3 -16 -23 18 20 -7 12 -5 -22 15 -4 7 | ./program013
 */
 
 #include <iostream>
@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
 
     //... start code here
 
-    int a[50], n, i;
+    int a[50], n;
     read_array(a, n);
     Result r = find_maximum_subarray(a, 0, n - 1);
     std::cout << r.low << " " << r.high << " " << r.sum << "\n";

@@ -1,8 +1,8 @@
 /*
-   exercise: 012
-   page: 68
-   description: the maximum subarray problem, dynamic programming
-   command: echo 16 13 -3 -25 20 -3 -16 -23 18 20 -7 12 -5 -22 15 -4 7 | ./program012
+   exercise: 014
+   page: 74
+   description: the maximum subarray problem, brute force
+   command: echo 16 13 -3 -25 20 -3 -16 -23 18 20 -7 12 -5 -22 15 -4 7 | ./program014
 */
 
 #include <iostream>
@@ -19,31 +19,31 @@ void read_array(int a[], int &n) {
 }
 
 struct result {
-    int low, high, sum;
+    int low;
+    int high;
+    int sum;
+
     result(int l, int h, int s): low(l), high(h), sum(s) {}
 };
 
 typedef result Result;
 
 Result find_maximum_subarray(int a[], int n) {
-    int dp[n], trav[n], i, max = INT_MIN, pos = 0;
+    int i, j, low, high;
+    int max = a[0];
+    int sum = 0;
     for (i = 0; i < n; i++) {
-        if (i == 0) {
-            dp[i] = a[i];
-            trav[i] = i;
-        } else if (a[i] > dp[i - 1] + a[i]) {
-            trav[i] = i;
-            dp[i] = a[i];
-        } else {
-            trav[i] = trav[i - 1];
-            dp[i] = dp[i - 1] + a[i];
-        }
-        if (max < dp[i]) {
-            max = dp[i];
-            pos = i;
+        sum = 0;
+        for (j = i; j < n; j++) {
+            sum = sum + a[j];
+            if (sum > max) {
+                max = sum;
+                low = i;
+                high = j;
+            }
         }
     }
-    return Result(trav[pos], pos, max);
+    return Result (low, high, max);
 }
 
 int main(int argc, char *argv[]) {
@@ -53,8 +53,9 @@ int main(int argc, char *argv[]) {
 
     int a[50], n;
     read_array(a, n);
-    Result r = find_maximum_subarray(a, n);
-    std::cout << r.low << " " << r.high << " " << r.sum << "\n";
+    find_maximum_subarray(a, n);
+    Result result = find_maximum_subarray(a, n);
+    std::cout << "[ RESULT ] " << result.low << " " << result.high << " " << result.sum << "\n";
 
     //... end code here
 

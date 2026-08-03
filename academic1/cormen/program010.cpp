@@ -1,7 +1,7 @@
 /*
    exercise: 000
    page: 00
-   description: testing template
+   description: bubble sort cormen version
    command: echo 9 3 8 2 7 1 6 9 4 5 | ./program010
 */
 
