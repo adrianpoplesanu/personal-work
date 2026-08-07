@@ -4,25 +4,25 @@ overview: "Make lang4 concurrency resemble Kotlin coroutines: every wait (delay,
 todos:
   - id: suspend-infra
     content: Add Waiting status, Suspend/Parked slice result, continuation-with-value, and shared park/resume scheduler APIs
-    status: pending
+    status: completed
   - id: timer-delay
     content: Timer/delay queue for park-on-delay; cancel removes waiting tasks
-    status: pending
+    status: completed
   - id: park-join-await
     content: Park on join/await until child task completes; wake waiter list on finish/fail/cancel
-    status: pending
+    status: completed
   - id: stmt-resume
     content: Statement/expression suspend points with resume value (delay→null, join/await→task result)
-    status: pending
+    status: completed
   - id: no-carrier-block
     content: Remove sleep_for and future.get from task context; avoid overflow OS threads for nested spawn
-    status: pending
+    status: completed
   - id: top-level-bridge
     content: Top-level/REPL join and delay may block the main thread only; workers never block
-    status: pending
+    status: completed
   - id: benchmark-tests
     content: Update spawn_100k_sleep with joins; expect ~1s; re-run parallel_delay_*, async_await, nested spawn tests
-    status: pending
+    status: completed
 isProject: true
 ---
 
