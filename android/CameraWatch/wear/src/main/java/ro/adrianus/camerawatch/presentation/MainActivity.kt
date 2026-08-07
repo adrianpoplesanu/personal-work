@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
@@ -31,7 +32,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.wear.compose.material.Button
+import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
@@ -141,14 +142,15 @@ private fun StreamingContent(
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,
         )
-        Button(
+        Chip(
             onClick = onStop,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
+                .fillMaxWidth(0.7f)
                 .padding(bottom = 12.dp),
-        ) {
-            Text("Stop")
-        }
+            shape = RoundedCornerShape(50),
+            label = { Text("Stop") },
+        )
     }
 }
 
@@ -187,13 +189,19 @@ private fun IdleContent(
         )
         Spacer(modifier = Modifier.height(12.dp))
         if (canStart) {
-            Button(onClick = onStart) {
-                Text("Start")
-            }
+            Chip(
+                onClick = onStart,
+                modifier = Modifier.fillMaxWidth(0.85f),
+                shape = RoundedCornerShape(50),
+                label = { Text("Start") },
+            )
             Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = onRefresh) {
-                Text("Refresh")
-            }
+            Chip(
+                onClick = onRefresh,
+                modifier = Modifier.fillMaxWidth(0.85f),
+                shape = RoundedCornerShape(50),
+                label = { Text("Refresh") },
+            )
         }
     }
 }
