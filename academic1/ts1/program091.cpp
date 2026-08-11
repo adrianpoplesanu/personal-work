@@ -1,7 +1,7 @@
 /*
    exercise: 091
    page: 238
-   description: subset sum problem
+   description: subset sum problem with binary array, backtracking and dynamic programming tabulation
    command: echo 5 3 7 4 2 9 13 | ./program091
 */
 
