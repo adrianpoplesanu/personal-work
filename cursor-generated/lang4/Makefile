@@ -1,5 +1,5 @@
 CXX      ?= c++
-CXXFLAGS ?= -std=c++17 -Wall -Wextra -pthread -I src
+CXXFLAGS ?= -std=c++17 -O2 -Wall -Wextra -pthread -I src
 
 SRCS := \
 	src/main.cpp \
