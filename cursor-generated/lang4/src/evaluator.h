@@ -5,6 +5,8 @@
 #include "object.h"
 #include "scheduler.h"
 
+#include <exception>
+#include <functional>
 #include <memory>
 
 struct EvalResult {
@@ -22,6 +24,13 @@ struct TaskExecutionContext {
   uint64_t checkpoints{0};
 };
 
+bool inTaskExecutionContext();
+
+RunSliceResult runResumeSlice(const std::shared_ptr<TaskScheduler>& sched,
+                              const std::shared_ptr<TaskObject>& handle, size_t budget,
+                              const std::function<Value(const Value&)>& resume_cont, Value pending,
+                              std::exception_ptr pending_error);
+
 class Evaluator {
  public:
   explicit Evaluator(Program* program, std::shared_ptr<TaskScheduler> scheduler = nullptr);
@@ -32,11 +41,12 @@ class Evaluator {
   RunSliceResult runCallableSlice(TaskExecutionContext& ctx, const Value& callee, const std::vector<Value>& args);
   RunSliceResult runWorkSlice(TaskExecutionContext& ctx, const std::function<Value()>& work);
 
- private:
-  void checkpoint(TaskExecutionContext* ctx);
   EvalResult evalStatement(Statement* stmt, const std::shared_ptr<Environment>& env);
   EvalResult evalBlockStatement(BlockStatement* block, const std::shared_ptr<Environment>& env);
   Value evalExpression(Expression* expr, const std::shared_ptr<Environment>& env);
+
+ private:
+  void checkpoint(TaskExecutionContext* ctx);
   Value evalProgramBlock(const std::shared_ptr<Environment>& env);
 
   Value applyFunction(const std::shared_ptr<FunctionObject>& fn, const std::vector<Value>& args,

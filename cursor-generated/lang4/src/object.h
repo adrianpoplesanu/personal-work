@@ -3,8 +3,10 @@
 #include "ast.h"
 
 #include <atomic>
+#include <exception>
 #include <future>
 #include <memory>
+#include <mutex>
 #include <ostream>
 #include <string>
 #include <pthread.h>
@@ -14,11 +16,14 @@
 
 struct Environment;
 struct TaskObject;
+struct ScheduledTask;
+class TaskScheduler;
 
 enum class TaskStatus {
   Ready,
   Running,
   Yielded,
+  Waiting,
   Completed,
   Failed,
   Cancelled,
@@ -98,6 +103,11 @@ struct Value {
 };
 
 struct TaskObject {
+  TaskObject();
+  ~TaskObject();
+  TaskObject(const TaskObject&) = delete;
+  TaskObject& operator=(const TaskObject&) = delete;
+
   std::future<Value> future;
   pthread_t overflow_pthread{};
   bool has_overflow_pthread{false};
@@ -106,6 +116,16 @@ struct TaskObject {
   std::atomic<bool> cancel_requested{false};
   std::shared_ptr<ContinuationState> continuation;
   TaskMetrics metrics;
+
+  std::mutex mu;
+  std::vector<std::shared_ptr<ScheduledTask>> waiters;
+  Value result_value{Value::null()};
+  std::exception_ptr result_error;
+  bool has_result{false};
+
+  std::weak_ptr<TaskScheduler> scheduler;
+  std::weak_ptr<ScheduledTask> parked_scheduled;
+  uint64_t delay_generation{0};
 };
 
 struct InstanceObject {
@@ -125,6 +145,7 @@ struct BoundMethodObject {
 
 bool isTruthy(const Value& v);
 bool valueEquals(const Value& a, const Value& b);
+bool isTerminalStatus(TaskStatus status);
 const char* taskStatusName(TaskStatus status);
 
 std::ostream& operator<<(std::ostream& os, const Value& v);

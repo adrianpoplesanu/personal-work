@@ -1,4 +1,9 @@
+let sleeper = fn() { delay(1000); };
+let ts = [];
 for (let i = 0; i < 100000; i = i + 1) {
-    spawn(fn() { delay(1000); });
+    append(ts, spawn(sleeper));
+}
+for (let i = 0; i < 100000; i = i + 1) {
+    join(ts[i]);
 }
 puts("done");

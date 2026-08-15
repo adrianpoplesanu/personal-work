@@ -7,6 +7,7 @@
 #include <future>
 #include <stdexcept>
 #include <thread>
+#include <utility>
 
 namespace {
 
@@ -17,7 +18,93 @@ std::string toString(const Value& v) {
 
 thread_local TaskExecutionContext* tls_task_ctx = nullptr;
 
+Value applyInfixOp(TokenType op, const Value& left, const Value& right) {
+  switch (op) {
+    case TokenType::PLUS:
+      if (left.kind == Value::Kind::Integer && right.kind == Value::Kind::Integer) {
+        return Value::makeInt(left.integer + right.integer);
+      }
+      if (left.kind == Value::Kind::String && right.kind == Value::Kind::String) {
+        return Value::makeString(left.string_val + right.string_val);
+      }
+      if (left.kind == Value::Kind::String) {
+        return Value::makeString(left.string_val + toString(right));
+      }
+      if (right.kind == Value::Kind::String) {
+        return Value::makeString(toString(left) + right.string_val);
+      }
+      throw std::runtime_error("unsupported operands for +");
+    case TokenType::MINUS:
+      if (left.kind != Value::Kind::Integer || right.kind != Value::Kind::Integer) {
+        throw std::runtime_error("operands must be integers");
+      }
+      return Value::makeInt(left.integer - right.integer);
+    case TokenType::ASTERISK:
+      if (left.kind != Value::Kind::Integer || right.kind != Value::Kind::Integer) {
+        throw std::runtime_error("operands must be integers");
+      }
+      return Value::makeInt(left.integer * right.integer);
+    case TokenType::SLASH:
+      if (left.kind != Value::Kind::Integer || right.kind != Value::Kind::Integer) {
+        throw std::runtime_error("operands must be integers");
+      }
+      if (right.integer == 0) throw std::runtime_error("division by zero");
+      return Value::makeInt(left.integer / right.integer);
+    case TokenType::PERCENT:
+      if (left.kind != Value::Kind::Integer || right.kind != Value::Kind::Integer) {
+        throw std::runtime_error("operands must be integers");
+      }
+      if (right.integer == 0) throw std::runtime_error("division by zero");
+      return Value::makeInt(left.integer % right.integer);
+    case TokenType::LT:
+      if (left.kind != Value::Kind::Integer || right.kind != Value::Kind::Integer) {
+        throw std::runtime_error("operands must be integers");
+      }
+      return Value::makeBool(left.integer < right.integer);
+    case TokenType::GT:
+      if (left.kind != Value::Kind::Integer || right.kind != Value::Kind::Integer) {
+        throw std::runtime_error("operands must be integers");
+      }
+      return Value::makeBool(left.integer > right.integer);
+    case TokenType::LT_EQ:
+      if (left.kind != Value::Kind::Integer || right.kind != Value::Kind::Integer) {
+        throw std::runtime_error("operands must be integers");
+      }
+      return Value::makeBool(left.integer <= right.integer);
+    case TokenType::GT_EQ:
+      if (left.kind != Value::Kind::Integer || right.kind != Value::Kind::Integer) {
+        throw std::runtime_error("operands must be integers");
+      }
+      return Value::makeBool(left.integer >= right.integer);
+    case TokenType::EQ:
+      return Value::makeBool(valueEquals(left, right));
+    case TokenType::NOT_EQ:
+      return Value::makeBool(!valueEquals(left, right));
+    default:
+      throw std::runtime_error("unknown infix operator");
+  }
+}
+
 }  // namespace
+
+bool inTaskExecutionContext() { return tls_task_ctx != nullptr; }
+
+RunSliceResult runResumeSlice(const std::shared_ptr<TaskScheduler>& sched,
+                              const std::shared_ptr<TaskObject>& handle, size_t budget,
+                              const std::function<Value(const Value&)>& resume_cont, Value pending,
+                              std::exception_ptr pending_error) {
+  TaskExecutionContext ctx;
+  ctx.task = handle;
+  ctx.checkpoint_budget = budget;
+  ctx.remaining_budget = budget;
+  Evaluator eval(nullptr, sched);
+  return eval.runWorkSlice(ctx, [&]() {
+    if (pending_error) {
+      std::rethrow_exception(pending_error);
+    }
+    return resume_cont(pending);
+  });
+}
 
 Evaluator::Evaluator(Program* program, std::shared_ptr<TaskScheduler> scheduler)
     : program_(program), scheduler_(std::move(scheduler)) {}
@@ -39,7 +126,6 @@ void Evaluator::checkpoint(TaskExecutionContext* ctx) {
   if (ctx->remaining_budget == 0) {
     ctx->yield_requested = true;
     ctx->remaining_budget = ctx->checkpoint_budget;
-    // Cooperative safe-point: let OS schedule other runnable workers/tasks.
     std::this_thread::yield();
   }
 }
@@ -62,7 +148,19 @@ EvalResult Evaluator::evalStatement(Statement* stmt, const std::shared_ptr<Envir
   if (auto* ls = dynamic_cast<LetStatementStmt*>(stmt)) {
     Value v = Value::null();
     if (ls->value) {
-      v = evalExpression(ls->value.get(), env);
+      try {
+        v = evalExpression(ls->value.get(), env);
+      } catch (SuspendRequest& sr) {
+        auto prev = std::move(sr.resume_cont);
+        auto env_c = env;
+        std::string name = ls->name.value;
+        sr.resume_cont = [prev = std::move(prev), env_c, name](const Value& rv) {
+          Value val = prev(rv);
+          env_c->set(name, val);
+          return Value::null();
+        };
+        throw;
+      }
     }
     env->set(ls->name.value, v);
     return {Value::null(), false};
@@ -70,7 +168,12 @@ EvalResult Evaluator::evalStatement(Statement* stmt, const std::shared_ptr<Envir
   if (auto* rs = dynamic_cast<ReturnStatementStmt*>(stmt)) {
     Value v = Value::null();
     if (rs->return_value) {
-      v = evalExpression(rs->return_value.get(), env);
+      try {
+        v = evalExpression(rs->return_value.get(), env);
+      } catch (SuspendRequest& sr) {
+        sr.done_after = true;
+        throw;
+      }
     }
     return {v, true};
   }
@@ -127,8 +230,64 @@ EvalResult Evaluator::evalStatement(Statement* stmt, const std::shared_ptr<Envir
 
 EvalResult Evaluator::evalBlockStatement(BlockStatement* block, const std::shared_ptr<Environment>& env) {
   EvalResult last{Value::null(), false};
-  for (auto& st : block->statements) {
-    last = evalStatement(st.get(), env);
+  for (size_t i = 0; i < block->statements.size(); ++i) {
+    try {
+      last = evalStatement(block->statements[i].get(), env);
+    } catch (SuspendRequest& sr) {
+      auto prev = std::move(sr.resume_cont);
+      bool done_after = sr.done_after;
+      sr.done_after = false;
+      auto env_c = env;
+      BlockStatement* blk = block;
+      size_t idx = i;
+      Program* prog = program_;
+      auto sched = scheduler_;
+      sr.resume_cont = [prev = std::move(prev), done_after, env_c, blk, idx, prog,
+                        sched](const Value& rv) {
+        Evaluator eval(prog, sched);
+        Value cur = prev(rv);
+        if (done_after) {
+          return cur;
+        }
+        for (size_t j = idx + 1; j < blk->statements.size(); ++j) {
+          try {
+            EvalResult r = eval.evalStatement(blk->statements[j].get(), env_c);
+            if (r.returned) {
+              return r.value;
+            }
+            cur = r.value;
+          } catch (SuspendRequest& sr2) {
+            auto prev2 = std::move(sr2.resume_cont);
+            bool done2 = sr2.done_after;
+            sr2.done_after = false;
+            auto env2 = env_c;
+            BlockStatement* blk2 = blk;
+            size_t idx2 = j;
+            Program* prog2 = prog;
+            auto sched2 = sched;
+            sr2.resume_cont = [prev2 = std::move(prev2), done2, env2, blk2, idx2, prog2,
+                               sched2](const Value& rv2) {
+              Evaluator eval2(prog2, sched2);
+              Value cur2 = prev2(rv2);
+              if (done2) {
+                return cur2;
+              }
+              for (size_t k = idx2 + 1; k < blk2->statements.size(); ++k) {
+                EvalResult r2 = eval2.evalStatement(blk2->statements[k].get(), env2);
+                if (r2.returned) {
+                  return r2.value;
+                }
+                cur2 = r2.value;
+              }
+              return cur2;
+            };
+            throw;
+          }
+        }
+        return cur;
+      };
+      throw;
+    }
     if (last.returned) {
       return last;
     }
@@ -178,75 +337,63 @@ Value Evaluator::evalExpression(Expression* expr, const std::shared_ptr<Environm
     throw std::runtime_error("unknown prefix operator");
   }
   if (auto* inf = dynamic_cast<InfixExpressionExpr*>(expr)) {
-    Value left = evalExpression(inf->left.get(), env);
+    Value left;
+    try {
+      left = evalExpression(inf->left.get(), env);
+    } catch (SuspendRequest& sr) {
+      auto prev = std::move(sr.resume_cont);
+      Expression* right_expr = inf->right.get();
+      TokenType op = inf->op.type;
+      auto env_c = env;
+      Program* prog = program_;
+      auto sched = scheduler_;
+      sr.resume_cont = [prev = std::move(prev), right_expr, op, env_c, prog,
+                        sched](const Value& rv) {
+        Evaluator eval(prog, sched);
+        Value left_v = prev(rv);
+        try {
+          Value right_v = eval.evalExpression(right_expr, env_c);
+          return applyInfixOp(op, left_v, right_v);
+        } catch (SuspendRequest& sr2) {
+          auto prev2 = std::move(sr2.resume_cont);
+          Value left_c = left_v;
+          TokenType op_c = op;
+          sr2.resume_cont = [prev2 = std::move(prev2), left_c, op_c](const Value& rv2) {
+            return applyInfixOp(op_c, left_c, prev2(rv2));
+          };
+          throw;
+        }
+      };
+      throw;
+    }
     if (inf->op.type == TokenType::PLUS) {
-      Value right = evalExpression(inf->right.get(), env);
-      if (left.kind == Value::Kind::Integer && right.kind == Value::Kind::Integer) {
-        return Value::makeInt(left.integer + right.integer);
+      Value right;
+      try {
+        right = evalExpression(inf->right.get(), env);
+      } catch (SuspendRequest& sr) {
+        auto prev = std::move(sr.resume_cont);
+        Value left_c = left;
+        TokenType op = TokenType::PLUS;
+        sr.resume_cont = [prev = std::move(prev), left_c, op](const Value& rv) {
+          return applyInfixOp(op, left_c, prev(rv));
+        };
+        throw;
       }
-      if (left.kind == Value::Kind::String && right.kind == Value::Kind::String) {
-        return Value::makeString(left.string_val + right.string_val);
-      }
-      if (left.kind == Value::Kind::String) {
-        return Value::makeString(left.string_val + toString(right));
-      }
-      if (right.kind == Value::Kind::String) {
-        return Value::makeString(toString(left) + right.string_val);
-      }
-      throw std::runtime_error("unsupported operands for +");
+      return applyInfixOp(TokenType::PLUS, left, right);
     }
-    Value right = evalExpression(inf->right.get(), env);
-    switch (inf->op.type) {
-      case TokenType::MINUS:
-        if (left.kind != Value::Kind::Integer || right.kind != Value::Kind::Integer) {
-          throw std::runtime_error("operands must be integers");
-        }
-        return Value::makeInt(left.integer - right.integer);
-      case TokenType::ASTERISK:
-        if (left.kind != Value::Kind::Integer || right.kind != Value::Kind::Integer) {
-          throw std::runtime_error("operands must be integers");
-        }
-        return Value::makeInt(left.integer * right.integer);
-      case TokenType::SLASH:
-        if (left.kind != Value::Kind::Integer || right.kind != Value::Kind::Integer) {
-          throw std::runtime_error("operands must be integers");
-        }
-        if (right.integer == 0) throw std::runtime_error("division by zero");
-        return Value::makeInt(left.integer / right.integer);
-      case TokenType::PERCENT:
-        if (left.kind != Value::Kind::Integer || right.kind != Value::Kind::Integer) {
-          throw std::runtime_error("operands must be integers");
-        }
-        if (right.integer == 0) throw std::runtime_error("division by zero");
-        return Value::makeInt(left.integer % right.integer);
-      case TokenType::LT:
-        if (left.kind != Value::Kind::Integer || right.kind != Value::Kind::Integer) {
-          throw std::runtime_error("operands must be integers");
-        }
-        return Value::makeBool(left.integer < right.integer);
-      case TokenType::GT:
-        if (left.kind != Value::Kind::Integer || right.kind != Value::Kind::Integer) {
-          throw std::runtime_error("operands must be integers");
-        }
-        return Value::makeBool(left.integer > right.integer);
-      case TokenType::LT_EQ:
-        if (left.kind != Value::Kind::Integer || right.kind != Value::Kind::Integer) {
-          throw std::runtime_error("operands must be integers");
-        }
-        return Value::makeBool(left.integer <= right.integer);
-      case TokenType::GT_EQ:
-        if (left.kind != Value::Kind::Integer || right.kind != Value::Kind::Integer) {
-          throw std::runtime_error("operands must be integers");
-        }
-        return Value::makeBool(left.integer >= right.integer);
-      case TokenType::EQ:
-        return Value::makeBool(valueEquals(left, right));
-      case TokenType::NOT_EQ:
-        return Value::makeBool(!valueEquals(left, right));
-      default:
-        break;
+    Value right;
+    try {
+      right = evalExpression(inf->right.get(), env);
+    } catch (SuspendRequest& sr) {
+      auto prev = std::move(sr.resume_cont);
+      Value left_c = left;
+      TokenType op = inf->op.type;
+      sr.resume_cont = [prev = std::move(prev), left_c, op](const Value& rv) {
+        return applyInfixOp(op, left_c, prev(rv));
+      };
+      throw;
     }
-    throw std::runtime_error("unknown infix operator");
+    return applyInfixOp(inf->op.type, left, right);
   }
   if (auto* ie = dynamic_cast<IfExpressionExpr*>(expr)) {
     Value cond = evalExpression(ie->condition.get(), env);
@@ -308,8 +455,51 @@ Value Evaluator::evalExpression(Expression* expr, const std::shared_ptr<Environm
   if (auto* ce = dynamic_cast<CallExpressionExpr*>(expr)) {
     Value callee = evalExpression(ce->function.get(), env);
     std::vector<Value> args;
-    for (auto& a : ce->arguments) {
-      args.push_back(evalExpression(a.get(), env));
+    args.reserve(ce->arguments.size());
+    for (size_t i = 0; i < ce->arguments.size(); ++i) {
+      try {
+        args.push_back(evalExpression(ce->arguments[i].get(), env));
+      } catch (SuspendRequest& sr) {
+        auto prev = std::move(sr.resume_cont);
+        Value callee_c = callee;
+        std::vector<Value> args_so_far = args;
+        auto* call = ce;
+        size_t arg_i = i;
+        auto env_c = env;
+        Program* prog = program_;
+        auto sched = scheduler_;
+        sr.resume_cont = [prev = std::move(prev), callee_c, args_so_far = std::move(args_so_far), call,
+                          arg_i, env_c, prog, sched](const Value& rv) mutable {
+          Evaluator eval(prog, sched);
+          args_so_far.push_back(prev(rv));
+          for (size_t j = arg_i + 1; j < call->arguments.size(); ++j) {
+            try {
+              args_so_far.push_back(eval.evalExpression(call->arguments[j].get(), env_c));
+            } catch (SuspendRequest& sr2) {
+              auto prev2 = std::move(sr2.resume_cont);
+              Value callee2 = callee_c;
+              std::vector<Value> args2 = args_so_far;
+              auto* call2 = call;
+              size_t arg_j = j;
+              auto env2 = env_c;
+              Program* prog2 = prog;
+              auto sched2 = sched;
+              sr2.resume_cont = [prev2 = std::move(prev2), callee2, args2 = std::move(args2), call2,
+                                 arg_j, env2, prog2, sched2](const Value& rv2) mutable {
+                Evaluator eval2(prog2, sched2);
+                args2.push_back(prev2(rv2));
+                for (size_t k = arg_j + 1; k < call2->arguments.size(); ++k) {
+                  args2.push_back(eval2.evalExpression(call2->arguments[k].get(), env2));
+                }
+                return eval2.callValue(callee2, args2);
+              };
+              throw;
+            }
+          }
+          return eval.callValue(callee_c, args_so_far);
+        };
+        throw;
+      }
     }
     return callValue(callee, args);
   }
@@ -402,8 +592,13 @@ Value Evaluator::applyFunction(const std::shared_ptr<FunctionObject>& fn, const 
     fnEnv->set("this", Value::makeInstance(this_binding));
   }
   Evaluator inner(program_, scheduler_);
-  EvalResult r = inner.evalBlockStatement(fn->body, fnEnv);
-  return r.value;
+  try {
+    EvalResult r = inner.evalBlockStatement(fn->body, fnEnv);
+    return r.value;
+  } catch (SuspendRequest& sr) {
+    // Block wrapper already builds a Value-producing continuation.
+    throw;
+  }
 }
 
 RunSliceResult Evaluator::runCallableSlice(TaskExecutionContext& ctx, const Value& callee,
@@ -437,6 +632,18 @@ RunSliceResult Evaluator::runWorkSlice(TaskExecutionContext& ctx, const std::fun
       result.value = computed;
     }
     result.checkpoints = ctx.checkpoints;
+  } catch (SuspendRequest& sr) {
+    result.status = RunSliceResult::Status::Suspended;
+    result.suspend_kind = sr.kind;
+    result.wake_at = sr.wake_at;
+    result.join_target = sr.join_target;
+    result.resume_continuation = std::move(sr.resume_cont);
+    if (!result.resume_continuation) {
+      result.resume_continuation = [](const Value& v) { return v; };
+    }
+    result.checkpoints = ctx.checkpoints;
+    tls_task_ctx = prev;
+    return result;
   } catch (...) {
     tls_task_ctx = prev;
     throw;

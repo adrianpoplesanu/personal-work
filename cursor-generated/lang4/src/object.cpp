@@ -1,6 +1,11 @@
 #include "object.h"
 
+#include "scheduler.h"
+
 #include <sstream>
+
+TaskObject::TaskObject() = default;
+TaskObject::~TaskObject() = default;
 
 Value Value::null() {
   Value v;
@@ -161,6 +166,11 @@ std::ostream& operator<<(std::ostream& os, const Value& v) {
   return os << v.inspect();
 }
 
+bool isTerminalStatus(TaskStatus status) {
+  return status == TaskStatus::Completed || status == TaskStatus::Failed ||
+         status == TaskStatus::Cancelled;
+}
+
 const char* taskStatusName(TaskStatus status) {
   switch (status) {
     case TaskStatus::Ready:
@@ -169,6 +179,8 @@ const char* taskStatusName(TaskStatus status) {
       return "running";
     case TaskStatus::Yielded:
       return "yielded";
+    case TaskStatus::Waiting:
+      return "waiting";
     case TaskStatus::Completed:
       return "completed";
     case TaskStatus::Failed:

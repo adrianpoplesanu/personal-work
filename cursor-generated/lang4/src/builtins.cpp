@@ -1,9 +1,12 @@
 #include "builtins.h"
 
+#include "evaluator.h"
+#include "scheduler.h"
+
+#include <chrono>
 #include <iostream>
 #include <pthread.h>
 #include <stdexcept>
-#include <chrono>
 #include <thread>
 
 namespace {
@@ -77,6 +80,17 @@ Value builtin_push(const std::vector<Value>& args) {
   return Value::makeArray(copy);
 }
 
+Value builtin_append(const std::vector<Value>& args) {
+  if (args.size() != 2) {
+    throw std::runtime_error("append() expects 2 arguments");
+  }
+  if (args[0].kind != Value::Kind::Array) {
+    throw std::runtime_error("append() first argument must be an array");
+  }
+  args[0].elements->push_back(args[1]);
+  return args[0];
+}
+
 void add(std::unordered_map<std::string, std::shared_ptr<BuiltinObject>>& m, const char* name,
          Value (*fn)(const std::vector<Value>&)) {
   auto b = std::make_shared<BuiltinObject>();
@@ -109,7 +123,11 @@ Value builtin_task_cancel(const std::vector<Value>& args) {
   if (args[0].kind != Value::Kind::Task) {
     throw std::runtime_error("task_cancel() requires a task");
   }
-  args[0].task_handle->cancel_requested.store(true);
+  auto handle = args[0].task_handle;
+  handle->cancel_requested.store(true);
+  if (auto sched = handle->scheduler.lock()) {
+    sched->requestCancel(handle);
+  }
   return Value::makeBool(true);
 }
 
@@ -145,6 +163,13 @@ Value builtin_delay(const std::vector<Value>& args) {
   if (args[0].integer < 0) {
     throw std::runtime_error("delay() requires a non-negative number of milliseconds");
   }
+  if (inTaskExecutionContext()) {
+    SuspendRequest sr;
+    sr.kind = SuspendRequest::Kind::Delay;
+    sr.wake_at = std::chrono::steady_clock::now() + std::chrono::milliseconds(args[0].integer);
+    sr.resume_cont = [](const Value& v) { return v; };
+    throw sr;
+  }
   std::this_thread::sleep_for(std::chrono::milliseconds(args[0].integer));
   return Value::null();
 }
@@ -159,6 +184,29 @@ Value joinTaskValue(const Value& taskVal) {
   if (handle->joined.exchange(true)) {
     throw std::runtime_error("join() on already joined task");
   }
+
+  {
+    std::lock_guard<std::mutex> lk(handle->mu);
+    if (handle->has_result) {
+      if (handle->result_error) {
+        std::rethrow_exception(handle->result_error);
+      }
+      if (handle->has_overflow_pthread) {
+        pthread_join(handle->overflow_pthread, nullptr);
+        handle->has_overflow_pthread = false;
+      }
+      return handle->result_value;
+    }
+  }
+
+  if (inTaskExecutionContext()) {
+    SuspendRequest sr;
+    sr.kind = SuspendRequest::Kind::Join;
+    sr.join_target = handle;
+    sr.resume_cont = [](const Value& v) { return v; };
+    throw sr;
+  }
+
   try {
     Value result = handle->future.get();
     if (handle->has_overflow_pthread) {
@@ -184,6 +232,7 @@ const std::unordered_map<std::string, std::shared_ptr<BuiltinObject>>& builtinMa
     add(builtins, "last", builtin_last);
     add(builtins, "rest", builtin_rest);
     add(builtins, "push", builtin_push);
+    add(builtins, "append", builtin_append);
     add(builtins, "join", builtin_join);
     add(builtins, "delay", builtin_delay);
     add(builtins, "task_status", builtin_task_status);
