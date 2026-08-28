@@ -17,6 +17,7 @@ void print_triangle(const int a[50][50], int n) {
         }
         std::cout << "\n";
     }
+    std::cout << "\n";
 }
 
 void print_drum(const int a[50][50], int n, const int dp[50][50], const int drum[50][50]) {
@@ -29,7 +30,18 @@ void print_drum(const int a[50][50], int n, const int dp[50][50], const int drum
             pos = i;
         }
     }
+    std::cout << "[ RESULT ][ TABULATION top-down ] ";
     for (int i = n - 1; i >= 0; i--) {
+        std::cout << a[i][pos] << " ";
+        pos = drum[i][pos];
+    }
+    std::cout << "\n";
+}
+
+void print_drum2(const int a[50][50], int n, const int dp[50][50], const int drum[50][50]) {
+    int pos = 0;
+    std::cout << "[ RESULT ][ TABULATION bottom-up ] ";
+    for (int i = 0; i < n; i++) {
         std::cout << a[i][pos] << " ";
         pos = drum[i][pos];
     }
@@ -64,9 +76,27 @@ void tabulation(const int a[50][50], int n) {
     print_drum(a, n, dp, drum);
 }
 
-void memoization() {
-
-}
+void tabulation2(const int a[50][50], int n) {
+    int dp[50][50], drum[50][50];
+    for (int i = n - 1; i >= 0; i--) {
+        for (int j = 0; j <= i; j++) {
+            if (i == n - 1) {
+                dp[i][j] = a[i][j];
+                drum[i][j] = -1;
+            } else {
+                if (dp[i + 1][j] > dp[i + 1][j + 1]) {
+                    dp[i][j] = a[i][j] + dp[i + 1][j];
+                    drum[i][j] = j;
+                } else {
+                    dp[i][j] = a[i][j] + dp[i + 1][j + 1];
+                    drum[i][j] = j + 1;
+                }
+            }
+        }
+    }
+    print_triangle(dp, n);
+    print_drum2(a, n, dp, drum);
+ }
 
 int main(int argc, char *argv[]) {
     auto start = std::chrono::high_resolution_clock::now();
@@ -81,9 +111,17 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    std::cout << "ORIGINAL TRIANGLE\n";
+
     print_triangle(a, n);
 
+    std::cout << "TABULATION top-down\n";
+
     tabulation(a, n);
+
+    std::cout << "TABULATION bottom-up\n";
+
+    tabulation2(a, n);
 
     //... end code here
 
