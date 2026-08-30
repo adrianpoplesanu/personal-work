@@ -1,8 +1,8 @@
 /*
-   exercise: 039
-   page: 238
-   description: double linked list
-   command: ./program039
+   exercise: 41
+   page: 239
+   description: implement a circular, doubly linked list with a sentinel
+   command: ./program041
 */
 
 #include <iostream>
@@ -17,65 +17,58 @@ struct Node {
 };
 
 struct DoubleLinkedList {
-    Node *head, *tail;
+    Node *nil;
 };
 
 void initialize_list(DoubleLinkedList &list) {
-    list.head = NULL;
-    list.tail = NULL;
+    list.nil = new Node();
+    list.nil->next = list.nil;
+    list.nil->prev = list.nil;
 }
 
-void cleanup_list(DoubleLinkedList &list) {
-    Node *x = list.head;
-    while(x) {
-        Node *current = x;
-        x = x->next;
-        delete current;
-    }
-    list.head = nullptr;
-    list.tail = nullptr;
+void list_delete(DoubleLinkedList list, Node* x) {
+    x->prev->next = x->next;
+    x->next->prev = x->prev;
 }
 
 Node* list_search(DoubleLinkedList list, int k) {
-    Node *x = list.head;
-    while (x != NULL && x->key != k) {
+    Node *x = list.nil->next;
+    while(x != list.nil && x->key != k) {
         x = x->next;
     }
     return x;
 }
 
-void list_insert_front(DoubleLinkedList &list, Node *x) {
-    x->next = list.head;
-    if (list.head != NULL) {
-        list.head->prev = x;
-    }
-    list.head = x;
-    x->prev = NULL;
+void list_insert_front(DoubleLinkedList &list, Node* x) {
+    x->next = list.nil->next;
+    list.nil->next->prev = x;
+    list.nil->next = x;
+    x->prev = list.nil;
 }
 
-void list_delete(DoubleLinkedList &list, Node *x) {
-    if (x == nullptr) {
-        return;
-    }
-    if (x->prev != NULL) {
-        x->prev->next = x->next;
-    } else {
-        list.head = x->next;
-    }
-    if (x->next != NULL) {
-        x->next->prev = x->prev;
-    }
-    delete x;
-}
-
-void print_list(DoubleLinkedList list) {
-    Node *current = list.head;
-    std::cout << "[ DoubleLinkedList ] ";
-    while(current != NULL) {
+void print_list(const DoubleLinkedList &list) {
+    Node *current = list.nil->next;
+    while(current != list.nil) {
         std::cout << current->key << " ";
         current = current->next;
     }
     std::cout << "\n";
+}
+
+void print_node(Node *x) {
+    std::cout << "Node{key=" << x->key << ", ";
+    std::cout << "prev=" << x->prev->key << ", ";
+    std::cout << "next=" << x->next->key << " ";
+    std::cout << "}\n";
+}
+
+void cleanup_list(DoubleLinkedList &list) {
+    Node *current = list.nil->next;
+    while(current != list.nil) {
+        Node *next = current->next;
+        delete current;
+        current = next;
+    }
 }
 
 int main(int argc, char *argv[]) {
@@ -109,7 +102,9 @@ int main(int argc, char *argv[]) {
 
     print_list(doublelinkedList);
 
-    list_delete(doublelinkedList, elem2);
+    Node *elem2_search = list_search(doublelinkedList, 18);
+    print_node(elem2_search);
+    list_delete(doublelinkedList, elem2_search);
 
     print_list(doublelinkedList);
 
