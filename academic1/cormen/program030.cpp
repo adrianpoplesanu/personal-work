@@ -39,7 +39,9 @@ int hoare_partition(int a[], int p, int r) {
         while(a[i] < x) i++;
 
         if (i >= j) return j;
-        swap(a, i++, j--);
+        swap(a, i, j);
+        i++;
+        j--;
     }
 }
 
