@@ -1,0 +1,43 @@
+/*
+   exercise: 000
+   page: 00
+   description: testing template
+   command: echo 123 | ./program020
+*/
+
+#include <iostream>
+#include <chrono>
+
+#define PRINT_EXECUTION_DURATION 0
+
+int a;
+
+void t() {
+    int a = 10;
+    {
+        int a = 20;
+        std::cout << a << "\n";
+    }
+    std::cout << a << "\n";
+}
+
+int main(int argc, char *argv[]) {
+    auto start = std::chrono::high_resolution_clock::now();
+
+    //... start code here
+
+    a = 7;
+    t();
+    std::cout << a << "\n";
+
+    //... end code here
+
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+
+    if (PRINT_EXECUTION_DURATION) {
+        std::cout << "Execution time: " << duration.count() << " ms\n";
+    }
+    return 0;
+}
+
