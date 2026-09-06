@@ -47,12 +47,14 @@ public class ArrayStack<E> implements Stack<E> {
     }
 
     public static void main(String[] args) {
-        ArrayStack<Integer> stack = new ArrayStack<>();
+        Stack<Integer> stack = new ArrayStack<>();
         System.out.println(stack.isEmpty());
+        System.out.println(stack.size());
         stack.push(11);
         stack.push(12);
         stack.push(13);
         System.out.println(stack.isEmpty());
+        System.out.println(stack.size());
         System.out.println(stack.top());
         while(!stack.isEmpty()) {
             System.out.print(stack.pop()+ " ");
