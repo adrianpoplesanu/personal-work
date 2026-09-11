@@ -103,7 +103,7 @@ public:
             return;
         }
         a[i] = key;
-        while (i > 1 && PARENT(i) < a[i]) {
+        while (i > 1 && a[PARENT(i)] < a[i]) {
             T tmp = a[i];
             a[i] = a[PARENT(i)];
             a[PARENT(i)] = tmp;
@@ -149,7 +149,7 @@ public:
         }
     }
 
-    void heap_minimum() {
+    T heap_minimum() {
         return a[1];
     }
 
@@ -239,7 +239,7 @@ int main(int argc, char *argv[]) {
     heap.pretty_print();
 
     Heap<int> heap2;
-    int b[] = {89, 35, 56, 12, 87, 45, 55, 66, 37, 67}, m = 9;
+    int b[] = {89, 35, 56, 12, 87, 45, 55, 66, 37, 67}, m = 10;
 
     heap2.load(b, m);
     heap2.build_min_heap();
