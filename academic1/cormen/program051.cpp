@@ -167,6 +167,35 @@ void tree_insert(Node *&root, Node *z) {
     }
 }
 
+void transplant(Node *&root, Node *u, Node *v) {
+    if (u->parent == nullptr) {
+        root = v;
+    } else if (u == u->parent->left) {
+        u->parent->left = v;
+    } else {
+        u->parent->right = v;
+    }
+    if (v != nullptr) {
+        v->parent = u->parent;
+    }
+}
+
+void tree_delete(Node *&root, Node *z) {
+    if (z->left == nullptr) {
+        transplant(root, z, z->right);
+    } else if (z->right == nullptr) {
+        transplant(root, z, z->left);
+    } else {
+        Node *y = tree_minimum(z->right);
+        if (y->parent != z) {
+            transplant(root, y, y->right);
+        }
+        transplant(root, z, y);
+        y->left = z->left;
+        y->left->parent = y;
+    }
+}
+
 int main(int argc, char *argv[]) {
     auto start = std::chrono::high_resolution_clock::now();
 
@@ -178,7 +207,10 @@ int main(int argc, char *argv[]) {
     tree_insert(root, new Node(6));
     tree_insert(root, new Node(8));
     tree_insert(root, new Node(3));
-    tree_insert(root, new Node(10));
+
+    Node *to_delete = new Node(10);
+    tree_insert(root, to_delete);
+
     tree_insert(root, new Node(18));
     tree_insert(root, new Node(2));
     tree_insert(root, new Node(4));
@@ -186,6 +218,16 @@ int main(int argc, char *argv[]) {
     tree_insert(root, new Node(15));
     tree_insert(root, new Node(13));
     tree_insert(root, new Node(9));
+
+    inorder_tree_walk(root);
+
+    std::cout << "\n";
+
+    normal_tree_walk(root);
+
+    tree_delete(root, to_delete);
+
+    std::cout << "============================\n";
 
     inorder_tree_walk(root);
 
