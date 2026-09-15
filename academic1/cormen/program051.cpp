@@ -167,6 +167,25 @@ void tree_insert(Node *&root, Node *z) {
     }
 }
 
+void tree_insert_recursive(Node *&root, Node *y, Node *x, Node *z) {
+    if (x != nullptr) {
+        if (z->key < x->key) {
+            tree_insert_recursive(root, x, x->left, z);
+        } else {
+            tree_insert_recursive(root, x, x->right, z);
+        }
+    } else {
+        z->parent = y;
+        if (y == nullptr) {
+            root = z;
+        } else if (z->key < y->key) {
+            y->left = z;
+        } else {
+            y->right = z;
+        }
+    }
+}
+
 void transplant(Node *&root, Node *u, Node *v) {
     if (u->parent == nullptr) {
         root = v;
@@ -215,7 +234,8 @@ int main(int argc, char *argv[]) {
     tree_insert(root, new Node(2));
     tree_insert(root, new Node(4));
     tree_insert(root, new Node(12));
-    tree_insert(root, new Node(15));
+    //tree_insert(root, new Node(15));
+    tree_insert_recursive(root, nullptr, root, new Node(15));
     tree_insert(root, new Node(13));
     tree_insert(root, new Node(9));
 
