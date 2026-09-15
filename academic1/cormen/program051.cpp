@@ -1,8 +1,8 @@
 /*
-   exercise: 050
+   exercise: 051
    page: 294
    description: full binary tree
-   command: echo 11 6 8 3 10 18 2 4 12 15 13 9 | ./program050
+   command: ./program051
 */
 
 #include <iostream>
