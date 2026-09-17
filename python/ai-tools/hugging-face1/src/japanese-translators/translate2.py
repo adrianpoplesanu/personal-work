@@ -1,0 +1,17 @@
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+
+
+if __name__ == "__main__":
+    model_name = "Helsinki-NLP/opus-mt-en-jap"
+
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+
+    #text = "Artificial intelligence is changing the world."
+    text = "Be the change you want to see in the world"
+
+    inputs = tokenizer(text, return_tensors="pt")
+
+    translated = model.generate(**inputs)
+
+    print(tokenizer.decode(translated[0], skip_special_tokens=True))
