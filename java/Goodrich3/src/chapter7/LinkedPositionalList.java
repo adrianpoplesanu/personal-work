@@ -1,5 +1,10 @@
 package chapter7;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 public class LinkedPositionalList<E> implements PositionalList<E> {
     private static class Node<E> implements Position<E> {
         private E element;
@@ -151,7 +156,69 @@ public class LinkedPositionalList<E> implements PositionalList<E> {
         return answer;
     }
 
+    private class PositionIterator implements Iterator<Position<E>> {
+        private Position<E> cursor = first();
+        private Position<E> recent = null;
+
+        @Override
+        public boolean hasNext() {
+            return cursor != null;
+        }
+
+        @Override
+        public Position<E> next() throws NoSuchElementException {
+            if (cursor == null) throw new NoSuchElementException("nothing left");
+            recent = cursor;
+            cursor = after(cursor);
+            return recent;
+        }
+
+        @Override
+        public void remove() throws IllegalStateException {
+            if (recent == null) throw new IllegalStateException("nothing to remove");
+            LinkedPositionalList.this.remove(recent);
+            recent = null;
+        }
+    }
+
+    private class PositionIterable implements Iterable<Position<E>> {
+
+        @NotNull
+        @Override
+        public Iterator<Position<E>> iterator() {
+            return new PositionIterator();
+        }
+    }
+
+    public Iterable<Position<E>> positions() {
+        return new PositionIterable();
+    }
+
+    private class ElementIterator implements Iterator<E> {
+        Iterator<Position<E>> posIterator = new PositionIterator();
+
+        @Override
+        public boolean hasNext() {
+            return posIterator.hasNext();
+        }
+
+        @Override
+        public E next() {
+            return posIterator.next().getElement();
+        }
+
+        @Override
+        public void remove() {
+            posIterator.remove();
+        }
+    }
+
+    public Iterator<E> iterator() {
+        return new ElementIterator();
+    }
+
     public void walk() {
+        // facuta doar pentru a testa elementele
         Node<E> current = header.getNext();
         while(current != trailer) {
             System.out.print(current.getElement() + " ");
@@ -176,11 +243,32 @@ public class LinkedPositionalList<E> implements PositionalList<E> {
         list.walk();
         System.out.println();
 
+        System.out.println("[ FOR-EACH ]");
+        for (Position<Integer> posNumber: list.positions()) {
+            System.out.println(posNumber.getElement());
+        }
+
         System.out.print("[ RESULT ] ");
         while(!list.isEmpty()) {
             Position<Integer> current = list.first();
             System.out.print(current.getElement() + " ");
             list.remove(current);
+        }
+        System.out.println();
+
+        LinkedPositionalList<String> names = new LinkedPositionalList<>();
+        names.addFirst("bebe");
+        names.addLast("dex");
+        names.addLast("alex");
+
+        System.out.println("[ FOR-EACH elements ]");
+        for (String name: names) {
+            System.out.println(name);
+        }
+
+        System.out.println("[ FOR-EACH positions ]");
+        for (Position<String> posString: names.positions()) {
+            System.out.println(posString.getElement());
         }
     }
 }

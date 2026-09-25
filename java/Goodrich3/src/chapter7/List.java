@@ -1,6 +1,6 @@
 package chapter7;
 
-public interface List<E> {
+public interface List<E> extends Iterable<E> {
     int size();
     boolean isEmpty();
     E get(int i) throws IndexOutOfBoundsException;

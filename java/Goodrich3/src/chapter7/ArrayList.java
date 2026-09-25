@@ -119,11 +119,18 @@ public class ArrayList<E> implements List<E> {
         list.add(1, 12);
         list.add(2, 13);
 
+        System.out.println("[ ITERATOR ]");
         for (Iterator<Integer> it = list.iterator(); it.hasNext(); ) {
             Integer el = it.next();
             System.out.println(el);
         }
 
+        System.out.println("[ FOR-EACH ]");
+        for (Integer el: list) {
+            System.out.println(el);
+        }
+
+        System.out.println("[ REMOVE ]");
         while(!list.isEmpty()) {
             System.out.println(list.remove(0));
         }

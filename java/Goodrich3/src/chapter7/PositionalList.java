@@ -1,6 +1,6 @@
 package chapter7;
 
-public interface PositionalList<E> {
+public interface PositionalList<E> extends Iterable<E> {
     int size();
     boolean isEmpty();
     Position<E> first();
