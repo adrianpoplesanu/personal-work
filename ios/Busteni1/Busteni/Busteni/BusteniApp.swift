@@ -9,9 +9,16 @@ import SwiftUI
 
 @main
 struct BusteniApp: App {
+
+    @State private var metrics = MetricsStore()
+
     var body: some Scene {
-        WindowGroup {
+        MenuBarExtra {
             ContentView()
+        } label: {
+            Text(metrics.menuBarTitle)
+                .monospacedDigit()
         }
+        .menuBarExtraStyle(.window)
     }
 }
