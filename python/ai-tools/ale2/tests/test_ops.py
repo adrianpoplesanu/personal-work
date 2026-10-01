@@ -24,6 +24,16 @@ def test_log_softmax_matches_log_of_softmax() -> None:
             assert abs(lp - math.log(p)) < 1e-12
 
 
+def test_matmul() -> None:
+    a = [[1, 2], [3, 4]]
+    b = [[5, 6], [7, 8]]
+    assert matmul(a, b) == [[19, 22], [43, 50]]
+
+def test_matmul_broadcast() -> None:
+    a = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+    b = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+    assert matmul(a, b) == [[30, 36, 42], [66, 81, 96], [102, 126, 150]]
+
 def test_cross_entropy_prefers_correct_class() -> None:
     logits = [[5.0, 0.0, 0.0]]
     assert cross_entropy(logits, [0]) < cross_entropy(logits, [1])
