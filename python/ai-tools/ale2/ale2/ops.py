@@ -22,7 +22,12 @@ def log_softmax(x):
 
 
 def matmul(a, b):
-    return [[sum(a[i][k] * b[k][j] for k in range(len(b[0]))) for j in range(len(b[0]))] for i in range(len(a))]
+    n = len(b)
+    p = len(b[0])
+    return [
+        [sum(a[i][k] * b[k][j] for k in range(n)) for j in range(p)]
+        for i in range(len(a))
+    ]
 
 
 def cross_entropy(logits, targets):
