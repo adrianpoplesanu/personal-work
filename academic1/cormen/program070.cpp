@@ -1,5 +1,5 @@
 /*
-   exercise: 069
+   exercise: 070
    page: 415
    description: greedy activity selection
    command: echo 11 1 4 3 5 0 6 5 7 3 9 5 9 6 10 8 11 8 12 2 14 12 16 | ./program070
