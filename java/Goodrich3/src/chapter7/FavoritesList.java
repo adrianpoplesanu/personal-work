@@ -2,7 +2,7 @@ package chapter7;
 
 import java.util.Iterator;
 
-public class FavouritesList<E> {
+public class FavoritesList<E> {
     protected static class Item<E> {
         private E value;
         private int count = 0;
@@ -26,7 +26,7 @@ public class FavouritesList<E> {
 
     PositionalList<Item<E>> list = new LinkedPositionalList<>();
 
-    public FavouritesList() {
+    public FavoritesList() {
 
     }
 
@@ -94,7 +94,7 @@ public class FavouritesList<E> {
     }
 
     public static void main(String[] args) {
-        FavouritesList<String> list = new FavouritesList<>();
+        FavoritesList<String> list = new FavoritesList<>();
         list.access("Python");
         list.access("Java");
         list.access("JS");
