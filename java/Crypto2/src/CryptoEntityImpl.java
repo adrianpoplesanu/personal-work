@@ -1,5 +1,6 @@
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 
 public class CryptoEntityImpl implements CryptoEntity {
@@ -52,7 +53,36 @@ public class CryptoEntityImpl implements CryptoEntity {
     }
 
     @Override
-    public String sha256(String message) {
+    public String sha256(String message) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+        byte[] hash = digest.digest(message.getBytes(StandardCharsets.UTF_8));
+
+        StringBuilder hex = new StringBuilder();
+        for (byte b: hash) {
+            hex.append(String.format("%02x", b));
+        }
+
+        return hex.toString();
+    }
+
+    @Override
+    public EncryptedMessage encryptMessageWithPublicKey(String message, PublicKey publicKey) {
+        return new EncryptedMessage();
+    }
+
+    @Override
+    public EncryptedMessage encryptMessageWithPublicKeyAndSign(String message, PublicKey publicKey) {
+        return new EncryptedMessage();
+    }
+
+    @Override
+    public String decryptMessage(String ciphertext) {
+        return "";
+    }
+
+    @Override
+    public String decryptMessageAndCheckSignature(String message, PublicKey publicKey) {
         return "";
     }
 
