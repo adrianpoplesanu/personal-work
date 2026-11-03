@@ -28,6 +28,31 @@ void table_insert(int *&t, int &n, int &size, int value) {
     n++;
 }
 
+void table_remove(int *&t, int &n, int &size, int value) {
+    for (int i = 0; i < n; i++) {
+        if (t[i] == value) {
+            for (int j = i; j < n - 1; j++) {
+                t[j] = t[j + 1];
+            }
+            n--;
+            if (n > 0 && n == size / 4) {
+                int *new_t = new int[size / 2];
+                for (int k = 0; k < n; k++) {
+                    new_t[k] = t[k];
+                }
+                delete[] t;
+                t = new_t;
+                size = size / 2;
+            } else if (n == 0) {
+                delete[] t;
+                t = nullptr;
+                size = 0;
+            }
+            break;
+        }
+    }
+}
+
 void printTable(int t[], int n) {
     for (int i = 0; i < n; i++) {
         std::cout << t[i] << " ";
