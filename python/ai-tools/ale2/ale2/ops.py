@@ -35,6 +35,18 @@ def linear(x, w, b):
     return [[v + b[j] for j, v in enumerate(row)] for row in matmul(x, w)]
 
 
+def transpose(a):
+    return [[a[i][j] for i in range(len(a))] for j in range(len(a[0]))]
+
+
+def linear_backward(x, w, dy):
+    """Gradients of y = x @ w + b. Returns dx, dw, db."""
+    db = [sum(row[j] for row in dy) for j in range(len(dy[0]))]
+    dw = matmul(transpose(x), dy)
+    dx = matmul(dy, transpose(w))
+    return dx, dw, db
+
+
 def cross_entropy(logits, targets):
     """Mean negative log-likelihood over a batch of rows.
 
