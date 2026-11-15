@@ -30,6 +30,11 @@ def matmul(a, b):
     ]
 
 
+def linear(x, w, b):
+    """y = x @ w + b. x is (m, n), w is (n, p), b has length p."""
+    return [[v + b[j] for j, v in enumerate(row)] for row in matmul(x, w)]
+
+
 def cross_entropy(logits, targets):
     """Mean negative log-likelihood over a batch of rows.
 

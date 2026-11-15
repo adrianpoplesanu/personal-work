@@ -6,7 +6,7 @@ import math
 
 import pytest
 
-from ale2.ops import cross_entropy, log_softmax, matmul, softmax
+from ale2.ops import cross_entropy, linear, log_softmax, matmul, softmax
 
 
 def test_softmax_sums_to_one() -> None:
@@ -37,6 +37,13 @@ def test_matmul_broadcast() -> None:
 
 def test_matmul_non_square() -> None:
     assert matmul([[1, 2, 3]], [[1], [2], [3]]) == [[14]]
+
+
+def test_linear_adds_bias() -> None:
+    x = [[1, 0], [0, 1]]
+    w = [[1, 2], [3, 4]]
+    b = [10, 20]
+    assert linear(x, w, b) == [[11, 22], [13, 24]]
 
 def test_cross_entropy_prefers_correct_class() -> None:
     logits = [[5.0, 0.0, 0.0]]
