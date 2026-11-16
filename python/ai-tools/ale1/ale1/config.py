@@ -16,6 +16,7 @@ class TrainConfig:
     learning_rate: float = 3e-4
     max_steps: int = 2000
     eval_interval: int = 200
+    vocab_size: int = 512  # BPE target size (256 bytes + merges)
     seed: int = 42
     device: str = "cpu"  # set to "cuda" or "mps" when available
 

@@ -1,3 +1,4 @@
-"""Minimal character-level LLM (ale1)."""
+"""Minimal BPE-tokenized LLM (ale1)."""
+
 
 __version__ = "0.1.0"

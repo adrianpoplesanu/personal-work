@@ -1,14 +1,14 @@
-# Minimal character-level LLM (ale1)
+# Minimal BPE LLM (ale1)
 
-A tiny decoder-only Transformer in PyTorch that learns next-character prediction on a small text corpus, then generates text by sampling from predicted probabilities.
+A tiny decoder-only Transformer in PyTorch that learns next-token prediction with a **byte-level BPE** tokenizer on a small text corpus, then generates text by sampling from predicted probabilities.
 
 ## Pipeline
 
-1. **Tokenization** — each character maps to an integer id  
+1. **Tokenization** — byte-level BPE (256 base bytes + learned merges)  
 2. **Embeddings** — token + position embeddings  
 3. **Transformer** — causal self-attention blocks  
 4. **Probabilities** — softmax over vocabulary logits (with temperature)  
-5. **Sampling** — multinomial / top-k next-character selection  
+5. **Sampling** — multinomial / top-k next-token selection  
 
 ## Requirements
 
@@ -37,7 +37,7 @@ pip install -e ".[dev]"
 
 - Script path: `ale1/train.py`
 - Working directory: project root (`.../ale1`)
-- Parameters (optional): `--max-steps 500 --device auto`
+- Parameters (optional): `--max-steps 500 --vocab-size 512 --device auto`
 
 **Sample**
 
@@ -56,9 +56,11 @@ pytest -q
 ## Quick start (terminal)
 
 ```bash
-python -m ale1.train --max-steps 500 --device auto
-python -m ale1.sample --prompt "First Citizen:" --max-new-tokens 200
+python -m ale1.train --max-steps 2000 --vocab-size 512 --device auto
+python -m ale1.sample --prompt "First Citizen:" --max-new-tokens 200 --temperature 0.6
 ```
+
+Old **character-level** checkpoints are incompatible — retrain after this change so `tokenizer.json` is BPE format.
 
 Optional: replace `data/tiny.txt` with the full Tiny Shakespeare corpus:
 
@@ -71,8 +73,8 @@ python scripts/prepare_data.py
 ```
 ale1/
   ale1/
-    config.py      # hyperparameters
-    tokenizer.py   # character-level encode/decode
+    config.py      # hyperparameters (includes vocab_size for BPE)
+    tokenizer.py   # byte-level BPE encode/decode
     model.py       # embeddings + transformer + generate
     train.py       # training loop + checkpoints
     sample.py      # load checkpoint and sample text
@@ -86,7 +88,7 @@ ale1/
 
 After training, `checkpoints/` contains:
 
-- `tokenizer.json` — character vocabulary  
+- `tokenizer.json` — BPE merges + vocab size  
 - `model.pt` — weights + config  
 
 These are required by `sample.py`.

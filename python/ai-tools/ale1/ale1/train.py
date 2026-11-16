@@ -1,4 +1,4 @@
-"""Train a tiny character-level GPT."""
+"""Train a tiny BPE-tokenized GPT."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 from ale1.config import TrainConfig
 from ale1.model import GPT
-from ale1.tokenizer import CharTokenizer
+from ale1.tokenizer import BpeTokenizer
 
 
 def pick_device(requested: str) -> torch.device:
@@ -45,7 +45,8 @@ def train(config: TrainConfig) -> None:
     device = pick_device(config.device)
 
     text = Path(config.data_path).read_text(encoding="utf-8")
-    tokenizer = CharTokenizer.from_text(text)
+    print(f"training BPE tokenizer (target vocab_size={config.vocab_size})...")
+    tokenizer = BpeTokenizer.train(text, vocab_size=config.vocab_size)
     data = torch.tensor(tokenizer.encode(text), dtype=torch.long)
 
     if data.size(0) <= config.block_size + 1:
@@ -102,6 +103,12 @@ def main() -> None:
     parser.add_argument("--lr", type=float, default=TrainConfig.learning_rate)
     parser.add_argument("--max-steps", type=int, default=TrainConfig.max_steps)
     parser.add_argument("--eval-interval", type=int, default=TrainConfig.eval_interval)
+    parser.add_argument(
+        "--vocab-size",
+        type=int,
+        default=TrainConfig.vocab_size,
+        help="BPE vocabulary size (256 base bytes + merges)",
+    )
     parser.add_argument("--seed", type=int, default=TrainConfig.seed)
     parser.add_argument(
         "--device",
@@ -123,6 +130,7 @@ def main() -> None:
         learning_rate=args.lr,
         max_steps=args.max_steps,
         eval_interval=args.eval_interval,
+        vocab_size=args.vocab_size,
         seed=args.seed,
         device=args.device,
     )
